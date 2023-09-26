@@ -7,6 +7,7 @@ import com.ekezet.othello.core.data.models.Position
 import com.ekezet.othello.core.data.serialize.BoardSerializer
 import com.ekezet.othello.core.game.GameState
 import com.ekezet.othello.core.game.Strategy
+import com.ekezet.othello.core.game.strategy.NaiveMaxStrategy
 import com.ekezet.othello.feature.gameboard.ui.viewModels.BoardList
 import com.ekezet.othello.feature.gameboard.ui.viewModels.BoardOverlayList
 
@@ -26,7 +27,11 @@ internal val defaultGameState: GameState
     get() = GameState.new(defaultBoard)
 
 internal val defaultArgs: GameBoardArgs
-    inline get() = GameBoardArgs(gameState = defaultGameState)
+    inline get() = GameBoardArgs(
+        gameState = defaultGameState,
+        displayOptions = DisplayOptions(),
+        opponentStrategy = NaiveMaxStrategy()
+    )
 
 internal data class DisplayOptions(
     val showPossibleMoves: Boolean = true,
@@ -35,8 +40,8 @@ internal data class DisplayOptions(
 
 internal data class GameBoardArgs(
     val gameState: GameState,
-    val displayOptions: DisplayOptions = DisplayOptions(),
-    val opponentStrategy: Strategy? = null,
+    val displayOptions: DisplayOptions,
+    val opponentStrategy: Strategy?,
 )
 
 internal data class GameBoardModel(
@@ -63,3 +68,5 @@ internal data class GameBoardState(
     val onResetGameClick: () -> Unit,
     val onToggleIndicatorsClick: () -> Unit,
 )
+
+internal object GameBoardDependency

@@ -2,17 +2,20 @@ package com.ekezet.othello.feature.gameboard
 
 import com.ekezet.hurok.Action
 import com.ekezet.hurok.Action.Next
+import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.data.models.Position
 import com.ekezet.othello.core.game.NextMove
 import com.ekezet.othello.core.game.error.InvalidMoveException
 import com.ekezet.othello.core.game.isValid
+import com.ekezet.othello.feature.gameboard.GameBoardEffect.DeriveOpponentMove
 
-internal sealed interface GameBoardAction : Action<GameBoardModel, Unit> {
+internal sealed interface GameBoardAction : Action<GameBoardModel, GameBoardDependency> {
 
     data object OnResetGameClicked : GameBoardAction {
         override fun GameBoardModel.proceed() = change(
             copy(
                 gameState = defaultGameState,
+                nextMovePosition = null,
             ),
         )
     }
@@ -36,19 +39,25 @@ internal sealed interface GameBoardAction : Action<GameBoardModel, Unit> {
     }
 
     data object ContinueGame : GameBoardAction {
-        override fun GameBoardModel.proceed(): Next<GameBoardModel, Unit> {
+        override fun GameBoardModel.proceed(): Next<GameBoardModel, GameBoardDependency> {
             nextMovePosition ?: return skip
-            val nextMove = NextMove(nextMovePosition, currentDisk)
-            return try {
-                change(
-                    copy(
-                        gameState = gameState.proceed(nextMove),
-                        nextMovePosition = if (currentDisk.isDark) null else opponentStrategy?.deriveNext(gameState),
-                    ),
-                )
+            val newState = try {
+                gameState.proceed(NextMove(nextMovePosition, currentDisk))
             } catch (e: InvalidMoveException) {
-                skip
+                return skip
             }
+            val effects = buildList<GameBoardEffect> {
+                if (opponentStrategy != null && newState.currentDisk == Disk.Light) {
+                    add(DeriveOpponentMove(newState, opponentStrategy))
+                }
+            }
+            return outcome(
+                model = copy(
+                    gameState = newState,
+                    nextMovePosition = null,
+                ),
+                effects = effects.toTypedArray(),
+            )
         }
     }
 }

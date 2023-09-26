@@ -13,13 +13,13 @@ import com.ekezet.othello.feature.gameboard.ui.viewModels.putAt
 import com.ekezet.othello.feature.gameboard.ui.viewModels.toList
 import kotlinx.coroutines.CoroutineScope
 
-internal typealias GameBoardScope = LoopScope<GameBoardModel, Unit>
+internal typealias GameBoardScope = LoopScope<GameBoardModel, GameBoardDependency>
 
 internal class GameBoardLoop(scope: CoroutineScope, args: GameBoardArgs) :
-    Loop<GameBoardState, GameBoardModel, GameBoardArgs, Unit, GameBoardAction>(
+    Loop<GameBoardState, GameBoardModel, GameBoardArgs, GameBoardDependency, GameBoardAction>(
         scope,
         args,
-        null,
+        GameBoardDependency,
     ) {
 
     override fun initModel(args: GameBoardArgs?) = GameBoardModel(
