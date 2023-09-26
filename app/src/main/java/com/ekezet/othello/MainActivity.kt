@@ -21,7 +21,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background,
                 ) {
-                    GameBoardView(modifier = Modifier.padding(8.dp))
+                    GameBoardView(modifier = Modifier.padding(16.dp))
                 }
             }
         }

@@ -1,3 +1,3 @@
-package com.ekezet.othello.core.game.error
+package com.ekezet.othello.core.game.throwable
 
 class InvalidMoveException : IllegalStateException()

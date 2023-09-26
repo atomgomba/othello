@@ -11,3 +11,6 @@ value class Disk private constructor(
 }
 
 fun Disk.flip() = if (isDark) Disk.Light else Disk.Dark
+
+val Disk.isLight: Boolean
+    inline get() = !isDark

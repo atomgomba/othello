@@ -4,7 +4,7 @@ import com.ekezet.othello.core.data.models.Board
 import com.ekezet.othello.core.data.models.BoardHeight
 import com.ekezet.othello.core.data.models.BoardWidth
 import com.ekezet.othello.core.data.models.Disk
-import com.ekezet.othello.core.data.serialize.error.InvalidTokenException
+import com.ekezet.othello.core.data.serialize.throwable.InvalidTokenException
 
 object BoardSerializer {
     @Throws(

@@ -11,4 +11,4 @@ val Position.y: Int
     inline get() = second
 
 val Position.absoluteValue: Position
-    get() = Position(x.absoluteValue, y.absoluteValue)
+    inline get() = Position(x.absoluteValue, y.absoluteValue)

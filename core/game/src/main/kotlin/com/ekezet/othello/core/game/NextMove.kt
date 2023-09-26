@@ -3,7 +3,6 @@ package com.ekezet.othello.core.game
 import com.ekezet.othello.core.data.models.Board
 import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.data.models.Position
-import java.util.Stack
 
 data class NextMove(val position: Position, val disk: Disk)
 
@@ -27,4 +26,4 @@ data class PastMove(val board: Board, val move: NextMove?) {
     }
 }
 
-typealias MoveHistory = Stack<PastMove>
+typealias MoveHistory = List<PastMove>
