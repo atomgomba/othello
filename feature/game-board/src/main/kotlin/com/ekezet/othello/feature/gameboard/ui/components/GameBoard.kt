@@ -1,0 +1,102 @@
+package com.ekezet.othello.feature.gameboard.ui.components
+
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.key
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
+import com.ekezet.othello.core.data.models.BoardHeight
+import com.ekezet.othello.core.data.models.BoardWidth
+import com.ekezet.othello.feature.gameboard.ui.viewModels.BoardList
+import com.ekezet.othello.feature.gameboard.ui.viewModels.BoardOverlayList
+import com.ekezet.othello.feature.gameboard.ui.viewModels.getAt
+
+private val borderWidth = 1.dp
+
+private const val CELL_WEIGHT = 1F / BoardWidth
+
+@Composable
+internal fun GameBoard(
+    board: BoardList,
+    modifier: Modifier = Modifier,
+    showPositions: Boolean = false,
+    overlay: BoardOverlayList? = null,
+    onCellClick: (x: Int, y: Int) -> Unit = { _, _ -> },
+) {
+    Surface(
+        shape = RoundedCornerShape(16.dp),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.background),
+    ) {
+        Column(
+            modifier = modifier.then(
+                Modifier
+                    .wrapContentHeight(align = Alignment.Top)
+                    .background(color = Color.White.copy(alpha = .75F))
+                    .padding(
+                        bottom = borderWidth,
+                        end = borderWidth,
+                    ),
+            ),
+        ) {
+            for (rowIndex in 0 until BoardHeight) {
+                Row(
+                    modifier = Modifier.wrapContentHeight(),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    for (colIndex in 0 until BoardWidth) {
+                        val disk = board.getAt(
+                            colIndex,
+                            rowIndex,
+                        )
+                        val overlayItem = overlay?.getAt(
+                            colIndex,
+                            rowIndex,
+                        )
+                        key(
+                            colIndex,
+                            rowIndex,
+                            disk,
+                            overlayItem?.composeKey,
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .padding(
+                                        top = borderWidth,
+                                        start = borderWidth,
+                                    )
+                                    .background(color = Color(0xFF338033))
+                                    .weight(CELL_WEIGHT)
+                                    .aspectRatio(1F)
+                                    .clickable {
+                                        onCellClick(
+                                            colIndex,
+                                            rowIndex,
+                                        )
+                                    },
+                                contentAlignment = Alignment.Center,
+                            ) {
+                                if (disk != null) {
+                                    GamePiece(disk = disk)
+                                }
+                                overlayItem?.Composable()
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
