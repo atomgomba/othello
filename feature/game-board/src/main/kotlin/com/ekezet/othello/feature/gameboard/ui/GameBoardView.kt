@@ -48,7 +48,7 @@ internal fun GameBoardScope.GameBoardViewImpl(
     Column(modifier = modifier) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(4.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             GamePiece(
                 disk = currentDisk,
@@ -62,9 +62,13 @@ internal fun GameBoardScope.GameBoardViewImpl(
             )
 
             Text("Turn: $currentTurn")
+
+            Spacer(Modifier.weight(1F))
+
+            Text("Opponent: $opponentName")
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(Modifier.height(16.dp))
 
         GameBoard(
             board = board,
@@ -73,7 +77,7 @@ internal fun GameBoardScope.GameBoardViewImpl(
             onCellClick = state.onCellClick,
         )
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(Modifier.height(24.dp))
 
         Row(
             horizontalArrangement = Arrangement.spacedBy(8.dp),

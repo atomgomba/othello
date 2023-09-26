@@ -60,6 +60,7 @@ internal data class GameBoardState(
     val overlay: BoardOverlayList,
     val currentTurn: Int,
     val currentDisk: Disk,
+    val opponentName: String?,
     val nextMovePosition: Position?,
     val hasPossibleMoves: Boolean,
     val showPossibleMoves: Boolean,

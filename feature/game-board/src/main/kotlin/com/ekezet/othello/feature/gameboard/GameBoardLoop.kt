@@ -33,6 +33,7 @@ internal class GameBoardLoop(scope: CoroutineScope, args: GameBoardArgs) :
             board = gameState.currentBoard.toList(),
             overlay = createOverlayItems(),
             currentDisk = gameState.currentDisk,
+            opponentName = opponentStrategy?.name ?: "Human",
             currentTurn = gameState.turn + 1,
             nextMovePosition = nextMovePosition,
             showPossibleMoves = displayOptions.showPossibleMoves,
