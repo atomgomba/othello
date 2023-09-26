@@ -33,14 +33,16 @@ internal fun Board.findValidMoves(subject: Disk): Set<ValidMove> {
     val result = mutableSetOf<ValidSegment<Position>>()
     val maxY = BoardHeight - 1
     for (y in 0 until BoardHeight) {
-        for (x in 0 until BoardWidth) {
-            val column = map { it[x] }.toTypedArray()
-            val vertical = findValidIndices(column, subject)
-            result.addAll(vertical.mapToX(x))
+        val row = get(y)
+        val horizontal = findValidIndices(row, subject)
+        result.addAll(horizontal.mapToY(y))
 
-            val row = get(y)
-            val horizontal = findValidIndices(row, subject)
-            result.addAll(horizontal.mapToY(y))
+        for (x in 0 until BoardWidth) {
+            if (y == 0) {
+                val column = map { it[x] }.toTypedArray()
+                val vertical = findValidIndices(column, subject)
+                result.addAll(vertical.mapToX(x))
+            }
 
             if (y == 0 || x == 0) {
                 val leftDiagonal = getLeftDiagonal(x, y)
