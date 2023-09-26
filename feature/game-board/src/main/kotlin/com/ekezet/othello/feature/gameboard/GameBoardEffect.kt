@@ -2,7 +2,7 @@ package com.ekezet.othello.feature.gameboard
 
 import com.ekezet.hurok.Effect
 import com.ekezet.othello.core.game.GameState
-import com.ekezet.othello.core.game.Strategy
+import com.ekezet.othello.core.game.strategy.Strategy
 import com.ekezet.othello.feature.gameboard.GameBoardAction.OnCellClicked
 import kotlinx.coroutines.delay
 

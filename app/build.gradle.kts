@@ -36,8 +36,12 @@ android {
 dependencies {
     implementation(libs.androidx.activity.compose)
 
+    implementation(libs.hurokBase)
+    implementation(libs.hurokCompose)
+
     implementation(project(":core:ui"))
     implementation(project(":core:data"))
+    implementation(project(":core:game"))
 
     implementation(project(":feature:game-board"))
 }

@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -15,10 +14,16 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.ekezet.hurok.compose.LoopWrapper
 import com.ekezet.othello.core.data.models.Disk
+import com.ekezet.othello.core.ui.R.string
 import com.ekezet.othello.feature.gameboard.GameBoardAction.ContinueGame
+import com.ekezet.othello.feature.gameboard.GameBoardArgs
 import com.ekezet.othello.feature.gameboard.GameBoardScope
 import com.ekezet.othello.feature.gameboard.GameBoardState
 import com.ekezet.othello.feature.gameboard.MOVE_DELAY_MILLIS
@@ -32,10 +37,11 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun GameBoardView(
+    args: GameBoardArgs,
     modifier: Modifier = Modifier,
     scope: CoroutineScope = rememberCoroutineScope(),
 ) {
-    LoopWrapper({ gameBoardLoop(scope) }) { state ->
+    LoopWrapper({ gameBoardLoop(scope, args) }, args) { state ->
         GameBoardViewImpl(state, modifier)
     }
 }
@@ -77,43 +83,33 @@ private fun GameBoardState.BoardHeader() {
     ) {
         DiskImage(disk = currentDisk)
 
-        Text("Turn: $currentTurn")
+        val turn = stringResource(id = string.game_board__header__turn, currentTurn)
+        Text(text = turn)
 
         Spacer(Modifier.weight(1F))
 
-        Text("Vs: $opponentName")
+        val opponent = opponentName ?: stringResource(string.game_board__header__human)
+        val vs = stringResource(string.game_board__header__vs, opponent)
+        Text(text = buildAnnotatedString {
+            append(vs)
+            addStyle(SpanStyle(fontWeight = FontWeight.Bold), vs.length - opponent.length, vs.length)
+        })
     }
 }
 
 @Composable
 private fun GameBoardState.BoardFooter() {
-    Column(
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            DiskImage(disk = Disk.Dark)
-            Text(diskCount.numDark.toString())
+        DiskImage(disk = Disk.Dark)
+        Text(diskCount.numDark.toString())
 
-            Spacer(Modifier.weight(1F))
+        Spacer(Modifier.weight(1F))
 
-            Text(diskCount.numLight.toString())
-            DiskImage(disk = Disk.Light)
-        }
-
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-        ) {
-            Button(onClick = onResetGameClick) {
-                Text("Reset game")
-            }
-
-            Button(onClick = onToggleIndicatorsClick) {
-                Text("Toggle indicators")
-            }
-        }
+        Text(diskCount.numLight.toString())
+        DiskImage(disk = Disk.Light)
     }
 }
 

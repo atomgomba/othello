@@ -12,27 +12,6 @@ import com.ekezet.othello.feature.gameboard.GameBoardEffect.DeriveOpponentMove
 
 internal sealed interface GameBoardAction : Action<GameBoardModel, GameBoardDependency> {
 
-    data object OnResetGameClicked : GameBoardAction {
-        override fun GameBoardModel.proceed() =
-            change(
-                copy(
-                    gameState = defaultGameState,
-                    nextMovePosition = null,
-                ),
-            )
-    }
-
-    data object OnToggleIndicatorsClicked : GameBoardAction {
-        override fun GameBoardModel.proceed() =
-            change(
-                copy(
-                    displayOptions = displayOptions.copy(
-                        showPossibleMoves = !displayOptions.showPossibleMoves,
-                    ),
-                ),
-            )
-    }
-
     data class OnCellClicked(val at: Position) : GameBoardAction {
         override fun GameBoardModel.proceed() =
             if (gameState.validMoves.isValid(at)) {

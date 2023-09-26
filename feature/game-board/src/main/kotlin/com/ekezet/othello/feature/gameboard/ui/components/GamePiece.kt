@@ -16,7 +16,7 @@ internal val DarkColor = Color.Black
 internal val LightColor = Color.White
 
 @Composable
-internal fun GamePiece(disk: Disk, modifier: Modifier = Modifier) {
+fun GamePiece(disk: Disk, modifier: Modifier = Modifier) {
     Box(
         modifier = modifier,
         contentAlignment = Alignment.Center,

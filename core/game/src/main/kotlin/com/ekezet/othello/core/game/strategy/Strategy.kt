@@ -1,6 +1,7 @@
-package com.ekezet.othello.core.game
+package com.ekezet.othello.core.game.strategy
 
 import com.ekezet.othello.core.data.models.Position
+import com.ekezet.othello.core.game.GameState
 
 interface Strategy {
     val name: String

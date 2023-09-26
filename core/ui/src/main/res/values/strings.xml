@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="main__menu__new_game">Reset game</string>
+    <string name="main__menu__toggle_indicators">Toggle indicators</string>
+
+    <string name="game_board__header__turn">Turn: %0$d</string>
+    <string name="game_board__header__vs">Vs: %0$s</string>
+    <string name="game_board__header__human">Other Human</string>
+</resources>

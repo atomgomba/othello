@@ -3,8 +3,6 @@ package com.ekezet.othello.feature.gameboard
 import com.ekezet.hurok.Loop
 import com.ekezet.hurok.LoopScope
 import com.ekezet.othello.feature.gameboard.GameBoardAction.OnCellClicked
-import com.ekezet.othello.feature.gameboard.GameBoardAction.OnResetGameClicked
-import com.ekezet.othello.feature.gameboard.GameBoardAction.OnToggleIndicatorsClicked
 import com.ekezet.othello.feature.gameboard.ui.viewModels.BoardOverlayList
 import com.ekezet.othello.feature.gameboard.ui.viewModels.OverlayItem.NextMoveIndicatorOverlayItem
 import com.ekezet.othello.feature.gameboard.ui.viewModels.OverlayItem.ValidMoveIndicatorOverlayItem
@@ -17,13 +15,13 @@ internal typealias GameBoardScope = LoopScope<GameBoardModel, GameBoardDependenc
 
 internal class GameBoardLoop(scope: CoroutineScope, args: GameBoardArgs) :
     Loop<GameBoardState, GameBoardModel, GameBoardArgs, GameBoardDependency, GameBoardAction>(
-        scope,
-        args,
-        GameBoardDependency,
+        coroutineScope = scope,
+        args = args,
+        dependency = GameBoardDependency,
     ) {
 
     override fun initModel(args: GameBoardArgs?) = GameBoardModel(
-        gameState = args!!.gameState,
+        gameState = args!!.initialGameState,
         displayOptions = args.displayOptions,
         opponentStrategy = args.opponentStrategy,
     )
@@ -41,8 +39,6 @@ internal class GameBoardLoop(scope: CoroutineScope, args: GameBoardArgs) :
             showBoardPositions = displayOptions.showBoardPositions,
             hasPossibleMoves = gameState.validMoves.isNotEmpty(),
             onCellClick = { x, y -> emit(OnCellClicked(x to y)) },
-            onResetGameClick = { emit(OnResetGameClicked) },
-            onToggleIndicatorsClick = { emit(OnToggleIndicatorsClicked) },
         )
     }
 
@@ -66,5 +62,5 @@ internal class GameBoardLoop(scope: CoroutineScope, args: GameBoardArgs) :
     }
 }
 
-internal fun gameBoardLoop(scope: CoroutineScope, args: GameBoardArgs? = null) =
-    GameBoardLoop(scope, args ?: defaultArgs)
+internal fun gameBoardLoop(scope: CoroutineScope, args: GameBoardArgs) =
+    GameBoardLoop(scope, args)
