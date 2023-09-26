@@ -7,21 +7,21 @@ import java.util.Stack
 
 data class NextMove(val position: Position, val disk: Disk)
 
-data class PastMove(val source: Board, val move: NextMove?) {
+data class PastMove(val board: Board, val move: NextMove?) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
         other as PastMove
 
-        if (!source.contentDeepEquals(other.source)) return false
+        if (!board.contentDeepEquals(other.board)) return false
         if (move != other.move) return false
 
         return true
     }
 
     override fun hashCode(): Int {
-        var result = source.contentDeepHashCode()
+        var result = board.contentDeepHashCode()
         result = 31 * result + (move?.hashCode() ?: 0)
         return result
     }

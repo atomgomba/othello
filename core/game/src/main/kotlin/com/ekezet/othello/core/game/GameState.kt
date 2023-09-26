@@ -41,7 +41,7 @@ data class GameState(
         return copy(
             currentBoard = nextBoard,
             history = history.apply {
-                add(PastMove(source = currentBoard, move = nextMove))
+                add(PastMove(board = currentBoard, move = nextMove))
             },
         )
     }
@@ -50,7 +50,7 @@ data class GameState(
         copy(
             currentBoard = currentBoard,
             history = history.apply {
-                add(PastMove(source = currentBoard, move = null))
+                add(PastMove(board = currentBoard, move = null))
             },
         )
 

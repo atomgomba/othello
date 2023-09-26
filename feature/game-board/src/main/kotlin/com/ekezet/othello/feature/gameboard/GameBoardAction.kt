@@ -43,7 +43,7 @@ internal sealed interface GameBoardAction : Action<GameBoardModel, Unit> {
                 change(
                     copy(
                         gameState = gameState.proceed(nextMove),
-                        nextMovePosition = null,
+                        nextMovePosition = if (currentDisk.isDark) null else opponentStrategy?.deriveNext(gameState),
                     ),
                 )
             } catch (e: InvalidMoveException) {

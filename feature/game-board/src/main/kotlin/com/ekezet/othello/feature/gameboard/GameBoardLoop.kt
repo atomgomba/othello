@@ -25,6 +25,7 @@ internal class GameBoardLoop(scope: CoroutineScope, args: GameBoardArgs) :
     override fun initModel(args: GameBoardArgs?) = GameBoardModel(
         gameState = args!!.gameState,
         displayOptions = args.displayOptions,
+        opponentStrategy = args.opponentStrategy,
     )
 
     override fun renderState(model: GameBoardModel) = with(model) {
