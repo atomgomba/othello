@@ -21,6 +21,7 @@ import com.ekezet.hurok.compose.LoopWrapper
 import com.ekezet.othello.feature.gameboard.GameBoardAction.ContinueGame
 import com.ekezet.othello.feature.gameboard.GameBoardScope
 import com.ekezet.othello.feature.gameboard.GameBoardState
+import com.ekezet.othello.feature.gameboard.MOVE_DELAY_MILLIS
 import com.ekezet.othello.feature.gameboard.gameBoardLoop
 import com.ekezet.othello.feature.gameboard.ui.components.GameBoard
 import com.ekezet.othello.feature.gameboard.ui.components.GamePiece
@@ -94,8 +95,7 @@ internal fun GameBoardScope.GameBoardViewImpl(
 
     LaunchedEffect(nextMovePosition) {
         if (nextMovePosition != null) {
-            // briefly show the current move before the next turn
-            delay(300L)
+            delay(MOVE_DELAY_MILLIS)
             emit(ContinueGame)
         }
     }

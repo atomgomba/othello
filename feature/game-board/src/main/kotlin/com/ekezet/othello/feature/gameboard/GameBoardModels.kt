@@ -7,7 +7,7 @@ import com.ekezet.othello.core.data.models.Position
 import com.ekezet.othello.core.data.serialize.BoardSerializer
 import com.ekezet.othello.core.game.GameState
 import com.ekezet.othello.core.game.Strategy
-import com.ekezet.othello.core.game.strategy.NaiveMaxStrategy
+import com.ekezet.othello.core.game.strategy.RandomStrategy
 import com.ekezet.othello.feature.gameboard.ui.viewModels.BoardList
 import com.ekezet.othello.feature.gameboard.ui.viewModels.BoardOverlayList
 
@@ -30,8 +30,13 @@ internal val defaultArgs: GameBoardArgs
     inline get() = GameBoardArgs(
         gameState = defaultGameState,
         displayOptions = DisplayOptions(),
-        opponentStrategy = NaiveMaxStrategy()
+        opponentStrategy = RandomStrategy(),
     )
+
+/**
+ * Give a little time for humans to follow changes on the board
+ */
+const val MOVE_DELAY_MILLIS = 300L
 
 internal data class DisplayOptions(
     val showPossibleMoves: Boolean = true,

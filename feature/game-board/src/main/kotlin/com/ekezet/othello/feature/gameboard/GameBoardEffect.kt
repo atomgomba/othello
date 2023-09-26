@@ -4,6 +4,7 @@ import com.ekezet.hurok.Effect
 import com.ekezet.othello.core.game.GameState
 import com.ekezet.othello.core.game.Strategy
 import com.ekezet.othello.feature.gameboard.GameBoardAction.OnCellClicked
+import kotlinx.coroutines.delay
 
 internal sealed interface GameBoardEffect : Effect<GameBoardModel, GameBoardDependency> {
 
@@ -14,6 +15,7 @@ internal sealed interface GameBoardEffect : Effect<GameBoardModel, GameBoardDepe
         override suspend fun GameBoardDependency.trigger(loop: GameBoardScope) {
             val next = strategy.deriveNext(state)
             if (next != null) {
+                delay(MOVE_DELAY_MILLIS)
                 loop.emit(OnCellClicked(next))
             } else {
                 // TODO: Opponent must pass or has lost
