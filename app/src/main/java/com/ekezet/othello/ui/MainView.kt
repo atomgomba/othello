@@ -17,11 +17,12 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.lifecycleScope
 import com.ekezet.hurok.compose.LoopWrapper
 import com.ekezet.othello.MainAction.OnNewGameClicked
 import com.ekezet.othello.MainAction.OnToggleIndicatorsClicked
@@ -35,8 +36,8 @@ import com.ekezet.othello.mainLoop
 import kotlinx.coroutines.CoroutineScope
 
 @Composable
-fun MainView(scope: CoroutineScope = rememberCoroutineScope()) {
-    LoopWrapper({ mainLoop(scope) }) { state ->
+fun MainView(parentScope: CoroutineScope = LocalLifecycleOwner.current.lifecycleScope) {
+    LoopWrapper({ mainLoop(parentScope) }) { state ->
         MainViewImpl(state)
     }
 }
@@ -64,6 +65,7 @@ private fun MainScope.MainViewImpl(state: MainState) = with(state) {
                 .fillMaxSize()
         ) {
             GameBoardView(
+                parentScope = coroutineScope,
                 args = gameBoardArgs,
                 modifier = Modifier
                     .padding(16.dp)

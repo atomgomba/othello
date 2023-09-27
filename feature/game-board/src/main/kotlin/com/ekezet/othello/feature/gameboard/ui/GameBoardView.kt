@@ -39,9 +39,9 @@ import kotlinx.coroutines.delay
 fun GameBoardView(
     args: GameBoardArgs,
     modifier: Modifier = Modifier,
-    scope: CoroutineScope = rememberCoroutineScope(),
+    parentScope: CoroutineScope = rememberCoroutineScope(),
 ) {
-    LoopWrapper({ gameBoardLoop(scope, args) }, args) { state ->
+    LoopWrapper({ gameBoardLoop(parentScope, args) }, args = args, key = args.gameState) { state ->
         GameBoardViewImpl(state, modifier)
     }
 }

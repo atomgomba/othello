@@ -1,7 +1,6 @@
 package com.ekezet.othello.feature.gameboard
 
 import com.ekezet.hurok.Loop
-import com.ekezet.hurok.LoopScope
 import com.ekezet.othello.feature.gameboard.GameBoardAction.OnCellClicked
 import com.ekezet.othello.feature.gameboard.ui.viewModels.BoardOverlayList
 import com.ekezet.othello.feature.gameboard.ui.viewModels.OverlayItem.NextMoveIndicatorOverlayItem
@@ -11,20 +10,17 @@ import com.ekezet.othello.feature.gameboard.ui.viewModels.putAt
 import com.ekezet.othello.feature.gameboard.ui.viewModels.toList
 import kotlinx.coroutines.CoroutineScope
 
-internal typealias GameBoardScope = LoopScope<GameBoardModel, GameBoardDependency>
-
-internal class GameBoardLoop(scope: CoroutineScope, args: GameBoardArgs) :
-    Loop<GameBoardState, GameBoardModel, GameBoardArgs, GameBoardDependency, GameBoardAction>(
-        coroutineScope = scope,
-        args = args,
-        dependency = GameBoardDependency,
+internal class GameBoardLoop(parentScope: CoroutineScope, initModel: GameBoardModel) :
+    Loop<GameBoardState, GameBoardModel, GameBoardArgs, Unit, GameBoardAction>(
+        coroutineScope = parentScope,
+        initModel = initModel,
     ) {
 
-    override fun initModel(args: GameBoardArgs?) = GameBoardModel(
-        gameState = args!!.initialGameState,
-        displayOptions = args.displayOptions,
-        opponentStrategy = args.opponentStrategy,
-    )
+    override fun GameBoardModel.applyArgs(args: GameBoardArgs) =
+        copy(
+            displayOptions = args.displayOptions,
+            opponentStrategy = args.opponentStrategy,
+        )
 
     override fun renderState(model: GameBoardModel) = with(model) {
         GameBoardState(
@@ -62,5 +58,5 @@ internal class GameBoardLoop(scope: CoroutineScope, args: GameBoardArgs) :
     }
 }
 
-internal fun gameBoardLoop(scope: CoroutineScope, args: GameBoardArgs) =
-    GameBoardLoop(scope, args)
+internal fun gameBoardLoop(parentScope: CoroutineScope, args: GameBoardArgs) =
+    GameBoardLoop(parentScope = parentScope, initModel = GameBoardModel.fromArgs(args))

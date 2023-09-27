@@ -1,6 +1,7 @@
 package com.ekezet.othello.feature.gameboard
 
 import androidx.compose.runtime.Stable
+import com.ekezet.hurok.LoopScope
 import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.data.models.Position
 import com.ekezet.othello.core.data.models.isLight
@@ -16,7 +17,7 @@ import com.ekezet.othello.feature.gameboard.ui.viewModels.BoardOverlayList
 const val MOVE_DELAY_MILLIS = 300L
 
 data class GameBoardArgs(
-    override val initialGameState: GameState,
+    override val gameState: GameState,
     override val displayOptions: DisplayOptions,
     override val opponentStrategy: Strategy?,
 ) : GameSettings
@@ -33,7 +34,7 @@ internal data class GameBoardModel(
     val opponentStrategy: Strategy? = null,
 ) {
     val currentDisk: Disk
-        get() = gameState.currentDisk
+        inline get() = gameState.currentDisk
 
     val diskCount: DiskCount by lazy {
         gameState.currentBoard
@@ -45,6 +46,16 @@ internal data class GameBoardModel(
                     second = if (disk.isLight) acc.second + 1 else acc.second,
                 )
             }
+    }
+
+    companion object {
+        fun fromArgs(args: GameBoardArgs) = with(args) {
+            GameBoardModel(
+                gameState = gameState,
+                opponentStrategy = opponentStrategy,
+                displayOptions = displayOptions,
+            )
+        }
     }
 }
 
@@ -63,8 +74,6 @@ internal data class GameBoardState(
     val onCellClick: (x: Int, y: Int) -> Unit,
 )
 
-internal object GameBoardDependency
-
 internal typealias DiskCount = Pair<Int, Int>
 
 internal val DiskCount.numDark: Int
@@ -72,3 +81,5 @@ internal val DiskCount.numDark: Int
 
 internal val DiskCount.numLight: Int
     inline get() = second
+
+internal typealias GameBoardScope = LoopScope<GameBoardModel, Unit>

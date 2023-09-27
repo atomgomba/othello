@@ -1,11 +1,11 @@
 package com.ekezet.othello
 
 import androidx.compose.runtime.Stable
+import com.ekezet.hurok.LoopScope
 import com.ekezet.othello.core.data.models.Board
 import com.ekezet.othello.core.data.serialize.BoardSerializer
 import com.ekezet.othello.core.game.GameState
 import com.ekezet.othello.core.game.strategy.NaiveMaxStrategy
-import com.ekezet.othello.core.game.strategy.PreferSidesDecoratorStrategy.Companion.preferSides
 import com.ekezet.othello.core.game.strategy.Strategy
 import com.ekezet.othello.feature.gameboard.DisplayOptions
 import com.ekezet.othello.feature.gameboard.GameBoardArgs
@@ -33,8 +33,8 @@ internal val defaultDisplayOptions: DisplayOptions
     )
 
 data class MainModel(
-    override val initialGameState: GameState = defaultGameState,
-    override val opponentStrategy: Strategy? = NaiveMaxStrategy().preferSides(),
+    override val gameState: GameState = defaultGameState,
+    override val opponentStrategy: Strategy? = NaiveMaxStrategy(),
     override val displayOptions: DisplayOptions = defaultDisplayOptions,
 ) : GameSettings
 
@@ -46,4 +46,4 @@ data class MainState(
     val onToggleIndicatorsClick: () -> Unit,
 )
 
-object MainDependency
+typealias MainScope = LoopScope<MainModel, Unit>

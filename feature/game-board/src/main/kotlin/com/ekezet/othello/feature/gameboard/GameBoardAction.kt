@@ -10,7 +10,7 @@ import com.ekezet.othello.core.game.isValid
 import com.ekezet.othello.core.game.throwable.InvalidMoveException
 import com.ekezet.othello.feature.gameboard.GameBoardEffect.DeriveOpponentMove
 
-internal sealed interface GameBoardAction : Action<GameBoardModel, GameBoardDependency> {
+internal sealed interface GameBoardAction : Action<GameBoardModel, Unit> {
 
     data class OnCellClicked(val at: Position) : GameBoardAction {
         override fun GameBoardModel.proceed() =
@@ -22,7 +22,7 @@ internal sealed interface GameBoardAction : Action<GameBoardModel, GameBoardDepe
     }
 
     data object ContinueGame : GameBoardAction {
-        override fun GameBoardModel.proceed(): Next<GameBoardModel, GameBoardDependency> {
+        override fun GameBoardModel.proceed(): Next<GameBoardModel, Unit> {
             nextMovePosition ?: return skip
             val newState = try {
                 gameState.proceed(NextMove(nextMovePosition, currentDisk))
@@ -34,8 +34,7 @@ internal sealed interface GameBoardAction : Action<GameBoardModel, GameBoardDepe
 
         private fun GameBoardModel.nextTurn(
             newState: GameState,
-        ): Next<GameBoardModel, GameBoardDependency> =
-            outcome(
+        ) = outcome(
                 model = copy(
                     gameState = newState,
                     nextMovePosition = null,

@@ -6,17 +6,17 @@ import com.ekezet.othello.core.game.strategy.Strategy
 import com.ekezet.othello.feature.gameboard.GameBoardAction.OnCellClicked
 import kotlinx.coroutines.delay
 
-internal sealed interface GameBoardEffect : Effect<GameBoardModel, GameBoardDependency> {
+internal sealed interface GameBoardEffect : Effect<GameBoardModel, Unit> {
 
     data class DeriveOpponentMove(
         private val state: GameState,
         private val strategy: Strategy,
     ) : GameBoardEffect {
-        override suspend fun GameBoardDependency.trigger(loop: GameBoardScope) {
+        override suspend fun GameBoardScope.trigger(dependency: Unit?) {
             val next = strategy.deriveNext(state)
             if (next != null) {
                 delay(MOVE_DELAY_MILLIS)
-                loop.emit(OnCellClicked(next))
+                emit(OnCellClicked(next))
             } else {
                 // TODO: Opponent must pass or has lost
             }
