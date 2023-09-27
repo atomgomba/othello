@@ -1,0 +1,28 @@
+package com.ekezet.othello.core.game.strategy
+
+import com.ekezet.othello.core.data.models.BoardHeight
+import com.ekezet.othello.core.data.models.BoardWidth
+import com.ekezet.othello.core.data.models.Position
+import com.ekezet.othello.core.data.models.x
+import com.ekezet.othello.core.data.models.y
+import com.ekezet.othello.core.game.GameState
+
+class PreferSidesDecoratorStrategy(
+    private val wrapped: Strategy,
+) : Strategy {
+    override val name: String
+        get() = "${wrapped.name} (Prefer sides)"
+
+    private val sidesX = setOf(0, BoardWidth - 1)
+    private val sidesY = setOf(0, BoardHeight - 1)
+
+    override fun deriveNext(state: GameState): Position? = with(state) {
+        validMoves.shuffled().firstOrNull { it.position.x in sidesX || it.position.y in sidesY }?.position
+            ?: wrapped.deriveNext(state)
+    }
+
+    companion object {
+        fun Strategy.preferSides() =
+            PreferSidesDecoratorStrategy(this)
+    }
+}

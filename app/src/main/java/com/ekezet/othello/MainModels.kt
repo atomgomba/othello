@@ -5,6 +5,7 @@ import com.ekezet.othello.core.data.models.Board
 import com.ekezet.othello.core.data.serialize.BoardSerializer
 import com.ekezet.othello.core.game.GameState
 import com.ekezet.othello.core.game.strategy.NaiveMaxStrategy
+import com.ekezet.othello.core.game.strategy.PreferSidesDecoratorStrategy.Companion.preferSides
 import com.ekezet.othello.core.game.strategy.Strategy
 import com.ekezet.othello.feature.gameboard.DisplayOptions
 import com.ekezet.othello.feature.gameboard.GameBoardArgs
@@ -33,7 +34,7 @@ internal val defaultDisplayOptions: DisplayOptions
 
 data class MainModel(
     override val initialGameState: GameState = defaultGameState,
-    override val opponentStrategy: Strategy? = NaiveMaxStrategy(),
+    override val opponentStrategy: Strategy? = NaiveMaxStrategy().preferSides(),
     override val displayOptions: DisplayOptions = defaultDisplayOptions,
 ) : GameSettings
 
