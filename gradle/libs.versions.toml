@@ -10,6 +10,7 @@ androidxCore = "1.12.0"
 androidxLifecycle = "2.6.2"
 hurok = "0.1.0"
 junit4 = "4.13.2"
+koinBom = "3.5.1"
 kotlin = "1.9.10"
 kotlinxCoroutines = "1.7.3"
 ksp = "1.9.10-1.0.13"
@@ -38,6 +39,10 @@ androidx-lifecycle-runtimeCompose = { group = "androidx.lifecycle", name = "life
 hurokBase = { group = "com.ekezet.hurok", name = "base", version.ref = "hurok" }
 hurokCompose = { group = "com.ekezet.hurok", name = "android-compose", version.ref = "hurok" }
 junit4 = { group = "junit", name = "junit", version.ref = "junit4" }
+koin-bom = { group = "io.insert-koin", name = "koin-bom", version.ref = "koinBom"}
+koin-core = { group = "io.insert-koin", name = "koin-core"}
+koin-android = { group = "io.insert-koin", name = "koin-android"}
+koin-androidx-compose = { group = "io.insert-koin", name = "koin-androidx-compose"}
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinxCoroutines" }
 timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
 

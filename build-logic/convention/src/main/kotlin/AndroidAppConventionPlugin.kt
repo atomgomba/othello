@@ -1,9 +1,10 @@
+
 import com.android.build.api.dsl.ApplicationExtension
+import com.ekezet.othello.configureKoin
 import com.ekezet.othello.configureKotlinAndroid
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
-import org.gradle.kotlin.dsl.dependencies
 
 class AndroidAppConventionPlugin : Plugin<Project> {
     companion object {
@@ -28,6 +29,7 @@ class AndroidAppConventionPlugin : Plugin<Project> {
                     }
 
                     configureKotlinAndroid(this)
+                    configureKoin(this)
                 }
             }
         }

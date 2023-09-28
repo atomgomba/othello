@@ -2,6 +2,7 @@
 import AndroidAppConventionPlugin.Companion.compileSdkLevel
 import AndroidAppConventionPlugin.Companion.minSdkLevel
 import com.android.build.api.dsl.LibraryExtension
+import com.ekezet.othello.configureKoin
 import com.ekezet.othello.configureKotlinAndroid
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -26,6 +27,7 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
                     }
 
                     configureKotlinAndroid(this)
+                    configureKoin(this)
                 }
             }
 
