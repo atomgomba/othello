@@ -19,25 +19,30 @@ import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.lifecycleScope
 import com.ekezet.hurok.compose.LoopWrapper
+import com.ekezet.othello.MainAction
 import com.ekezet.othello.MainAction.OnNewGameClicked
 import com.ekezet.othello.MainAction.OnToggleIndicatorsClicked
+import com.ekezet.othello.MainDependency
+import com.ekezet.othello.MainModel
 import com.ekezet.othello.MainScope
 import com.ekezet.othello.MainState
 import com.ekezet.othello.R.string
 import com.ekezet.othello.core.ui.R
 import com.ekezet.othello.feature.gameboard.DisplayOptions
 import com.ekezet.othello.feature.gameboard.ui.GameBoardView
-import com.ekezet.othello.mainLoop
-import kotlinx.coroutines.CoroutineScope
+import org.koin.compose.koinInject
+import org.koin.core.qualifier.named
 
 @Composable
-fun MainView(parentScope: CoroutineScope = LocalLifecycleOwner.current.lifecycleScope) {
-    LoopWrapper({ mainLoop(parentScope) }) { state ->
+internal fun MainView(
+    loopScope: MainScope = koinInject(named("mainScope")),
+) {
+    LoopWrapper<MainState, MainModel, Unit, MainDependency, MainAction>(
+        builder = { loopScope },
+    ) { state ->
         MainViewImpl(state)
     }
 }
@@ -45,27 +50,28 @@ fun MainView(parentScope: CoroutineScope = LocalLifecycleOwner.current.lifecycle
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun MainScope.MainViewImpl(state: MainState) = with(state) {
-    Scaffold(topBar = {
-        TopAppBar(
-            colors = topAppBarColors(
-                containerColor = MaterialTheme.colorScheme.primaryContainer,
-                titleContentColor = MaterialTheme.colorScheme.primary,
-            ),
-            title = { Text(stringResource(string.app_name)) },
-            navigationIcon = { },
-            actions = { Toolbar(gameSettings.displayOptions) },
-        )
-    },
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                colors = topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    titleContentColor = MaterialTheme.colorScheme.primary,
+                ),
+                title = { Text(stringResource(string.app_name)) },
+                navigationIcon = { },
+                actions = { Toolbar(gameSettings.displayOptions) },
+            )
+        },
         bottomBar = {
             BottomAppBar { }
-        }) { innerPadding ->
+        },
+    ) { innerPadding ->
         Box(
             modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize()
         ) {
             GameBoardView(
-                parentScope = coroutineScope,
                 args = gameBoardArgs,
                 modifier = Modifier
                     .padding(16.dp)

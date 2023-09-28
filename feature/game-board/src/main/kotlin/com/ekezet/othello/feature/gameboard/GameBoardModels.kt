@@ -2,10 +2,13 @@ package com.ekezet.othello.feature.gameboard
 
 import androidx.compose.runtime.Stable
 import com.ekezet.hurok.LoopScope
+import com.ekezet.othello.core.data.models.Board
 import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.data.models.Position
 import com.ekezet.othello.core.data.models.isLight
+import com.ekezet.othello.core.data.serialize.BoardSerializer
 import com.ekezet.othello.core.game.GameState
+import com.ekezet.othello.core.game.strategy.HumanPlayer
 import com.ekezet.othello.core.game.strategy.Strategy
 import com.ekezet.othello.feature.gameboard.data.GameSettings
 import com.ekezet.othello.feature.gameboard.ui.viewModels.BoardList
@@ -16,8 +19,36 @@ import com.ekezet.othello.feature.gameboard.ui.viewModels.BoardOverlayList
  */
 const val MOVE_DELAY_MILLIS = 300L
 
+val defaultBoard: Board
+    inline get() = BoardSerializer.fromLines(
+        ",,,,,,,,",
+        ",,,,,,,,",
+        ",,,,,,,,",
+        ",,,ox,,,",
+        ",,,xo,,,",
+        ",,,,,,,,",
+        ",,,,,,,,",
+        ",,,,,,,,",
+    )
+
+val defaultGameState: GameState
+    inline get() = GameState.new(defaultBoard)
+
+val defaultDisplayOptions: DisplayOptions
+    inline get() = DisplayOptions(
+        showPossibleMoves = true,
+        showBoardPositions = false,
+    )
+
+val defaultStrategy: Strategy? = HumanPlayer
+
+val defaultGameBoardArgs: GameBoardArgs
+    inline get() = GameBoardArgs(
+        displayOptions = defaultDisplayOptions,
+        opponentStrategy = defaultStrategy,
+    )
+
 data class GameBoardArgs(
-    override val gameState: GameState,
     override val displayOptions: DisplayOptions,
     override val opponentStrategy: Strategy?,
 ) : GameSettings
@@ -27,11 +58,11 @@ data class DisplayOptions(
     val showBoardPositions: Boolean,
 )
 
-internal data class GameBoardModel(
-    val gameState: GameState,
-    val displayOptions: DisplayOptions,
+data class GameBoardModel(
+    val gameState: GameState = defaultGameState,
+    val displayOptions: DisplayOptions = defaultDisplayOptions,
+    val opponentStrategy: Strategy? = defaultStrategy,
     val nextMovePosition: Position? = null,
-    val opponentStrategy: Strategy? = null,
 ) {
     val currentDisk: Disk
         inline get() = gameState.currentDisk
@@ -51,7 +82,6 @@ internal data class GameBoardModel(
     companion object {
         fun fromArgs(args: GameBoardArgs) = with(args) {
             GameBoardModel(
-                gameState = gameState,
                 opponentStrategy = opponentStrategy,
                 displayOptions = displayOptions,
             )
@@ -82,4 +112,4 @@ internal val DiskCount.numDark: Int
 internal val DiskCount.numLight: Int
     inline get() = second
 
-internal typealias GameBoardScope = LoopScope<GameBoardModel, Unit>
+typealias GameBoardScope = LoopScope<GameBoardModel, Unit>

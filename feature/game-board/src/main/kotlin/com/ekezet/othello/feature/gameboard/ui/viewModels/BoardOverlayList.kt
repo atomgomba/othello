@@ -1,6 +1,6 @@
 package com.ekezet.othello.feature.gameboard.ui.viewModels
 
-typealias BoardOverlayList = List<List<OverlayItem?>>
+internal typealias BoardOverlayList = List<List<OverlayItem?>>
 
 internal fun BoardOverlay.toList(): BoardOverlayList = buildList {
     for (row in this@toList) {

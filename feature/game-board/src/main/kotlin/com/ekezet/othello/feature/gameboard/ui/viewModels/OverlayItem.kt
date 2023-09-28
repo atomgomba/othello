@@ -10,7 +10,7 @@ import com.ekezet.othello.feature.gameboard.ui.components.overlay.NextMoveIndica
 import com.ekezet.othello.feature.gameboard.ui.components.overlay.ValidMoveIndicator
 import java.util.Stack
 
-sealed interface OverlayItem : HasComposeKey {
+internal sealed interface OverlayItem : HasComposeKey {
     @Composable
     fun Composable()
 

@@ -3,20 +3,22 @@ package com.ekezet.othello
 import com.ekezet.hurok.Loop
 import com.ekezet.othello.MainAction.OnNewGameClicked
 import com.ekezet.othello.MainAction.OnToggleIndicatorsClicked
-import com.ekezet.othello.feature.gameboard.GameBoardArgs
+import com.ekezet.othello.feature.gameboard.defaultGameBoardArgs
 import kotlinx.coroutines.CoroutineScope
 
-class MainLoop(parentScope: CoroutineScope, initModel: MainModel) :
-    Loop<MainState, MainModel, Unit, Unit, MainAction>(
-        coroutineScope = parentScope,
-        initModel = initModel,
-    ) {
-
+internal class MainLoop(
+    parentScope: CoroutineScope,
+    initModel: MainModel,
+    dependency: MainDependency,
+) : Loop<MainState, MainModel, Unit, MainDependency, MainAction>(
+    loopCoroutineScope = parentScope,
+    initModel = initModel,
+    dependency = dependency,
+) {
     override fun renderState(model: MainModel) = with(model) {
         MainState(
             gameSettings = model,
-            gameBoardArgs = GameBoardArgs(
-                gameState = gameState,
+            gameBoardArgs = defaultGameBoardArgs.copy(
                 displayOptions = displayOptions,
                 opponentStrategy = opponentStrategy,
             ),
@@ -26,5 +28,9 @@ class MainLoop(parentScope: CoroutineScope, initModel: MainModel) :
     }
 }
 
-fun mainLoop(parentScope: CoroutineScope) =
-    MainLoop(parentScope = parentScope, initModel = MainModel())
+internal fun mainLoop(parentScope: CoroutineScope, dependency: MainDependency) =
+    MainLoop(
+        parentScope = parentScope,
+        initModel = MainModel(),
+        dependency = dependency,
+    )

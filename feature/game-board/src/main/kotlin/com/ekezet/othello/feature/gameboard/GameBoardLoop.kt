@@ -12,7 +12,7 @@ import kotlinx.coroutines.CoroutineScope
 
 internal class GameBoardLoop(parentScope: CoroutineScope, initModel: GameBoardModel) :
     Loop<GameBoardState, GameBoardModel, GameBoardArgs, Unit, GameBoardAction>(
-        coroutineScope = parentScope,
+        loopCoroutineScope = parentScope,
         initModel = initModel,
     ) {
 

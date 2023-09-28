@@ -2,48 +2,34 @@ package com.ekezet.othello
 
 import androidx.compose.runtime.Stable
 import com.ekezet.hurok.LoopScope
-import com.ekezet.othello.core.data.models.Board
-import com.ekezet.othello.core.data.serialize.BoardSerializer
-import com.ekezet.othello.core.game.GameState
 import com.ekezet.othello.core.game.strategy.NaiveMaxStrategy
 import com.ekezet.othello.core.game.strategy.Strategy
 import com.ekezet.othello.feature.gameboard.DisplayOptions
 import com.ekezet.othello.feature.gameboard.GameBoardArgs
+import com.ekezet.othello.feature.gameboard.GameBoardScope
 import com.ekezet.othello.feature.gameboard.data.GameSettings
+import com.ekezet.othello.feature.gameboard.defaultDisplayOptions
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.get
+import org.koin.core.qualifier.named
 
-internal val defaultBoard: Board
-    inline get() = BoardSerializer.fromLines(
-        ",,,,,,,,",
-        ",,,,,,,,",
-        ",,,,,,,,",
-        ",,,ox,,,",
-        ",,,xo,,,",
-        ",,,,,,,,",
-        ",,,,,,,,",
-        ",,,,,,,,",
-    )
-
-internal val defaultGameState: GameState
-    inline get() = GameState.new(defaultBoard)
-
-internal val defaultDisplayOptions: DisplayOptions
-    inline get() = DisplayOptions(
-        showPossibleMoves = true,
-        showBoardPositions = false,
-    )
-
-data class MainModel(
-    override val gameState: GameState = defaultGameState,
+internal data class MainModel(
     override val opponentStrategy: Strategy? = NaiveMaxStrategy(),
     override val displayOptions: DisplayOptions = defaultDisplayOptions,
 ) : GameSettings
 
 @Stable
-data class MainState(
+internal data class MainState(
     val gameSettings: GameSettings,
     val gameBoardArgs: GameBoardArgs,
     val onNewGameClick: () -> Unit,
     val onToggleIndicatorsClick: () -> Unit,
 )
 
-typealias MainScope = LoopScope<MainModel, Unit>
+internal class MainDependency(
+    gameBoardScope: GameBoardScope? = null
+) : KoinComponent {
+    val gameBoardScope: GameBoardScope = gameBoardScope ?: get(named("gameBoardScope"))
+}
+
+internal typealias MainScope = LoopScope<MainModel, MainDependency>

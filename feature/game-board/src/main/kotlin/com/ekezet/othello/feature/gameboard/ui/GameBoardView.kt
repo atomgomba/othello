@@ -10,7 +10,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,32 +21,36 @@ import androidx.compose.ui.unit.dp
 import com.ekezet.hurok.compose.LoopWrapper
 import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.ui.R.string
+import com.ekezet.othello.feature.gameboard.GameBoardAction
 import com.ekezet.othello.feature.gameboard.GameBoardAction.ContinueGame
 import com.ekezet.othello.feature.gameboard.GameBoardArgs
+import com.ekezet.othello.feature.gameboard.GameBoardModel
 import com.ekezet.othello.feature.gameboard.GameBoardScope
 import com.ekezet.othello.feature.gameboard.GameBoardState
 import com.ekezet.othello.feature.gameboard.MOVE_DELAY_MILLIS
-import com.ekezet.othello.feature.gameboard.gameBoardLoop
 import com.ekezet.othello.feature.gameboard.numDark
 import com.ekezet.othello.feature.gameboard.numLight
 import com.ekezet.othello.feature.gameboard.ui.components.GameBoard
 import com.ekezet.othello.feature.gameboard.ui.components.GamePiece
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
+import org.koin.compose.koinInject
+import org.koin.core.qualifier.named
 
 @Composable
 fun GameBoardView(
     args: GameBoardArgs,
     modifier: Modifier = Modifier,
-    parentScope: CoroutineScope = rememberCoroutineScope(),
+    loopScope: GameBoardScope = koinInject(named("gameBoardScope")),
 ) {
-    LoopWrapper({ gameBoardLoop(parentScope, args) }, args = args, key = args.gameState) { state ->
+    LoopWrapper<GameBoardState, GameBoardModel, GameBoardArgs, Unit, GameBoardAction>(
+        builder = { loopScope }, args = args,
+    ) { state ->
         GameBoardViewImpl(state, modifier)
     }
 }
 
 @Composable
-internal fun GameBoardScope.GameBoardViewImpl(
+private fun GameBoardScope.GameBoardViewImpl(
     state: GameBoardState,
     modifier: Modifier = Modifier,
 ) = with(state) {
@@ -92,7 +95,9 @@ private fun GameBoardState.BoardHeader() {
         val vs = stringResource(string.game_board__header__vs, opponent)
         Text(text = buildAnnotatedString {
             append(vs)
-            addStyle(SpanStyle(fontWeight = FontWeight.Bold), vs.length - opponent.length, vs.length)
+            addStyle(
+                SpanStyle(fontWeight = FontWeight.Bold), vs.length - opponent.length, vs.length
+            )
         })
     }
 }

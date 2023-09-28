@@ -47,3 +47,14 @@ internal sealed interface GameBoardAction : Action<GameBoardModel, Unit> {
             )
     }
 }
+
+data class OnUpdateGameState(
+    private val newState: GameState,
+) : GameBoardAction {
+    override fun GameBoardModel.proceed() =
+        change(
+            copy(
+                gameState = newState,
+            ),
+        )
+}
