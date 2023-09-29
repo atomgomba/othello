@@ -31,14 +31,14 @@ import com.ekezet.othello.MainScope
 import com.ekezet.othello.MainState
 import com.ekezet.othello.R.string
 import com.ekezet.othello.core.ui.R
+import com.ekezet.othello.di.MainScopeName
 import com.ekezet.othello.feature.gameboard.DisplayOptions
 import com.ekezet.othello.feature.gameboard.ui.GameBoardView
 import org.koin.compose.koinInject
-import org.koin.core.qualifier.named
 
 @Composable
 internal fun MainView(
-    loopScope: MainScope = koinInject(named("mainScope")),
+    loopScope: MainScope = koinInject(MainScopeName),
 ) {
     LoopWrapper<MainState, MainModel, Unit, MainDependency, MainAction>(
         builder = { loopScope },

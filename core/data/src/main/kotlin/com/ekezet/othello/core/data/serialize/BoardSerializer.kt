@@ -22,7 +22,17 @@ object BoardSerializer {
         return result
     }
 
+    @Throws(
+        InvalidTokenException::class,
+        IllegalStateException::class,
+    )
     fun fromLines(vararg lines: String) = fromLines(lines.toList())
+
+    @Throws(
+        InvalidTokenException::class,
+        IllegalStateException::class,
+    )
+    fun fromString(lines: String) = fromLines(lines.split('\n'))
 
     fun toLines(board: Board): List<String> = board.map { row -> row.toLine() }
 

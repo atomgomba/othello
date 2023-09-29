@@ -2,9 +2,9 @@ package com.ekezet.othello.core.game
 
 import com.ekezet.othello.core.data.models.Board
 import com.ekezet.othello.core.data.models.Disk
+import com.ekezet.othello.core.data.models.isLight
 import com.ekezet.othello.core.data.models.putAndCloneAt
 import com.ekezet.othello.core.data.models.putAt
-import com.ekezet.othello.core.game.throwable.GameFinishedException
 import com.ekezet.othello.core.game.throwable.InvalidMoveException
 
 data class GameState(
@@ -24,11 +24,25 @@ data class GameState(
         currentBoard.findValidMoves(currentDisk)
     }
 
+    /**
+     * dark, light
+     */
+    val diskCount: DiskCount by lazy {
+        currentBoard
+            .flatten()
+            .filterNotNull()
+            .fold(DiskCount(0, 0)) { acc, disk ->
+                DiskCount(
+                    first = if (disk.isDark) acc.first + 1 else acc.first,
+                    second = if (disk.isLight) acc.second + 1 else acc.second,
+                )
+            }
+    }
+
     @Throws(
         InvalidMoveException::class,
-        GameFinishedException::class,
     )
-    fun proceed(nextMove: NextMove): GameState {
+    fun proceed(nextMove: NextMove): MoveResult {
         val (pos, disk) = nextMove
         if (validMoves.isInvalid(pos)) {
             throw InvalidMoveException()
@@ -43,15 +57,34 @@ data class GameState(
                 nextBoard.putAt(position, currentDisk)
             }
         }
-        return copy(
+        val nextState = copy(
             currentBoard = nextBoard,
             history = history + PastMove(board = currentBoard, move = nextMove),
         )
+        return if (nextState.validMoves.isNotEmpty()) {
+            // next player has a valid move, continue the game
+            NextTurn(state = nextState)
+        } else {
+            val hasMoreValidMoves = nextBoard
+                .findValidMoves(disk)
+                .isNotEmpty()
+            if (hasMoreValidMoves) {
+                // current player still has a valid move, next player passes
+                PassTurn(state = nextState.copy(
+                    history = nextState.history + nextState.history,
+                ))
+            } else {
+                // nobody can move, it's a win or a tie
+                val (numDark, numLight) = nextState.diskCount
+                if (numDark == numLight) {
+                    Tie(state = nextState)
+                } else {
+                    val winner = if (numDark < numLight) Disk.Light else Disk.Dark
+                    Win(state = nextState, winner = winner)
+                }
+            }
+        }
     }
-
-    fun pass() = copy(
-        history = history + PastMove(board = currentBoard, move = null),
-    )
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -72,9 +105,17 @@ data class GameState(
     }
 
     companion object {
-        fun new(board: Board) = GameState(
+        fun new(board: Board = BoardFactory.starter()) = GameState(
             currentBoard = board,
             history = emptyList(),
         )
     }
 }
+
+typealias DiskCount = Pair<Int, Int>
+
+val DiskCount.numDark: Int
+    inline get() = first
+
+val DiskCount.numLight: Int
+    inline get() = second

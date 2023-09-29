@@ -16,23 +16,29 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.ekezet.othello.core.data.models.BoardHeight
 import com.ekezet.othello.core.data.models.BoardWidth
+import com.ekezet.othello.feature.gameboard.GameEnd
+import com.ekezet.othello.feature.gameboard.GameEnd.EndedTie
+import com.ekezet.othello.feature.gameboard.GameEnd.EndedWin
 import com.ekezet.othello.feature.gameboard.ui.viewModels.BoardList
 import com.ekezet.othello.feature.gameboard.ui.viewModels.BoardOverlayList
 import com.ekezet.othello.feature.gameboard.ui.viewModels.getAt
 
 private val borderWidth = 1.dp
-
+private const val LOSER_ALPHA = .33F
 private const val CELL_WEIGHT = 1F / BoardWidth
 
 @Composable
 internal fun GameBoard(
     board: BoardList,
     modifier: Modifier = Modifier,
+    background: Color = Color(0xFF338033),
     showPositions: Boolean = false,
+    ended: GameEnd? = null,
     overlay: BoardOverlayList? = null,
     onCellClick: (x: Int, y: Int) -> Unit = { _, _ -> },
 ) {
@@ -77,7 +83,7 @@ internal fun GameBoard(
                                         top = borderWidth,
                                         start = borderWidth,
                                     )
-                                    .background(color = Color(0xFF338033))
+                                    .background(color = background)
                                     .weight(CELL_WEIGHT)
                                     .aspectRatio(1F)
                                     .clickable {
@@ -89,7 +95,16 @@ internal fun GameBoard(
                                 contentAlignment = Alignment.Center,
                             ) {
                                 if (disk != null) {
-                                    GamePiece(disk = disk)
+                                    GamePiece(
+                                        disk = disk,
+                                        modifier = Modifier.alpha(
+                                            alpha = when (ended) {
+                                                null -> 1F
+                                                is EndedWin -> if (ended.winner == disk) 1F else LOSER_ALPHA
+                                                EndedTie -> LOSER_ALPHA
+                                            }
+                                        ),
+                                    )
                                 }
                                 overlayItem?.Composable()
                             }

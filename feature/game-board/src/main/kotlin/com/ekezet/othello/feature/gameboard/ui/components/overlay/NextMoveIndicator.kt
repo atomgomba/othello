@@ -13,6 +13,6 @@ internal fun NextMoveIndicator() {
     Surface(
         shape = CircleShape,
         color = Color.Yellow.copy(alpha = .6F),
-        modifier = Modifier.size(16.dp),
+        modifier = Modifier.size(24.dp),
     ) {}
 }

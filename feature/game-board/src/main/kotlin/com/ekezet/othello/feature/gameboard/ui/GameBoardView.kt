@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -20,27 +21,31 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.ekezet.hurok.compose.LoopWrapper
 import com.ekezet.othello.core.data.models.Disk
+import com.ekezet.othello.core.game.numDark
+import com.ekezet.othello.core.game.numLight
 import com.ekezet.othello.core.ui.R.string
+import com.ekezet.othello.feature.gameboard.ACTION_DELAY_MILLIS
 import com.ekezet.othello.feature.gameboard.GameBoardAction
 import com.ekezet.othello.feature.gameboard.GameBoardAction.ContinueGame
 import com.ekezet.othello.feature.gameboard.GameBoardArgs
 import com.ekezet.othello.feature.gameboard.GameBoardModel
 import com.ekezet.othello.feature.gameboard.GameBoardScope
 import com.ekezet.othello.feature.gameboard.GameBoardState
-import com.ekezet.othello.feature.gameboard.MOVE_DELAY_MILLIS
-import com.ekezet.othello.feature.gameboard.numDark
-import com.ekezet.othello.feature.gameboard.numLight
+import com.ekezet.othello.feature.gameboard.GameEnd
+import com.ekezet.othello.feature.gameboard.di.GameBoardScopeName
 import com.ekezet.othello.feature.gameboard.ui.components.GameBoard
 import com.ekezet.othello.feature.gameboard.ui.components.GamePiece
 import kotlinx.coroutines.delay
 import org.koin.compose.koinInject
-import org.koin.core.qualifier.named
+
+private val selectedColor: Color
+    @Composable get() = MaterialTheme.colorScheme.inversePrimary
 
 @Composable
 fun GameBoardView(
     args: GameBoardArgs,
     modifier: Modifier = Modifier,
-    loopScope: GameBoardScope = koinInject(named("gameBoardScope")),
+    loopScope: GameBoardScope = koinInject(GameBoardScopeName),
 ) {
     LoopWrapper<GameBoardState, GameBoardModel, GameBoardArgs, Unit, GameBoardAction>(
         builder = { loopScope }, args = args,
@@ -63,6 +68,7 @@ private fun GameBoardScope.GameBoardViewImpl(
         GameBoard(
             board = board,
             showPositions = showBoardPositions,
+            ended = ended,
             overlay = overlay,
             onCellClick = state.onCellClick,
         )
@@ -72,7 +78,7 @@ private fun GameBoardScope.GameBoardViewImpl(
 
     LaunchedEffect(nextMovePosition) {
         if (nextMovePosition != null) {
-            delay(MOVE_DELAY_MILLIS)
+            delay(ACTION_DELAY_MILLIS)
             emit(ContinueGame)
         }
     }
@@ -106,27 +112,33 @@ private fun GameBoardState.BoardHeader() {
 private fun GameBoardState.BoardFooter() {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        DiskImage(disk = Disk.Dark)
-        Text(diskCount.numDark.toString())
+        val isDarkWin = ended is GameEnd.EndedWin && ended.winner == Disk.Dark
+        DiskImage(disk = Disk.Dark, isSelected = isDarkWin)
+        Text("${diskCount.numDark}", color = if (isDarkWin) selectedColor else Color.Unspecified)
 
         Spacer(Modifier.weight(1F))
 
-        Text(diskCount.numLight.toString())
-        DiskImage(disk = Disk.Light)
+        val isLightWin = ended is GameEnd.EndedWin && ended.winner == Disk.Light
+        Text("${diskCount.numLight}", color = if (isLightWin) selectedColor else Color.Unspecified)
+        DiskImage(disk = Disk.Light, isSelected = isLightWin)
     }
 }
 
 @Composable
-private fun DiskImage(disk: Disk) {
+private fun DiskImage(disk: Disk, isSelected: Boolean = false) {
     GamePiece(
         disk = disk,
         modifier = Modifier
             .size(24.dp)
             .border(
                 width = 1.dp,
-                color = Color.Gray,
+                color = if (!isSelected) {
+                    MaterialTheme.colorScheme.onSurface.copy(alpha = .666F)
+                } else {
+                    selectedColor
+                },
                 shape = CircleShape,
             ),
     )

@@ -3,12 +3,12 @@ package com.ekezet.othello
 import com.ekezet.hurok.Action
 import com.ekezet.hurok.Action.Next
 import com.ekezet.othello.MainEffect.UpdateGameBoardGameState
-import com.ekezet.othello.feature.gameboard.defaultGameState
+import com.ekezet.othello.core.game.GameState
 
 internal sealed interface MainAction : Action<MainModel, MainDependency> {
     data object OnNewGameClicked : MainAction {
         override fun MainModel.proceed(): Next<MainModel, MainDependency> =
-            trigger(UpdateGameBoardGameState(defaultGameState))
+            trigger(UpdateGameBoardGameState(GameState.new()))
     }
 
     data object OnToggleIndicatorsClicked : MainAction {

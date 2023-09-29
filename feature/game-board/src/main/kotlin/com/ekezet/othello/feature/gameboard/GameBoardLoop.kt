@@ -27,13 +27,13 @@ internal class GameBoardLoop(parentScope: CoroutineScope, initModel: GameBoardMo
             board = gameState.currentBoard.toList(),
             overlay = createOverlayItems(),
             currentDisk = gameState.currentDisk,
-            diskCount = diskCount,
+            diskCount = gameState.diskCount,
             opponentName = opponentStrategy?.name ?: "Human",
             currentTurn = gameState.turn + 1,
             nextMovePosition = nextMovePosition,
             showPossibleMoves = displayOptions.showPossibleMoves,
             showBoardPositions = displayOptions.showBoardPositions,
-            hasPossibleMoves = gameState.validMoves.isNotEmpty(),
+            ended = ended,
             onCellClick = { x, y -> emit(OnCellClicked(x to y)) },
         )
     }

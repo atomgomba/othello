@@ -2,6 +2,7 @@ package com.ekezet.othello.di
 
 import com.ekezet.hurok.AnyLoopScope
 import com.ekezet.othello.MainDependency
+import com.ekezet.othello.feature.gameboard.di.GameBoardScopeName
 import com.ekezet.othello.feature.gameboard.di.gameBoardFeatureModule
 import com.ekezet.othello.mainLoop
 import kotlinx.coroutines.CoroutineScope
@@ -15,7 +16,7 @@ internal fun mainModule(parentScope: CoroutineScope) = module {
 
     single {
         MainDependency(
-            gameBoardScope = get(named("gameBoardScope")),
+            gameBoardScope = get(GameBoardScopeName),
         )
     }
 

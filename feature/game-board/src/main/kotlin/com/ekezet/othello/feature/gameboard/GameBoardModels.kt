@@ -5,8 +5,8 @@ import com.ekezet.hurok.LoopScope
 import com.ekezet.othello.core.data.models.Board
 import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.data.models.Position
-import com.ekezet.othello.core.data.models.isLight
 import com.ekezet.othello.core.data.serialize.BoardSerializer
+import com.ekezet.othello.core.game.DiskCount
 import com.ekezet.othello.core.game.GameState
 import com.ekezet.othello.core.game.strategy.HumanPlayer
 import com.ekezet.othello.core.game.strategy.Strategy
@@ -17,18 +17,18 @@ import com.ekezet.othello.feature.gameboard.ui.viewModels.BoardOverlayList
 /**
  * Give a little time for humans to follow changes on the board
  */
-const val MOVE_DELAY_MILLIS = 300L
+const val ACTION_DELAY_MILLIS = 300L
 
 val defaultBoard: Board
     inline get() = BoardSerializer.fromLines(
-        ",,,,,,,,",
-        ",,,,,,,,",
-        ",,,,,,,,",
-        ",,,ox,,,",
-        ",,,xo,,,",
-        ",,,,,,,,",
-        ",,,,,,,,",
-        ",,,,,,,,",
+        "--------",
+        "--------",
+        "--------",
+        "---ox---",
+        "---xo---",
+        "--------",
+        "--------",
+        "--------",
     )
 
 val defaultGameState: GameState
@@ -63,21 +63,17 @@ data class GameBoardModel(
     val displayOptions: DisplayOptions = defaultDisplayOptions,
     val opponentStrategy: Strategy? = defaultStrategy,
     val nextMovePosition: Position? = null,
+    val ended: GameEnd? = null,
 ) {
     val currentDisk: Disk
         inline get() = gameState.currentDisk
 
-    val diskCount: DiskCount by lazy {
-        gameState.currentBoard
-            .flatten()
-            .filterNotNull()
-            .fold(DiskCount(0, 0)) { acc, disk ->
-                DiskCount(
-                    first = if (disk.isDark) acc.first + 1 else acc.first,
-                    second = if (disk.isLight) acc.second + 1 else acc.second,
-                )
-            }
-    }
+    fun resetGameState(state: GameState = defaultGameState) =
+        copy(
+            gameState = state,
+            nextMovePosition = null,
+            ended = null,
+        )
 
     companion object {
         fun fromArgs(args: GameBoardArgs) = with(args) {
@@ -98,18 +94,15 @@ internal data class GameBoardState(
     val opponentName: String?,
     val diskCount: DiskCount,
     val nextMovePosition: Position?,
-    val hasPossibleMoves: Boolean,
     val showPossibleMoves: Boolean,
     val showBoardPositions: Boolean,
     val onCellClick: (x: Int, y: Int) -> Unit,
+    val ended: GameEnd?,
 )
 
-internal typealias DiskCount = Pair<Int, Int>
-
-internal val DiskCount.numDark: Int
-    inline get() = first
-
-internal val DiskCount.numLight: Int
-    inline get() = second
-
 typealias GameBoardScope = LoopScope<GameBoardModel, Unit>
+
+sealed interface GameEnd {
+    data class EndedWin(val winner: Disk) : GameEnd
+    data object EndedTie : GameEnd
+}

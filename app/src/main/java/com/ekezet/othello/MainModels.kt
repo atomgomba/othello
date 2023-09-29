@@ -9,9 +9,9 @@ import com.ekezet.othello.feature.gameboard.GameBoardArgs
 import com.ekezet.othello.feature.gameboard.GameBoardScope
 import com.ekezet.othello.feature.gameboard.data.GameSettings
 import com.ekezet.othello.feature.gameboard.defaultDisplayOptions
+import com.ekezet.othello.feature.gameboard.di.GameBoardScopeName
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
-import org.koin.core.qualifier.named
 
 internal data class MainModel(
     override val opponentStrategy: Strategy? = NaiveMaxStrategy(),
@@ -29,7 +29,7 @@ internal data class MainState(
 internal class MainDependency(
     gameBoardScope: GameBoardScope? = null
 ) : KoinComponent {
-    val gameBoardScope: GameBoardScope = gameBoardScope ?: get(named("gameBoardScope"))
+    val gameBoardScope: GameBoardScope = gameBoardScope ?: get(GameBoardScopeName)
 }
 
 internal typealias MainScope = LoopScope<MainModel, MainDependency>
