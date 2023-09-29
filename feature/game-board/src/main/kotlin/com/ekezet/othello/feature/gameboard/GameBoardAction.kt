@@ -4,6 +4,7 @@ import com.ekezet.hurok.Action
 import com.ekezet.hurok.Action.Next
 import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.data.models.Position
+import com.ekezet.othello.core.data.serialize.BoardSerializer
 import com.ekezet.othello.core.game.GameState
 import com.ekezet.othello.core.game.NextMove
 import com.ekezet.othello.core.game.NextTurn
@@ -77,4 +78,14 @@ data class OnUpdateGameState(
     private val newState: GameState,
 ) : GameBoardAction {
     override fun GameBoardModel.proceed() = change(resetGameState(newState))
+}
+
+data class OnSerializeBoard(
+    private val callback: (lines: List<String>) -> Unit,
+) : GameBoardAction {
+    override fun GameBoardModel.proceed(): Next<GameBoardModel, Unit> {
+        val lines = BoardSerializer.toLines(gameState.currentBoard)
+        callback(lines)
+        return skip
+    }
 }

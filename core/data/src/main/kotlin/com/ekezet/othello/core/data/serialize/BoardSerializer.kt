@@ -52,5 +52,5 @@ object BoardSerializer {
             Disk.Dark -> TOKEN_DARK
             else -> TOKEN_EMPTY
         }
-    }.joinToString()
+    }.joinToString("")
 }

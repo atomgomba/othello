@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -24,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import com.ekezet.hurok.compose.LoopWrapper
 import com.ekezet.othello.MainAction
 import com.ekezet.othello.MainAction.OnNewGameClicked
+import com.ekezet.othello.MainAction.OnShareBoardClicked
 import com.ekezet.othello.MainAction.OnToggleIndicatorsClicked
 import com.ekezet.othello.MainDependency
 import com.ekezet.othello.MainModel
@@ -93,9 +95,14 @@ private fun MainScope.Toolbar(options: DisplayOptions) = with(options) {
     IconButton(onClick = { emit(OnToggleIndicatorsClicked) }) {
         Icon(
             imageVector = if (showPossibleMoves) Icons.Filled.LocationOn else Icons.Outlined.LocationOn,
-            contentDescription = stringResource(
-                R.string.main__menu__toggle_indicators,
-            ),
+            contentDescription = stringResource(R.string.main__menu__toggle_indicators),
+        )
+    }
+
+    IconButton(onClick = { emit(OnShareBoardClicked) }) {
+        Icon(
+            imageVector = Icons.Default.Share,
+            contentDescription = stringResource(R.string.main__menu__share_board),
         )
     }
 }

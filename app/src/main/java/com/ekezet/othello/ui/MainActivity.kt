@@ -18,7 +18,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             val coroutineScope = rememberCoroutineScope()
             KoinApplication(application = {
-                modules(mainModule(coroutineScope))
+                modules(mainModule(coroutineScope, this@MainActivity))
             }) {
                 OthelloTheme {
                     Surface(
