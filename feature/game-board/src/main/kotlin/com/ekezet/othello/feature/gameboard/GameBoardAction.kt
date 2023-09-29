@@ -54,7 +54,7 @@ internal sealed interface GameBoardAction : Action<GameBoardModel, Unit> {
                 }
             }
             return outcome(
-                model = resetGameState(newState),
+                model = resetNextTurn(newState),
                 effects = effects.toTypedArray(),
             )
         }
@@ -62,13 +62,13 @@ internal sealed interface GameBoardAction : Action<GameBoardModel, Unit> {
         private fun passTurn(newState: GameState) = trigger(WaitBeforePass(newState))
 
         private fun GameBoardModel.finishGame(newState: GameState, winner: Disk?) = outcome(
-            model = resetGameState(newState),
+            model = resetNextTurn(newState),
             WaitBeforeGameEnd(winner?.let { EndedWin(it) } ?: EndedTie),
         )
     }
 
     data class OnTurnPassed(val newState: GameState) : GameBoardAction {
-        override fun GameBoardModel.proceed() = change(resetGameState(newState))
+        override fun GameBoardModel.proceed() = change(resetNextTurn(newState))
     }
 
     data class OnGameEnded(val result: GameEnd) : GameBoardAction {
@@ -79,7 +79,7 @@ internal sealed interface GameBoardAction : Action<GameBoardModel, Unit> {
 data class OnUpdateGameState(
     private val newState: GameState,
 ) : GameBoardAction {
-    override fun GameBoardModel.proceed() = change(resetGameState(newState))
+    override fun GameBoardModel.proceed() = change(resetNextTurn(newState))
 }
 
 data class OnSerializeBoard(

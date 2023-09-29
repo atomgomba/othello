@@ -87,7 +87,7 @@ internal fun GameBoard(
                             ) {
                                 if (disk != null) {
                                     val alpha: Float by animateFloatAsState(
-                                        label = "disk-alpha",
+                                        label = "board-disk-alpha",
                                         targetValue = when (ended) {
                                             null -> 1F
                                             is EndedWin -> if (ended.winner == disk) 1F else LOSER_ALPHA

@@ -32,7 +32,7 @@ internal class GameBoardLoop(
             overlay = createOverlayItems(),
             currentDisk = gameState.currentDisk,
             diskCount = gameState.diskCount,
-            opponentName = opponentStrategy?.name ?: "Human",
+            opponentName = opponentStrategy?.name,
             currentTurn = gameState.turn + 1,
             nextMovePosition = nextMovePosition,
             showPossibleMoves = displayOptions.showPossibleMoves,

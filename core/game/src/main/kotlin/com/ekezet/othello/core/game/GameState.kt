@@ -3,8 +3,8 @@ package com.ekezet.othello.core.game
 import com.ekezet.othello.core.data.models.Board
 import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.data.models.isLight
-import com.ekezet.othello.core.data.models.putAndCloneAt
 import com.ekezet.othello.core.data.models.putAt
+import com.ekezet.othello.core.data.models.putAtAndClone
 import com.ekezet.othello.core.data.serialize.serialize
 import com.ekezet.othello.core.game.throwable.InvalidMoveException
 import timber.log.Timber
@@ -51,7 +51,7 @@ data class GameState(
             throw InvalidMoveException()
         }
         Timber.d("Next move (turn: ${turn + 1}): $disk @ ${pos.serialize()}")
-        val nextBoard = currentBoard.putAndCloneAt(pos, disk)
+        val nextBoard = currentBoard.putAtAndClone(pos, disk)
         val validSegments = validMoves
             .filter { it.position == pos }
             .map { it.segment }
@@ -65,6 +65,7 @@ data class GameState(
             currentBoard = nextBoard,
             history = history + PastMove(board = currentBoard, move = nextMove),
         )
+
         return if (nextState.validMoves.isNotEmpty()) {
             // next player has a valid move, continue the game
             Timber.d("Continue turn ${nextState.turn + 1}")

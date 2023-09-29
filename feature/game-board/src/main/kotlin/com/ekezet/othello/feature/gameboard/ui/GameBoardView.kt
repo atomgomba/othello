@@ -1,5 +1,6 @@
 package com.ekezet.othello.feature.gameboard.ui
 
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,9 +14,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
@@ -49,7 +52,7 @@ import nl.dionsegijn.konfetti.core.emitter.Emitter
 import java.util.concurrent.TimeUnit.SECONDS
 
 private val highlightColor: Color
-    @Composable get() = MaterialTheme.colorScheme.inversePrimary
+    @Composable get() = MaterialTheme.colorScheme.tertiary
 
 @Composable
 fun GameBoardView(
@@ -59,7 +62,7 @@ fun GameBoardView(
 ) {
     LoopWrapper(
         parentScope = parentScope,
-        initModel = GameBoardModel.fromArgs(args),
+        initModel = GameBoardModel(),
         builder = gameBoardLoopBuilder,
         args = args,
     ) { state ->
@@ -108,7 +111,7 @@ private fun GameBoardState.BoardHeader() {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        DiskImage(disk = currentDisk)
+        DiskImage(disk = currentDisk, hidden = ended != null)
 
         Text(text = stringResource(id = string.game_board__header__turn, currentTurn))
 
@@ -163,15 +166,20 @@ private fun GameBoardState.BoardFooter() {
 }
 
 @Composable
-private fun DiskImage(disk: Disk, isSelected: Boolean = false) {
+private fun DiskImage(disk: Disk, isSelected: Boolean = false, hidden: Boolean = false) {
+    val alpha by animateFloatAsState(
+        targetValue = if (hidden) 0F else 1F,
+        label = "current-disk-alpha"
+    )
     GamePiece(
         disk = disk,
         modifier = Modifier
+            .alpha(alpha)
             .size(24.dp)
             .border(
                 width = 1.dp,
                 color = if (!isSelected) {
-                    MaterialTheme.colorScheme.onSurface.copy(alpha = .666F)
+                    MaterialTheme.colorScheme.outline
                 } else {
                     highlightColor
                 },

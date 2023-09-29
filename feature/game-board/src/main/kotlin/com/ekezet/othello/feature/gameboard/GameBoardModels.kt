@@ -20,15 +20,17 @@ import com.ekezet.othello.feature.gameboard.ui.viewModels.BoardOverlayList
 const val ACTION_DELAY_MILLIS = 300L
 
 val defaultBoard: Board
-    inline get() = BoardSerializer.fromLines(
-        "--------",
-        "--------",
-        "--------",
-        "---ox---",
-        "---xo---",
-        "--------",
-        "--------",
-        "--------",
+    inline get() = BoardSerializer.fromString(
+        """
+        --------
+        --------
+        --------
+        ---ox---
+        ---xo---
+        --------
+        --------
+        --------
+        """
     )
 
 val defaultGameState: GameState
@@ -69,23 +71,14 @@ data class GameBoardModel(
         inline get() = gameState.currentDisk
 
     val isHumanOpponent: Boolean
-        get() = opponentStrategy == HumanPlayer
+        inline get() = opponentStrategy == HumanPlayer
 
-    fun resetGameState(state: GameState = defaultGameState) =
+    fun resetNextTurn(nextState: GameState = defaultGameState) =
         copy(
-            gameState = state,
+            gameState = nextState,
             nextMovePosition = null,
             ended = null,
         )
-
-    companion object {
-        fun fromArgs(args: GameBoardArgs) = with(args) {
-            GameBoardModel(
-                opponentStrategy = opponentStrategy,
-                displayOptions = displayOptions,
-            )
-        }
-    }
 }
 
 @Stable
