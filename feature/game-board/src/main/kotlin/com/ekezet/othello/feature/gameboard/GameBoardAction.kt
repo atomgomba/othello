@@ -13,7 +13,9 @@ import com.ekezet.othello.core.game.Tie
 import com.ekezet.othello.core.game.Win
 import com.ekezet.othello.core.game.isValid
 import com.ekezet.othello.core.game.throwable.InvalidMoveException
-import com.ekezet.othello.feature.gameboard.GameBoardEffect.WaitBeforeNextAction
+import com.ekezet.othello.feature.gameboard.GameBoardEffect.WaitBeforeGameEnd
+import com.ekezet.othello.feature.gameboard.GameBoardEffect.WaitBeforeNextTurn
+import com.ekezet.othello.feature.gameboard.GameBoardEffect.WaitBeforePass
 import com.ekezet.othello.feature.gameboard.GameEnd.EndedTie
 import com.ekezet.othello.feature.gameboard.GameEnd.EndedWin
 
@@ -48,7 +50,7 @@ internal sealed interface GameBoardAction : Action<GameBoardModel, Unit> {
             if (opponentStrategy != null && newState.currentDisk == Disk.Light) {
                 val nextMove = opponentStrategy.deriveNext(newState)
                 if (nextMove != null) {
-                    effects.add(WaitBeforeNextAction(OnCellClicked(nextMove)))
+                    effects.add(WaitBeforeNextTurn(nextMove))
                 }
             }
             return outcome(
@@ -57,19 +59,19 @@ internal sealed interface GameBoardAction : Action<GameBoardModel, Unit> {
             )
         }
 
-        private fun GameBoardModel.passTurn(newState: GameState) =
-            change(
-                model = resetGameState(newState),
-            )
+        private fun passTurn(newState: GameState) = trigger(WaitBeforePass(newState))
 
-        private fun GameBoardModel.finishGame(newState: GameState, winner: Disk?) =
-            outcome(
-                model = resetGameState(newState),
-                WaitBeforeNextAction(EndGame(winner?.let { EndedWin(it) } ?: EndedTie)),
-            )
+        private fun GameBoardModel.finishGame(newState: GameState, winner: Disk?) = outcome(
+            model = resetGameState(newState),
+            WaitBeforeGameEnd(winner?.let { EndedWin(it) } ?: EndedTie),
+        )
     }
 
-    data class EndGame(val result: GameEnd) : GameBoardAction {
+    data class OnTurnPassed(val newState: GameState) : GameBoardAction {
+        override fun GameBoardModel.proceed() = change(resetGameState(newState))
+    }
+
+    data class OnGameEnded(val result: GameEnd) : GameBoardAction {
         override fun GameBoardModel.proceed() = change(copy(ended = result))
     }
 }

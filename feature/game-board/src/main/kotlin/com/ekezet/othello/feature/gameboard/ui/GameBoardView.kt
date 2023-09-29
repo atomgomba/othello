@@ -23,6 +23,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.ekezet.hurok.compose.LoopWrapper
 import com.ekezet.othello.core.data.models.Disk
+import com.ekezet.othello.core.data.models.x
+import com.ekezet.othello.core.data.models.y
 import com.ekezet.othello.core.game.numDark
 import com.ekezet.othello.core.game.numLight
 import com.ekezet.othello.core.ui.R.string
@@ -33,7 +35,6 @@ import com.ekezet.othello.feature.gameboard.GameBoardArgs
 import com.ekezet.othello.feature.gameboard.GameBoardModel
 import com.ekezet.othello.feature.gameboard.GameBoardScope
 import com.ekezet.othello.feature.gameboard.GameBoardState
-import com.ekezet.othello.feature.gameboard.GameEnd
 import com.ekezet.othello.feature.gameboard.GameEnd.EndedWin
 import com.ekezet.othello.feature.gameboard.di.GameBoardScopeName
 import com.ekezet.othello.feature.gameboard.ui.components.GameBoard
@@ -98,8 +99,8 @@ private fun GameBoardScope.GameBoardViewImpl(
         }
     }
 
-    LaunchedEffect(nextMovePosition) {
-        if (nextMovePosition != null) {
+    if (nextMovePosition != null) {
+        LaunchedEffect(nextMovePosition.x, nextMovePosition.y) {
             delay(ACTION_DELAY_MILLIS)
             emit(ContinueGame)
         }
@@ -140,13 +141,13 @@ private fun GameBoardState.BoardFooter() {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        val isDarkWin = ended is GameEnd.EndedWin && ended.winner == Disk.Dark
+        val isDarkWin = ended is EndedWin && ended.winner == Disk.Dark
         DiskImage(disk = Disk.Dark, isSelected = isDarkWin)
         Text("${diskCount.numDark}", color = if (isDarkWin) selectedColor else Color.Unspecified)
 
         Spacer(Modifier.weight(1F))
 
-        val isLightWin = ended is GameEnd.EndedWin && ended.winner == Disk.Light
+        val isLightWin = ended is EndedWin && ended.winner == Disk.Light
         Text("${diskCount.numLight}", color = if (isLightWin) selectedColor else Color.Unspecified)
         DiskImage(disk = Disk.Light, isSelected = isLightWin)
     }
