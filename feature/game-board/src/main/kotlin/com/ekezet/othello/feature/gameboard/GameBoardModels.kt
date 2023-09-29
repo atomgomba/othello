@@ -68,6 +68,9 @@ data class GameBoardModel(
     val currentDisk: Disk
         inline get() = gameState.currentDisk
 
+    val isHumanOpponent: Boolean
+        get() = opponentStrategy == HumanPlayer
+
     fun resetGameState(state: GameState = defaultGameState) =
         copy(
             gameState = state,
@@ -96,8 +99,9 @@ internal data class GameBoardState(
     val nextMovePosition: Position?,
     val showPossibleMoves: Boolean,
     val showBoardPositions: Boolean,
-    val onCellClick: (x: Int, y: Int) -> Unit,
     val ended: GameEnd?,
+    val celebrate: Boolean,
+    val onCellClick: (x: Int, y: Int) -> Unit,
 )
 
 typealias GameBoardScope = LoopScope<GameBoardModel, Unit>

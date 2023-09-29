@@ -85,7 +85,7 @@ private fun GameBoardScope.GameBoardViewImpl(
             BoardFooter()
         }
 
-        if (ended is EndedWin && ended.winner == Disk.Dark) {
+        if (celebrate) {
             KonfettiView(
                 modifier = Modifier
                     .matchParentSize()

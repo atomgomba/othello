@@ -1,7 +1,9 @@
 package com.ekezet.othello.feature.gameboard
 
 import com.ekezet.hurok.Loop
+import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.feature.gameboard.GameBoardAction.OnCellClicked
+import com.ekezet.othello.feature.gameboard.GameEnd.EndedWin
 import com.ekezet.othello.feature.gameboard.ui.viewModels.BoardOverlayList
 import com.ekezet.othello.feature.gameboard.ui.viewModels.OverlayItem.NextMoveIndicatorOverlayItem
 import com.ekezet.othello.feature.gameboard.ui.viewModels.OverlayItem.ValidMoveIndicatorOverlayItem
@@ -34,6 +36,7 @@ internal class GameBoardLoop(parentScope: CoroutineScope, initModel: GameBoardMo
             showPossibleMoves = displayOptions.showPossibleMoves,
             showBoardPositions = displayOptions.showBoardPositions,
             ended = ended,
+            celebrate = ended is EndedWin && (ended.winner == Disk.Dark || isHumanOpponent),
             onCellClick = { x, y -> emit(OnCellClicked(x to y)) },
         )
     }
