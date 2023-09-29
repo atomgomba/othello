@@ -28,6 +28,10 @@ class AndroidAppConventionPlugin : Plugin<Project> {
                         targetSdk = compileSdkLevel
                     }
 
+                    buildFeatures {
+                        buildConfig = true
+                    }
+
                     configureKotlinAndroid(this)
                     configureKoin(this)
                 }

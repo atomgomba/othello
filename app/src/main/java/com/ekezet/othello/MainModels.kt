@@ -27,7 +27,7 @@ internal data class MainState(
 )
 
 internal class MainDependency(
-    gameBoardScope: GameBoardScope? = null
+    gameBoardScope: GameBoardScope? = null,
 ) : KoinComponent {
     val gameBoardScope: GameBoardScope = gameBoardScope ?: get(GameBoardScopeName)
 }

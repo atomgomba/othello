@@ -64,7 +64,7 @@ internal sealed interface GameBoardAction : Action<GameBoardModel, Unit> {
         private fun GameBoardModel.finishGame(newState: GameState, winner: Disk?) =
             outcome(
                 model = resetGameState(newState),
-                WaitBeforeNextAction(EndGame(winner?.let { EndedWin(it) } ?: EndedTie))
+                WaitBeforeNextAction(EndGame(winner?.let { EndedWin(it) } ?: EndedTie)),
             )
     }
 

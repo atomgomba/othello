@@ -16,7 +16,7 @@ internal sealed interface MainAction : Action<MainModel, MainDependency> {
             val newSettings = copy(
                 displayOptions = displayOptions.copy(
                     showPossibleMoves = !displayOptions.showPossibleMoves,
-                )
+                ),
             )
             return outcome(newSettings)
         }

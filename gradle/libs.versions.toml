@@ -11,6 +11,7 @@ androidxLifecycle = "2.6.2"
 hurok = "0.1.0"
 junit4 = "4.13.2"
 koinBom = "3.5.1"
+konfetti = "2.0.3"
 kotlin = "1.9.10"
 kotlinxCoroutines = "1.7.3"
 ksp = "1.9.10-1.0.13"
@@ -39,10 +40,11 @@ androidx-lifecycle-runtimeCompose = { group = "androidx.lifecycle", name = "life
 hurokBase = { group = "com.ekezet.hurok", name = "base", version.ref = "hurok" }
 hurokCompose = { group = "com.ekezet.hurok", name = "android-compose", version.ref = "hurok" }
 junit4 = { group = "junit", name = "junit", version.ref = "junit4" }
-koin-bom = { group = "io.insert-koin", name = "koin-bom", version.ref = "koinBom"}
-koin-core = { group = "io.insert-koin", name = "koin-core"}
 koin-android = { group = "io.insert-koin", name = "koin-android"}
 koin-androidx-compose = { group = "io.insert-koin", name = "koin-androidx-compose"}
+koin-bom = { group = "io.insert-koin", name = "koin-bom", version.ref = "koinBom"}
+koin-core = { group = "io.insert-koin", name = "koin-core"}
+konfetti = { group = "nl.dionsegijn", name = "konfetti-compose", version.ref = "konfetti" }
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinxCoroutines" }
 timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
 
@@ -56,6 +58,3 @@ ksp-gradlePlugin = { group = "com.google.devtools.ksp", name = "com.google.devto
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
 android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
 android-test = { id = "com.android.test", version.ref = "androidGradlePlugin" }
-
-#kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
-#kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }

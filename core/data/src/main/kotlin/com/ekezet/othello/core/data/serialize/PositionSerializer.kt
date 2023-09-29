@@ -4,12 +4,12 @@ import com.ekezet.othello.core.data.models.Position
 import com.ekezet.othello.core.data.models.x
 import com.ekezet.othello.core.data.models.y
 
-private val letters: String by lazy {
-    ('A'..'Z').joinToString()
+private val letters: List<Char> by lazy {
+    ('A'..'Z').toList()
 }
 
-private val numbers: String by lazy {
-    ('1'..'9').joinToString()
+private val numbers: List<Char> by lazy {
+    ('1'..'9').toList()
 }
 
 fun Position.serialize() = buildString {

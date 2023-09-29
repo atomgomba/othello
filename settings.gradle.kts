@@ -20,8 +20,9 @@ rootProject.name = "othello"
 
 include(":app")
 
-include(":core:ui")
 include(":core:data")
 include(":core:game")
+include(":core:logging")
+include(":core:ui")
 
 include(":feature:game-board")

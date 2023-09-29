@@ -69,7 +69,7 @@ private fun MainScope.MainViewImpl(state: MainState) = with(state) {
         Box(
             modifier = Modifier
                 .padding(innerPadding)
-                .fillMaxSize()
+                .fillMaxSize(),
         ) {
             GameBoardView(
                 args = gameBoardArgs,
@@ -94,7 +94,7 @@ private fun MainScope.Toolbar(options: DisplayOptions) = with(options) {
         Icon(
             imageVector = if (showPossibleMoves) Icons.Filled.LocationOn else Icons.Outlined.LocationOn,
             contentDescription = stringResource(
-                R.string.main__menu__toggle_indicators
+                R.string.main__menu__toggle_indicators,
             ),
         )
     }

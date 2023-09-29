@@ -22,7 +22,8 @@ internal fun mainModule(parentScope: CoroutineScope) = module {
 
     single<AnyLoopScope>(named("mainScope")) {
         mainLoop(
-            parentScope = parentScope, dependency = get()
+            parentScope = parentScope,
+            dependency = get(),
         )
     }
 }

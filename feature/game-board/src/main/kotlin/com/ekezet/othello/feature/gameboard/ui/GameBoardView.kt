@@ -2,6 +2,7 @@ package com.ekezet.othello.feature.gameboard.ui
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -19,6 +20,7 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import com.ekezet.hurok.compose.LoopWrapper
 import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.game.numDark
@@ -32,11 +34,16 @@ import com.ekezet.othello.feature.gameboard.GameBoardModel
 import com.ekezet.othello.feature.gameboard.GameBoardScope
 import com.ekezet.othello.feature.gameboard.GameBoardState
 import com.ekezet.othello.feature.gameboard.GameEnd
+import com.ekezet.othello.feature.gameboard.GameEnd.EndedWin
 import com.ekezet.othello.feature.gameboard.di.GameBoardScopeName
 import com.ekezet.othello.feature.gameboard.ui.components.GameBoard
 import com.ekezet.othello.feature.gameboard.ui.components.GamePiece
 import kotlinx.coroutines.delay
+import nl.dionsegijn.konfetti.compose.KonfettiView
+import nl.dionsegijn.konfetti.core.Party
+import nl.dionsegijn.konfetti.core.emitter.Emitter
 import org.koin.compose.koinInject
+import java.util.concurrent.TimeUnit.SECONDS
 
 private val selectedColor: Color
     @Composable get() = MaterialTheme.colorScheme.inversePrimary
@@ -48,7 +55,8 @@ fun GameBoardView(
     loopScope: GameBoardScope = koinInject(GameBoardScopeName),
 ) {
     LoopWrapper<GameBoardState, GameBoardModel, GameBoardArgs, Unit, GameBoardAction>(
-        builder = { loopScope }, args = args,
+        builder = { loopScope },
+        args = args,
     ) { state ->
         GameBoardViewImpl(state, modifier)
     }
@@ -59,21 +67,35 @@ private fun GameBoardScope.GameBoardViewImpl(
     state: GameBoardState,
     modifier: Modifier = Modifier,
 ) = with(state) {
-    Column(
-        modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-    ) {
-        BoardHeader()
+    Box(modifier = modifier) {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+        ) {
+            BoardHeader()
 
-        GameBoard(
-            board = board,
-            showPositions = showBoardPositions,
-            ended = ended,
-            overlay = overlay,
-            onCellClick = state.onCellClick,
-        )
+            GameBoard(
+                board = board,
+                showPositions = showBoardPositions,
+                ended = ended,
+                overlay = overlay,
+                onCellClick = state.onCellClick,
+            )
 
-        BoardFooter()
+            BoardFooter()
+        }
+
+        if (ended is EndedWin && ended.winner == Disk.Dark) {
+            KonfettiView(
+                modifier = Modifier
+                    .matchParentSize()
+                    .zIndex(Float.MAX_VALUE),
+                parties = listOf(
+                    Party(
+                        emitter = Emitter(duration = 5, SECONDS).perSecond(30),
+                    ),
+                ),
+            )
+        }
     }
 
     LaunchedEffect(nextMovePosition) {
@@ -99,12 +121,16 @@ private fun GameBoardState.BoardHeader() {
 
         val opponent = opponentName ?: stringResource(string.game_board__header__human)
         val vs = stringResource(string.game_board__header__vs, opponent)
-        Text(text = buildAnnotatedString {
-            append(vs)
-            addStyle(
-                SpanStyle(fontWeight = FontWeight.Bold), vs.length - opponent.length, vs.length
-            )
-        })
+        Text(
+            text = buildAnnotatedString {
+                append(vs)
+                addStyle(
+                    SpanStyle(fontWeight = FontWeight.Bold),
+                    vs.length - opponent.length,
+                    vs.length,
+                )
+            },
+        )
     }
 }
 

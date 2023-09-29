@@ -63,20 +63,9 @@ internal fun GameBoard(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     for (colIndex in 0 until BoardWidth) {
-                        val disk = board.getAt(
-                            colIndex,
-                            rowIndex,
-                        )
-                        val overlayItem = overlay?.getAt(
-                            colIndex,
-                            rowIndex,
-                        )
-                        key(
-                            colIndex,
-                            rowIndex,
-                            disk,
-                            overlayItem?.composeKey,
-                        ) {
+                        val disk = board.getAt(colIndex, rowIndex)
+                        val overlayItem = overlay?.getAt(colIndex, rowIndex)
+                        key(colIndex, rowIndex, disk, overlayItem?.composeKey) {
                             Box(
                                 modifier = Modifier
                                     .padding(
@@ -102,7 +91,7 @@ internal fun GameBoard(
                                                 null -> 1F
                                                 is EndedWin -> if (ended.winner == disk) 1F else LOSER_ALPHA
                                                 EndedTie -> LOSER_ALPHA
-                                            }
+                                            },
                                         ),
                                     )
                                 }

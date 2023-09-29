@@ -14,4 +14,6 @@ dependencies {
 
     implementation(libs.hurokBase)
     implementation(libs.hurokCompose)
+
+    implementation(libs.konfetti)
 }

@@ -5,7 +5,9 @@ import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.data.models.isLight
 import com.ekezet.othello.core.data.models.putAndCloneAt
 import com.ekezet.othello.core.data.models.putAt
+import com.ekezet.othello.core.data.serialize.serialize
 import com.ekezet.othello.core.game.throwable.InvalidMoveException
+import timber.log.Timber
 
 data class GameState(
     val currentBoard: Board,
@@ -45,8 +47,10 @@ data class GameState(
     fun proceed(nextMove: NextMove): MoveResult {
         val (pos, disk) = nextMove
         if (validMoves.isInvalid(pos)) {
+            Timber.w("Invalid move: $disk @ ${pos.serialize()}")
             throw InvalidMoveException()
         }
+        Timber.d("Next move (turn: ${turn + 1}): $disk @ ${pos.serialize()}")
         val nextBoard = currentBoard.putAndCloneAt(pos, disk)
         val validSegments = validMoves
             .filter { it.position == pos }
@@ -63,6 +67,7 @@ data class GameState(
         )
         return if (nextState.validMoves.isNotEmpty()) {
             // next player has a valid move, continue the game
+            Timber.d("Continue turn ${nextState.turn + 1}")
             NextTurn(state = nextState)
         } else {
             val hasMoreValidMoves = nextBoard
@@ -70,16 +75,21 @@ data class GameState(
                 .isNotEmpty()
             if (hasMoreValidMoves) {
                 // current player still has a valid move, next player passes
-                PassTurn(state = nextState.copy(
-                    history = nextState.history + nextState.history,
-                ))
+                Timber.d("Player passed ($disk)")
+                PassTurn(
+                    state = nextState.copy(
+                        history = nextState.history + nextState.history,
+                    ),
+                )
             } else {
                 // nobody can move, it's a win or a tie
                 val (numDark, numLight) = nextState.diskCount
                 if (numDark == numLight) {
+                    Timber.d("It's a tie!")
                     Tie(state = nextState)
                 } else {
                     val winner = if (numDark < numLight) Disk.Light else Disk.Dark
+                    Timber.d("We have a winner! ($winner)")
                     Win(state = nextState, winner = winner)
                 }
             }

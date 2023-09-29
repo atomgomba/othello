@@ -8,7 +8,7 @@ android {
 
 dependencies {
     implementation(project(":core:data"))
-    implementation(libs.timber)
+    implementation(project(":core:logging"))
 
     testImplementation(libs.junit4)
 }
