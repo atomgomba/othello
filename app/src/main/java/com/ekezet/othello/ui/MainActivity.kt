@@ -6,7 +6,6 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import com.ekezet.othello.core.ui.theme.OthelloTheme
 import com.ekezet.othello.di.mainModule
@@ -16,9 +15,8 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val coroutineScope = rememberCoroutineScope()
             KoinApplication(application = {
-                modules(mainModule(coroutineScope, this@MainActivity))
+                modules(mainModule(this@MainActivity))
             }) {
                 OthelloTheme {
                     Surface(

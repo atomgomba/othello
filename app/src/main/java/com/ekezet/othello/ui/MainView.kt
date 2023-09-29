@@ -18,32 +18,36 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.ekezet.hurok.compose.LoopWrapper
-import com.ekezet.othello.MainAction
 import com.ekezet.othello.MainAction.OnNewGameClicked
 import com.ekezet.othello.MainAction.OnShareBoardClicked
 import com.ekezet.othello.MainAction.OnToggleIndicatorsClicked
-import com.ekezet.othello.MainDependency
 import com.ekezet.othello.MainModel
 import com.ekezet.othello.MainScope
 import com.ekezet.othello.MainState
 import com.ekezet.othello.R.string
 import com.ekezet.othello.core.ui.R
-import com.ekezet.othello.di.MainScopeName
 import com.ekezet.othello.feature.gameboard.DisplayOptions
 import com.ekezet.othello.feature.gameboard.ui.GameBoardView
+import com.ekezet.othello.mainLoopBuilder
+import kotlinx.coroutines.CoroutineScope
 import org.koin.compose.koinInject
 
 @Composable
 internal fun MainView(
-    loopScope: MainScope = koinInject(MainScopeName),
+    parentScope: CoroutineScope = rememberCoroutineScope(),
+    initModel: MainModel = MainModel(),
 ) {
-    LoopWrapper<MainState, MainModel, Unit, MainDependency, MainAction>(
-        builder = { loopScope },
+    LoopWrapper(
+        builder = mainLoopBuilder,
+        parentScope = parentScope,
+        initModel = initModel,
+        dependency = koinInject(),
     ) { state ->
         MainViewImpl(state)
     }

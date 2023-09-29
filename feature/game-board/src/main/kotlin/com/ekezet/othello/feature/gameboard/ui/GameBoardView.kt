@@ -3,6 +3,7 @@ package com.ekezet.othello.feature.gameboard.ui
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,6 +13,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,34 +31,36 @@ import com.ekezet.othello.core.game.numDark
 import com.ekezet.othello.core.game.numLight
 import com.ekezet.othello.core.ui.R.string
 import com.ekezet.othello.feature.gameboard.ACTION_DELAY_MILLIS
-import com.ekezet.othello.feature.gameboard.GameBoardAction
 import com.ekezet.othello.feature.gameboard.GameBoardAction.ContinueGame
 import com.ekezet.othello.feature.gameboard.GameBoardArgs
 import com.ekezet.othello.feature.gameboard.GameBoardModel
 import com.ekezet.othello.feature.gameboard.GameBoardScope
 import com.ekezet.othello.feature.gameboard.GameBoardState
+import com.ekezet.othello.feature.gameboard.GameEnd.EndedTie
 import com.ekezet.othello.feature.gameboard.GameEnd.EndedWin
-import com.ekezet.othello.feature.gameboard.di.GameBoardScopeName
+import com.ekezet.othello.feature.gameboard.gameBoardLoopBuilder
 import com.ekezet.othello.feature.gameboard.ui.components.GameBoard
 import com.ekezet.othello.feature.gameboard.ui.components.GamePiece
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import nl.dionsegijn.konfetti.compose.KonfettiView
 import nl.dionsegijn.konfetti.core.Party
 import nl.dionsegijn.konfetti.core.emitter.Emitter
-import org.koin.compose.koinInject
 import java.util.concurrent.TimeUnit.SECONDS
 
-private val selectedColor: Color
+private val highlightColor: Color
     @Composable get() = MaterialTheme.colorScheme.inversePrimary
 
 @Composable
 fun GameBoardView(
     args: GameBoardArgs,
     modifier: Modifier = Modifier,
-    loopScope: GameBoardScope = koinInject(GameBoardScopeName),
+    parentScope: CoroutineScope = rememberCoroutineScope(),
 ) {
-    LoopWrapper<GameBoardState, GameBoardModel, GameBoardArgs, Unit, GameBoardAction>(
-        builder = { loopScope },
+    LoopWrapper(
+        parentScope = parentScope,
+        initModel = GameBoardModel.fromArgs(args),
+        builder = gameBoardLoopBuilder,
         args = args,
     ) { state ->
         GameBoardViewImpl(state, modifier)
@@ -86,16 +90,7 @@ private fun GameBoardScope.GameBoardViewImpl(
         }
 
         if (celebrate) {
-            KonfettiView(
-                modifier = Modifier
-                    .matchParentSize()
-                    .zIndex(Float.MAX_VALUE),
-                parties = listOf(
-                    Party(
-                        emitter = Emitter(duration = 5, SECONDS).perSecond(30),
-                    ),
-                ),
-            )
+            Celebrate()
         }
     }
 
@@ -115,8 +110,7 @@ private fun GameBoardState.BoardHeader() {
     ) {
         DiskImage(disk = currentDisk)
 
-        val turn = stringResource(id = string.game_board__header__turn, currentTurn)
-        Text(text = turn)
+        Text(text = stringResource(id = string.game_board__header__turn, currentTurn))
 
         Spacer(Modifier.weight(1F))
 
@@ -143,12 +137,27 @@ private fun GameBoardState.BoardFooter() {
     ) {
         val isDarkWin = ended is EndedWin && ended.winner == Disk.Dark
         DiskImage(disk = Disk.Dark, isSelected = isDarkWin)
-        Text("${diskCount.numDark}", color = if (isDarkWin) selectedColor else Color.Unspecified)
+        Text("${diskCount.numDark}", color = if (isDarkWin) highlightColor else Color.Unspecified)
 
         Spacer(Modifier.weight(1F))
 
+        if (ended != null) {
+            Text(
+                text = stringResource(
+                    id = when (ended) {
+                        EndedTie -> string.game_board__header__tie_game
+                        is EndedWin -> string.game_board__header__winner
+                    }
+                ),
+                color = highlightColor,
+                fontWeight = FontWeight.Bold,
+            )
+
+            Spacer(Modifier.weight(1F))
+        }
+
         val isLightWin = ended is EndedWin && ended.winner == Disk.Light
-        Text("${diskCount.numLight}", color = if (isLightWin) selectedColor else Color.Unspecified)
+        Text("${diskCount.numLight}", color = if (isLightWin) highlightColor else Color.Unspecified)
         DiskImage(disk = Disk.Light, isSelected = isLightWin)
     }
 }
@@ -164,9 +173,23 @@ private fun DiskImage(disk: Disk, isSelected: Boolean = false) {
                 color = if (!isSelected) {
                     MaterialTheme.colorScheme.onSurface.copy(alpha = .666F)
                 } else {
-                    selectedColor
+                    highlightColor
                 },
                 shape = CircleShape,
             ),
+    )
+}
+
+@Composable
+private fun BoxScope.Celebrate() {
+    KonfettiView(
+        modifier = Modifier
+            .matchParentSize()
+            .zIndex(Float.MAX_VALUE),
+        parties = listOf(
+            Party(
+                emitter = Emitter(duration = 5, SECONDS).perSecond(30),
+            ),
+        ),
     )
 }

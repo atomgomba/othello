@@ -15,7 +15,7 @@ internal sealed interface MainEffect : Effect<MainModel, MainDependency> {
         override suspend fun LoopScope<MainModel, MainDependency>.trigger(
             dependency: MainDependency?,
         ) = dependency?.run {
-            gameBoardScope.emit(OnUpdateGameState(newState))
+            gameBoardScope?.emit(OnUpdateGameState(newState))
         }
     }
 
@@ -23,7 +23,7 @@ internal sealed interface MainEffect : Effect<MainModel, MainDependency> {
         override suspend fun LoopScope<MainModel, MainDependency>.trigger(
             dependency: MainDependency?,
         ) = dependency?.run {
-            gameBoardScope.emit(OnSerializeBoard { lines ->
+            gameBoardScope?.emit(OnSerializeBoard { lines ->
                 emit(OnBoardSerialized(lines))
             })
         }

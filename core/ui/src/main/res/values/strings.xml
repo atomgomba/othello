@@ -7,4 +7,6 @@
     <string name="game_board__header__turn">Turn: %0$d</string>
     <string name="game_board__header__vs">Vs: %0$s</string>
     <string name="game_board__header__human">Other Human</string>
+    <string name="game_board__header__winner">Winner!</string>
+    <string name="game_board__header__tie_game">Tie Game!</string>
 </resources>

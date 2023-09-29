@@ -1,6 +1,7 @@
 package com.ekezet.othello.feature.gameboard
 
 import com.ekezet.hurok.Loop
+import com.ekezet.hurok.LoopBuilder
 import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.feature.gameboard.GameBoardAction.OnCellClicked
 import com.ekezet.othello.feature.gameboard.GameEnd.EndedWin
@@ -10,12 +11,13 @@ import com.ekezet.othello.feature.gameboard.ui.viewModels.OverlayItem.ValidMoveI
 import com.ekezet.othello.feature.gameboard.ui.viewModels.newEmptyOverlay
 import com.ekezet.othello.feature.gameboard.ui.viewModels.putAt
 import com.ekezet.othello.feature.gameboard.ui.viewModels.toList
-import kotlinx.coroutines.CoroutineScope
 
-internal class GameBoardLoop(parentScope: CoroutineScope, initModel: GameBoardModel) :
+internal class GameBoardLoop(
+    initModel: GameBoardModel, args: GameBoardArgs?,
+) :
     Loop<GameBoardState, GameBoardModel, GameBoardArgs, Unit, GameBoardAction>(
-        loopCoroutineScope = parentScope,
         initModel = initModel,
+        args = args,
     ) {
 
     override fun GameBoardModel.applyArgs(args: GameBoardArgs) =
@@ -61,5 +63,7 @@ internal class GameBoardLoop(parentScope: CoroutineScope, initModel: GameBoardMo
     }
 }
 
-internal fun gameBoardLoop(parentScope: CoroutineScope, args: GameBoardArgs) =
-    GameBoardLoop(parentScope = parentScope, initModel = GameBoardModel.fromArgs(args))
+internal val gameBoardLoopBuilder: LoopBuilder<GameBoardState, GameBoardModel, GameBoardArgs, Unit, GameBoardAction> =
+    { initModel, args, _ ->
+        GameBoardLoop(initModel = initModel, args = args)
+    }

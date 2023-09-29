@@ -1,17 +1,15 @@
 package com.ekezet.othello
 
 import com.ekezet.hurok.Loop
+import com.ekezet.hurok.LoopBuilder
 import com.ekezet.othello.MainAction.OnNewGameClicked
 import com.ekezet.othello.MainAction.OnToggleIndicatorsClicked
 import com.ekezet.othello.feature.gameboard.defaultGameBoardArgs
-import kotlinx.coroutines.CoroutineScope
 
 internal class MainLoop(
-    parentScope: CoroutineScope,
     initModel: MainModel,
     dependency: MainDependency,
 ) : Loop<MainState, MainModel, Unit, MainDependency, MainAction>(
-    loopCoroutineScope = parentScope,
     initModel = initModel,
     dependency = dependency,
 ) {
@@ -28,9 +26,10 @@ internal class MainLoop(
     }
 }
 
-internal fun mainLoop(parentScope: CoroutineScope, dependency: MainDependency) =
-    MainLoop(
-        parentScope = parentScope,
-        initModel = MainModel(),
-        dependency = dependency,
-    )
+internal val mainLoopBuilder: LoopBuilder<MainState, MainModel, Unit, MainDependency, MainAction> =
+    { initModel, _, dependency ->
+        MainLoop(
+            initModel = initModel,
+            dependency = requireNotNull(dependency) { "MainLoop dependency not set" },
+        )
+    }
