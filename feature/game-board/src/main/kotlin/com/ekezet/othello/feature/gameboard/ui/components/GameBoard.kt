@@ -1,5 +1,6 @@
 package com.ekezet.othello.feature.gameboard.ui.components
 
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -13,6 +14,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -84,14 +86,18 @@ internal fun GameBoard(
                                 contentAlignment = Alignment.Center,
                             ) {
                                 if (disk != null) {
+                                    val alpha: Float by animateFloatAsState(
+                                        label = "disk-alpha",
+                                        targetValue = when (ended) {
+                                            null -> 1F
+                                            is EndedWin -> if (ended.winner == disk) 1F else LOSER_ALPHA
+                                            EndedTie -> LOSER_ALPHA
+                                        },
+                                    )
                                     GamePiece(
                                         disk = disk,
                                         modifier = Modifier.alpha(
-                                            alpha = when (ended) {
-                                                null -> 1F
-                                                is EndedWin -> if (ended.winner == disk) 1F else LOSER_ALPHA
-                                                EndedTie -> LOSER_ALPHA
-                                            },
+                                            alpha = alpha,
                                         ),
                                     )
                                 }
