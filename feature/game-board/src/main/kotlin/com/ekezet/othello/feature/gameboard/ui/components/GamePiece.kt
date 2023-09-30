@@ -2,14 +2,12 @@ package com.ekezet.othello.feature.gameboard.ui.components
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
 import com.ekezet.othello.core.data.models.Disk
 
 internal val DarkColor = Color.Black
@@ -23,8 +21,7 @@ fun GamePiece(disk: Disk, modifier: Modifier = Modifier) {
     ) {
         Surface(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(4.dp),
+                .fillMaxSize(.8F),
             shape = CircleShape,
             color = disk.color,
         ) {}

@@ -4,12 +4,11 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -32,7 +31,6 @@ import com.ekezet.othello.feature.gameboard.ui.viewModels.getAt
 
 private val borderWidth = 1.dp
 private const val LOSER_ALPHA = .333F
-private const val CELL_WEIGHT = 1F / BoardWidth
 
 @Composable
 internal fun GameBoard(
@@ -47,35 +45,22 @@ internal fun GameBoard(
     Surface(
         shape = RoundedCornerShape(16.dp),
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.background),
+        modifier = modifier,
     ) {
-        Column(
-            modifier = modifier.then(
-                Modifier
-                    .wrapContentSize()
-                    .background(color = Color.White.copy(alpha = .75F))
-                    .padding(
-                        bottom = borderWidth,
-                        end = borderWidth,
-                    ),
-            ),
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(count = BoardWidth),
+            verticalArrangement = Arrangement.spacedBy(borderWidth),
+            horizontalArrangement = Arrangement.spacedBy(borderWidth),
         ) {
             for (rowIndex in 0 until BoardHeight) {
-                Row(
-                    modifier = Modifier.wrapContentSize(),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    for (colIndex in 0 until BoardWidth) {
-                        val disk = board.getAt(colIndex, rowIndex)
-                        val overlayItem = overlay?.getAt(colIndex, rowIndex)
-                        key(colIndex, rowIndex, disk, overlayItem?.composeKey) {
+                for (colIndex in 0 until BoardWidth) {
+                    val disk = board.getAt(colIndex, rowIndex)
+                    val overlayItem = overlay?.getAt(colIndex, rowIndex)
+                    item {
+                        key(colIndex, rowIndex, disk, overlayItem?.composeKey, ended) {
                             Box(
                                 modifier = Modifier
-                                    .padding(
-                                        top = borderWidth,
-                                        start = borderWidth,
-                                    )
                                     .background(color = background)
-                                    .weight(CELL_WEIGHT)
                                     .aspectRatio(1F)
                                     .clickable {
                                         onCellClick(
@@ -96,9 +81,7 @@ internal fun GameBoard(
                                     )
                                     GamePiece(
                                         disk = disk,
-                                        modifier = Modifier.alpha(
-                                            alpha = alpha,
-                                        ),
+                                        modifier = Modifier.alpha(alpha),
                                     )
                                 }
                                 overlayItem?.Composable()

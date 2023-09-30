@@ -14,11 +14,6 @@ import com.ekezet.othello.feature.gameboard.data.GameSettings
 import com.ekezet.othello.feature.gameboard.ui.viewModels.BoardList
 import com.ekezet.othello.feature.gameboard.ui.viewModels.BoardOverlayList
 
-/**
- * Give a little time for humans to follow changes on the board
- */
-const val ACTION_DELAY_MILLIS = 300L
-
 val defaultBoard: Board
     inline get() = BoardSerializer.fromString(
         """
@@ -49,6 +44,11 @@ val defaultGameBoardArgs: GameBoardArgs
         displayOptions = defaultDisplayOptions,
         opponentStrategy = defaultStrategy,
     )
+
+/**
+ * Give a little time for humans to follow changes on the board
+ */
+internal const val ACTION_DELAY_MILLIS = 300L
 
 data class GameBoardArgs(
     override val displayOptions: DisplayOptions,

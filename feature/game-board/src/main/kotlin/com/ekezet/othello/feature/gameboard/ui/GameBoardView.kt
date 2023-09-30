@@ -28,8 +28,6 @@ import androidx.compose.ui.zIndex
 import com.ekezet.hurok.AnyLoopScope
 import com.ekezet.hurok.compose.LoopWrapper
 import com.ekezet.othello.core.data.models.Disk
-import com.ekezet.othello.core.data.models.x
-import com.ekezet.othello.core.data.models.y
 import com.ekezet.othello.core.game.numDark
 import com.ekezet.othello.core.game.numLight
 import com.ekezet.othello.core.ui.R.string
@@ -96,8 +94,8 @@ private fun GameBoardScope.GameBoardViewImpl(
         }
     }
 
-    if (nextMovePosition != null) {
-        LaunchedEffect(nextMovePosition.x, nextMovePosition.y) {
+    LaunchedEffect(nextMovePosition != null) {
+        if (nextMovePosition != null) {
             delay(ACTION_DELAY_MILLIS)
             emit(ContinueGame)
         }
@@ -138,9 +136,7 @@ private fun GameBoardState.BoardFooter() {
         horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         val isDarkWin = ended is EndedWin && ended.winner == Disk.Dark
-        val isLightWin = ended is EndedWin && ended.winner == Disk.Light
-
-        DiskImage(disk = Disk.Dark, isSelected = isDarkWin, isHidden = ended != null && isLightWin)
+        DiskImage(disk = Disk.Dark, isSelected = isDarkWin)
         Text("${diskCount.numDark}", color = if (isDarkWin) highlightColor else Color.Unspecified)
 
         Spacer(Modifier.weight(1F))
@@ -160,8 +156,9 @@ private fun GameBoardState.BoardFooter() {
             Spacer(Modifier.weight(1F))
         }
 
+        val isLightWin = ended is EndedWin && ended.winner == Disk.Light
         Text("${diskCount.numLight}", color = if (isLightWin) highlightColor else Color.Unspecified)
-        DiskImage(disk = Disk.Light, isSelected = isLightWin, isHidden = ended != null && isDarkWin)
+        DiskImage(disk = Disk.Light, isSelected = isLightWin)
     }
 }
 
