@@ -29,10 +29,10 @@ internal data class MainState(
 
 internal class MainDependency(
     mainActivity: MainActivity? = null,
-    gameBoardScope: GameBoardScope? = null,
 ) : KoinComponent {
     val mainActivity: MainActivity = mainActivity ?: get()
-    val gameBoardScope: GameBoardScope? =  null //gameBoardScope ?: get(GameBoardScopeName)
+    var gameBoardScope: GameBoardScope? = null
+        internal set
 }
 
 internal typealias MainScope = LoopScope<MainModel, MainDependency>

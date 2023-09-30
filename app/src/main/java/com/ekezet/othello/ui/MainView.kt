@@ -82,6 +82,7 @@ private fun MainScope.MainViewImpl(state: MainState) = with(state) {
                 modifier = Modifier
                     .padding(16.dp)
                     .align(Center),
+                parentLoop = this@MainViewImpl,
             )
         }
     }

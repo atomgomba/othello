@@ -15,7 +15,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -26,6 +25,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import com.ekezet.hurok.AnyLoopScope
 import com.ekezet.hurok.compose.LoopWrapper
 import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.data.models.x
@@ -44,7 +44,6 @@ import com.ekezet.othello.feature.gameboard.GameEnd.EndedWin
 import com.ekezet.othello.feature.gameboard.gameBoardLoopBuilder
 import com.ekezet.othello.feature.gameboard.ui.components.GameBoard
 import com.ekezet.othello.feature.gameboard.ui.components.GamePiece
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import nl.dionsegijn.konfetti.compose.KonfettiView
 import nl.dionsegijn.konfetti.core.Party
@@ -58,10 +57,10 @@ private val highlightColor: Color
 fun GameBoardView(
     args: GameBoardArgs,
     modifier: Modifier = Modifier,
-    parentScope: CoroutineScope = rememberCoroutineScope(),
+    parentLoop: AnyLoopScope? = null
 ) {
     LoopWrapper(
-        parentScope = parentScope,
+        parentLoop = parentLoop,
         initModel = GameBoardModel(),
         builder = gameBoardLoopBuilder,
         args = args,
@@ -111,7 +110,7 @@ private fun GameBoardState.BoardHeader() {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        DiskImage(disk = currentDisk, hidden = ended != null)
+        DiskImage(disk = currentDisk, isHidden = ended != null)
 
         Text(text = stringResource(id = string.game_board__header__turn, currentTurn))
 
@@ -139,7 +138,9 @@ private fun GameBoardState.BoardFooter() {
         horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         val isDarkWin = ended is EndedWin && ended.winner == Disk.Dark
-        DiskImage(disk = Disk.Dark, isSelected = isDarkWin)
+        val isLightWin = ended is EndedWin && ended.winner == Disk.Light
+
+        DiskImage(disk = Disk.Dark, isSelected = isDarkWin, isHidden = ended != null && isLightWin)
         Text("${diskCount.numDark}", color = if (isDarkWin) highlightColor else Color.Unspecified)
 
         Spacer(Modifier.weight(1F))
@@ -159,16 +160,15 @@ private fun GameBoardState.BoardFooter() {
             Spacer(Modifier.weight(1F))
         }
 
-        val isLightWin = ended is EndedWin && ended.winner == Disk.Light
         Text("${diskCount.numLight}", color = if (isLightWin) highlightColor else Color.Unspecified)
-        DiskImage(disk = Disk.Light, isSelected = isLightWin)
+        DiskImage(disk = Disk.Light, isSelected = isLightWin, isHidden = ended != null && isDarkWin)
     }
 }
 
 @Composable
-private fun DiskImage(disk: Disk, isSelected: Boolean = false, hidden: Boolean = false) {
+private fun DiskImage(disk: Disk, isSelected: Boolean = false, isHidden: Boolean = false) {
     val alpha by animateFloatAsState(
-        targetValue = if (hidden) 0F else 1F,
+        targetValue = if (isHidden) 0F else 1F,
         label = "current-disk-alpha"
     )
     GamePiece(

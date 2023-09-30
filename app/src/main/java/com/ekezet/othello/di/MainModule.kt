@@ -15,7 +15,6 @@ internal fun mainModule(mainActivity: MainActivity) = module {
     single {
         MainDependency(
             mainActivity = get(),
-            gameBoardScope = null,
         )
     }
 }
