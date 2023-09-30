@@ -9,7 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -31,7 +31,7 @@ import com.ekezet.othello.feature.gameboard.ui.viewModels.BoardOverlayList
 import com.ekezet.othello.feature.gameboard.ui.viewModels.getAt
 
 private val borderWidth = 1.dp
-private const val LOSER_ALPHA = .33F
+private const val LOSER_ALPHA = .333F
 private const val CELL_WEIGHT = 1F / BoardWidth
 
 @Composable
@@ -51,7 +51,7 @@ internal fun GameBoard(
         Column(
             modifier = modifier.then(
                 Modifier
-                    .wrapContentHeight(align = Alignment.Top)
+                    .wrapContentSize()
                     .background(color = Color.White.copy(alpha = .75F))
                     .padding(
                         bottom = borderWidth,
@@ -61,7 +61,7 @@ internal fun GameBoard(
         ) {
             for (rowIndex in 0 until BoardHeight) {
                 Row(
-                    modifier = Modifier.wrapContentHeight(),
+                    modifier = Modifier.wrapContentSize(),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     for (colIndex in 0 until BoardWidth) {

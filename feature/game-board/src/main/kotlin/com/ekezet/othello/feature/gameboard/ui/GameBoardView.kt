@@ -85,7 +85,7 @@ private fun GameBoardScope.GameBoardViewImpl(
                 showPositions = showBoardPositions,
                 ended = ended,
                 overlay = overlay,
-                onCellClick = state.onCellClick,
+                onCellClick = onCellClick,
             )
 
             BoardFooter()
