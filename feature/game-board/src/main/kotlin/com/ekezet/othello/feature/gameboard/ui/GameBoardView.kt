@@ -36,12 +36,12 @@ import com.ekezet.othello.core.ui.R.string
 import com.ekezet.othello.feature.gameboard.ACTION_DELAY_MILLIS
 import com.ekezet.othello.feature.gameboard.GameBoardAction.ContinueGame
 import com.ekezet.othello.feature.gameboard.GameBoardArgs
+import com.ekezet.othello.feature.gameboard.GameBoardLoop
 import com.ekezet.othello.feature.gameboard.GameBoardModel
 import com.ekezet.othello.feature.gameboard.GameBoardScope
 import com.ekezet.othello.feature.gameboard.GameBoardState
 import com.ekezet.othello.feature.gameboard.GameEnd.EndedTie
 import com.ekezet.othello.feature.gameboard.GameEnd.EndedWin
-import com.ekezet.othello.feature.gameboard.gameBoardLoopBuilder
 import com.ekezet.othello.feature.gameboard.ui.components.GameBoard
 import com.ekezet.othello.feature.gameboard.ui.components.GamePiece
 import kotlinx.coroutines.delay
@@ -57,12 +57,12 @@ private val highlightColor: Color
 fun GameBoardView(
     args: GameBoardArgs,
     modifier: Modifier = Modifier,
-    parentLoop: AnyLoopScope? = null
+    parentLoop: AnyLoopScope? = null,
 ) {
     LoopWrapper(
+        builder = GameBoardLoop,
         parentLoop = parentLoop,
         initModel = GameBoardModel(),
-        builder = gameBoardLoopBuilder,
         args = args,
     ) { state ->
         GameBoardViewImpl(state, modifier)
@@ -151,7 +151,7 @@ private fun GameBoardState.BoardFooter() {
                     id = when (ended) {
                         EndedTie -> string.game_board__header__tie_game
                         is EndedWin -> string.game_board__header__winner
-                    }
+                    },
                 ),
                 color = highlightColor,
                 fontWeight = FontWeight.Bold,
@@ -169,7 +169,7 @@ private fun GameBoardState.BoardFooter() {
 private fun DiskImage(disk: Disk, isSelected: Boolean = false, isHidden: Boolean = false) {
     val alpha by animateFloatAsState(
         targetValue = if (isHidden) 0F else 1F,
-        label = "current-disk-alpha"
+        label = "current-disk-alpha",
     )
     GamePiece(
         disk = disk,

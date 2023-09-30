@@ -27,6 +27,7 @@ import com.ekezet.hurok.compose.LoopWrapper
 import com.ekezet.othello.MainAction.OnNewGameClicked
 import com.ekezet.othello.MainAction.OnShareBoardClicked
 import com.ekezet.othello.MainAction.OnToggleIndicatorsClicked
+import com.ekezet.othello.MainLoop
 import com.ekezet.othello.MainModel
 import com.ekezet.othello.MainScope
 import com.ekezet.othello.MainState
@@ -34,7 +35,6 @@ import com.ekezet.othello.R.string
 import com.ekezet.othello.core.ui.R
 import com.ekezet.othello.feature.gameboard.DisplayOptions
 import com.ekezet.othello.feature.gameboard.ui.GameBoardView
-import com.ekezet.othello.mainLoopBuilder
 import kotlinx.coroutines.CoroutineScope
 import org.koin.compose.koinInject
 
@@ -44,7 +44,7 @@ internal fun MainView(
     initModel: MainModel = MainModel(),
 ) {
     LoopWrapper(
-        builder = mainLoopBuilder,
+        builder = MainLoop,
         parentScope = parentScope,
         initModel = initModel,
         dependency = koinInject(),

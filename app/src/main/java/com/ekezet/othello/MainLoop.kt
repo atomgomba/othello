@@ -31,12 +31,16 @@ internal class MainLoop(
     override fun MainDependency.onAddChildLoop(child: AnyLoopScope) {
         gameBoardScope = child as? GameBoardScope
     }
-}
 
-internal val mainLoopBuilder: LoopBuilder<MainState, MainModel, Unit, MainDependency, MainAction> =
-    { initModel, _, dependency ->
-        MainLoop(
+    internal companion object Builder :
+        LoopBuilder<MainState, MainModel, Unit, MainDependency, MainAction> {
+        override fun invoke(
+            initModel: MainModel,
+            args: Unit?,
+            dependency: MainDependency?,
+        ) = MainLoop(
             initModel = initModel,
-            dependency = requireNotNull(dependency) { "MainLoop dependency not set" },
+            dependency = requireNotNull(dependency) { "MainLoop dependency must be set" },
         )
     }
+}

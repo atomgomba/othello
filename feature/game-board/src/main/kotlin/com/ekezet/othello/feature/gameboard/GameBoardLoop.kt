@@ -13,7 +13,8 @@ import com.ekezet.othello.feature.gameboard.ui.viewModels.putAt
 import com.ekezet.othello.feature.gameboard.ui.viewModels.toList
 
 internal class GameBoardLoop(
-    initModel: GameBoardModel, args: GameBoardArgs?,
+    initModel: GameBoardModel,
+    args: GameBoardArgs?,
 ) :
     Loop<GameBoardState, GameBoardModel, GameBoardArgs, Unit, GameBoardAction>(
         initModel = initModel,
@@ -61,9 +62,13 @@ internal class GameBoardLoop(
 
         return items.toList()
     }
-}
 
-internal val gameBoardLoopBuilder: LoopBuilder<GameBoardState, GameBoardModel, GameBoardArgs, Unit, GameBoardAction> =
-    { initModel, args, _ ->
-        GameBoardLoop(initModel = initModel, args = args)
+    internal companion object Builder :
+        LoopBuilder<GameBoardState, GameBoardModel, GameBoardArgs, Unit, GameBoardAction> {
+        override fun invoke(
+            initModel: GameBoardModel,
+            args: GameBoardArgs?,
+            dependency: Unit?,
+        ) = GameBoardLoop(initModel = initModel, args = args)
     }
+}

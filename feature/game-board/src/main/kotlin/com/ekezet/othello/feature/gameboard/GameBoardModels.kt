@@ -30,7 +30,7 @@ val defaultBoard: Board
         --------
         --------
         --------
-        """
+        """,
     )
 
 val defaultGameState: GameState

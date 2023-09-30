@@ -30,7 +30,7 @@ internal sealed interface MainAction : Action<MainModel, MainDependency> {
     }
 
     data class OnBoardSerialized(
-        private val lines: List<String>
+        private val lines: List<String>,
     ) : MainAction {
         override fun MainModel.proceed(): Next<MainModel, MainDependency> {
             val result = lines.joinToString("\n")
