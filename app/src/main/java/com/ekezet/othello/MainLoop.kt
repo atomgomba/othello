@@ -8,19 +8,20 @@ import com.ekezet.othello.MainAction.OnToggleIndicatorsClicked
 import com.ekezet.othello.feature.gameboard.GameBoardScope
 import com.ekezet.othello.feature.gameboard.defaultGameBoardArgs
 
-internal class MainLoop(
-    initModel: MainModel,
-    dependency: MainDependency,
-) : Loop<MainState, MainModel, Unit, MainDependency, MainAction>(
-    initModel = initModel,
-    dependency = dependency,
-) {
+internal class MainLoop(dependency: MainDependency) :
+    Loop<MainState, MainModel, Unit, MainDependency, MainAction>(
+        dependency = dependency,
+    ) {
+
+    override fun initModel() = MainModel()
+
     override fun renderState(model: MainModel) = with(model) {
         MainState(
             gameSettings = model,
             gameBoardArgs = defaultGameBoardArgs.copy(
                 displayOptions = displayOptions,
-                opponentStrategy = opponentStrategy,
+                lightStrategy = lightStrategy,
+                darkStrategy = darkStrategy,
             ),
             onNewGameClick = { emit(OnNewGameClicked) },
             onToggleIndicatorsClick = { emit(OnToggleIndicatorsClicked) },
@@ -35,11 +36,9 @@ internal class MainLoop(
     internal companion object Builder :
         LoopBuilder<MainState, MainModel, Unit, MainDependency, MainAction> {
         override fun invoke(
-            initModel: MainModel,
             args: Unit?,
             dependency: MainDependency?,
         ) = MainLoop(
-            initModel = initModel,
             dependency = requireNotNull(dependency) { "MainLoop dependency must be set" },
         )
     }

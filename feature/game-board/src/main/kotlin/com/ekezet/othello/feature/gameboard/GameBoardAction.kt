@@ -47,8 +47,9 @@ internal sealed interface GameBoardAction : Action<GameBoardModel, Unit> {
 
         private fun GameBoardModel.nextTurn(newState: GameState): Next<GameBoardModel, Unit> {
             val effects = mutableListOf<GameBoardEffect>()
-            if (opponentStrategy != null && newState.currentDisk == Disk.Light) {
-                val nextMove = opponentStrategy.deriveNext(newState)
+            val strategy = if (newState.currentDisk == Disk.Light) lightStrategy else darkStrategy
+            if (strategy != null) {
+                val nextMove = strategy.deriveNext(newState)
                 if (nextMove != null) {
                     effects.add(WaitBeforeNextTurn(nextMove))
                 }
@@ -67,6 +68,17 @@ internal sealed interface GameBoardAction : Action<GameBoardModel, Unit> {
         )
     }
 
+    data object OnGameStarted : GameBoardAction {
+        override fun GameBoardModel.proceed() =
+            if (darkStrategy == null) {
+                // dark is a human
+                skip
+            } else {
+                val nextMove = darkStrategy.deriveNext(gameState) ?: error("Starting the game is impossible")
+                trigger(WaitBeforeNextTurn(nextMove))
+            }
+    }
+
     data class OnTurnPassed(val newState: GameState) : GameBoardAction {
         override fun GameBoardModel.proceed() = change(resetNextTurn(newState))
     }
@@ -79,7 +91,15 @@ internal sealed interface GameBoardAction : Action<GameBoardModel, Unit> {
 data class OnUpdateGameState(
     private val newState: GameState,
 ) : GameBoardAction {
-    override fun GameBoardModel.proceed() = change(resetNextTurn(newState))
+    override fun GameBoardModel.proceed(): Next<GameBoardModel, Unit> {
+        val nextMove = darkStrategy?.deriveNext(newState)
+        val effects = buildList {
+            if (nextMove != null) {
+                add(WaitBeforeNextTurn(nextMove))
+            }
+        }
+        return outcome(resetNextTurn(newState), effects = effects.toTypedArray())
+    }
 }
 
 data class OnSerializeBoard(

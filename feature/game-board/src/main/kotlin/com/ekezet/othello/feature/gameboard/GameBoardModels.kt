@@ -8,9 +8,12 @@ import com.ekezet.othello.core.data.models.Position
 import com.ekezet.othello.core.data.serialize.BoardSerializer
 import com.ekezet.othello.core.game.DiskCount
 import com.ekezet.othello.core.game.GameState
+import com.ekezet.othello.core.game.data.BoardDisplayOptions
+import com.ekezet.othello.core.game.data.GameSettings
 import com.ekezet.othello.core.game.strategy.HumanPlayer
+import com.ekezet.othello.core.game.strategy.NaiveMaxStrategy
+import com.ekezet.othello.core.game.strategy.PreferSidesDecoratorStrategy.Companion.preferSides
 import com.ekezet.othello.core.game.strategy.Strategy
-import com.ekezet.othello.feature.gameboard.data.GameSettings
 import com.ekezet.othello.feature.gameboard.ui.viewModels.BoardList
 import com.ekezet.othello.feature.gameboard.ui.viewModels.BoardOverlayList
 
@@ -31,18 +34,21 @@ val defaultBoard: Board
 val defaultGameState: GameState
     inline get() = GameState.new(defaultBoard)
 
-val defaultDisplayOptions: DisplayOptions
-    inline get() = DisplayOptions(
+val defaultDisplayOptions: BoardDisplayOptions
+    inline get() = BoardDisplayOptions(
         showPossibleMoves = true,
         showBoardPositions = false,
     )
 
-val defaultStrategy: Strategy? = HumanPlayer
+val defaultLightStrategy: Strategy = NaiveMaxStrategy().preferSides()
+
+val defaultDarkStrategy: Strategy? = HumanPlayer
 
 val defaultGameBoardArgs: GameBoardArgs
     inline get() = GameBoardArgs(
         displayOptions = defaultDisplayOptions,
-        opponentStrategy = defaultStrategy,
+        lightStrategy = defaultLightStrategy,
+        darkStrategy = defaultDarkStrategy,
     )
 
 /**
@@ -51,29 +57,30 @@ val defaultGameBoardArgs: GameBoardArgs
 internal const val ACTION_DELAY_MILLIS = 300L
 
 data class GameBoardArgs(
-    override val displayOptions: DisplayOptions,
-    override val opponentStrategy: Strategy?,
+    override val displayOptions: BoardDisplayOptions,
+    override val lightStrategy: Strategy?,
+    override val darkStrategy: Strategy?,
 ) : GameSettings
 
-data class DisplayOptions(
-    val showPossibleMoves: Boolean,
-    val showBoardPositions: Boolean,
-)
-
 data class GameBoardModel(
-    val gameState: GameState = defaultGameState,
-    val displayOptions: DisplayOptions = defaultDisplayOptions,
-    val opponentStrategy: Strategy? = defaultStrategy,
-    val nextMovePosition: Position? = null,
-    val ended: GameEnd? = null,
+    internal val gameState: GameState = defaultGameState,
+    internal val displayOptions: BoardDisplayOptions = defaultDisplayOptions,
+    internal val lightStrategy: Strategy? = defaultLightStrategy,
+    internal val darkStrategy: Strategy? = defaultDarkStrategy,
+    internal val nextMovePosition: Position? = null,
+    internal val ended: GameEnd? = null,
 ) {
-    val currentDisk: Disk
+    internal val currentDisk: Disk
         inline get() = gameState.currentDisk
 
-    val isHumanOpponent: Boolean
-        inline get() = opponentStrategy == HumanPlayer
+    internal fun isHumanPlayer(disk: Disk): Boolean =
+        when (disk) {
+            Disk.Light -> lightStrategy == HumanPlayer
+            Disk.Dark -> darkStrategy == HumanPlayer
+            else -> error("Expected Light or Dark, but was $disk")
+        }
 
-    fun resetNextTurn(nextState: GameState = defaultGameState) =
+    internal fun resetNextTurn(nextState: GameState = defaultGameState) =
         copy(
             gameState = nextState,
             nextMovePosition = null,
@@ -94,6 +101,7 @@ internal data class GameBoardState(
     val showBoardPositions: Boolean,
     val ended: GameEnd?,
     val celebrate: Boolean,
+    val isHumanPlayer: Boolean,
     val onCellClick: (x: Int, y: Int) -> Unit,
 )
 

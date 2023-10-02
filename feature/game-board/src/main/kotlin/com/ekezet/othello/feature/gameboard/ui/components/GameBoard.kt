@@ -40,6 +40,7 @@ internal fun GameBoard(
     showPositions: Boolean = false,
     ended: GameEnd? = null,
     overlay: BoardOverlayList? = null,
+    isClickable: Boolean = true,
     onCellClick: (x: Int, y: Int) -> Unit = { _, _ -> },
 ) {
     Surface(
@@ -62,11 +63,17 @@ internal fun GameBoard(
                                 modifier = Modifier
                                     .background(color = background)
                                     .aspectRatio(1F)
-                                    .clickable {
-                                        onCellClick(
-                                            colIndex,
-                                            rowIndex,
-                                        )
+                                    .run {
+                                        if (isClickable) {
+                                            clickable {
+                                                onCellClick(
+                                                    colIndex,
+                                                    rowIndex,
+                                                )
+                                            }
+                                        } else {
+                                            this
+                                        }
                                     },
                                 contentAlignment = Alignment.Center,
                             ) {

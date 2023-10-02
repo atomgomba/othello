@@ -35,7 +35,6 @@ import com.ekezet.othello.feature.gameboard.ACTION_DELAY_MILLIS
 import com.ekezet.othello.feature.gameboard.GameBoardAction.ContinueGame
 import com.ekezet.othello.feature.gameboard.GameBoardArgs
 import com.ekezet.othello.feature.gameboard.GameBoardLoop
-import com.ekezet.othello.feature.gameboard.GameBoardModel
 import com.ekezet.othello.feature.gameboard.GameBoardScope
 import com.ekezet.othello.feature.gameboard.GameBoardState
 import com.ekezet.othello.feature.gameboard.GameEnd.EndedTie
@@ -60,7 +59,6 @@ fun GameBoardView(
     LoopWrapper(
         builder = GameBoardLoop,
         parentLoop = parentLoop,
-        initModel = GameBoardModel(),
         args = args,
     ) { state ->
         GameBoardViewImpl(state, modifier)
@@ -83,6 +81,7 @@ private fun GameBoardScope.GameBoardViewImpl(
                 showPositions = showBoardPositions,
                 ended = ended,
                 overlay = overlay,
+                isClickable = isHumanPlayer,
                 onCellClick = onCellClick,
             )
 

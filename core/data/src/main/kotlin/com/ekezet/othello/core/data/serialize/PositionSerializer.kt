@@ -12,7 +12,7 @@ private val numbers: List<Char> by lazy {
     ('1'..'9').toList()
 }
 
-fun Position.serialize() = buildString {
+fun Position.asString() = buildString {
     append(letters[x])
     append(numbers[y])
 }

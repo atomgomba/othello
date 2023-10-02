@@ -28,12 +28,11 @@ import com.ekezet.othello.MainAction.OnNewGameClicked
 import com.ekezet.othello.MainAction.OnShareBoardClicked
 import com.ekezet.othello.MainAction.OnToggleIndicatorsClicked
 import com.ekezet.othello.MainLoop
-import com.ekezet.othello.MainModel
 import com.ekezet.othello.MainScope
 import com.ekezet.othello.MainState
 import com.ekezet.othello.R.string
+import com.ekezet.othello.core.game.data.BoardDisplayOptions
 import com.ekezet.othello.core.ui.R
-import com.ekezet.othello.feature.gameboard.DisplayOptions
 import com.ekezet.othello.feature.gameboard.ui.GameBoardView
 import kotlinx.coroutines.CoroutineScope
 import org.koin.compose.koinInject
@@ -41,12 +40,10 @@ import org.koin.compose.koinInject
 @Composable
 internal fun MainView(
     parentScope: CoroutineScope = rememberCoroutineScope(),
-    initModel: MainModel = MainModel(),
 ) {
     LoopWrapper(
         builder = MainLoop,
         parentScope = parentScope,
-        initModel = initModel,
         dependency = koinInject(),
     ) { state ->
         MainViewImpl(state)
@@ -89,7 +86,7 @@ private fun MainScope.MainViewImpl(state: MainState) = with(state) {
 }
 
 @Composable
-private fun MainScope.Toolbar(options: DisplayOptions) = with(options) {
+private fun MainScope.Toolbar(options: BoardDisplayOptions) = with(options) {
     IconButton(onClick = { emit(OnNewGameClicked) }) {
         Icon(
             imageVector = Icons.Default.Refresh,

@@ -5,7 +5,7 @@ import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.data.models.isLight
 import com.ekezet.othello.core.data.models.putAt
 import com.ekezet.othello.core.data.models.putAtAndClone
-import com.ekezet.othello.core.data.serialize.serialize
+import com.ekezet.othello.core.data.serialize.asString
 import com.ekezet.othello.core.game.throwable.InvalidMoveException
 import timber.log.Timber
 
@@ -47,10 +47,10 @@ data class GameState(
     fun proceed(nextMove: NextMove): MoveResult {
         val (pos, disk) = nextMove
         if (validMoves.isInvalid(pos)) {
-            Timber.w("Invalid move: $disk @ ${pos.serialize()}")
+            Timber.w("Invalid move: $disk @ ${pos.asString()}")
             throw InvalidMoveException()
         }
-        Timber.d("Next move (turn: ${turn + 1}): $disk @ ${pos.serialize()}")
+        Timber.d("Next move (turn: ${turn + 1}): $disk @ ${pos.asString()}")
         val nextBoard = currentBoard.putAtAndClone(pos, disk)
         val validSegments = validMoves
             .filter { it.position == pos }
@@ -65,34 +65,39 @@ data class GameState(
             currentBoard = nextBoard,
             history = history + PastMove(board = currentBoard, move = nextMove),
         )
+        return generateNextTurn(nextState, nextBoard, disk)
+    }
 
-        return if (nextState.validMoves.isNotEmpty()) {
-            // next player has a valid move, continue the game
-            Timber.d("Continue turn ${nextState.turn + 1}")
-            NextTurn(state = nextState)
+    private fun generateNextTurn(
+        nextState: GameState,
+        nextBoard: Board,
+        disk: Disk,
+    ) = if (nextState.validMoves.isNotEmpty()) {
+        // next player has a valid move, continue the game
+        Timber.d("Continue turn ${nextState.turn + 1}")
+        NextTurn(state = nextState)
+    } else {
+        val hasMoreValidMoves = nextBoard
+            .findValidMoves(disk)
+            .isNotEmpty()
+        if (hasMoreValidMoves) {
+            // current player still has a valid move, next player passes
+            Timber.d("Player passed ($disk)")
+            PassTurn(
+                state = nextState.copy(
+                    history = nextState.history + PastMove(board = nextBoard, move = null),
+                ),
+            )
         } else {
-            val hasMoreValidMoves = nextBoard
-                .findValidMoves(disk)
-                .isNotEmpty()
-            if (hasMoreValidMoves) {
-                // current player still has a valid move, next player passes
-                Timber.d("Player passed ($disk)")
-                PassTurn(
-                    state = nextState.copy(
-                        history = nextState.history + nextState.history,
-                    ),
-                )
+            // nobody can move, it's a win or a tie
+            val (numDark, numLight) = nextState.diskCount
+            if (numDark == numLight) {
+                Timber.d("It's a tie!")
+                Tie(state = nextState)
             } else {
-                // nobody can move, it's a win or a tie
-                val (numDark, numLight) = nextState.diskCount
-                if (numDark == numLight) {
-                    Timber.d("It's a tie!")
-                    Tie(state = nextState)
-                } else {
-                    val winner = if (numDark < numLight) Disk.Light else Disk.Dark
-                    Timber.d("We have a winner! ($winner)")
-                    Win(state = nextState, winner = winner)
-                }
+                val winner = if (numDark < numLight) Disk.Light else Disk.Dark
+                Timber.d("We have a winner! ($winner)")
+                Win(state = nextState, winner = winner)
             }
         }
     }

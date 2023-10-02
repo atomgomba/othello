@@ -12,12 +12,12 @@ object BoardSerializer {
         IllegalStateException::class,
     )
     fun fromLines(lines: List<String>): Board {
-        val data = lines.map { it.trim() }.filterNot { it.isEmpty() }
+        val data = lines.map { it.trim().replace("`", "") }.filterNot { it.isEmpty() }
         var result = arrayOf<Array<Disk?>>()
         check(data.size == BoardHeight) { "BoardHeight must be $BoardHeight, but was ${data.size}" }
         for ((n, line) in data.withIndex()) {
             check(line.length == BoardWidth) { "Length of row ${n + 1} must be $BoardWidth, but was ${line.length}" }
-            result += line.toRow()
+            result += line.toDisks()
         }
         return result
     }
@@ -37,7 +37,7 @@ object BoardSerializer {
     fun toLines(board: Board): List<String> = board.map { row -> row.toLine() }
 
     @Throws(InvalidTokenException::class)
-    private fun String.toRow(): Array<Disk?> = toCharArray().map { char ->
+    private fun String.toDisks(): Array<Disk?> = toCharArray().map { char ->
         when (char) {
             TOKEN_EMPTY -> null
             TOKEN_LIGHT -> Disk.Light

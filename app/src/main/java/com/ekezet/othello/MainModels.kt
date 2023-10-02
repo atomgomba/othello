@@ -2,20 +2,23 @@ package com.ekezet.othello
 
 import androidx.compose.runtime.Stable
 import com.ekezet.hurok.LoopScope
+import com.ekezet.othello.core.game.data.BoardDisplayOptions
+import com.ekezet.othello.core.game.data.GameSettings
+import com.ekezet.othello.core.game.strategy.NaiveMaxStrategy
+import com.ekezet.othello.core.game.strategy.PreferSidesDecoratorStrategy.Companion.preferSides
+import com.ekezet.othello.core.game.strategy.RandomStrategy
 import com.ekezet.othello.core.game.strategy.Strategy
-import com.ekezet.othello.feature.gameboard.DisplayOptions
 import com.ekezet.othello.feature.gameboard.GameBoardArgs
 import com.ekezet.othello.feature.gameboard.GameBoardScope
-import com.ekezet.othello.feature.gameboard.data.GameSettings
 import com.ekezet.othello.feature.gameboard.defaultDisplayOptions
-import com.ekezet.othello.feature.gameboard.defaultStrategy
 import com.ekezet.othello.ui.MainActivity
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 
 internal data class MainModel(
-    override val opponentStrategy: Strategy? = defaultStrategy,
-    override val displayOptions: DisplayOptions = defaultDisplayOptions,
+    override val lightStrategy: Strategy? = NaiveMaxStrategy().preferSides(),
+    override val darkStrategy: Strategy? = RandomStrategy(),
+    override val displayOptions: BoardDisplayOptions = defaultDisplayOptions,
 ) : GameSettings
 
 @Stable

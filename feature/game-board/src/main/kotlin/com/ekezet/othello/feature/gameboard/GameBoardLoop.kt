@@ -2,8 +2,8 @@ package com.ekezet.othello.feature.gameboard
 
 import com.ekezet.hurok.Loop
 import com.ekezet.hurok.LoopBuilder
-import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.feature.gameboard.GameBoardAction.OnCellClicked
+import com.ekezet.othello.feature.gameboard.GameBoardAction.OnGameStarted
 import com.ekezet.othello.feature.gameboard.GameEnd.EndedWin
 import com.ekezet.othello.feature.gameboard.ui.viewModels.BoardOverlayList
 import com.ekezet.othello.feature.gameboard.ui.viewModels.OverlayItem.NextMoveIndicatorOverlayItem
@@ -12,19 +12,22 @@ import com.ekezet.othello.feature.gameboard.ui.viewModels.newEmptyOverlay
 import com.ekezet.othello.feature.gameboard.ui.viewModels.putAt
 import com.ekezet.othello.feature.gameboard.ui.viewModels.toList
 
-internal class GameBoardLoop(
-    initModel: GameBoardModel,
-    args: GameBoardArgs?,
-) :
+internal class GameBoardLoop(args: GameBoardArgs?) :
     Loop<GameBoardState, GameBoardModel, GameBoardArgs, Unit, GameBoardAction>(
-        initModel = initModel,
         args = args,
     ) {
+
+    override fun initModel() = GameBoardModel()
+
+    override fun onLoopStarted() {
+        emit(OnGameStarted)
+    }
 
     override fun GameBoardModel.applyArgs(args: GameBoardArgs) =
         copy(
             displayOptions = args.displayOptions,
-            opponentStrategy = args.opponentStrategy,
+            lightStrategy = args.lightStrategy,
+            darkStrategy = args.darkStrategy,
         )
 
     override fun renderState(model: GameBoardModel) = with(model) {
@@ -33,13 +36,14 @@ internal class GameBoardLoop(
             overlay = createOverlayItems(),
             currentDisk = gameState.currentDisk,
             diskCount = gameState.diskCount,
-            opponentName = opponentStrategy?.name,
+            opponentName = lightStrategy?.name,
             currentTurn = gameState.turn + 1,
             nextMovePosition = nextMovePosition,
             showPossibleMoves = displayOptions.showPossibleMoves,
             showBoardPositions = displayOptions.showBoardPositions,
             ended = ended,
-            celebrate = ended is EndedWin && (ended.winner == Disk.Dark || isHumanOpponent),
+            celebrate = ended is EndedWin && isHumanPlayer(ended.winner),
+            isHumanPlayer = isHumanPlayer(gameState.currentDisk),
             onCellClick = { x, y -> emit(OnCellClicked(x to y)) },
         )
     }
@@ -66,9 +70,8 @@ internal class GameBoardLoop(
     internal companion object Builder :
         LoopBuilder<GameBoardState, GameBoardModel, GameBoardArgs, Unit, GameBoardAction> {
         override fun invoke(
-            initModel: GameBoardModel,
             args: GameBoardArgs?,
             dependency: Unit?,
-        ) = GameBoardLoop(initModel = initModel, args = args)
+        ) = GameBoardLoop(args = args)
     }
 }
