@@ -31,13 +31,16 @@ val Board.diskCount: DiskCount
     get() =
         flatten()
             .filterNotNull()
-            .fold(DiskCount(0, 0)) { acc, disk ->
+            .fold(0 to 0) { acc, disk ->
                 DiskCount(
-                    first = if (disk.isDark) acc.first + 1 else acc.first,
-                    second = if (disk.isLight) acc.second + 1 else acc.second,
+                    first = acc.first.run { if (disk.isDark) plus(1) else this },
+                    second = acc.second.run { if (disk.isLight) plus(1) else this },
                 )
             }
 
+/**
+ * Count of dark/light disks
+ */
 typealias DiskCount = Pair<Int, Int>
 
 val DiskCount.numDark: Int

@@ -68,6 +68,7 @@ data class GameBoardModel(
     override val lightStrategy: Strategy? = defaultLightStrategy,
     override val darkStrategy: Strategy? = defaultDarkStrategy,
     internal val nextMovePosition: Position? = null,
+    internal val passed: Boolean = false,
     internal val ended: GameEnd? = null,
 ) : GameSettings {
     internal val currentDisk: Disk
@@ -80,12 +81,17 @@ data class GameBoardModel(
             else -> error("Expected Light or Dark, but was $disk")
         }
 
-    internal fun resetNextTurn(nextState: GameState = defaultGameState) =
+    internal fun resetNextTurn(nextState: GameState = defaultGameState, passed: Boolean = false) =
         copy(
             gameState = nextState,
             nextMovePosition = null,
             ended = null,
+            passed = passed,
         )
+
+    internal fun pickNextMoveAt(position: Position?) = copy(
+        nextMovePosition = position
+    )
 }
 
 @Stable
@@ -104,6 +110,7 @@ internal data class GameBoardState(
     val ended: GameEnd?,
     val celebrate: Boolean,
     val isHumanPlayer: Boolean,
+    val passed: Boolean,
     val onCellClick: (x: Int, y: Int) -> Unit,
 )
 

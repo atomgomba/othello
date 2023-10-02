@@ -3,8 +3,6 @@ package com.ekezet.othello
 import com.ekezet.hurok.AnyLoopScope
 import com.ekezet.hurok.Loop
 import com.ekezet.hurok.LoopBuilder
-import com.ekezet.othello.MainAction.OnNewGameClicked
-import com.ekezet.othello.MainAction.OnToggleIndicatorsClicked
 import com.ekezet.othello.feature.gameboard.GameBoardScope
 import com.ekezet.othello.feature.gameboard.defaultGameBoardArgs
 
@@ -25,6 +23,7 @@ internal class MainLoop(dependency: MainDependency) :
             ),
             onNewGameClick = { emit(OnNewGameClicked) },
             onToggleIndicatorsClick = { emit(OnToggleIndicatorsClicked) },
+            onShareGameClick = { emit(OnShareGameClicked) },
         )
     }
 

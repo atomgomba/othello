@@ -20,12 +20,12 @@ object GameStateSerializer {
         appendLine("Disks: Dark: $numDark; Light: $numLight")
     }
 
-    fun pastMoveToString(turn0: Int, pastMove: PastMove) = buildString {
-        if (pastMove.move == null) {
-            appendLine("## Turn ${turn0 + 1}: ${pastMove.disk} Passes")
-        } else {
-            with(pastMove.move) {
-                appendLine("## Turn ${turn0 + 1}: $disk @ ${position.asString()}")
+    private fun pastMoveToString(turn0: Int, pastMove: PastMove) = buildString {
+        with(pastMove) {
+            if (moveAt == null) {
+                appendLine("## Turn ${turn0 + 1}: $disk Passes")
+            } else {
+                appendLine("## Turn ${turn0 + 1}: $disk @ ${moveAt.asString()}")
             }
         }
         appendLine(BoardSerializer.toString(pastMove.board))
@@ -36,7 +36,9 @@ object GameStateSerializer {
     }
 
     private fun serializedHeader(gameSetting: GameSettings) = buildString {
-        appendLine("# Othello (${gameSetting.darkStrategy.requiredName} vs. ${gameSetting.lightStrategy.requiredName})")
+        appendLine(
+            "# Othello (${gameSetting.darkStrategy.requiredName} vs. ${gameSetting.lightStrategy.requiredName})"
+        )
         appendLine(BoardSerializer.toString(BoardFactory.starter()))
     }
 }

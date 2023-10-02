@@ -24,9 +24,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.ekezet.hurok.compose.LoopWrapper
-import com.ekezet.othello.MainAction.OnNewGameClicked
-import com.ekezet.othello.MainAction.OnShareGameClicked
-import com.ekezet.othello.MainAction.OnToggleIndicatorsClicked
 import com.ekezet.othello.MainLoop
 import com.ekezet.othello.MainScope
 import com.ekezet.othello.MainState
@@ -46,13 +43,13 @@ internal fun MainView(
         parentScope = parentScope,
         dependency = koinInject(),
     ) { state ->
-        MainViewImpl(state)
+        state.MainViewImpl(this)
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun MainScope.MainViewImpl(state: MainState) = with(state) {
+private fun MainState.MainViewImpl(mainLoop: MainScope) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -79,29 +76,29 @@ private fun MainScope.MainViewImpl(state: MainState) = with(state) {
                 modifier = Modifier
                     .padding(16.dp)
                     .align(Center),
-                parentLoop = this@MainViewImpl,
+                parentLoop = mainLoop,
             )
         }
     }
 }
 
 @Composable
-private fun MainScope.Toolbar(options: BoardDisplayOptions) = with(options) {
-    IconButton(onClick = { emit(OnNewGameClicked) }) {
+private fun MainState.Toolbar(options: BoardDisplayOptions) = with(options) {
+    IconButton(onClick = onNewGameClick) {
         Icon(
             imageVector = Icons.Default.Refresh,
             contentDescription = stringResource(R.string.main__menu__new_game),
         )
     }
 
-    IconButton(onClick = { emit(OnToggleIndicatorsClicked) }) {
+    IconButton(onClick = onToggleIndicatorsClick) {
         Icon(
             imageVector = if (showPossibleMoves) Icons.Filled.LocationOn else Icons.Outlined.LocationOn,
             contentDescription = stringResource(R.string.main__menu__toggle_indicators),
         )
     }
 
-    IconButton(onClick = { emit(OnShareGameClicked) }) {
+    IconButton(onClick = onShareGameClick) {
         Icon(
             imageVector = Icons.Default.Share,
             contentDescription = stringResource(R.string.main__menu__share_board),

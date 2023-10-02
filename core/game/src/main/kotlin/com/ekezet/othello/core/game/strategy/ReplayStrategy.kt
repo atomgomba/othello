@@ -15,6 +15,6 @@ class ReplayStrategy(history: MoveHistory, disk: Disk) : Strategy {
     override fun deriveNext(state: GameState): Position? {
         val pastMove = moves.getOrNull(index) ?: return null
         index += 1
-        return pastMove.move?.position
+        return pastMove.moveAt
     }
 }

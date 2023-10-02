@@ -2,9 +2,10 @@ package com.ekezet.othello.feature.gameboard
 
 import com.ekezet.hurok.Loop
 import com.ekezet.hurok.LoopBuilder
-import com.ekezet.othello.feature.gameboard.GameBoardAction.OnCellClicked
-import com.ekezet.othello.feature.gameboard.GameBoardAction.OnGameStarted
 import com.ekezet.othello.feature.gameboard.GameEnd.EndedWin
+import com.ekezet.othello.feature.gameboard.actions.GameBoardAction
+import com.ekezet.othello.feature.gameboard.actions.OnGameStarted
+import com.ekezet.othello.feature.gameboard.actions.OnMoveMade
 import com.ekezet.othello.feature.gameboard.ui.viewModels.BoardOverlayList
 import com.ekezet.othello.feature.gameboard.ui.viewModels.OverlayItem.NextMoveIndicatorOverlayItem
 import com.ekezet.othello.feature.gameboard.ui.viewModels.OverlayItem.ValidMoveIndicatorOverlayItem
@@ -44,9 +45,10 @@ internal class GameBoardLoop(args: GameBoardArgs?) :
             showPossibleMoves = displayOptions.showPossibleMoves,
             showBoardPositions = displayOptions.showBoardPositions,
             ended = ended,
+            passed = passed,
             celebrate = ended is EndedWin && isHumanPlayer(ended.winner),
             isHumanPlayer = isHumanPlayer(gameState.currentDisk),
-            onCellClick = { x, y -> emit(OnCellClicked(x to y)) },
+            onCellClick = { x, y -> emit(OnMoveMade(x to y)) },
         )
     }
 

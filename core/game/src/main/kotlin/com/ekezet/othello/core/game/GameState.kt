@@ -3,6 +3,7 @@ package com.ekezet.othello.core.game
 import com.ekezet.othello.core.data.models.Board
 import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.data.models.DiskCount
+import com.ekezet.othello.core.data.models.Position
 import com.ekezet.othello.core.data.models.deepClone
 import com.ekezet.othello.core.data.models.diskCount
 import com.ekezet.othello.core.data.models.putAt
@@ -29,9 +30,6 @@ data class GameState(
         currentBoard.findValidMoves(currentDisk)
     }
 
-    /**
-     * dark, light
-     */
     val diskCount: DiskCount by lazy {
         currentBoard.diskCount
     }
@@ -39,16 +37,15 @@ data class GameState(
     @Throws(
         InvalidMoveException::class,
     )
-    fun proceed(nextMove: NextMove): MoveResult {
-        val (pos, disk) = nextMove
-        if (validMoves.isInvalid(pos)) {
-            Timber.w("Invalid move: $disk @ ${pos.asString()}")
+    fun proceed(moveAt: Position?, disk: Disk): MoveResult {
+        if (moveAt == null || validMoves.isInvalid(moveAt)) {
+            Timber.w("Invalid move attempt: $disk @ ${moveAt?.asString()}")
             throw InvalidMoveException()
         }
-        Timber.d("Next move (turn: ${turn + 1}): $disk @ ${pos.asString()}")
-        val nextBoard = currentBoard.putAtAndClone(pos, disk)
+        Timber.d("Next move (turn: ${turn + 1}): $disk @ ${moveAt.asString()}")
+        val nextBoard = currentBoard.putAtAndClone(moveAt, disk)
         val validSegments = validMoves
-            .filter { it.position == pos }
+            .filter { it.position == moveAt }
             .map { it.segment }
         for (segment in validSegments) {
             val parts = segment.parts()
@@ -59,7 +56,10 @@ data class GameState(
         val nextState = copy(
             currentBoard = nextBoard,
             history = history + PastMove(
-                board = nextBoard.deepClone(), move = nextMove, disk = disk
+                board = nextBoard.deepClone(),
+                moveAt = moveAt,
+                disk = disk,
+                turn = turn + 1,
             ),
         )
         Timber.d("Next board:\n" + BoardSerializer.toString(nextBoard))
@@ -84,7 +84,10 @@ data class GameState(
             PassTurn(
                 state = nextState.copy(
                     history = nextState.history + PastMove(
-                        board = nextBoard.deepClone(), move = null, disk = nextDisk
+                        board = nextBoard.deepClone(),
+                        moveAt = null,
+                        disk = nextDisk,
+                        turn = turn + 1,
                     ),
                 ),
             )

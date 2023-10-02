@@ -27,13 +27,13 @@ import com.ekezet.othello.core.data.models.numDark
 import com.ekezet.othello.core.data.models.numLight
 import com.ekezet.othello.core.ui.R.string
 import com.ekezet.othello.feature.gameboard.ACTION_DELAY_MILLIS
-import com.ekezet.othello.feature.gameboard.GameBoardAction.ContinueGame
 import com.ekezet.othello.feature.gameboard.GameBoardArgs
 import com.ekezet.othello.feature.gameboard.GameBoardLoop
 import com.ekezet.othello.feature.gameboard.GameBoardScope
 import com.ekezet.othello.feature.gameboard.GameBoardState
 import com.ekezet.othello.feature.gameboard.GameEnd.EndedTie
 import com.ekezet.othello.feature.gameboard.GameEnd.EndedWin
+import com.ekezet.othello.feature.gameboard.actions.ContinueGame
 import com.ekezet.othello.feature.gameboard.ui.components.GameBoard
 import com.ekezet.othello.feature.gameboard.ui.components.GamePiece
 import kotlinx.coroutines.delay
@@ -105,6 +105,11 @@ private fun GameBoardState.BoardHeader() {
         DiskImage(disk = currentDisk)
 
         Text(text = stringResource(id = string.game_board__header__turn, currentTurn))
+
+        if (passed) {
+            Spacer(Modifier.weight(1F))
+            Text(text = stringResource(id = string.game_board__header__passed))
+        }
     }
 }
 

@@ -27,6 +27,7 @@ internal data class MainState(
     val gameBoardArgs: GameBoardArgs,
     val onNewGameClick: () -> Unit,
     val onToggleIndicatorsClick: () -> Unit,
+    val onShareGameClick: () -> Unit
 )
 
 internal class MainDependency(
