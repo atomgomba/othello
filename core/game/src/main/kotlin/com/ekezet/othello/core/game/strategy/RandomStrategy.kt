@@ -8,7 +8,7 @@ import com.ekezet.othello.core.game.GameState
  */
 class RandomStrategy : Strategy {
     override val name: String
-        get() = "Random Ron"
+        get() = "Random Pick"
 
     override fun deriveNext(state: GameState): Position? =
         state.validMoves.shuffled().firstOrNull()?.position

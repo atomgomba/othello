@@ -8,3 +8,6 @@ interface Strategy {
 
     fun deriveNext(state: GameState): Position?
 }
+
+val Strategy?.requiredName: String
+    get() = this?.name ?: "Human"

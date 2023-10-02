@@ -3,7 +3,7 @@ package com.ekezet.othello
 import android.content.Intent
 import com.ekezet.hurok.Effect
 import com.ekezet.hurok.LoopScope
-import com.ekezet.othello.MainAction.OnBoardSerialized
+import com.ekezet.othello.MainAction.OnGameSerialized
 import com.ekezet.othello.core.game.GameState
 import com.ekezet.othello.feature.gameboard.OnSerializeBoard
 import com.ekezet.othello.feature.gameboard.OnUpdateGameState
@@ -24,8 +24,8 @@ internal sealed interface MainEffect : Effect<MainModel, MainDependency> {
             dependency: MainDependency?,
         ) = dependency?.run {
             gameBoardScope?.emit(
-                OnSerializeBoard { lines ->
-                    emit(OnBoardSerialized(lines))
+                OnSerializeBoard {
+                    emit(OnGameSerialized(it))
                 },
             )
         }

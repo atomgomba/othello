@@ -9,7 +9,7 @@ import com.ekezet.othello.core.game.parts
  */
 class NaiveMaxStrategy : Strategy {
     override val name: String
-        get() = "Naive Max"
+        get() = "Max Flip"
 
     override fun deriveNext(state: GameState): Position? =
         state.validMoves.maxByOrNull { it.segment.parts().size }?.position

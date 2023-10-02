@@ -4,7 +4,7 @@ import com.ekezet.hurok.Action
 import com.ekezet.hurok.Action.Next
 import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.data.models.Position
-import com.ekezet.othello.core.data.serialize.BoardSerializer
+import com.ekezet.othello.core.data.serialize.asString
 import com.ekezet.othello.core.game.GameState
 import com.ekezet.othello.core.game.NextMove
 import com.ekezet.othello.core.game.NextTurn
@@ -12,12 +12,14 @@ import com.ekezet.othello.core.game.PassTurn
 import com.ekezet.othello.core.game.Tie
 import com.ekezet.othello.core.game.Win
 import com.ekezet.othello.core.game.isValid
+import com.ekezet.othello.core.game.serialize.GameStateSerializer
 import com.ekezet.othello.core.game.throwable.InvalidMoveException
 import com.ekezet.othello.feature.gameboard.GameBoardEffect.WaitBeforeGameEnd
 import com.ekezet.othello.feature.gameboard.GameBoardEffect.WaitBeforeNextTurn
 import com.ekezet.othello.feature.gameboard.GameBoardEffect.WaitBeforePass
 import com.ekezet.othello.feature.gameboard.GameEnd.EndedTie
 import com.ekezet.othello.feature.gameboard.GameEnd.EndedWin
+import timber.log.Timber
 
 internal sealed interface GameBoardAction : Action<GameBoardModel, Unit> {
 
@@ -35,6 +37,7 @@ internal sealed interface GameBoardAction : Action<GameBoardModel, Unit> {
             val moveResult = try {
                 gameState.proceed(NextMove(nextMovePosition, currentDisk))
             } catch (e: InvalidMoveException) {
+                Timber.w("Invalid move at ${nextMovePosition.asString()}")
                 return skip
             }
             return when (moveResult) {
@@ -60,7 +63,11 @@ internal sealed interface GameBoardAction : Action<GameBoardModel, Unit> {
             )
         }
 
-        private fun passTurn(newState: GameState) = trigger(WaitBeforePass(newState))
+        private fun GameBoardModel.passTurn(newState: GameState): Next<GameBoardModel, Unit> {
+            val strategy = if (newState.currentDisk == Disk.Light) lightStrategy else darkStrategy
+            val nextMove = strategy?.deriveNext(newState)
+            return trigger(WaitBeforePass(nextMove, newState))
+        }
 
         private fun GameBoardModel.finishGame(newState: GameState, winner: Disk?) = outcome(
             model = resetNextTurn(newState),
@@ -79,8 +86,9 @@ internal sealed interface GameBoardAction : Action<GameBoardModel, Unit> {
             }
     }
 
-    data class OnTurnPassed(val newState: GameState) : GameBoardAction {
-        override fun GameBoardModel.proceed() = change(resetNextTurn(newState))
+    data class OnTurnPassed(val nextMove: Position?, val newState: GameState) : GameBoardAction {
+        override fun GameBoardModel.proceed() =
+            change(resetNextTurn(newState).copy(nextMovePosition = nextMove))
     }
 
     data class OnGameEnded(val result: GameEnd) : GameBoardAction {
@@ -103,11 +111,11 @@ data class OnUpdateGameState(
 }
 
 data class OnSerializeBoard(
-    private val callback: (lines: List<String>) -> Unit,
+    private val callback: (data: String) -> Unit,
 ) : GameBoardAction {
     override fun GameBoardModel.proceed(): Next<GameBoardModel, Unit> {
-        val lines = BoardSerializer.toLines(gameState.currentBoard)
-        callback(lines)
+        val data = GameStateSerializer.toString(gameState, this)
+        callback(data)
         return skip
     }
 }

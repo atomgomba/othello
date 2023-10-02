@@ -9,8 +9,9 @@ android {
 
 dependencies {
     implementation(project(":core:data"))
-    implementation(project(":core:ui"))
     implementation(project(":core:game"))
+    implementation(project(":core:logging"))
+    implementation(project(":core:ui"))
 
     implementation(libs.hurokBase)
     implementation(libs.hurokCompose)

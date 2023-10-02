@@ -6,7 +6,7 @@ import com.ekezet.othello.core.data.models.Position
 
 data class NextMove(val position: Position, val disk: Disk)
 
-data class PastMove(val board: Board, val move: NextMove?) {
+data class PastMove(val board: Board, val move: NextMove?, val disk: Disk) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false

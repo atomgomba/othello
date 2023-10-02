@@ -25,17 +25,16 @@ internal sealed interface MainAction : Action<MainModel, MainDependency> {
         }
     }
 
-    data object OnShareBoardClicked : MainAction {
+    data object OnShareGameClicked : MainAction {
         override fun MainModel.proceed() = trigger(SerializeBoard)
     }
 
-    data class OnBoardSerialized(
-        private val lines: List<String>,
+    data class OnGameSerialized(
+        private val data: String,
     ) : MainAction {
         override fun MainModel.proceed(): Next<MainModel, MainDependency> {
-            val result = lines.joinToString("\n")
-            Timber.d("Board:\n$result")
-            return trigger(StartShareIntent(result))
+            Timber.d("Board:\n$data")
+            return trigger(StartShareIntent(data))
         }
     }
 }

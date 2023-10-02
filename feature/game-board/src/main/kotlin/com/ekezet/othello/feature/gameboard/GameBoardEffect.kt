@@ -20,11 +20,12 @@ internal sealed interface GameBoardEffect : Effect<GameBoardModel, Unit> {
     }
 
     data class WaitBeforePass(
+        private val nextMove: Position?,
         private val newState: GameState,
     ) : GameBoardEffect {
         override suspend fun GameBoardScope.trigger(dependency: Unit?) {
             delay(ACTION_DELAY_MILLIS)
-            emit(OnTurnPassed(newState))
+            emit(OnTurnPassed(nextMove, newState))
         }
     }
 

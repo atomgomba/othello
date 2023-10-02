@@ -35,6 +35,8 @@ internal class GameBoardLoop(args: GameBoardArgs?) :
             board = gameState.currentBoard.toList(),
             overlay = createOverlayItems(),
             currentDisk = gameState.currentDisk,
+            darkStrategyName = darkStrategy?.name,
+            lightStrategyName = lightStrategy?.name,
             diskCount = gameState.diskCount,
             opponentName = lightStrategy?.name,
             currentTurn = gameState.turn + 1,

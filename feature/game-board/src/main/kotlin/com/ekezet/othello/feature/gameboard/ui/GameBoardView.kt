@@ -1,6 +1,5 @@
 package com.ekezet.othello.feature.gameboard.ui
 
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -14,22 +13,18 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.ekezet.hurok.AnyLoopScope
 import com.ekezet.hurok.compose.LoopWrapper
 import com.ekezet.othello.core.data.models.Disk
-import com.ekezet.othello.core.game.numDark
-import com.ekezet.othello.core.game.numLight
+import com.ekezet.othello.core.data.models.numDark
+import com.ekezet.othello.core.data.models.numLight
 import com.ekezet.othello.core.ui.R.string
 import com.ekezet.othello.feature.gameboard.ACTION_DELAY_MILLIS
 import com.ekezet.othello.feature.gameboard.GameBoardAction.ContinueGame
@@ -107,70 +102,79 @@ private fun GameBoardState.BoardHeader() {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        DiskImage(disk = currentDisk, isHidden = ended != null)
+        DiskImage(disk = currentDisk)
 
         Text(text = stringResource(id = string.game_board__header__turn, currentTurn))
-
-        Spacer(Modifier.weight(1F))
-
-        val opponent = opponentName ?: stringResource(string.game_board__header__human)
-        val vs = stringResource(string.game_board__header__vs, opponent)
-        Text(
-            text = buildAnnotatedString {
-                append(vs)
-                addStyle(
-                    SpanStyle(fontWeight = FontWeight.Bold),
-                    vs.length - opponent.length,
-                    vs.length,
-                )
-            },
-        )
     }
 }
 
 @Composable
 private fun GameBoardState.BoardFooter() {
+    val isDarkWin = ended is EndedWin && ended.winner == Disk.Dark
+    val isLightWin = ended is EndedWin && ended.winner == Disk.Light
+
+    Column(
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            DiskImage(disk = Disk.Dark, isSelected = isDarkWin)
+            Text(
+                "${diskCount.numDark}", color = if (isDarkWin) highlightColor else Color.Unspecified
+            )
+
+            Spacer(Modifier.weight(1F))
+
+            if (ended != null) {
+                Text(
+                    text = stringResource(
+                        id = when (ended) {
+                            EndedTie -> string.game_board__footer__tie_game
+                            is EndedWin -> string.game_board__footer__winner
+                        },
+                    ),
+                    color = highlightColor,
+                    fontWeight = FontWeight.Bold,
+                )
+
+                Spacer(Modifier.weight(1F))
+            }
+
+            Text(
+                "${diskCount.numLight}",
+                color = if (isLightWin) highlightColor else Color.Unspecified
+            )
+            DiskImage(disk = Disk.Light, isSelected = isLightWin)
+        }
+    }
+
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        val isDarkWin = ended is EndedWin && ended.winner == Disk.Dark
-        DiskImage(disk = Disk.Dark, isSelected = isDarkWin)
-        Text("${diskCount.numDark}", color = if (isDarkWin) highlightColor else Color.Unspecified)
+        Text(
+            text = darkStrategyName ?: stringResource(string.common__human_player),
+            fontWeight = FontWeight.Bold,
+            color = if (isDarkWin) highlightColor else Color.Unspecified
+        )
 
         Spacer(Modifier.weight(1F))
 
-        if (ended != null) {
-            Text(
-                text = stringResource(
-                    id = when (ended) {
-                        EndedTie -> string.game_board__header__tie_game
-                        is EndedWin -> string.game_board__header__winner
-                    },
-                ),
-                color = highlightColor,
-                fontWeight = FontWeight.Bold,
-            )
-
-            Spacer(Modifier.weight(1F))
-        }
-
-        val isLightWin = ended is EndedWin && ended.winner == Disk.Light
-        Text("${diskCount.numLight}", color = if (isLightWin) highlightColor else Color.Unspecified)
-        DiskImage(disk = Disk.Light, isSelected = isLightWin)
+        Text(
+            text = lightStrategyName ?: stringResource(string.common__human_player),
+            fontWeight = FontWeight.Bold,
+            color = if (isLightWin) highlightColor else Color.Unspecified
+        )
     }
 }
 
 @Composable
-private fun DiskImage(disk: Disk, isSelected: Boolean = false, isHidden: Boolean = false) {
-    val alpha by animateFloatAsState(
-        targetValue = if (isHidden) 0F else 1F,
-        label = "current-disk-alpha",
-    )
+private fun DiskImage(disk: Disk, isSelected: Boolean = false) {
     GamePiece(
         disk = disk,
         modifier = Modifier
-            .alpha(alpha)
             .size(24.dp)
             .border(
                 width = 1.dp,

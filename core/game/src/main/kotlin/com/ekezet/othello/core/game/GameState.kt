@@ -2,9 +2,12 @@ package com.ekezet.othello.core.game
 
 import com.ekezet.othello.core.data.models.Board
 import com.ekezet.othello.core.data.models.Disk
-import com.ekezet.othello.core.data.models.isLight
+import com.ekezet.othello.core.data.models.DiskCount
+import com.ekezet.othello.core.data.models.deepClone
+import com.ekezet.othello.core.data.models.diskCount
 import com.ekezet.othello.core.data.models.putAt
 import com.ekezet.othello.core.data.models.putAtAndClone
+import com.ekezet.othello.core.data.serialize.BoardSerializer
 import com.ekezet.othello.core.data.serialize.asString
 import com.ekezet.othello.core.game.throwable.InvalidMoveException
 import timber.log.Timber
@@ -30,15 +33,7 @@ data class GameState(
      * dark, light
      */
     val diskCount: DiskCount by lazy {
-        currentBoard
-            .flatten()
-            .filterNotNull()
-            .fold(DiskCount(0, 0)) { acc, disk ->
-                DiskCount(
-                    first = if (disk.isDark) acc.first + 1 else acc.first,
-                    second = if (disk.isLight) acc.second + 1 else acc.second,
-                )
-            }
+        currentBoard.diskCount
     }
 
     @Throws(
@@ -58,34 +53,39 @@ data class GameState(
         for (segment in validSegments) {
             val parts = segment.parts()
             for (position in parts) {
-                nextBoard.putAt(position, currentDisk)
+                nextBoard.putAt(position, disk)
             }
         }
         val nextState = copy(
             currentBoard = nextBoard,
-            history = history + PastMove(board = currentBoard, move = nextMove),
+            history = history + PastMove(
+                board = nextBoard.deepClone(), move = nextMove, disk = disk
+            ),
         )
-        return generateNextTurn(nextState, nextBoard, disk)
+        Timber.d("Next board:\n" + BoardSerializer.toString(nextBoard))
+        return generateNextTurn(nextState, nextBoard)
     }
 
     private fun generateNextTurn(
         nextState: GameState,
         nextBoard: Board,
-        disk: Disk,
-    ) = if (nextState.validMoves.isNotEmpty()) {
+    ): MoveResult = if (nextState.validMoves.isNotEmpty()) {
         // next player has a valid move, continue the game
         Timber.d("Continue turn ${nextState.turn + 1}")
         NextTurn(state = nextState)
     } else {
+        val nextDisk = nextState.currentDisk
         val hasMoreValidMoves = nextBoard
-            .findValidMoves(disk)
+            .findValidMoves(nextDisk)
             .isNotEmpty()
         if (hasMoreValidMoves) {
             // current player still has a valid move, next player passes
-            Timber.d("Player passed ($disk)")
+            Timber.d("Player passed ($nextDisk)")
             PassTurn(
                 state = nextState.copy(
-                    history = nextState.history + PastMove(board = nextBoard, move = null),
+                    history = nextState.history + PastMove(
+                        board = nextBoard.deepClone(), move = null, disk = nextDisk
+                    ),
                 ),
             )
         } else {
@@ -127,11 +127,3 @@ data class GameState(
         )
     }
 }
-
-typealias DiskCount = Pair<Int, Int>
-
-val DiskCount.numDark: Int
-    inline get() = first
-
-val DiskCount.numLight: Int
-    inline get() = second

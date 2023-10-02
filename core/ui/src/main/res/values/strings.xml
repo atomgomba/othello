@@ -4,9 +4,10 @@
     <string name="main__menu__toggle_indicators">Toggle indicators</string>
     <string name="main__menu__share_board">Share board</string>
 
+    <string name="common__human_player">HumanPlayer </string>
+
     <string name="game_board__header__turn">Turn: %0$d</string>
-    <string name="game_board__header__vs">Vs: %0$s</string>
-    <string name="game_board__header__human">Other Human</string>
-    <string name="game_board__header__winner">Winner!</string>
-    <string name="game_board__header__tie_game">Tie Game!</string>
+
+    <string name="game_board__footer__winner">Winner!</string>
+    <string name="game_board__footer__tie_game">Tie Game!</string>
 </resources>

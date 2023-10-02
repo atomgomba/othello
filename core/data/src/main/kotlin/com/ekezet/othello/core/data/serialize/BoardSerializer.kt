@@ -36,6 +36,8 @@ object BoardSerializer {
 
     fun toLines(board: Board): List<String> = board.map { row -> row.toLine() }
 
+    fun toString(board: Board) = toLines(board).joinToString("  \n")
+
     @Throws(InvalidTokenException::class)
     private fun String.toDisks(): Array<Disk?> = toCharArray().map { char ->
         when (char) {

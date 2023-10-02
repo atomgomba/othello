@@ -25,7 +25,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.ekezet.hurok.compose.LoopWrapper
 import com.ekezet.othello.MainAction.OnNewGameClicked
-import com.ekezet.othello.MainAction.OnShareBoardClicked
+import com.ekezet.othello.MainAction.OnShareGameClicked
 import com.ekezet.othello.MainAction.OnToggleIndicatorsClicked
 import com.ekezet.othello.MainLoop
 import com.ekezet.othello.MainScope
@@ -101,7 +101,7 @@ private fun MainScope.Toolbar(options: BoardDisplayOptions) = with(options) {
         )
     }
 
-    IconButton(onClick = { emit(OnShareBoardClicked) }) {
+    IconButton(onClick = { emit(OnShareGameClicked) }) {
         Icon(
             imageVector = Icons.Default.Share,
             contentDescription = stringResource(R.string.main__menu__share_board),

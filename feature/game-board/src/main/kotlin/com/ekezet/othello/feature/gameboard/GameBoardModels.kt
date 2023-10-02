@@ -4,9 +4,9 @@ import androidx.compose.runtime.Stable
 import com.ekezet.hurok.LoopScope
 import com.ekezet.othello.core.data.models.Board
 import com.ekezet.othello.core.data.models.Disk
+import com.ekezet.othello.core.data.models.DiskCount
 import com.ekezet.othello.core.data.models.Position
 import com.ekezet.othello.core.data.serialize.BoardSerializer
-import com.ekezet.othello.core.game.DiskCount
 import com.ekezet.othello.core.game.GameState
 import com.ekezet.othello.core.game.data.BoardDisplayOptions
 import com.ekezet.othello.core.game.data.GameSettings
@@ -64,12 +64,12 @@ data class GameBoardArgs(
 
 data class GameBoardModel(
     internal val gameState: GameState = defaultGameState,
-    internal val displayOptions: BoardDisplayOptions = defaultDisplayOptions,
-    internal val lightStrategy: Strategy? = defaultLightStrategy,
-    internal val darkStrategy: Strategy? = defaultDarkStrategy,
+    override val displayOptions: BoardDisplayOptions = defaultDisplayOptions,
+    override val lightStrategy: Strategy? = defaultLightStrategy,
+    override val darkStrategy: Strategy? = defaultDarkStrategy,
     internal val nextMovePosition: Position? = null,
     internal val ended: GameEnd? = null,
-) {
+) : GameSettings {
     internal val currentDisk: Disk
         inline get() = gameState.currentDisk
 
@@ -94,6 +94,8 @@ internal data class GameBoardState(
     val overlay: BoardOverlayList,
     val currentTurn: Int,
     val currentDisk: Disk,
+    val darkStrategyName: String?,
+    val lightStrategyName: String?,
     val opponentName: String?,
     val diskCount: DiskCount,
     val nextMovePosition: Position?,
