@@ -6,7 +6,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.ekezet.othello.core.data.models.Disk
-import com.ekezet.othello.feature.gameboard.ui.components.color
+import com.ekezet.othello.core.ui.components.color
 
 @Composable
 internal fun ValidMoveIndicator(disk: Disk) {

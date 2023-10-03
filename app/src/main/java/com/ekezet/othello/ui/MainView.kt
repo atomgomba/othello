@@ -3,13 +3,12 @@ package com.ekezet.othello.ui
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Share
-import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -23,9 +22,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
@@ -39,7 +38,8 @@ import com.ekezet.othello.MainScope
 import com.ekezet.othello.MainState
 import com.ekezet.othello.R.string
 import com.ekezet.othello.core.game.data.BoardDisplayOptions
-import com.ekezet.othello.core.game.provider.GameSettingsProvider
+import com.ekezet.othello.core.game.data.GameSettings
+import com.ekezet.othello.core.game.store.GameSettingsStore
 import com.ekezet.othello.core.ui.R
 import com.ekezet.othello.feature.gameboard.ui.GameBoardView
 import com.ekezet.othello.feature.gamesettings.ui.GameSettingsView
@@ -49,14 +49,23 @@ import org.koin.compose.koinInject
 
 @Composable
 internal fun MainView(
-    parentScope: CoroutineScope = rememberCoroutineScope(),
+    parentScope: CoroutineScope,
+    gameSettingsStore: GameSettingsStore = koinInject(),
+    navController: NavHostController = rememberNavController(),
 ) {
+    val gameSettings: GameSettings by gameSettingsStore.settings.collectAsState()
+
     LoopWrapper(
         builder = MainLoop,
+        args = gameSettings,
         parentScope = parentScope,
         dependency = koinInject(),
     ) { state ->
-        state.MainViewImpl(this)
+        state.MainViewImpl(
+            mainLoop = this,
+            gameSettings = gameSettings,
+            navController = navController,
+        )
     }
 }
 
@@ -64,10 +73,9 @@ internal fun MainView(
 @Composable
 private fun MainState.MainViewImpl(
     mainLoop: MainScope,
-    navController: NavHostController = rememberNavController(),
-    gameSettingsProvider: GameSettingsProvider = koinInject(),
+    gameSettings: GameSettings,
+    navController: NavHostController,
 ) {
-    val gameSettings by gameSettingsProvider.settings.collectAsState()
     val viewModelStoreOwner = requireNotNull(LocalViewModelStoreOwner.current) {
         "ViewModelStoreOwner must be provided"
     }
@@ -98,10 +106,7 @@ private fun MainState.MainViewImpl(
                     AppDestination.All.forEach { destination ->
                         NavigationBarItem(
                             selected = currentDestination == destination.label,
-                            onClick = {
-                                navigate(destination.label)
-                                currentDestination = destination.label
-                            },
+                            onClick = { navigate(destination.label) },
                             icon = {
                                 Icon(
                                     imageVector = destination.icon, contentDescription = null
@@ -119,6 +124,7 @@ private fun MainState.MainViewImpl(
             modifier = Modifier.padding(innerPadding),
         ) {
             composable(AppDestination.GameBoard.label) {
+                currentDestination = AppDestination.GameBoard.label
                 CompositionLocalProvider(LocalViewModelStoreOwner provides viewModelStoreOwner) {
                     GameBoardView(
                         args = gameSettings,
@@ -129,6 +135,7 @@ private fun MainState.MainViewImpl(
             }
 
             composable(AppDestination.GameSettings.label) {
+                currentDestination = AppDestination.GameSettings.label
                 CompositionLocalProvider(LocalViewModelStoreOwner provides viewModelStoreOwner) {
                     GameSettingsView(
                         args = gameSettings,
@@ -152,9 +159,11 @@ private fun MainState.GameBoardToolbarActions(
         )
     }
 
-    IconButton(onClick = onToggleIndicatorsClick) {
+    IconToggleButton(checked = showPossibleMoves, onCheckedChange = { onToggleIndicatorsClick() }) {
         Icon(
-            imageVector = if (showPossibleMoves) Icons.Filled.LocationOn else Icons.Outlined.LocationOn,
+            painter = painterResource(
+                id = if (showPossibleMoves) R.drawable.ic_visibility else R.drawable.ic_visibility_off
+            ),
             contentDescription = stringResource(R.string.main__menu__toggle_indicators),
         )
     }

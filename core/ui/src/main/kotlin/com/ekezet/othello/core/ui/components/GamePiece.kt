@@ -1,4 +1,4 @@
-package com.ekezet.othello.feature.gameboard.ui.components
+package com.ekezet.othello.core.ui.components
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -28,5 +28,5 @@ fun GamePiece(disk: Disk, modifier: Modifier = Modifier) {
     }
 }
 
-internal val Disk.color: Color
+val Disk.color: Color
     get() = if (isDark) DarkColor else LightColor

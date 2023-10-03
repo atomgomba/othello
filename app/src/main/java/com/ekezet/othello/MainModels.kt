@@ -7,10 +7,9 @@ import com.ekezet.othello.core.game.data.IGameSettings
 import com.ekezet.othello.core.game.data.defaultDarkStrategy
 import com.ekezet.othello.core.game.data.defaultDisplayOptions
 import com.ekezet.othello.core.game.data.defaultLightStrategy
-import com.ekezet.othello.core.game.provider.GameSettingsProvider
+import com.ekezet.othello.core.game.store.GameSettingsStore
 import com.ekezet.othello.core.game.strategy.Strategy
 import com.ekezet.othello.feature.gameboard.GameBoardScope
-import com.ekezet.othello.feature.gamesettings.GameSettingsScope
 import com.ekezet.othello.ui.MainActivity
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
@@ -30,14 +29,12 @@ internal data class MainState(
 
 internal class MainDependency(
     mainActivity: MainActivity? = null,
-    gameSettingsProvider: GameSettingsProvider? = null,
+    gameSettingsStore: GameSettingsStore? = null,
 ) : KoinComponent {
     val mainActivity: MainActivity = mainActivity ?: get()
-    val gameSettingsProvider: GameSettingsProvider = gameSettingsProvider ?: get()
+    val gameSettingsStore: GameSettingsStore = gameSettingsStore ?: get()
 
     var gameBoardScope: GameBoardScope? = null
-        internal set
-    var gameSettingsScope: GameSettingsScope? = null
         internal set
 }
 

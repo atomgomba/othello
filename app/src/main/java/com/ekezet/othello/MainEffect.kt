@@ -16,7 +16,7 @@ internal data class PublishGameSettings(
     override suspend fun LoopScope<MainModel, MainDependency>.trigger(
         dependency: MainDependency?,
     ) = dependency?.run {
-        gameSettingsProvider.update(settings)
+        gameSettingsStore.update(settings)
     }
 }
 

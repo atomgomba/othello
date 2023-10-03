@@ -12,7 +12,9 @@ interface Strategy {
 val Strategy?.requiredName: String
     get() = this?.name ?: "Human"
 
-val Strategies = buildSet {
-    add(NaiveMaxStrategy)
-    add(RandomStrategy)
-}
+val Strategies
+    get() = buildSet {
+        add(HumanPlayer)
+        add(NaiveMaxStrategy)
+        add(RandomStrategy)
+    }

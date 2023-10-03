@@ -11,6 +11,7 @@ dependencies {
     implementation(project(":core:data"))
     implementation(project(":core:game"))
     implementation(project(":core:ui"))
+    implementation(project(":core:logging"))
 
     implementation(libs.hurokBase)
     implementation(libs.hurokCompose)

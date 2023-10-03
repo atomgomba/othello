@@ -22,6 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.ekezet.othello.core.data.models.BoardHeight
 import com.ekezet.othello.core.data.models.BoardWidth
+import com.ekezet.othello.core.ui.components.GamePiece
 import com.ekezet.othello.feature.gameboard.GameEnd
 import com.ekezet.othello.feature.gameboard.GameEnd.EndedTie
 import com.ekezet.othello.feature.gameboard.GameEnd.EndedWin

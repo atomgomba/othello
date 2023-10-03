@@ -28,6 +28,7 @@ import com.ekezet.othello.core.data.models.numDark
 import com.ekezet.othello.core.data.models.numLight
 import com.ekezet.othello.core.game.data.GameSettings
 import com.ekezet.othello.core.ui.R.string
+import com.ekezet.othello.core.ui.components.GamePiece
 import com.ekezet.othello.feature.gameboard.ACTION_DELAY_MILLIS
 import com.ekezet.othello.feature.gameboard.GameBoardLoop
 import com.ekezet.othello.feature.gameboard.GameBoardScope
@@ -36,7 +37,6 @@ import com.ekezet.othello.feature.gameboard.GameEnd.EndedTie
 import com.ekezet.othello.feature.gameboard.GameEnd.EndedWin
 import com.ekezet.othello.feature.gameboard.actions.ContinueGame
 import com.ekezet.othello.feature.gameboard.ui.components.GameBoard
-import com.ekezet.othello.feature.gameboard.ui.components.GamePiece
 import kotlinx.coroutines.delay
 import nl.dionsegijn.konfetti.compose.KonfettiView
 import nl.dionsegijn.konfetti.core.Party
