@@ -2,6 +2,7 @@ package com.ekezet.othello.feature.gameboard
 
 import com.ekezet.hurok.Loop
 import com.ekezet.hurok.LoopBuilder
+import com.ekezet.othello.core.game.data.GameSettings
 import com.ekezet.othello.feature.gameboard.GameEnd.EndedWin
 import com.ekezet.othello.feature.gameboard.actions.GameBoardAction
 import com.ekezet.othello.feature.gameboard.actions.OnGameStarted
@@ -13,8 +14,8 @@ import com.ekezet.othello.feature.gameboard.ui.viewModels.newEmptyOverlay
 import com.ekezet.othello.feature.gameboard.ui.viewModels.putAt
 import com.ekezet.othello.feature.gameboard.ui.viewModels.toList
 
-internal class GameBoardLoop(args: GameBoardArgs?) :
-    Loop<GameBoardState, GameBoardModel, GameBoardArgs, Unit, GameBoardAction>(
+internal class GameBoardLoop private constructor(args: GameSettings) :
+    Loop<GameBoardState, GameBoardModel, GameSettings, Unit, GameBoardAction>(
         args = args,
     ) {
 
@@ -24,7 +25,7 @@ internal class GameBoardLoop(args: GameBoardArgs?) :
         emit(OnGameStarted)
     }
 
-    override fun GameBoardModel.applyArgs(args: GameBoardArgs) =
+    override fun GameBoardModel.applyArgs(args: GameSettings) =
         copy(
             displayOptions = args.displayOptions,
             lightStrategy = args.lightStrategy,
@@ -72,10 +73,12 @@ internal class GameBoardLoop(args: GameBoardArgs?) :
     }
 
     internal companion object Builder :
-        LoopBuilder<GameBoardState, GameBoardModel, GameBoardArgs, Unit, GameBoardAction> {
+        LoopBuilder<GameBoardState, GameBoardModel, GameSettings, Unit, GameBoardAction> {
         override fun invoke(
-            args: GameBoardArgs?,
+            args: GameSettings?,
             dependency: Unit?,
-        ) = GameBoardLoop(args = args)
+        ) = GameBoardLoop(
+            args = requireNotNull(args) { "GameBoardLoop arguments must be set" },
+        )
     }
 }

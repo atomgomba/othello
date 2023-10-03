@@ -35,6 +35,7 @@ android {
 
 dependencies {
     implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.navigation.compose)
 
     implementation(libs.hurokBase)
     implementation(libs.hurokCompose)
@@ -45,4 +46,5 @@ dependencies {
     implementation(project(":core:ui"))
 
     implementation(project(":feature:game-board"))
+    implementation(project(":feature:game-settings"))
 }

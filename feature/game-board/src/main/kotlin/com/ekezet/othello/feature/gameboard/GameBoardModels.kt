@@ -2,65 +2,25 @@ package com.ekezet.othello.feature.gameboard
 
 import androidx.compose.runtime.Stable
 import com.ekezet.hurok.LoopScope
-import com.ekezet.othello.core.data.models.Board
 import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.data.models.DiskCount
 import com.ekezet.othello.core.data.models.Position
-import com.ekezet.othello.core.data.serialize.BoardSerializer
 import com.ekezet.othello.core.game.GameState
 import com.ekezet.othello.core.game.data.BoardDisplayOptions
-import com.ekezet.othello.core.game.data.GameSettings
+import com.ekezet.othello.core.game.data.IGameSettings
+import com.ekezet.othello.core.game.data.defaultDarkStrategy
+import com.ekezet.othello.core.game.data.defaultDisplayOptions
+import com.ekezet.othello.core.game.data.defaultGameState
+import com.ekezet.othello.core.game.data.defaultLightStrategy
 import com.ekezet.othello.core.game.strategy.HumanPlayer
-import com.ekezet.othello.core.game.strategy.NaiveMaxStrategy
-import com.ekezet.othello.core.game.strategy.PreferSidesDecoratorStrategy.Companion.preferSides
 import com.ekezet.othello.core.game.strategy.Strategy
 import com.ekezet.othello.feature.gameboard.ui.viewModels.BoardList
 import com.ekezet.othello.feature.gameboard.ui.viewModels.BoardOverlayList
-
-val defaultBoard: Board
-    inline get() = BoardSerializer.fromString(
-        """
-        --------
-        --------
-        --------
-        ---ox---
-        ---xo---
-        --------
-        --------
-        --------
-        """,
-    )
-
-val defaultGameState: GameState
-    inline get() = GameState.new(defaultBoard)
-
-val defaultDisplayOptions: BoardDisplayOptions
-    inline get() = BoardDisplayOptions(
-        showPossibleMoves = true,
-        showBoardPositions = false,
-    )
-
-val defaultLightStrategy: Strategy = NaiveMaxStrategy().preferSides()
-
-val defaultDarkStrategy: Strategy? = HumanPlayer
-
-val defaultGameBoardArgs: GameBoardArgs
-    inline get() = GameBoardArgs(
-        displayOptions = defaultDisplayOptions,
-        lightStrategy = defaultLightStrategy,
-        darkStrategy = defaultDarkStrategy,
-    )
 
 /**
  * Give a little time for humans to follow changes on the board
  */
 internal const val ACTION_DELAY_MILLIS = 300L
-
-data class GameBoardArgs(
-    override val displayOptions: BoardDisplayOptions,
-    override val lightStrategy: Strategy?,
-    override val darkStrategy: Strategy?,
-) : GameSettings
 
 data class GameBoardModel(
     internal val gameState: GameState = defaultGameState,
@@ -70,7 +30,7 @@ data class GameBoardModel(
     internal val nextMovePosition: Position? = null,
     internal val passed: Boolean = false,
     internal val ended: GameEnd? = null,
-) : GameSettings {
+) : IGameSettings {
     internal val currentDisk: Disk
         inline get() = gameState.currentDisk
 
@@ -90,7 +50,7 @@ data class GameBoardModel(
         )
 
     internal fun pickNextMoveAt(position: Position?) = copy(
-        nextMovePosition = position
+        nextMovePosition = position,
     )
 }
 

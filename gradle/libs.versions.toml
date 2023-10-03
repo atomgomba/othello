@@ -8,6 +8,7 @@ androidxComposeCompiler = "1.5.3"
 androidxComposeRuntimeTracing = "1.0.0-alpha04"
 androidxCore = "1.12.0"
 androidxLifecycle = "2.6.2"
+androidxNavigation = "2.7.3"
 hurok = "0.1.0"
 junit4 = "4.13.2"
 koinBom = "3.5.1"
@@ -37,6 +38,7 @@ androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "u
 androidx-compose-ui-util = { group = "androidx.compose.ui", name = "ui-util" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidxCore" }
 androidx-lifecycle-runtimeCompose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidxLifecycle" }
+androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidxNavigation" }
 hurokBase = { group = "com.ekezet.hurok", name = "base", version.ref = "hurok" }
 hurokCompose = { group = "com.ekezet.hurok", name = "android-compose", version.ref = "hurok" }
 junit4 = { group = "junit", name = "junit", version.ref = "junit4" }

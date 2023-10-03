@@ -14,6 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -25,9 +26,9 @@ import com.ekezet.hurok.compose.LoopWrapper
 import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.data.models.numDark
 import com.ekezet.othello.core.data.models.numLight
+import com.ekezet.othello.core.game.data.GameSettings
 import com.ekezet.othello.core.ui.R.string
 import com.ekezet.othello.feature.gameboard.ACTION_DELAY_MILLIS
-import com.ekezet.othello.feature.gameboard.GameBoardArgs
 import com.ekezet.othello.feature.gameboard.GameBoardLoop
 import com.ekezet.othello.feature.gameboard.GameBoardScope
 import com.ekezet.othello.feature.gameboard.GameBoardState
@@ -47,7 +48,7 @@ private val highlightColor: Color
 
 @Composable
 fun GameBoardView(
-    args: GameBoardArgs,
+    args: GameSettings,
     modifier: Modifier = Modifier,
     parentLoop: AnyLoopScope? = null,
 ) {
@@ -68,6 +69,7 @@ private fun GameBoardScope.GameBoardViewImpl(
     Box(modifier = modifier) {
         Column(
             verticalArrangement = Arrangement.spacedBy(16.dp),
+            modifier = Modifier.align(Center),
         ) {
             BoardHeader()
 
@@ -127,7 +129,8 @@ private fun GameBoardState.BoardFooter() {
         ) {
             DiskImage(disk = Disk.Dark, isSelected = isDarkWin)
             Text(
-                "${diskCount.numDark}", color = if (isDarkWin) highlightColor else Color.Unspecified
+                "${diskCount.numDark}",
+                color = if (isDarkWin) highlightColor else Color.Unspecified,
             )
 
             Spacer(Modifier.weight(1F))
@@ -149,7 +152,7 @@ private fun GameBoardState.BoardFooter() {
 
             Text(
                 "${diskCount.numLight}",
-                color = if (isLightWin) highlightColor else Color.Unspecified
+                color = if (isLightWin) highlightColor else Color.Unspecified,
             )
             DiskImage(disk = Disk.Light, isSelected = isLightWin)
         }
@@ -162,7 +165,7 @@ private fun GameBoardState.BoardFooter() {
         Text(
             text = darkStrategyName ?: stringResource(string.common__human_player),
             fontWeight = FontWeight.Bold,
-            color = if (isDarkWin) highlightColor else Color.Unspecified
+            color = if (isDarkWin) highlightColor else Color.Unspecified,
         )
 
         Spacer(Modifier.weight(1F))
@@ -170,7 +173,7 @@ private fun GameBoardState.BoardFooter() {
         Text(
             text = lightStrategyName ?: stringResource(string.common__human_player),
             fontWeight = FontWeight.Bold,
-            color = if (isLightWin) highlightColor else Color.Unspecified
+            color = if (isLightWin) highlightColor else Color.Unspecified,
         )
     }
 }

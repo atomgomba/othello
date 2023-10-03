@@ -19,11 +19,11 @@ import timber.log.Timber
 internal sealed interface GameBoardAction : Action<GameBoardModel, Unit>
 
 internal data object OnGameStarted : GameBoardAction {
-    override fun GameBoardModel.proceed() = if (darkStrategy == null) {
+    override fun GameBoardModel.proceed() = if (ended != null || darkStrategy == null) {
         skip
     } else {
         val nextMove = darkStrategy.deriveNext(gameState)
-            ?: error("Strategy couldn't find a valid move")
+            ?: error("Strategy couldn't find a valid starting move")
         trigger(WaitBeforeNextTurn(nextMove))
     }
 }

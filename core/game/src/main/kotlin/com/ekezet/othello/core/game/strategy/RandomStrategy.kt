@@ -6,7 +6,7 @@ import com.ekezet.othello.core.game.GameState
 /**
  * Just picks a random valid move.
  */
-class RandomStrategy : Strategy {
+object RandomStrategy : Strategy {
     override val name: String
         get() = "Random Pick"
 

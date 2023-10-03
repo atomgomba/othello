@@ -4,9 +4,9 @@ import com.ekezet.hurok.AnyLoopScope
 import com.ekezet.hurok.Loop
 import com.ekezet.hurok.LoopBuilder
 import com.ekezet.othello.feature.gameboard.GameBoardScope
-import com.ekezet.othello.feature.gameboard.defaultGameBoardArgs
+import com.ekezet.othello.feature.gamesettings.GameSettingsScope
 
-internal class MainLoop(dependency: MainDependency) :
+internal class MainLoop private constructor(dependency: MainDependency) :
     Loop<MainState, MainModel, Unit, MainDependency, MainAction>(
         dependency = dependency,
     ) {
@@ -15,12 +15,6 @@ internal class MainLoop(dependency: MainDependency) :
 
     override fun renderState(model: MainModel) = with(model) {
         MainState(
-            gameSettings = model,
-            gameBoardArgs = defaultGameBoardArgs.copy(
-                displayOptions = displayOptions,
-                lightStrategy = lightStrategy,
-                darkStrategy = darkStrategy,
-            ),
             onNewGameClick = { emit(OnNewGameClicked) },
             onToggleIndicatorsClick = { emit(OnToggleIndicatorsClicked) },
             onShareGameClick = { emit(OnShareGameClicked) },
@@ -30,6 +24,7 @@ internal class MainLoop(dependency: MainDependency) :
     @Suppress("UNCHECKED_CAST")
     override fun MainDependency.onAddChildLoop(child: AnyLoopScope) {
         gameBoardScope = child as? GameBoardScope
+        gameSettingsScope = child as? GameSettingsScope
     }
 
     internal companion object Builder :

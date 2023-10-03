@@ -4,10 +4,21 @@ import android.content.Intent
 import com.ekezet.hurok.Effect
 import com.ekezet.hurok.LoopScope
 import com.ekezet.othello.core.game.GameState
-import com.ekezet.othello.feature.gameboard.actions.OnSerializeBoard
+import com.ekezet.othello.core.game.data.IGameSettings
+import com.ekezet.othello.feature.gameboard.actions.OnSerializeGameState
 import com.ekezet.othello.feature.gameboard.actions.OnUpdateGameState
 
 internal sealed interface MainEffect : Effect<MainModel, MainDependency>
+
+internal data class PublishGameSettings(
+    private val settings: IGameSettings,
+) : MainEffect {
+    override suspend fun LoopScope<MainModel, MainDependency>.trigger(
+        dependency: MainDependency?,
+    ) = dependency?.run {
+        gameSettingsProvider.update(settings)
+    }
+}
 
 internal data class UpdateGameBoardGameState(
     private val newState: GameState,
@@ -24,8 +35,8 @@ internal data object SerializeBoard : MainEffect {
         dependency: MainDependency?,
     ) = dependency?.run {
         gameBoardScope?.emit(
-            OnSerializeBoard {
-                emit(OnGameSerialized(it))
+            OnSerializeGameState {
+                emit(OnGameStateSerialized(it))
             },
         )
     }

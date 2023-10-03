@@ -33,6 +33,7 @@
             <option value="$PROJECT_DIR$/core/ui" />
             <option value="$PROJECT_DIR$/feature" />
             <option value="$PROJECT_DIR$/feature/game-board" />
+            <option value="$PROJECT_DIR$/feature/game-settings" />
           </set>
         </option>
       </GradleProjectSettings>

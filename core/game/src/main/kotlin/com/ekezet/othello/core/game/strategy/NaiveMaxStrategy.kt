@@ -7,7 +7,7 @@ import com.ekezet.othello.core.game.parts
 /**
  * Simply takes the move which results in the highest number of disks flipped.
  */
-class NaiveMaxStrategy : Strategy {
+object NaiveMaxStrategy : Strategy {
     override val name: String
         get() = "Max Flip"
 

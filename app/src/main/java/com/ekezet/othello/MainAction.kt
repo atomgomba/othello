@@ -19,7 +19,7 @@ internal data object OnToggleIndicatorsClicked : MainAction {
                 showPossibleMoves = !displayOptions.showPossibleMoves,
             ),
         )
-        return outcome(newSettings)
+        return outcome(newSettings, PublishGameSettings(newSettings))
     }
 }
 
@@ -27,7 +27,7 @@ internal data object OnShareGameClicked : MainAction {
     override fun MainModel.proceed() = trigger(SerializeBoard)
 }
 
-internal data class OnGameSerialized(
+internal data class OnGameStateSerialized(
     private val data: String,
 ) : MainAction {
     override fun MainModel.proceed(): Next<MainModel, MainDependency> {

@@ -26,3 +26,4 @@ include(":core:logging")
 include(":core:ui")
 
 include(":feature:game-board")
+include(":feature:game-settings")

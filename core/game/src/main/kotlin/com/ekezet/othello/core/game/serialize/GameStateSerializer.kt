@@ -6,11 +6,11 @@ import com.ekezet.othello.core.data.serialize.asString
 import com.ekezet.othello.core.game.BoardFactory
 import com.ekezet.othello.core.game.GameState
 import com.ekezet.othello.core.game.PastMove
-import com.ekezet.othello.core.game.data.GameSettings
+import com.ekezet.othello.core.game.data.IGameSettings
 import com.ekezet.othello.core.game.strategy.requiredName
 
 object GameStateSerializer {
-    fun toString(gameState: GameState, gameSetting: GameSettings) = buildString {
+    fun toString(gameState: GameState, gameSetting: IGameSettings) = buildString {
         appendLine(serializedHeader(gameSetting))
         for ((i, pastMove) in gameState.history.withIndex()) {
             appendLine(pastMoveToString(i, pastMove))
@@ -35,9 +35,9 @@ object GameStateSerializer {
         TODO()
     }
 
-    private fun serializedHeader(gameSetting: GameSettings) = buildString {
+    private fun serializedHeader(gameSetting: IGameSettings) = buildString {
         appendLine(
-            "# Othello (${gameSetting.darkStrategy.requiredName} vs. ${gameSetting.lightStrategy.requiredName})"
+            "# Othello (${gameSetting.darkStrategy.requiredName} vs. ${gameSetting.lightStrategy.requiredName})",
         )
         appendLine(BoardSerializer.toString(BoardFactory.starter()))
     }
