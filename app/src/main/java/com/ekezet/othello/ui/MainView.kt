@@ -1,5 +1,7 @@
 package com.ekezet.othello.ui
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -94,7 +96,7 @@ private fun MainState.MainViewImpl(
                 title = { Text(stringResource(string.app_name)) },
                 navigationIcon = { },
                 actions = {
-                    if (currentDestination == AppDestination.GameBoard.label) {
+                    AnimatedVisibility(visible = currentDestination == AppDestination.GameBoard.label) {
                         GameBoardToolbarActions(gameSettings.displayOptions)
                     }
                 },
@@ -153,26 +155,29 @@ private fun MainState.MainViewImpl(
 private fun MainState.GameBoardToolbarActions(
     options: BoardDisplayOptions,
 ) = with(options) {
-    IconButton(onClick = onNewGameClick) {
-        Icon(
-            imageVector = Icons.Default.Refresh,
-            contentDescription = stringResource(R.string.main__menu__new_game),
-        )
-    }
+    Row {
+        IconButton(onClick = onNewGameClick) {
+            Icon(
+                imageVector = Icons.Default.Refresh,
+                contentDescription = stringResource(R.string.main__menu__new_game),
+            )
+        }
 
-    IconToggleButton(checked = showPossibleMoves, onCheckedChange = { onToggleIndicatorsClick() }) {
-        Icon(
-            painter = painterResource(
-                id = if (showPossibleMoves) R.drawable.ic_visibility else R.drawable.ic_visibility_off,
-            ),
-            contentDescription = stringResource(R.string.main__menu__toggle_indicators),
-        )
-    }
+        IconToggleButton(
+            checked = showPossibleMoves, onCheckedChange = { onToggleIndicatorsClick() }) {
+            Icon(
+                painter = painterResource(
+                    id = if (showPossibleMoves) R.drawable.ic_visibility else R.drawable.ic_visibility_off,
+                ),
+                contentDescription = stringResource(R.string.main__menu__toggle_indicators),
+            )
+        }
 
-    IconButton(onClick = onShareGameClick) {
-        Icon(
-            imageVector = Icons.Default.Share,
-            contentDescription = stringResource(R.string.main__menu__share_board),
-        )
+        IconButton(onClick = onShareGameClick) {
+            Icon(
+                imageVector = Icons.Default.Share,
+                contentDescription = stringResource(R.string.main__menu__share_board),
+            )
+        }
     }
 }
