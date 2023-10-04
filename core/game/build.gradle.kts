@@ -7,6 +7,8 @@ android {
 }
 
 dependencies {
+    implementation(libs.kotlinx.coroutines.android)
+
     implementation(project(":core:data"))
     implementation(project(":core:logging"))
 

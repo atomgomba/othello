@@ -12,7 +12,6 @@ internal fun Project.configureKoin(
             val bom = libs.findLibrary("koin.bom").get()
             add("implementation", platform(bom))
             add("implementation", libs.findLibrary("koin.core").get())
-            add("implementation", libs.findLibrary("koin.android").get())
         }
     }
 }

@@ -5,5 +5,7 @@ import com.ekezet.othello.core.game.store.GameSettingsStore
 import org.koin.dsl.module
 
 fun gameCoreModule() = module {
-    single<GameSettingsStore> { DefaultGameSettingsStore() }
+    single<GameSettingsStore> {
+        DefaultGameSettingsStore()
+    }
 }

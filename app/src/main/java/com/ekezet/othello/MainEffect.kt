@@ -53,7 +53,9 @@ internal data class StartShareIntent(
             putExtra(Intent.EXTRA_TEXT, text)
             type = "text/plain"
         }
-        val shareIntent = Intent.createChooser(sendIntent, null)
-        mainActivity.startActivity(shareIntent)
+        val shareIntent = Intent.createChooser(sendIntent, null).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        }
+        androidContext.startActivity(shareIntent)
     }
 }
