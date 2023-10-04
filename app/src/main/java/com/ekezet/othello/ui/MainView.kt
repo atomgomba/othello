@@ -7,13 +7,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Share
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -24,6 +23,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -51,7 +51,7 @@ import org.koin.compose.koinInject
 
 @Composable
 internal fun MainView(
-    parentScope: CoroutineScope,
+    parentScope: CoroutineScope = rememberCoroutineScope(),
     gameSettingsStore: GameSettingsStore = koinInject(),
     navController: NavHostController = rememberNavController(),
 ) {
@@ -96,7 +96,9 @@ private fun MainState.MainViewImpl(
                 title = { Text(stringResource(string.app_name)) },
                 navigationIcon = { },
                 actions = {
-                    AnimatedVisibility(visible = currentDestination == AppDestination.GameBoard.label) {
+                    AnimatedVisibility(
+                        visible = currentDestination == AppDestination.GameBoard.label
+                    ) {
                         GameBoardToolbarActions(gameSettings.displayOptions)
                     }
                 },
@@ -104,18 +106,17 @@ private fun MainState.MainViewImpl(
         },
         bottomBar = {
             with(navController) {
-                NavigationBar {
+                BottomAppBar {
                     AppDestination.All.forEach { destination ->
-                        NavigationBarItem(
-                            selected = currentDestination == destination.label,
-                            onClick = { navigate(destination.label) },
-                            icon = {
-                                Icon(
-                                    imageVector = destination.icon,
-                                    contentDescription = null,
-                                )
-                            },
-                        )
+                        IconToggleButton(
+                            checked = currentDestination == destination.label,
+                            onCheckedChange = { navigate(destination.label) },
+                        ) {
+                            Icon(
+                                imageVector = destination.icon,
+                                contentDescription = null,
+                            )
+                        }
                     }
                 }
             }
