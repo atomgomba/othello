@@ -9,6 +9,8 @@ android {
 dependencies {
     implementation(libs.kotlinx.coroutines.android)
 
+    implementation(libs.hurokBase)
+
     implementation(project(":core:data"))
     implementation(project(":core:logging"))
 

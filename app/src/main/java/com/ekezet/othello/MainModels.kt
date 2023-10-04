@@ -2,12 +2,13 @@ package com.ekezet.othello
 
 import android.content.Context
 import androidx.compose.runtime.Stable
-import com.ekezet.hurok.LoopScope
+import com.ekezet.hurok.ParentLoop
 import com.ekezet.othello.core.game.data.BoardDisplayOptions
 import com.ekezet.othello.core.game.data.IGameSettings
 import com.ekezet.othello.core.game.data.defaultDarkStrategy
 import com.ekezet.othello.core.game.data.defaultDisplayOptions
 import com.ekezet.othello.core.game.data.defaultLightStrategy
+import com.ekezet.othello.core.game.dependency.HasGameSettingsStore
 import com.ekezet.othello.core.game.store.GameSettingsStore
 import com.ekezet.othello.core.game.strategy.Strategy
 import com.ekezet.othello.feature.gameboard.GameBoardScope
@@ -30,12 +31,12 @@ internal data class MainState(
 internal class MainDependency(
     androidContext: Context? = null,
     gameSettingsStore: GameSettingsStore? = null,
-) : KoinComponent {
+) : KoinComponent, HasGameSettingsStore {
     val androidContext: Context = androidContext ?: get()
-    val gameSettingsStore: GameSettingsStore = gameSettingsStore ?: get()
+    override val gameSettingsStore: GameSettingsStore = gameSettingsStore ?: get()
 
     var gameBoardScope: GameBoardScope? = null
         internal set
 }
 
-internal typealias MainScope = LoopScope<MainModel, MainDependency>
+internal typealias MainLoopScope = ParentLoop<MainModel, MainDependency>

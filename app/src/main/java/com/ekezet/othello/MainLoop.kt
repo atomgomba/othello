@@ -1,6 +1,6 @@
 package com.ekezet.othello
 
-import com.ekezet.hurok.AnyLoopScope
+import com.ekezet.hurok.AnyParentLoop
 import com.ekezet.hurok.Loop
 import com.ekezet.hurok.LoopBuilder
 import com.ekezet.othello.core.game.data.GameSettings
@@ -31,7 +31,7 @@ internal class MainLoop private constructor(
     )
 
     @Suppress("UNCHECKED_CAST")
-    override fun MainDependency.onAddChildLoop(child: AnyLoopScope) {
+    override fun MainDependency.onAddChildLoop(child: AnyParentLoop) {
         gameBoardScope = child as? GameBoardScope
     }
 
@@ -41,8 +41,8 @@ internal class MainLoop private constructor(
             args: GameSettings?,
             dependency: MainDependency?,
         ) = MainLoop(
-            args = requireNotNull(args) { "MainLoop args must be set" },
-            dependency = requireNotNull(dependency) { "MainLoop dependency must be set" },
+            args = requireNotNull(args) { "Args must be set" },
+            dependency = requireNotNull(dependency) { "Dependency must be set" },
         )
     }
 }

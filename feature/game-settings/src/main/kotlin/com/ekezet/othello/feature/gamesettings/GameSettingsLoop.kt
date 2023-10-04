@@ -41,8 +41,8 @@ internal class GameSettingsLoop private constructor(
             args: GameSettings?,
             dependency: GameSettingsDependency?,
         ) = GameSettingsLoop(
-            args = requireNotNull(args) { "GameSettingsLoop arguments must be set" },
-            dependency = requireNotNull(dependency) { "GameSettingsLoop dependency must be set" },
+            args = requireNotNull(args) { "Arguments must be set" },
+            dependency = requireNotNull(dependency) { "Dependency must be set" },
         )
     }
 }

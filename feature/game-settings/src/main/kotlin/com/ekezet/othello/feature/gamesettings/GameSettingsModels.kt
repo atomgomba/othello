@@ -8,6 +8,7 @@ import com.ekezet.othello.core.game.data.IGameSettings
 import com.ekezet.othello.core.game.data.defaultDarkStrategy
 import com.ekezet.othello.core.game.data.defaultDisplayOptions
 import com.ekezet.othello.core.game.data.defaultLightStrategy
+import com.ekezet.othello.core.game.dependency.HasGameSettingsStore
 import com.ekezet.othello.core.game.store.GameSettingsStore
 import com.ekezet.othello.core.game.strategy.PreferSidesDecoratorStrategy
 import com.ekezet.othello.core.game.strategy.Strategy
@@ -61,6 +62,6 @@ internal data class GameSettingsState(
 
 internal class GameSettingsDependency(
     gameSettingsStore: GameSettingsStore? = null,
-) : KoinComponent {
-    val gameSettingsStore: GameSettingsStore = gameSettingsStore ?: get()
+) : KoinComponent, HasGameSettingsStore {
+    override val gameSettingsStore: GameSettingsStore = gameSettingsStore ?: get()
 }

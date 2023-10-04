@@ -21,7 +21,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import com.ekezet.hurok.AnyLoopScope
+import com.ekezet.hurok.AnyParentLoop
 import com.ekezet.hurok.compose.LoopWrapper
 import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.data.models.numDark
@@ -50,22 +50,22 @@ private val highlightColor: Color
 fun GameBoardView(
     args: GameSettings,
     modifier: Modifier = Modifier,
-    parentLoop: AnyLoopScope? = null,
+    parentLoop: AnyParentLoop? = null,
 ) {
     LoopWrapper(
         builder = GameBoardLoop,
         parentLoop = parentLoop,
         args = args,
-    ) { state ->
-        GameBoardViewImpl(state, modifier)
+    ) { loop ->
+        GameBoardViewImpl(loop, modifier)
     }
 }
 
 @Composable
-private fun GameBoardScope.GameBoardViewImpl(
-    state: GameBoardState,
+private fun GameBoardState.GameBoardViewImpl(
+    loop: GameBoardScope,
     modifier: Modifier = Modifier,
-) = with(state) {
+) = with(loop) {
     Box(modifier = modifier) {
         Column(
             verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -93,7 +93,7 @@ private fun GameBoardScope.GameBoardViewImpl(
     LaunchedEffect(nextMovePosition != null) {
         if (nextMovePosition != null) {
             delay(ACTION_DELAY_MILLIS)
-            emit(ContinueGame)
+            loop.emit(ContinueGame)
         }
     }
 }

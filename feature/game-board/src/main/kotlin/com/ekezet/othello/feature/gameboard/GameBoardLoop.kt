@@ -87,7 +87,7 @@ internal class GameBoardLoop private constructor(args: GameSettings) :
             args: GameSettings?,
             dependency: Unit?,
         ) = GameBoardLoop(
-            args = requireNotNull(args) { "GameBoardLoop arguments must be set" },
+            args = requireNotNull(args) { "Arguments must be set" },
         )
     }
 }

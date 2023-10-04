@@ -1,7 +1,7 @@
 package com.ekezet.othello.feature.gameboard
 
 import androidx.compose.runtime.Stable
-import com.ekezet.hurok.LoopScope
+import com.ekezet.hurok.ParentLoop
 import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.data.models.DiskCount
 import com.ekezet.othello.core.data.models.Position
@@ -74,7 +74,7 @@ internal data class GameBoardState(
     val onCellClick: (x: Int, y: Int) -> Unit,
 )
 
-typealias GameBoardScope = LoopScope<GameBoardModel, Unit>
+typealias GameBoardScope = ParentLoop<GameBoardModel, Unit>
 
 sealed interface GameEnd {
     data class EndedWin(val winner: Disk) : GameEnd

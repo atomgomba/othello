@@ -36,7 +36,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.ekezet.hurok.compose.LoopWrapper
 import com.ekezet.othello.MainLoop
-import com.ekezet.othello.MainScope
+import com.ekezet.othello.MainLoopScope
 import com.ekezet.othello.MainState
 import com.ekezet.othello.R.string
 import com.ekezet.othello.core.game.data.BoardDisplayOptions
@@ -62,9 +62,9 @@ internal fun MainView(
         args = gameSettings,
         parentScope = parentScope,
         dependency = koinInject(),
-    ) { state ->
-        state.MainViewImpl(
-            mainLoop = this,
+    ) { loop ->
+        MainViewImpl(
+            loop = loop,
             gameSettings = gameSettings,
             navController = navController,
         )
@@ -74,7 +74,7 @@ internal fun MainView(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun MainState.MainViewImpl(
-    mainLoop: MainScope,
+    loop: MainLoopScope,
     gameSettings: GameSettings,
     navController: NavHostController,
 ) {
@@ -97,7 +97,7 @@ private fun MainState.MainViewImpl(
                 navigationIcon = { },
                 actions = {
                     AnimatedVisibility(
-                        visible = currentDestination == AppDestination.GameBoard.label
+                        visible = currentDestination == AppDestination.GameBoard.label,
                     ) {
                         GameBoardToolbarActions(gameSettings.displayOptions)
                     }
@@ -133,7 +133,7 @@ private fun MainState.MainViewImpl(
                     GameBoardView(
                         args = gameSettings,
                         modifier = destinationModifier,
-                        parentLoop = mainLoop,
+                        parentLoop = loop,
                     )
                 }
             }
@@ -144,7 +144,7 @@ private fun MainState.MainViewImpl(
                     GameSettingsView(
                         args = gameSettings,
                         modifier = destinationModifier,
-                        parentLoop = mainLoop,
+                        parentLoop = loop,
                     )
                 }
             }
@@ -165,7 +165,9 @@ private fun MainState.GameBoardToolbarActions(
         }
 
         IconToggleButton(
-            checked = showPossibleMoves, onCheckedChange = { onToggleIndicatorsClick() }) {
+            checked = showPossibleMoves,
+            onCheckedChange = { onToggleIndicatorsClick() },
+        ) {
             Icon(
                 painter = painterResource(
                     id = if (showPossibleMoves) R.drawable.ic_visibility else R.drawable.ic_visibility_off,

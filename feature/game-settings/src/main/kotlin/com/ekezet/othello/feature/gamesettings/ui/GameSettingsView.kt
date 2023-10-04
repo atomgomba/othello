@@ -29,7 +29,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.ekezet.hurok.AnyLoopScope
+import com.ekezet.hurok.AnyParentLoop
 import com.ekezet.hurok.compose.LoopWrapper
 import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.game.data.GameSettings
@@ -45,23 +45,22 @@ import org.koin.compose.koinInject
 fun GameSettingsView(
     args: GameSettings,
     modifier: Modifier = Modifier,
-    parentLoop: AnyLoopScope? = null,
+    parentLoop: AnyParentLoop? = null,
 ) {
     LoopWrapper(
         builder = GameSettingsLoop,
         parentLoop = parentLoop,
         dependency = koinInject(),
         args = args,
-    ) { state ->
-        GameSettingsViewImpl(state, modifier)
+    ) {
+        GameSettingsViewImpl(modifier)
     }
 }
 
 @Composable
-private fun GameSettingsViewImpl(
-    state: GameSettingsState,
+private fun GameSettingsState.GameSettingsViewImpl(
     modifier: Modifier = Modifier,
-) = with(state) {
+) {
     LazyColumn(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -79,7 +78,7 @@ private fun GameSettingsViewImpl(
         }
 
         item {
-            StrategyPickerResult(disk = Disk.Dark, name = darkName, preferSides = isDarkPreferSides)
+            StrategyValueSelector(disk = Disk.Dark, name = darkName, preferSides = isDarkPreferSides)
         }
 
         item {
@@ -87,7 +86,7 @@ private fun GameSettingsViewImpl(
         }
 
         item {
-            StrategyPickerResult(disk = Disk.Light, name = lightName, preferSides = isLightPreferSides)
+            StrategyValueSelector(disk = Disk.Light, name = lightName, preferSides = isLightPreferSides)
         }
     }
 
@@ -97,7 +96,7 @@ private fun GameSettingsViewImpl(
 }
 
 @Composable
-private fun GameSettingsState.StrategyPickerResult(
+private fun GameSettingsState.StrategyValueSelector(
     disk: Disk,
     name: String?,
     preferSides: Boolean,

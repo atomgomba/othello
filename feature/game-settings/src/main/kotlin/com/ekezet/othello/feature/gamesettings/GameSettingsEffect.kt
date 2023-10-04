@@ -1,17 +1,11 @@
 package com.ekezet.othello.feature.gamesettings
 
 import com.ekezet.hurok.Effect
-import com.ekezet.hurok.LoopScope
 import com.ekezet.othello.core.game.data.IGameSettings
+import com.ekezet.othello.core.game.effect.PublishGameSettings
 
 internal sealed interface GameSettingsEffect : Effect<GameSettingsModel, GameSettingsDependency>
 
 internal data class PublishGameSettings(
-    private val settings: IGameSettings,
-) : GameSettingsEffect {
-    override suspend fun LoopScope<GameSettingsModel, GameSettingsDependency>.trigger(
-        dependency: GameSettingsDependency?,
-    ) = dependency?.run {
-        gameSettingsStore.update(settings)
-    }
-}
+    override val settings: IGameSettings,
+) : GameSettingsEffect, PublishGameSettings<GameSettingsModel, GameSettingsDependency>()
