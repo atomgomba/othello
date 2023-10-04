@@ -2,6 +2,7 @@ package com.ekezet.othello.feature.gameboard
 
 import com.ekezet.hurok.Loop
 import com.ekezet.hurok.LoopBuilder
+import com.ekezet.othello.core.game.GameState
 import com.ekezet.othello.core.game.data.GameSettings
 import com.ekezet.othello.feature.gameboard.GameEnd.EndedWin
 import com.ekezet.othello.feature.gameboard.actions.GameBoardAction
@@ -25,12 +26,20 @@ internal class GameBoardLoop private constructor(args: GameSettings) :
         emit(OnGameStarted)
     }
 
-    override fun GameBoardModel.applyArgs(args: GameSettings) =
-        copy(
+    override fun GameBoardModel.applyArgs(args: GameSettings): GameBoardModel {
+        val strategyChanged = lightStrategy != args.lightStrategy || darkStrategy != args.darkStrategy
+        return copy(
             displayOptions = args.displayOptions,
             lightStrategy = args.lightStrategy,
             darkStrategy = args.darkStrategy,
-        )
+        ).run {
+            if (strategyChanged) {
+                resetNextTurn(GameState.new())
+            } else {
+                this
+            }
+        }
+    }
 
     override fun renderState(model: GameBoardModel) = with(model) {
         GameBoardState(
