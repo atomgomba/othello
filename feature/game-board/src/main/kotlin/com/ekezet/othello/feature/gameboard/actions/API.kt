@@ -6,7 +6,7 @@ import com.ekezet.othello.core.game.serialize.GameStateSerializer
 import com.ekezet.othello.feature.gameboard.GameBoardModel
 import com.ekezet.othello.feature.gameboard.WaitBeforeNextTurn
 
- data class OnUpdateGameState(
+data class OnUpdateGameState(
     private val newState: GameState,
 ) : GameBoardAction {
     override fun GameBoardModel.proceed(): Next<GameBoardModel, Unit> {

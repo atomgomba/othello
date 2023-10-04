@@ -109,7 +109,8 @@ private fun MainState.MainViewImpl(
                             onClick = { navigate(destination.label) },
                             icon = {
                                 Icon(
-                                    imageVector = destination.icon, contentDescription = null
+                                    imageVector = destination.icon,
+                                    contentDescription = null,
                                 )
                             },
                         )
@@ -162,7 +163,7 @@ private fun MainState.GameBoardToolbarActions(
     IconToggleButton(checked = showPossibleMoves, onCheckedChange = { onToggleIndicatorsClick() }) {
         Icon(
             painter = painterResource(
-                id = if (showPossibleMoves) R.drawable.ic_visibility else R.drawable.ic_visibility_off
+                id = if (showPossibleMoves) R.drawable.ic_visibility else R.drawable.ic_visibility_off,
             ),
             contentDescription = stringResource(R.string.main__menu__toggle_indicators),
         )

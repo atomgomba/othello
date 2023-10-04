@@ -98,7 +98,9 @@ private fun GameSettingsViewImpl(
 
 @Composable
 private fun GameSettingsState.StrategyPickerResult(
-    disk: Disk, name: String?, preferSides: Boolean,
+    disk: Disk,
+    name: String?,
+    preferSides: Boolean,
 ) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(16.dp),
@@ -124,7 +126,7 @@ private fun GameSettingsState.StrategyPickerResult(
 
             Text(
                 name ?: stringResource(id = string.common__human_player),
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             )
         }
     }
@@ -168,7 +170,7 @@ private fun StrategyItem(strategy: Strategy?, isSelected: Boolean, onClick: () -
         modifier = Modifier
             .fillMaxWidth()
             .clickable(onClick = onClick)
-            .padding(16.dp)
+            .padding(16.dp),
     ) {
         Icon(
             imageVector = Icons.Default.Check,

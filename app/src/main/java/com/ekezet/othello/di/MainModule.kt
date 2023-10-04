@@ -12,7 +12,5 @@ internal fun mainModule() = module {
         gameSettingsFeatureModule(),
     )
 
-    //single { mainActivity }
-
     singleOf(::MainDependency)
 }

@@ -1,7 +1,6 @@
 package com.ekezet.othello.feature.gamesettings
 
 import androidx.compose.runtime.Stable
-import com.ekezet.hurok.LoopScope
 import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.data.models.isLight
 import com.ekezet.othello.core.game.data.BoardDisplayOptions
@@ -52,15 +51,13 @@ internal data class GameSettingsState(
             lightStrategy
         } else {
             darkStrategy
-
-        }, strategy
+        },
+        strategy,
     )
 
     private fun isStrategySelected(current: Strategy?, other: Strategy?) =
         current == other || (current is PreferSidesDecoratorStrategy && current.wrapped == other)
 }
-
-typealias GameSettingsScope = LoopScope<GameSettingsModel, Unit>
 
 internal class GameSettingsDependency(
     gameSettingsStore: GameSettingsStore? = null,
