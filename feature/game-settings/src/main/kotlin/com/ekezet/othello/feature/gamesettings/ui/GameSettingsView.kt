@@ -23,6 +23,7 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -37,6 +38,7 @@ import com.ekezet.othello.core.game.strategy.Strategies
 import com.ekezet.othello.core.game.strategy.Strategy
 import com.ekezet.othello.core.ui.R.string
 import com.ekezet.othello.core.ui.components.GamePiece
+import com.ekezet.othello.core.ui.stringResource
 import com.ekezet.othello.feature.gamesettings.GameSettingsLoop
 import com.ekezet.othello.feature.gamesettings.GameSettingsState
 import org.koin.compose.koinInject
@@ -44,6 +46,7 @@ import org.koin.compose.koinInject
 @Composable
 fun GameSettingsView(
     args: GameSettings,
+    showStrategySelectorFor: Disk?,
     modifier: Modifier = Modifier,
     parentLoop: AnyParentLoop? = null,
 ) {
@@ -54,6 +57,12 @@ fun GameSettingsView(
         args = args,
     ) {
         GameSettingsViewImpl(modifier)
+
+        LaunchedEffect(key1 = showStrategySelectorFor) {
+            if (showStrategySelectorFor != null) {
+                onShowStrategiesClick(showStrategySelectorFor)
+            }
+        }
     }
 }
 
@@ -67,7 +76,7 @@ private fun GameSettingsState.GameSettingsViewImpl(
     ) {
         item {
             Text(
-                text = "Players",
+                text = stringResource(id = string.game_settings__header__players),
                 style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.primary,
             )
@@ -78,7 +87,11 @@ private fun GameSettingsState.GameSettingsViewImpl(
         }
 
         item {
-            StrategyValueSelector(disk = Disk.Dark, name = darkName, preferSides = isDarkPreferSides)
+            StrategyValueSelector(
+                disk = Disk.Dark,
+                name = darkName,
+                preferSides = isDarkPreferSides,
+            )
         }
 
         item {
@@ -86,7 +99,11 @@ private fun GameSettingsState.GameSettingsViewImpl(
         }
 
         item {
-            StrategyValueSelector(disk = Disk.Light, name = lightName, preferSides = isLightPreferSides)
+            StrategyValueSelector(
+                disk = Disk.Light,
+                name = lightName,
+                preferSides = isLightPreferSides,
+            )
         }
     }
 
@@ -119,7 +136,13 @@ private fun GameSettingsState.StrategyValueSelector(
         )
 
         Column {
-            Text("$disk strategy", style = MaterialTheme.typography.labelSmall)
+            Text(
+                text = stringResource(
+                    id = string.game_settings__title__strategy,
+                    disk.stringResource,
+                ),
+                style = MaterialTheme.typography.labelSmall,
+            )
 
             Spacer(Modifier.height(4.dp))
 
@@ -134,7 +157,7 @@ private fun GameSettingsState.StrategyValueSelector(
         Row(
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Text("Prefer sides")
+            Text(stringResource(id = string.game_settings__switch__prefer_sides))
             Spacer(Modifier.weight(1F))
             Switch(checked = preferSides, onCheckedChange = { checked ->
                 onPreferSidesClick(disk, checked)
@@ -148,8 +171,19 @@ private fun GameSettingsState.StrategyValueSelector(
 private fun GameSettingsState.StrategyPicker(disk: Disk) {
     ModalBottomSheet(onDismissRequest = onDismissStrategies) {
         Column {
+            Text(
+                text = stringResource(
+                    id = string.game_settings__title__strategy,
+                    disk.stringResource,
+                ),
+                style = MaterialTheme.typography.labelLarge,
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .padding(bottom = 16.dp),
+            )
+
             for (strategy in Strategies) {
-                StrategyItem(
+                StrategyListItem(
                     strategy = strategy,
                     isSelected = disk.isStrategySelected(strategy),
                     onClick = { onStrategySelect(disk, strategy) },
@@ -162,7 +196,7 @@ private fun GameSettingsState.StrategyPicker(disk: Disk) {
 }
 
 @Composable
-private fun StrategyItem(strategy: Strategy?, isSelected: Boolean, onClick: () -> Unit) {
+private fun StrategyListItem(strategy: Strategy?, isSelected: Boolean, onClick: () -> Unit) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(16.dp),
@@ -178,7 +212,7 @@ private fun StrategyItem(strategy: Strategy?, isSelected: Boolean, onClick: () -
         )
 
         Text(
-            text = strategy?.name ?: stringResource(id = string.common__human_player),
+            text = strategy.stringResource,
             style = MaterialTheme.typography.titleLarge,
         )
     }

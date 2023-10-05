@@ -15,7 +15,7 @@ internal class MainLoop private constructor(
         dependency = dependency,
     ) {
 
-    override fun initModel() = MainModel()
+    override fun initModel(args: GameSettings?) = MainModel()
 
     override fun renderState(model: MainModel) =
         MainState(

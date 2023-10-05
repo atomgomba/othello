@@ -7,6 +7,13 @@ value class Disk private constructor(
     companion object {
         val Light = Disk(false)
         val Dark = Disk(true)
+
+        fun valueOf(value: String?): Disk? =
+            when (value) {
+                Light.toString() -> Light
+                Dark.toString() -> Dark
+                else -> null
+            }
     }
 
     override fun toString() = if (isDark) "Dark" else "Light"

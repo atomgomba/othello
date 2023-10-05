@@ -1,18 +1,20 @@
 package com.ekezet.othello.feature.gameboard.actions
 
 import com.ekezet.hurok.Action.Next
+import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.game.GameState
 import com.ekezet.othello.core.game.serialize.GameStateSerializer
 import com.ekezet.othello.feature.gameboard.GameBoardModel
 import com.ekezet.othello.feature.gameboard.WaitBeforeNextTurn
 
+typealias OnStrategyClick = (disk: Disk) -> Unit
+
 data class OnUpdateGameState(
     private val newState: GameState,
 ) : GameBoardAction {
     override fun GameBoardModel.proceed(): Next<GameBoardModel, Unit> {
-        val nextMove = darkStrategy?.deriveNext(newState)
         val effects = buildList {
-            if (nextMove != null) {
+            darkStrategy?.deriveNext(newState)?.let { nextMove ->
                 add(WaitBeforeNextTurn(nextMove))
             }
         }

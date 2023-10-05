@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -36,6 +37,7 @@ import com.ekezet.othello.feature.gameboard.GameBoardState
 import com.ekezet.othello.feature.gameboard.GameEnd.EndedTie
 import com.ekezet.othello.feature.gameboard.GameEnd.EndedWin
 import com.ekezet.othello.feature.gameboard.actions.ContinueGame
+import com.ekezet.othello.feature.gameboard.actions.OnStrategyClick
 import com.ekezet.othello.feature.gameboard.ui.components.GameBoard
 import kotlinx.coroutines.delay
 import nl.dionsegijn.konfetti.compose.KonfettiView
@@ -49,6 +51,7 @@ private val highlightColor: Color
 @Composable
 fun GameBoardView(
     args: GameSettings,
+    onStrategyClick: OnStrategyClick,
     modifier: Modifier = Modifier,
     parentLoop: AnyParentLoop? = null,
 ) {
@@ -57,13 +60,14 @@ fun GameBoardView(
         parentLoop = parentLoop,
         args = args,
     ) { loop ->
-        GameBoardViewImpl(loop, modifier)
+        GameBoardViewImpl(loop, onStrategyClick, modifier)
     }
 }
 
 @Composable
 private fun GameBoardState.GameBoardViewImpl(
     loop: GameBoardScope,
+    onStrategyClick: OnStrategyClick,
     modifier: Modifier = Modifier,
 ) = with(loop) {
     Box(modifier = modifier) {
@@ -82,7 +86,7 @@ private fun GameBoardState.GameBoardViewImpl(
                 onCellClick = onCellClick,
             )
 
-            BoardFooter()
+            BoardFooter(onStrategyClick)
         }
 
         if (celebrate) {
@@ -116,7 +120,9 @@ private fun GameBoardState.BoardHeader() {
 }
 
 @Composable
-private fun GameBoardState.BoardFooter() {
+private fun GameBoardState.BoardFooter(
+    onStrategyClick: OnStrategyClick,
+) {
     val isDarkWin = ended is EndedWin && ended.winner == Disk.Dark
     val isLightWin = ended is EndedWin && ended.winner == Disk.Light
 
@@ -128,6 +134,7 @@ private fun GameBoardState.BoardFooter() {
             horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             DiskImage(disk = Disk.Dark, isSelected = isDarkWin)
+
             Text(
                 "${diskCount.numDark}",
                 color = if (isDarkWin) highlightColor else Color.Unspecified,
@@ -154,27 +161,33 @@ private fun GameBoardState.BoardFooter() {
                 "${diskCount.numLight}",
                 color = if (isLightWin) highlightColor else Color.Unspecified,
             )
+
             DiskImage(disk = Disk.Light, isSelected = isLightWin)
         }
     }
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        Text(
-            text = darkStrategyName ?: stringResource(string.common__human_player),
-            fontWeight = FontWeight.Bold,
-            color = if (isDarkWin) highlightColor else Color.Unspecified,
-        )
+        OutlinedButton(onClick = { onStrategyClick(Disk.Dark) }) {
+            Text(
+                text = darkStrategyName ?: stringResource(string.common__human_player),
+                style = MaterialTheme.typography.labelSmall,
+                fontWeight = FontWeight.Bold,
+                color = if (isDarkWin) highlightColor else Color.Unspecified,
+            )
+        }
 
         Spacer(Modifier.weight(1F))
 
-        Text(
-            text = lightStrategyName ?: stringResource(string.common__human_player),
-            fontWeight = FontWeight.Bold,
-            color = if (isLightWin) highlightColor else Color.Unspecified,
-        )
+        OutlinedButton(onClick = { onStrategyClick(Disk.Light) }) {
+            Text(
+                text = lightStrategyName ?: stringResource(string.common__human_player),
+                style = MaterialTheme.typography.labelSmall,
+                fontWeight = FontWeight.Bold,
+                color = if (isLightWin) highlightColor else Color.Unspecified,
+            )
+        }
     }
 }
 

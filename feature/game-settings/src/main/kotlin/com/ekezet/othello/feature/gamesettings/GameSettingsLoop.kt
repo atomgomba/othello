@@ -12,7 +12,7 @@ internal class GameSettingsLoop private constructor(
     args = args,
     dependency = dependency,
 ) {
-    override fun initModel() = GameSettingsModel()
+    override fun initModel(args: GameSettings?) = GameSettingsModel()
 
     override fun GameSettingsModel.applyArgs(args: GameSettings) =
         copy(

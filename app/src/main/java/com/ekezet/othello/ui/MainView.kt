@@ -34,11 +34,13 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.ekezet.hurok.compose.LoopWrapper
 import com.ekezet.othello.MainLoop
 import com.ekezet.othello.MainLoopScope
 import com.ekezet.othello.MainState
 import com.ekezet.othello.R.string
+import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.game.data.BoardDisplayOptions
 import com.ekezet.othello.core.game.data.GameSettings
 import com.ekezet.othello.core.game.store.GameSettingsStore
@@ -134,15 +136,27 @@ private fun MainState.MainViewImpl(
                         args = gameSettings,
                         modifier = destinationModifier,
                         parentLoop = loop,
+                        onStrategyClick = { disk ->
+                            navController.navigate(AppDestination.GameSettings.label + "?disk=$disk")
+                        },
                     )
                 }
             }
 
-            composable(AppDestination.GameSettings.label) {
+            composable(
+                AppDestination.GameSettings.label + "?disk={disk}",
+                arguments = listOf(
+                    navArgument("disk") {
+                        nullable = true
+                        defaultValue = null
+                    },
+                ),
+            ) { backStackEntry ->
                 currentDestination = AppDestination.GameSettings.label
                 CompositionLocalProvider(LocalViewModelStoreOwner provides viewModelStoreOwner) {
                     GameSettingsView(
                         args = gameSettings,
+                        showStrategySelectorFor = Disk.valueOf(backStackEntry.arguments?.getString("disk")),
                         modifier = destinationModifier,
                         parentLoop = loop,
                     )

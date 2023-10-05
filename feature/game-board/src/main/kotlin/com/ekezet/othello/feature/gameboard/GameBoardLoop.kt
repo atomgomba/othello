@@ -20,7 +20,7 @@ internal class GameBoardLoop private constructor(args: GameSettings) :
         args = args,
     ) {
 
-    override fun initModel() = GameBoardModel()
+    override fun initModel(args: GameSettings?) = GameBoardModel()
 
     override fun onLoopStarted() {
         emit(OnGameStarted)
