@@ -15,6 +15,9 @@ val Disk.stringResource: String
         },
     )
 
-val Strategy?.stringResource: String
+val Strategy?.nameOrHumanPlayer: String
     @Composable inline get() =
-        this?.name ?: stringResource(string.common__human_player)
+        this?.name.orHumanPlayer
+
+val String?.orHumanPlayer: String
+    @Composable inline get() = this ?: stringResource(id = string.common__human_player)

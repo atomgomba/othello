@@ -30,6 +30,7 @@ import com.ekezet.othello.core.data.models.numLight
 import com.ekezet.othello.core.game.data.GameSettings
 import com.ekezet.othello.core.ui.R.string
 import com.ekezet.othello.core.ui.components.GamePiece
+import com.ekezet.othello.core.ui.orHumanPlayer
 import com.ekezet.othello.feature.gameboard.ACTION_DELAY_MILLIS
 import com.ekezet.othello.feature.gameboard.GameBoardLoop
 import com.ekezet.othello.feature.gameboard.GameBoardScope
@@ -171,7 +172,7 @@ private fun GameBoardState.BoardFooter(
     ) {
         OutlinedButton(onClick = { onStrategyClick(Disk.Dark) }) {
             Text(
-                text = darkStrategyName ?: stringResource(string.common__human_player),
+                text = darkStrategyName.orHumanPlayer,
                 style = MaterialTheme.typography.labelSmall,
                 fontWeight = FontWeight.Bold,
                 color = if (isDarkWin) highlightColor else Color.Unspecified,
@@ -182,7 +183,7 @@ private fun GameBoardState.BoardFooter(
 
         OutlinedButton(onClick = { onStrategyClick(Disk.Light) }) {
             Text(
-                text = lightStrategyName ?: stringResource(string.common__human_player),
+                text = lightStrategyName.orHumanPlayer,
                 style = MaterialTheme.typography.labelSmall,
                 fontWeight = FontWeight.Bold,
                 color = if (isLightWin) highlightColor else Color.Unspecified,
