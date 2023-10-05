@@ -20,10 +20,13 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.SheetState
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -41,8 +44,10 @@ import com.ekezet.othello.core.ui.components.GamePiece
 import com.ekezet.othello.core.ui.stringResource
 import com.ekezet.othello.feature.gamesettings.GameSettingsLoop
 import com.ekezet.othello.feature.gamesettings.GameSettingsState
+import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GameSettingsView(
     args: GameSettings,
@@ -56,20 +61,18 @@ fun GameSettingsView(
         dependency = koinInject(),
         args = args,
     ) {
-        GameSettingsViewImpl(modifier)
-
-        LaunchedEffect(key1 = showStrategySelectorFor) {
-            if (showStrategySelectorFor != null) {
-                onShowStrategiesClick(showStrategySelectorFor)
-            }
-        }
+        GameSettingsViewImpl(showStrategySelectorFor, modifier)
     }
 }
 
+@ExperimentalMaterial3Api
 @Composable
 private fun GameSettingsState.GameSettingsViewImpl(
+    showStrategySelectorFor: Disk?,
     modifier: Modifier = Modifier,
 ) {
+    val sheetState = rememberModalBottomSheetState()
+
     LazyColumn(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -107,8 +110,20 @@ private fun GameSettingsState.GameSettingsViewImpl(
         }
     }
 
+    val scope = rememberCoroutineScope()
     if (selectingStrategyFor != null) {
-        StrategyPicker(disk = selectingStrategyFor)
+        StrategyPicker(selectingStrategyFor, sheetState)
+    }
+    LaunchedEffect(key1 = selectingStrategyFor) {
+        if (selectingStrategyFor == null && sheetState.isVisible) {
+            scope.launch { sheetState.hide() }
+        }
+    }
+
+    LaunchedEffect(key1 = showStrategySelectorFor) {
+        if (showStrategySelectorFor != null && !sheetState.isVisible && selectingStrategyFor == null) {
+            onShowStrategiesClick(showStrategySelectorFor)
+        }
     }
 }
 
@@ -168,8 +183,14 @@ private fun GameSettingsState.StrategyValueSelector(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun GameSettingsState.StrategyPicker(disk: Disk) {
-    ModalBottomSheet(onDismissRequest = onDismissStrategies) {
+private fun GameSettingsState.StrategyPicker(
+    disk: Disk,
+    sheetState: SheetState,
+) {
+    ModalBottomSheet(
+        onDismissRequest = onDismissStrategies,
+        sheetState = sheetState,
+    ) {
         Column {
             Text(
                 text = stringResource(
