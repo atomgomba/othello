@@ -1,4 +1,4 @@
-package com.ekezet.othello.ui
+package com.ekezet.othello.main.ui
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Row
@@ -37,9 +37,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.ekezet.hurok.compose.LoopWrapper
-import com.ekezet.othello.MainLoop
-import com.ekezet.othello.MainLoopScope
-import com.ekezet.othello.MainState
 import com.ekezet.othello.R.string
 import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.game.data.BoardDisplayOptions
@@ -48,7 +45,10 @@ import com.ekezet.othello.core.game.store.GameSettingsStore
 import com.ekezet.othello.core.ui.R
 import com.ekezet.othello.feature.gameboard.ui.GameBoardView
 import com.ekezet.othello.feature.gamesettings.ui.GameSettingsView
-import com.ekezet.othello.navigation.AppDestination
+import com.ekezet.othello.main.MainLoop
+import com.ekezet.othello.main.MainLoopScope
+import com.ekezet.othello.main.MainState
+import com.ekezet.othello.main.navigation.MainDestinations
 import kotlinx.coroutines.CoroutineScope
 import org.koin.compose.koinInject
 
@@ -87,7 +87,7 @@ private fun MainState.MainViewImpl(
     val destinationModifier = Modifier
         .padding(16.dp)
         .fillMaxSize()
-    var currentDestination: String by remember { mutableStateOf(AppDestination.Start.label) }
+    var currentDestination: String by remember { mutableStateOf(MainDestinations.Start.label) }
 
     Scaffold(
         topBar = {
@@ -98,7 +98,7 @@ private fun MainState.MainViewImpl(
                 ),
                 title = { Text(stringResource(string.app_name)) },
                 navigationIcon = {
-                    if (currentDestination == AppDestination.GameSettings.label) {
+                    if (currentDestination == MainDestinations.GameSettings.label) {
                         IconButton(onClick = { navController.popBackStack() }) {
                             Icon(
                                 imageVector = Icons.Default.ArrowBack,
@@ -109,7 +109,7 @@ private fun MainState.MainViewImpl(
                 },
                 actions = {
                     AnimatedVisibility(
-                        visible = currentDestination == AppDestination.GameBoard.label,
+                        visible = currentDestination == MainDestinations.GameBoard.label,
                     ) {
                         GameBoardToolbarActions(gameSettings.displayOptions)
                     }
@@ -119,7 +119,7 @@ private fun MainState.MainViewImpl(
         bottomBar = {
             with(navController) {
                 BottomAppBar {
-                    AppDestination.All.forEach { destination ->
+                    MainDestinations.All.forEach { destination ->
                         IconToggleButton(
                             checked = currentDestination == destination.label,
                             onCheckedChange = { navigate(destination.label) },
@@ -136,25 +136,25 @@ private fun MainState.MainViewImpl(
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = AppDestination.Start.label,
+            startDestination = MainDestinations.Start.label,
             modifier = Modifier.padding(innerPadding),
         ) {
-            composable(AppDestination.GameBoard.label) {
-                currentDestination = AppDestination.GameBoard.label
+            composable(MainDestinations.GameBoard.label) {
+                currentDestination = MainDestinations.GameBoard.label
                 CompositionLocalProvider(LocalViewModelStoreOwner provides viewModelStoreOwner) {
                     GameBoardView(
                         args = gameSettings,
                         modifier = destinationModifier,
                         parentLoop = loop,
                         onStrategyClick = { disk ->
-                            navController.navigate(AppDestination.GameSettings.label + "?disk=$disk")
+                            navController.navigate(MainDestinations.GameSettings.label + "?disk=$disk")
                         },
                     )
                 }
             }
 
             composable(
-                AppDestination.GameSettings.label + "?disk={disk}",
+                MainDestinations.GameSettings.label + "?disk={disk}",
                 arguments = listOf(
                     navArgument("disk") {
                         nullable = true
@@ -162,7 +162,7 @@ private fun MainState.MainViewImpl(
                     },
                 ),
             ) { backStackEntry ->
-                currentDestination = AppDestination.GameSettings.label
+                currentDestination = MainDestinations.GameSettings.label
                 CompositionLocalProvider(LocalViewModelStoreOwner provides viewModelStoreOwner) {
                     GameSettingsView(
                         args = gameSettings,

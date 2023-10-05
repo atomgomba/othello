@@ -1,4 +1,4 @@
-package com.ekezet.othello
+package com.ekezet.othello.main
 
 import com.ekezet.hurok.AnyParentLoop
 import com.ekezet.hurok.Loop

@@ -1,4 +1,4 @@
-package com.ekezet.othello
+package com.ekezet.othello.main
 
 import android.content.Intent
 import com.ekezet.hurok.Effect

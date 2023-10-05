@@ -1,4 +1,4 @@
-package com.ekezet.othello
+package com.ekezet.othello.main
 
 import com.ekezet.hurok.Action
 import com.ekezet.hurok.Action.Next

@@ -19,7 +19,7 @@
         >
 
         <activity
-            android:name=".ui.MainActivity"
+            android:name=".main.ui.MainActivity"
             android:configChanges="orientation|uiMode"
             android:exported="true"
             android:theme="@style/Theme.Othello"

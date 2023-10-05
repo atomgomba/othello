@@ -1,4 +1,4 @@
-package com.ekezet.othello
+package com.ekezet.othello.main
 
 import android.content.Context
 import androidx.compose.runtime.Stable

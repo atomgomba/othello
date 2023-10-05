@@ -1,4 +1,4 @@
-package com.ekezet.othello.ui
+package com.ekezet.othello.main.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
