@@ -1,7 +1,7 @@
 package com.ekezet.othello.navigation
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.ui.graphics.vector.ImageVector
 
@@ -11,7 +11,7 @@ sealed interface AppDestination {
 
     data object GameBoard : AppDestination {
         override val label: String = "game-board"
-        override val icon: ImageVector = Icons.Default.Home
+        override val icon: ImageVector = Icons.Default.PlayArrow
     }
 
     data object GameSettings : AppDestination {

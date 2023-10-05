@@ -10,7 +10,7 @@ import com.ekezet.othello.core.game.data.defaultDisplayOptions
 import com.ekezet.othello.core.game.data.defaultLightStrategy
 import com.ekezet.othello.core.game.dependency.HasGameSettingsStore
 import com.ekezet.othello.core.game.store.GameSettingsStore
-import com.ekezet.othello.core.game.strategy.PreferSidesDecoratorStrategy
+import com.ekezet.othello.core.game.strategy.DecoratedStrategy
 import com.ekezet.othello.core.game.strategy.Strategy
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
@@ -20,12 +20,15 @@ data class GameSettingsModel(
     override val darkStrategy: Strategy? = defaultDarkStrategy,
     override val displayOptions: BoardDisplayOptions = defaultDisplayOptions,
     val selectingStrategyFor: Disk? = null,
-) : IGameSettings
+) : IGameSettings {
+    fun resetSelection() = copy(selectingStrategyFor = null)
+}
 
 @Stable
 internal data class GameSettingsState(
     val isLightPreferSides: Boolean,
     val isDarkPreferSides: Boolean,
+    val displayOptions: BoardDisplayOptions,
     val lightStrategy: Strategy? = defaultLightStrategy,
     val darkStrategy: Strategy? = defaultDarkStrategy,
     val selectingStrategyFor: Disk?,
@@ -33,6 +36,8 @@ internal data class GameSettingsState(
     val onDismissStrategies: () -> Unit,
     val onPreferSidesClick: (disk: Disk, prefer: Boolean) -> Unit,
     val onStrategySelect: (disk: Disk, strategy: Strategy?) -> Unit,
+    val onShowPossibleMovesClick: () -> Unit,
+    val onShowBoardPositionsClick: () -> Unit,
 ) {
     val Disk.isNotHuman: Boolean
         get() = if (isLight) {
@@ -57,7 +62,7 @@ internal data class GameSettingsState(
     )
 
     private fun isStrategySelected(current: Strategy?, other: Strategy?) =
-        current == other || (current is PreferSidesDecoratorStrategy && current.wrapped == other)
+        current == other || (current is DecoratedStrategy && current.wrapped == other)
 }
 
 internal class GameSettingsDependency(

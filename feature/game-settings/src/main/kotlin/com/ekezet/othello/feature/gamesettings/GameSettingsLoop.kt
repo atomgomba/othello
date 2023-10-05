@@ -12,7 +12,7 @@ internal class GameSettingsLoop private constructor(
     args = args,
     dependency = dependency,
 ) {
-    override fun initModel(args: GameSettings?) = GameSettingsModel()
+    override fun initModel() = GameSettingsModel()
 
     override fun GameSettingsModel.applyArgs(args: GameSettings) =
         copy(
@@ -27,11 +27,14 @@ internal class GameSettingsLoop private constructor(
             lightStrategy = lightStrategy,
             isDarkPreferSides = darkStrategy is PreferSidesDecoratorStrategy,
             isLightPreferSides = lightStrategy is PreferSidesDecoratorStrategy,
+            displayOptions = displayOptions,
             selectingStrategyFor = selectingStrategyFor,
             onShowStrategiesClick = { disk -> emit(OnSelectStrategyClicked(disk)) },
             onDismissStrategies = { emit(OnSelectStrategyDismissed) },
             onPreferSidesClick = { disk, prefer -> emit(OnPreferSidesClicked(disk, prefer)) },
             onStrategySelect = { disk, strategy -> emit(OnStrategyItemClicked(disk, strategy)) },
+            onShowPossibleMovesClick = { emit(OnShowPossibleMovesClicked) },
+            onShowBoardPositionsClick = { emit(OnShowBoardPositionsClicked) },
         )
     }
 

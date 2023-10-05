@@ -22,6 +22,7 @@ import com.ekezet.othello.feature.gamesettings.GameSettingsLoop
 import com.ekezet.othello.feature.gamesettings.GameSettingsState
 import com.ekezet.othello.feature.gamesettings.ui.components.SelectedStrategy
 import com.ekezet.othello.feature.gamesettings.ui.components.StrategyPicker
+import com.ekezet.othello.feature.gamesettings.ui.components.SwitchRow
 import org.koin.compose.koinInject
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -62,9 +63,7 @@ private fun GameSettingsState.GameSettingsViewImpl(
             )
         }
 
-        item {
-            Spacer(Modifier.height(4.dp))
-        }
+        item { Spacer(Modifier.height(4.dp)) }
 
         item {
             SelectedStrategy(
@@ -74,15 +73,33 @@ private fun GameSettingsState.GameSettingsViewImpl(
             )
         }
 
-        item {
-            Divider()
-        }
+        item { Divider() }
 
         item {
             SelectedStrategy(
                 disk = Disk.Light,
                 name = lightName,
                 preferSides = isLightPreferSides,
+            )
+        }
+
+        item { Divider() }
+
+        item {
+            SwitchRow(
+                label = "Show possible moves",
+                checked = displayOptions.showPossibleMoves,
+                onCheckedChange = { onShowPossibleMovesClick() },
+            )
+        }
+
+        item { Divider() }
+
+        item {
+            SwitchRow(
+                label = "Show board positions",
+                checked = displayOptions.showBoardPositions,
+                onCheckedChange = { onShowBoardPositionsClick() },
             )
         }
     }

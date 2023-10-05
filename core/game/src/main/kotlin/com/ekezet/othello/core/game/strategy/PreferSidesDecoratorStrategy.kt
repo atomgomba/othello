@@ -8,8 +8,8 @@ import com.ekezet.othello.core.data.models.y
 import com.ekezet.othello.core.game.GameState
 
 class PreferSidesDecoratorStrategy(
-    val wrapped: Strategy,
-) : Strategy {
+    override val wrapped: Strategy,
+) : DecoratedStrategy {
     override val name: String
         get() = "${wrapped.name} (Prefer sides)"
 

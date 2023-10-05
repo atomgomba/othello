@@ -12,10 +12,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -69,14 +67,12 @@ internal fun GameSettingsState.SelectedStrategy(
     }
 
     AnimatedVisibility(visible = disk.isNotHuman) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Text(stringResource(id = string.game_settings__switch__prefer_sides))
-            Spacer(Modifier.weight(1F))
-            Switch(checked = preferSides, onCheckedChange = { checked ->
+        SwitchRow(
+            label = stringResource(id = string.game_settings__switch__prefer_sides),
+            checked = preferSides,
+            onCheckedChange = { checked ->
                 onPreferSidesClick(disk, checked)
-            })
-        }
+            }
+        )
     }
 }

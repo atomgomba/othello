@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.BottomAppBar
@@ -96,7 +97,16 @@ private fun MainState.MainViewImpl(
                     titleContentColor = MaterialTheme.colorScheme.primary,
                 ),
                 title = { Text(stringResource(string.app_name)) },
-                navigationIcon = { },
+                navigationIcon = {
+                    if (currentDestination == AppDestination.GameSettings.label) {
+                        IconButton(onClick = { navController.popBackStack() }) {
+                            Icon(
+                                imageVector = Icons.Default.ArrowBack,
+                                contentDescription = null,
+                            )
+                        }
+                    }
+                },
                 actions = {
                     AnimatedVisibility(
                         visible = currentDestination == AppDestination.GameBoard.label,

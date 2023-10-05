@@ -7,7 +7,9 @@ import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -72,22 +74,24 @@ private fun GameBoardState.GameBoardViewImpl(
     modifier: Modifier = Modifier,
 ) = with(loop) {
     Box(modifier = modifier) {
-        Column(
+        LazyColumn(
             verticalArrangement = Arrangement.spacedBy(16.dp),
             modifier = Modifier.align(Center),
         ) {
-            BoardHeader()
+            item { BoardHeader() }
 
-            GameBoard(
-                board = board,
-                showPositions = showBoardPositions,
-                ended = ended,
-                overlay = overlay,
-                isClickable = isHumanPlayer,
-                onCellClick = onCellClick,
-            )
+            item {
+                GameBoard(
+                    board = board,
+                    showPositions = showBoardPositions,
+                    ended = ended,
+                    overlay = overlay,
+                    isClickable = isHumanPlayer,
+                    onCellClick = onCellClick,
+                )
+            }
 
-            BoardFooter(onStrategyClick)
+            item { BoardFooter(onStrategyClick) }
         }
 
         if (celebrate) {
@@ -127,9 +131,7 @@ private fun GameBoardState.BoardFooter(
     val isDarkWin = ended is EndedWin && ended.winner == Disk.Dark
     val isLightWin = ended is EndedWin && ended.winner == Disk.Light
 
-    Column(
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-    ) {
+    Column {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -166,6 +168,8 @@ private fun GameBoardState.BoardFooter(
             DiskImage(disk = Disk.Light, isSelected = isLightWin)
         }
     }
+
+    Spacer(Modifier.height(8.dp))
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
