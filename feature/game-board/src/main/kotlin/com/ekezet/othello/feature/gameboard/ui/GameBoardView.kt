@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -27,6 +28,7 @@ import androidx.compose.ui.zIndex
 import com.ekezet.hurok.AnyParentLoop
 import com.ekezet.hurok.compose.LoopWrapper
 import com.ekezet.othello.core.data.models.Disk
+import com.ekezet.othello.core.data.models.isLight
 import com.ekezet.othello.core.data.models.numDark
 import com.ekezet.othello.core.data.models.numLight
 import com.ekezet.othello.core.game.data.GameSettings
@@ -51,6 +53,7 @@ import java.util.concurrent.TimeUnit.SECONDS
 private val highlightColor: Color
     @Composable get() = MaterialTheme.colorScheme.tertiary
 
+@ExperimentalLayoutApi
 @Composable
 fun GameBoardView(
     args: GameSettings,
@@ -67,13 +70,16 @@ fun GameBoardView(
     }
 }
 
+@ExperimentalLayoutApi
 @Composable
 private fun GameBoardState.GameBoardViewImpl(
     loop: GameBoardScope,
     onStrategyClick: OnStrategyClick,
     modifier: Modifier = Modifier,
 ) = with(loop) {
-    Box(modifier = modifier) {
+    Box(
+        modifier = modifier,
+    ) {
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(16.dp),
             modifier = Modifier.align(Center),
@@ -128,8 +134,8 @@ private fun GameBoardState.BoardHeader() {
 private fun GameBoardState.BoardFooter(
     onStrategyClick: OnStrategyClick,
 ) {
-    val isDarkWin = ended is EndedWin && ended.winner == Disk.Dark
-    val isLightWin = ended is EndedWin && ended.winner == Disk.Light
+    val isDarkWin = ended is EndedWin && ended.winner.isDark
+    val isLightWin = ended is EndedWin && ended.winner.isLight
 
     Column {
         Row(

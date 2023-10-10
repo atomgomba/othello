@@ -1,6 +1,7 @@
 package com.ekezet.othello.main.ui
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -49,9 +50,11 @@ import com.ekezet.othello.main.MainLoop
 import com.ekezet.othello.main.MainLoopScope
 import com.ekezet.othello.main.MainState
 import com.ekezet.othello.main.navigation.MainDestinations
+import com.ekezet.othello.main.navigation.MainDestinations.GameSettings.PICK_STRATEGY
 import kotlinx.coroutines.CoroutineScope
 import org.koin.compose.koinInject
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 internal fun MainView(
     parentScope: CoroutineScope = rememberCoroutineScope(),
@@ -74,6 +77,7 @@ internal fun MainView(
     }
 }
 
+@ExperimentalLayoutApi
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun MainState.MainViewImpl(
@@ -147,16 +151,18 @@ private fun MainState.MainViewImpl(
                         modifier = destinationModifier,
                         parentLoop = loop,
                         onStrategyClick = { disk ->
-                            navController.navigate(MainDestinations.GameSettings.label + "?disk=$disk")
+                            navController.navigate(
+                                "${MainDestinations.GameSettings.label}?$PICK_STRATEGY=$disk"
+                            )
                         },
                     )
                 }
             }
 
             composable(
-                MainDestinations.GameSettings.label + "?disk={disk}",
+                "${MainDestinations.GameSettings.label}?$PICK_STRATEGY={$PICK_STRATEGY}",
                 arguments = listOf(
-                    navArgument("disk") {
+                    navArgument(PICK_STRATEGY) {
                         nullable = true
                         defaultValue = null
                     },
@@ -166,7 +172,9 @@ private fun MainState.MainViewImpl(
                 CompositionLocalProvider(LocalViewModelStoreOwner provides viewModelStoreOwner) {
                     GameSettingsView(
                         args = gameSettings,
-                        showStrategySelectorFor = Disk.valueOf(backStackEntry.arguments?.getString("disk")),
+                        pickStrategyFor = Disk.valueOf(backStackEntry.arguments?.getString(
+                            PICK_STRATEGY
+                        )),
                         modifier = destinationModifier,
                         parentLoop = loop,
                     )

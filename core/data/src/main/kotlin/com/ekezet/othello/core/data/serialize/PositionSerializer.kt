@@ -4,15 +4,15 @@ import com.ekezet.othello.core.data.models.Position
 import com.ekezet.othello.core.data.models.x
 import com.ekezet.othello.core.data.models.y
 
-private val letters: List<Char> by lazy {
-    ('A'..'Z').toList()
+val PositionLetters: List<Char> by lazy {
+    ('A'..'H').toList()
 }
 
-private val numbers: List<Char> by lazy {
-    ('1'..'9').toList()
+val PositionNumbers: List<Char> by lazy {
+    ('1'..'8').toList()
 }
 
 fun Position.asString() = buildString {
-    append(letters[x])
-    append(numbers[y])
+    append(PositionLetters[x])
+    append(PositionNumbers[y])
 }

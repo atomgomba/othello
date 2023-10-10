@@ -26,5 +26,7 @@ sealed interface MainDestinations {
     data object GameSettings : MainDestinations {
         override val label: String = "game-settings"
         override val icon: ImageVector = Icons.Default.Settings
+
+        const val PICK_STRATEGY = "pickStrategy"
     }
 }

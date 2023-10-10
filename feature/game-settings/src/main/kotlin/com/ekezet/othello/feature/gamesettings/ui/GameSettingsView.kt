@@ -29,7 +29,7 @@ import org.koin.compose.koinInject
 @Composable
 fun GameSettingsView(
     args: GameSettings,
-    showStrategySelectorFor: Disk?,
+    pickStrategyFor: Disk?,
     modifier: Modifier = Modifier,
     parentLoop: AnyParentLoop? = null,
 ) {
@@ -39,14 +39,14 @@ fun GameSettingsView(
         dependency = koinInject(),
         args = args,
     ) {
-        GameSettingsViewImpl(showStrategySelectorFor, modifier)
+        GameSettingsViewImpl(pickStrategyFor, modifier)
     }
 }
 
 @ExperimentalMaterial3Api
 @Composable
 private fun GameSettingsState.GameSettingsViewImpl(
-    showStrategySelectorFor: Disk?,
+    pickStrategyFor: Disk?,
     modifier: Modifier = Modifier,
 ) {
     val sheetState = rememberModalBottomSheetState()
@@ -106,7 +106,7 @@ private fun GameSettingsState.GameSettingsViewImpl(
 
     StrategyPicker(
         selectingStrategyFor = selectingStrategyFor,
-        showStrategySelectorFor = showStrategySelectorFor,
+        pickStrategyFor = pickStrategyFor,
         sheetState = sheetState,
     )
 }

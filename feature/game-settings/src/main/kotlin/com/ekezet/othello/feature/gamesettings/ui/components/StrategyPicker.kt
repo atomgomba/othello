@@ -40,30 +40,35 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun GameSettingsState.StrategyPicker(
+    // FIXME
     selectingStrategyFor: Disk?,
-    showStrategySelectorFor: Disk?,
+    // FIXME
+    pickStrategyFor: Disk?,
     sheetState: SheetState,
 ) {
     val scope = rememberCoroutineScope()
-    var selectorAlreadyShown by rememberSaveable { mutableStateOf(false) }
+    var isFirstTimePicker by rememberSaveable { mutableStateOf(true) }
 
     if (selectingStrategyFor != null) {
+        // open normal selection
         StrategyPickerImpl(selectingStrategyFor, sheetState)
     }
 
     LaunchedEffect(key1 = selectingStrategyFor) {
+        // if picker is dismissed, need to update bottom sheet state too
         if (selectingStrategyFor == null && sheetState.isVisible) {
             scope.launch { sheetState.hide() }
         }
     }
 
-    if (!selectorAlreadyShown) {
-        LaunchedEffect(key1 = showStrategySelectorFor) {
-            if (showStrategySelectorFor != null && !sheetState.isVisible && selectingStrategyFor == null) {
-                onShowStrategiesClick(showStrategySelectorFor)
+    if (isFirstTimePicker && pickStrategyFor != null) {
+        LaunchedEffect(key1 = pickStrategyFor) {
+            if (!sheetState.isVisible && selectingStrategyFor == null) {
+                // picker isn't already open, open it now
+                onShowStrategiesClick(pickStrategyFor)
             }
         }
-        selectorAlreadyShown = true
+        isFirstTimePicker = false
     }
 }
 

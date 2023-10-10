@@ -8,7 +8,7 @@ import com.ekezet.othello.core.ui.R.string
 
 val Disk.stringResource: String
     @Composable inline get() = stringResource(
-        if (this == Disk.Dark) {
+        if (isDark) {
             string.common__dark
         } else {
             string.common__light
