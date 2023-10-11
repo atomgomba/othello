@@ -7,5 +7,5 @@ import kotlinx.coroutines.flow.StateFlow
 interface GameSettingsStore {
     val settings: StateFlow<GameSettings>
 
-    fun update(new: IGameSettings)
+    suspend fun update(new: IGameSettings)
 }

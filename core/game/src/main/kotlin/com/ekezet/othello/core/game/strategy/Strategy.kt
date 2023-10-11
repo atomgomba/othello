@@ -12,6 +12,13 @@ interface Strategy {
 val Strategy?.requiredName: String
     get() = this?.name ?: "Human"
 
+val Strategy?.wrappedName: String
+    get() = if (this is DecoratedStrategy) {
+        wrapped.wrappedName
+    } else {
+        requiredName
+    }
+
 val Strategies
     get() = buildSet {
         add(HumanPlayer)
