@@ -1,7 +1,7 @@
 package com.ekezet.othello.main
 
 import android.content.Context
-import androidx.compose.runtime.Stable
+import androidx.compose.runtime.Immutable
 import com.ekezet.hurok.ParentLoop
 import com.ekezet.othello.core.game.data.BoardDisplayOptions
 import com.ekezet.othello.core.game.data.IGameSettings
@@ -21,7 +21,7 @@ internal data class MainModel(
     override val displayOptions: BoardDisplayOptions = defaultDisplayOptions,
 ) : IGameSettings
 
-@Stable
+@Immutable
 internal data class MainState(
     val onNewGameClick: () -> Unit,
     val onToggleIndicatorsClick: () -> Unit,

@@ -1,7 +1,7 @@
 package com.ekezet.othello.feature.gameboard
 
 import androidx.compose.animation.core.AnimationConstants.DefaultDurationMillis
-import androidx.compose.runtime.Stable
+import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
 import com.ekezet.hurok.ParentLoop
 import com.ekezet.othello.core.data.models.Disk
@@ -56,7 +56,7 @@ data class GameBoardModel(
     )
 }
 
-@Stable
+@Immutable
 internal data class GameBoardState(
     val board: BoardList,
     val overlay: BoardOverlayList,

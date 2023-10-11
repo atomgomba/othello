@@ -10,8 +10,8 @@ value class Disk private constructor(
 
         fun valueOf(value: String?): Disk? =
             when (value) {
-                Light.toString() -> Light
-                Dark.toString() -> Dark
+                "$Light" -> Light
+                "$Dark" -> Dark
                 else -> null
             }
     }

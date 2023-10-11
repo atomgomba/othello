@@ -13,6 +13,8 @@ dependencies {
     implementation(project(":core:logging"))
     implementation(project(":core:ui"))
 
+    implementation(libs.kotlinx.immutable)
+
     implementation(libs.hurokBase)
     implementation(libs.hurokCompose)
 

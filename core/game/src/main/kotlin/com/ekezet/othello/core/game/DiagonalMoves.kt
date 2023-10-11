@@ -4,6 +4,7 @@ import com.ekezet.othello.core.data.models.Board
 import com.ekezet.othello.core.data.models.BoardHeight
 import com.ekezet.othello.core.data.models.BoardWidth
 import com.ekezet.othello.core.data.models.Disk
+import com.ekezet.othello.core.data.models.Position
 
 internal fun Board.getLeftDiagonal(fromX: Int, fromY: Int) =
     getDiagonal(fromX, fromY until BoardHeight)
@@ -23,3 +24,21 @@ private fun Board.getDiagonal(fromX: Int, rangeY: IntProgression): Array<Disk?> 
     }
     return result
 }
+
+internal fun Set<ValidSegment<Int>>.transposeRight(x: Int, y: Int): Set<ValidSegment<Position>> =
+    map {
+        ValidSegment(
+            start = Position(x + it.start, y + it.start),
+            end = Position(x + it.end, y + it.end),
+            isStartValid = it.isStartValid,
+        )
+    }.toSet()
+
+internal fun Set<ValidSegment<Int>>.transposeLeft(x: Int, y: Int): Set<ValidSegment<Position>> =
+    map {
+        ValidSegment(
+            start = Position(x + it.start, y - it.start),
+            end = Position(x + it.end, y - it.end),
+            isStartValid = it.isStartValid,
+        )
+    }.toSet()

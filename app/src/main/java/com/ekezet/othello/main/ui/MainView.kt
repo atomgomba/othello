@@ -32,6 +32,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -99,7 +100,9 @@ private fun MainState.MainViewImpl(
                 ),
                 title = { Text(stringResource(string.app_name)) },
                 navigationIcon = {
-                    if (currentDestination == MainDestinations.GameSettings.label) {
+                    AnimatedVisibility(
+                        visible = currentDestination == MainDestinations.GameSettings.label
+                    ) {
                         IconButton(onClick = { navController.popBackStack() }) {
                             Icon(
                                 imageVector = Icons.Default.ArrowBack,
@@ -140,7 +143,9 @@ private fun MainState.MainViewImpl(
             startDestination = MainDestinations.Start.label,
             modifier = Modifier.padding(innerPadding),
         ) {
-            composable(MainDestinations.GameBoard.label) {
+            composable(
+                route = MainDestinations.GameBoard.label,
+            ) {
                 currentDestination = MainDestinations.GameBoard.label
                 CompositionLocalProvider(LocalViewModelStoreOwner provides viewModelStoreOwner) {
                     GameBoardView(
@@ -157,25 +162,24 @@ private fun MainState.MainViewImpl(
             }
 
             composable(
-                "${MainDestinations.GameSettings.label}?$PICK_STRATEGY={$PICK_STRATEGY}",
+                route = "${MainDestinations.GameSettings.label}?$PICK_STRATEGY={$PICK_STRATEGY}",
                 arguments = listOf(
                     navArgument(PICK_STRATEGY) {
+                        type = NavType.StringType
                         nullable = true
                         defaultValue = null
                     },
                 ),
-            ) { backStackEntry ->
+            ) { entry ->
                 currentDestination = MainDestinations.GameSettings.label
                 CompositionLocalProvider(LocalViewModelStoreOwner provides viewModelStoreOwner) {
                     GameSettingsView(
                         args = gameSettings,
-                        pickStrategyFor = Disk.valueOf(
-                            backStackEntry.arguments?.getString(
-                                PICK_STRATEGY,
-                            ),
-                        ),
                         modifier = destinationModifier,
                         parentLoop = loop,
+                        pickStrategyFor = Disk.valueOf(
+                            entry.arguments?.getString(PICK_STRATEGY),
+                        ),
                     )
                 }
             }

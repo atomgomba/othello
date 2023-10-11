@@ -156,7 +156,7 @@ private fun HorizontalPositions(
     ) {
         for ((i, letter) in PositionLetters.withIndex()) {
             Text(
-                text = letter.toString(),
+                text = "$letter",
                 textAlign = TextAlign.Center,
                 color = if (nextMovePosition?.x == i) Color.Unspecified else MaterialTheme.colorScheme.outlineVariant,
                 modifier = Modifier.weight(CELL_WEIGHT),
@@ -174,7 +174,7 @@ private fun VerticalPosition(
     Column {
         Box {
             Text(
-                text = number.toString(),
+                text = "$number",
                 textAlign = TextAlign.Center,
                 color = if (nextMovePosition?.y == number - 1) Color.Unspecified else MaterialTheme.colorScheme.outlineVariant,
                 modifier = Modifier

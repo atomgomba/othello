@@ -18,16 +18,22 @@ data class ValidSegment<out T : Any>(
     val isStartValid: Boolean,
 )
 
+data class ValidMove(
+    val position: Position,
+    val segment: ValidSegment<Position>,
+)
+
+fun Set<ValidMove>.isValid(position: Position): Boolean =
+    any { it.position == position }
+
+fun Set<ValidMove>.isInvalid(position: Position) =
+    !isValid(position)
+
 internal val <T : Any> ValidSegment<T>.validPosition: T
     get() = if (isStartValid) start else end
 
 internal val <T : Any> ValidSegment<T>.invalidPosition: T
     get() = if (isStartValid) end else start
-
-data class ValidMove(
-    val position: Position,
-    val segment: ValidSegment<Position>,
-)
 
 internal fun Board.findValidMoves(subject: Disk): Set<ValidMove> {
     val result = mutableSetOf<ValidSegment<Position>>()
@@ -65,12 +71,6 @@ internal fun Board.findValidMoves(subject: Disk): Set<ValidMove> {
         )
     }.toSet()
 }
-
-fun Set<ValidMove>.isValid(position: Position): Boolean =
-    any { it.position == position }
-
-fun Set<ValidMove>.isInvalid(position: Position) =
-    !isValid(position)
 
 internal fun findValidIndices(disks: Array<out Disk?>, subject: Disk): Set<ValidSegment<Int>> {
     if (disks.toSet().size != 3) {
@@ -115,24 +115,6 @@ internal fun Set<ValidSegment<Int>>.mapToX(x: Int): Set<ValidSegment<Position>> 
         isStartValid = it.isStartValid,
     )
 }.toSet()
-
-internal fun Set<ValidSegment<Int>>.transposeRight(x: Int, y: Int): Set<ValidSegment<Position>> =
-    map {
-        ValidSegment(
-            start = Position(x + it.start, y + it.start),
-            end = Position(x + it.end, y + it.end),
-            isStartValid = it.isStartValid,
-        )
-    }.toSet()
-
-internal fun Set<ValidSegment<Int>>.transposeLeft(x: Int, y: Int): Set<ValidSegment<Position>> =
-    map {
-        ValidSegment(
-            start = Position(x + it.start, y - it.start),
-            end = Position(x + it.end, y - it.end),
-            isStartValid = it.isStartValid,
-        )
-    }.toSet()
 
 internal fun ValidSegment<Position>.parts(): Set<Position> {
     val result = mutableListOf<Position>()

@@ -1,6 +1,6 @@
 package com.ekezet.othello.feature.gamesettings
 
-import androidx.compose.runtime.Stable
+import androidx.compose.runtime.Immutable
 import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.data.models.isLight
 import com.ekezet.othello.core.game.data.BoardDisplayOptions
@@ -24,7 +24,7 @@ data class GameSettingsModel(
     internal fun resetSelection() = copy(selectingStrategyFor = null)
 }
 
-@Stable
+@Immutable
 internal data class GameSettingsState(
     internal val isLightPreferSides: Boolean,
     internal val isDarkPreferSides: Boolean,

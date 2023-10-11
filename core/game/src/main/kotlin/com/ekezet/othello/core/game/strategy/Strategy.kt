@@ -7,7 +7,12 @@ interface Strategy {
     val name: String
 
     fun deriveNext(state: GameState): Position?
+
+    companion object Factory
 }
+
+fun Strategy.Factory.ofName(name: String): Strategy? =
+    Strategies.firstOrNull { it?.name == name }
 
 val Strategy?.requiredName: String
     get() = this?.name ?: "Human"
