@@ -90,6 +90,7 @@ private fun GameBoardState.GameBoardViewImpl(
                 GameBoard(
                     board = board,
                     showPositions = showBoardPositions,
+                    nextMovePosition = nextMovePosition,
                     ended = ended,
                     overlay = overlay,
                     isClickable = isHumanPlayer,

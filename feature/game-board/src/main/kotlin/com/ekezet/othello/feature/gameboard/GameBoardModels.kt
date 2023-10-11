@@ -20,7 +20,7 @@ import com.ekezet.othello.feature.gameboard.ui.viewModels.BoardOverlayList
 /**
  * Give a little time for humans to follow changes on the board
  */
-internal const val ACTION_DELAY_MILLIS = 300L
+internal const val ACTION_DELAY_MILLIS = 500L
 
 data class GameBoardModel(
     internal val gameState: GameState = defaultGameState,

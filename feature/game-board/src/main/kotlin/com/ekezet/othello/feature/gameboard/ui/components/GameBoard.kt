@@ -29,6 +29,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.ekezet.othello.core.data.models.BoardHeight
 import com.ekezet.othello.core.data.models.BoardWidth
+import com.ekezet.othello.core.data.models.Position
+import com.ekezet.othello.core.data.models.x
+import com.ekezet.othello.core.data.models.y
 import com.ekezet.othello.core.data.serialize.PositionLetters
 import com.ekezet.othello.core.ui.components.GamePiece
 import com.ekezet.othello.feature.gameboard.GameEnd
@@ -51,6 +54,7 @@ internal fun GameBoard(
     modifier: Modifier = Modifier,
     background: Color = Color(0xFF338033),
     showPositions: Boolean = false,
+    nextMovePosition: Position? = null,
     ended: GameEnd? = null,
     overlay: BoardOverlayList? = null,
     isClickable: Boolean = true,
@@ -62,6 +66,7 @@ internal fun GameBoard(
                 board = board,
                 background = background,
                 showPositions = showPositions,
+                nextMovePosition = nextMovePosition,
                 ended = ended,
                 overlay = overlay,
                 isClickable = isClickable,
@@ -77,6 +82,7 @@ private fun GameBoardImpl(
     board: BoardList,
     background: Color = Color(0xFF338033),
     showPositions: Boolean,
+    nextMovePosition: Position? = null,
     ended: GameEnd? = null,
     overlay: BoardOverlayList? = null,
     isClickable: Boolean = true,
@@ -87,7 +93,7 @@ private fun GameBoardImpl(
     ) {
         for (rowIndex in 0 until BoardHeight) {
             if (showPositions && rowIndex == 0) {
-                HorizontalPositions()
+                HorizontalPositions(nextMovePosition = nextMovePosition)
             }
 
             Row(
@@ -100,13 +106,13 @@ private fun GameBoardImpl(
                     val overlayItem = overlay?.getAt(colIndex, rowIndex)
 
                     if (showPositions && colIndex == 0) {
-                        VerticalPosition(rowIndex + 1)
+                        VerticalPosition(number = rowIndex + 1, nextMovePosition = nextMovePosition)
                     }
 
                     key(colIndex, rowIndex, disk, overlayItem?.composeKey, ended) {
                         Box(
                             modifier = Modifier
-                                .roundedBoard(colIndex, rowIndex)
+                                .roundedCell(colIndex, rowIndex)
                                 .background(color = background)
                                 .weight(CELL_WEIGHT)
                                 .aspectRatio(1F)
@@ -139,19 +145,20 @@ private fun GameBoardImpl(
 }
 
 @Composable
-private fun HorizontalPositions() {
+private fun HorizontalPositions(
+    nextMovePosition: Position?,
+) {
     Row(
         modifier = Modifier
             .padding(start = positionSize)
             .fillMaxWidth()
             .height(positionSize)
     ) {
-        for (letter in PositionLetters) {
+        for ((i, letter) in PositionLetters.withIndex()) {
             Text(
-                text = letter.toString(),
-                textAlign = TextAlign.Center,
-                color = MaterialTheme.colorScheme.outlineVariant,
-                modifier = Modifier.weight(CELL_WEIGHT)
+                text = letter.toString(), textAlign = TextAlign.Center,
+                color = if (nextMovePosition?.x == i) Color.Unspecified else MaterialTheme.colorScheme.outlineVariant,
+                modifier = Modifier.weight(CELL_WEIGHT),
             )
         }
     }
@@ -159,13 +166,16 @@ private fun HorizontalPositions() {
 
 @ExperimentalLayoutApi
 @Composable
-private fun VerticalPosition(number: Int) {
+private fun VerticalPosition(
+    number: Int,
+    nextMovePosition: Position?,
+) {
     Column {
         Box {
             Text(
                 text = number.toString(),
                 textAlign = TextAlign.Center,
-                color = MaterialTheme.colorScheme.outlineVariant,
+                color = if (nextMovePosition?.y == number - 1) Color.Unspecified else MaterialTheme.colorScheme.outlineVariant,
                 modifier = Modifier
                     .width(positionSize)
                     .align(Alignment.Center),
@@ -174,15 +184,14 @@ private fun VerticalPosition(number: Int) {
     }
 }
 
-private fun Modifier.roundedBoard(x: Int, y: Int) =
-    if (x == 0 && y == 0) {
-        clip(shape = RoundedCornerShape(topStart = boardCornerRadius))
-    } else if (x == 7 && y == 0) {
-        clip(shape = RoundedCornerShape(topEnd = boardCornerRadius))
-    } else if (x == 0 && y == 7) {
-        clip(shape = RoundedCornerShape(bottomStart = boardCornerRadius))
-    } else if (x == 7 && y == 7) {
-        clip(shape = RoundedCornerShape(bottomEnd = boardCornerRadius))
-    } else {
-        this
-    }
+private fun Modifier.roundedCell(x: Int, y: Int) = if (x == 0 && y == 0) {
+    clip(shape = RoundedCornerShape(topStart = boardCornerRadius))
+} else if (x == 7 && y == 0) {
+    clip(shape = RoundedCornerShape(topEnd = boardCornerRadius))
+} else if (x == 0 && y == 7) {
+    clip(shape = RoundedCornerShape(bottomStart = boardCornerRadius))
+} else if (x == 7 && y == 7) {
+    clip(shape = RoundedCornerShape(bottomEnd = boardCornerRadius))
+} else {
+    this
+}
