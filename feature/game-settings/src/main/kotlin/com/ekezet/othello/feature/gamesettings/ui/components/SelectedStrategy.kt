@@ -1,6 +1,5 @@
 package com.ekezet.othello.feature.gamesettings.ui.components
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -16,7 +15,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.ui.R.string
@@ -31,48 +29,54 @@ internal fun GameSettingsState.SelectedStrategy(
     name: String?,
     preferSides: Boolean,
 ) {
-    Row(
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onShowStrategiesClick(disk) },
+    Column(
+        verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        GamePiece(
-            disk = disk,
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
             modifier = Modifier
-                .size(48.dp)
-                .border(
-                    width = 1.dp,
+                .fillMaxWidth()
+                .clickable { onShowStrategiesClick(disk) },
+        ) {
+            Column {
+                Text(
+                    text = stringResource(
+                        id = string.game_settings__title__strategy,
+                        disk.stringResource,
+                    ),
+                )
+
+                Spacer(Modifier.height(4.dp))
+
+                Text(
+                    text = name.orHumanPlayer,
+                    style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.outline,
-                    shape = CircleShape,
-                ),
-        )
+                )
+            }
 
-        Column {
-            Text(
-                text = stringResource(
-                    id = string.game_settings__title__strategy,
-                    disk.stringResource,
-                ),
-                style = MaterialTheme.typography.labelSmall,
-            )
+            Spacer(modifier = Modifier.weight(1F))
 
-            Spacer(Modifier.height(4.dp))
-
-            Text(
-                text = name.orHumanPlayer,
-                fontWeight = FontWeight.Bold,
+            GamePiece(
+                disk = disk,
+                modifier = Modifier
+                    .size(32.dp)
+                    .border(
+                        width = 1.dp,
+                        color = MaterialTheme.colorScheme.outline,
+                        shape = CircleShape,
+                    ),
             )
         }
-    }
 
-    AnimatedVisibility(visible = disk.isNotHuman) {
-        SwitchRow(
-            label = stringResource(id = string.game_settings__switch__prefer_sides),
-            checked = preferSides,
-            onCheckedChange = { checked ->
-                onPreferSidesClick(disk, checked)
-            }
-        )
+        if (disk.isNotHuman) {
+            SwitchRow(
+                label = stringResource(id = string.game_settings__switch__prefer_sides),
+                checked = preferSides,
+                onCheckedChange = { checked ->
+                    onPreferSidesClick(disk, checked)
+                },
+            )
+        }
     }
 }

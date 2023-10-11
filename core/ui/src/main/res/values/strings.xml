@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="main__menu__new_game">Reset game</string>
-    <string name="main__menu__toggle_indicators">Toggle indicators</string>
     <string name="main__menu__share_board">Share board</string>
+    <string name="main__menu__toggle_indicators">Toggle indicators</string>
 
-    <string name="common__human_player">Human Player</string>
     <string name="common__dark">Dark</string>
+    <string name="common__human_player">Human Player</string>
     <string name="common__light">Light</string>
 
-    <string name="game_board__header__turn">Turn: %0$d</string>
-    <string name="game_board__header__passed">Passed Turn</string>
-    <string name="game_board__footer__winner">Winner!</string>
     <string name="game_board__footer__tie_game">Tie Game!</string>
+    <string name="game_board__footer__winner">Winner!</string>
+    <string name="game_board__header__passed">Passed Turn</string>
+    <string name="game_board__header__turn">Turn: %d</string>
 
+    <string name="game_settings__header__board">Board</string>
     <string name="game_settings__header__players">Players</string>
-    <string name="game_settings__title__strategy">%0$s strategy</string>
     <string name="game_settings__switch__prefer_sides">Prefer sides</string>
+    <string name="game_settings__title__strategy">%s strategy</string>
 </resources>

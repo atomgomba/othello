@@ -45,7 +45,7 @@ fun GameSettingsView(
 
 @ExperimentalMaterial3Api
 @Composable
-private fun GameSettingsState.GameSettingsViewImpl(
+internal fun GameSettingsState.GameSettingsViewImpl(
     pickStrategyFor: Disk?,
     modifier: Modifier = Modifier,
 ) {
@@ -53,17 +53,13 @@ private fun GameSettingsState.GameSettingsViewImpl(
 
     LazyColumn(
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(16.dp),
+        verticalArrangement = Arrangement.spacedBy(24.dp),
     ) {
         item {
-            Text(
+            SettingsHeader(
                 text = stringResource(id = string.game_settings__header__players),
-                style = MaterialTheme.typography.titleSmall,
-                color = MaterialTheme.colorScheme.primary,
             )
         }
-
-        item { Spacer(Modifier.height(4.dp)) }
 
         item {
             SelectedStrategy(
@@ -83,7 +79,13 @@ private fun GameSettingsState.GameSettingsViewImpl(
             )
         }
 
-        item { Divider() }
+        item { Spacer(Modifier.height(4.dp)) }
+
+        item {
+            SettingsHeader(
+                text = stringResource(id = string.game_settings__header__board),
+            )
+        }
 
         item {
             SwitchRow(
@@ -92,8 +94,6 @@ private fun GameSettingsState.GameSettingsViewImpl(
                 onCheckedChange = { onShowPossibleMovesClick() },
             )
         }
-
-        item { Divider() }
 
         item {
             SwitchRow(
@@ -108,5 +108,14 @@ private fun GameSettingsState.GameSettingsViewImpl(
         selectingStrategyFor = selectingStrategyFor,
         pickStrategyFor = pickStrategyFor,
         sheetState = sheetState,
+    )
+}
+
+@Composable
+private fun SettingsHeader(text: String) {
+    Text(
+        text = text,
+        style = MaterialTheme.typography.titleSmall,
+        color = MaterialTheme.colorScheme.primary,
     )
 }

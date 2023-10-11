@@ -11,14 +11,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
 
 @Composable
-internal fun SwitchRow(label: String, checked: Boolean, onCheckedChange: (value: Boolean) -> Unit) {
+internal fun SwitchRow(
+    label: String,
+    checked: Boolean,
+    onCheckedChange: (value: Boolean) -> Unit,
+) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.toggleable(
-            value = checked,
-            role = Role.Switch,
-            onValueChange = onCheckedChange,
-        )
+        modifier = Modifier
+            .toggleable(
+                value = checked,
+                role = Role.Switch,
+                onValueChange = onCheckedChange,
+            ),
     ) {
         Text(label)
         Spacer(Modifier.weight(1F))

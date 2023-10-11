@@ -19,40 +19,40 @@ data class GameSettingsModel(
     override val lightStrategy: Strategy? = defaultLightStrategy,
     override val darkStrategy: Strategy? = defaultDarkStrategy,
     override val displayOptions: BoardDisplayOptions = defaultDisplayOptions,
-    val selectingStrategyFor: Disk? = null,
+    internal val selectingStrategyFor: Disk? = null,
 ) : IGameSettings {
-    fun resetSelection() = copy(selectingStrategyFor = null)
+    internal fun resetSelection() = copy(selectingStrategyFor = null)
 }
 
 @Stable
 internal data class GameSettingsState(
-    val isLightPreferSides: Boolean,
-    val isDarkPreferSides: Boolean,
-    val displayOptions: BoardDisplayOptions,
-    val lightStrategy: Strategy? = defaultLightStrategy,
-    val darkStrategy: Strategy? = defaultDarkStrategy,
-    val selectingStrategyFor: Disk?,
-    val onShowStrategiesClick: (disk: Disk) -> Unit,
-    val onDismissStrategies: () -> Unit,
-    val onPreferSidesClick: (disk: Disk, prefer: Boolean) -> Unit,
-    val onStrategySelect: (disk: Disk, strategy: Strategy?) -> Unit,
-    val onShowPossibleMovesClick: () -> Unit,
-    val onShowBoardPositionsClick: () -> Unit,
+    internal val isLightPreferSides: Boolean,
+    internal val isDarkPreferSides: Boolean,
+    internal val displayOptions: BoardDisplayOptions,
+    internal val lightStrategy: Strategy? = defaultLightStrategy,
+    internal val darkStrategy: Strategy? = defaultDarkStrategy,
+    internal val selectingStrategyFor: Disk?,
+    internal val onShowStrategiesClick: (disk: Disk) -> Unit,
+    internal val onDismissStrategies: () -> Unit,
+    internal val onPreferSidesClick: (disk: Disk, prefer: Boolean) -> Unit,
+    internal val onStrategySelect: (disk: Disk, strategy: Strategy?) -> Unit,
+    internal val onShowPossibleMovesClick: () -> Unit,
+    internal val onShowBoardPositionsClick: () -> Unit,
 ) {
-    val Disk.isNotHuman: Boolean
-        get() = if (isLight) {
+    internal val Disk.isNotHuman: Boolean
+        inline get() = if (isLight) {
             lightName != null
         } else {
             darkName != null
         }
 
-    val lightName: String?
-        get() = lightStrategy?.name
+    internal val lightName: String?
+        inline get() = lightStrategy?.name
 
-    val darkName: String?
-        get() = darkStrategy?.name
+    internal val darkName: String?
+        inline get() = darkStrategy?.name
 
-    fun Disk.isStrategySelected(strategy: Strategy?) = isStrategySelected(
+    internal fun Disk.isStrategySelected(strategy: Strategy?) = isStrategySelected(
         if (isLight) {
             lightStrategy
         } else {
