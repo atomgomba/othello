@@ -30,7 +30,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -88,9 +87,7 @@ private fun MainState.MainViewImpl(
     val viewModelStoreOwner = requireNotNull(LocalViewModelStoreOwner.current) {
         "ViewModelStoreOwner must be provided"
     }
-    val destinationModifier = Modifier
-        .padding(16.dp)
-        .fillMaxSize()
+    val destinationModifier = Modifier.fillMaxSize()
     var currentDestination: String by remember { mutableStateOf(MainDestinations.Start.label) }
 
     Scaffold(
@@ -152,7 +149,7 @@ private fun MainState.MainViewImpl(
                         parentLoop = loop,
                         onStrategyClick = { disk ->
                             navController.navigate(
-                                "${MainDestinations.GameSettings.label}?$PICK_STRATEGY=$disk"
+                                "${MainDestinations.GameSettings.label}?$PICK_STRATEGY=$disk",
                             )
                         },
                     )
@@ -172,9 +169,11 @@ private fun MainState.MainViewImpl(
                 CompositionLocalProvider(LocalViewModelStoreOwner provides viewModelStoreOwner) {
                     GameSettingsView(
                         args = gameSettings,
-                        pickStrategyFor = Disk.valueOf(backStackEntry.arguments?.getString(
-                            PICK_STRATEGY
-                        )),
+                        pickStrategyFor = Disk.valueOf(
+                            backStackEntry.arguments?.getString(
+                                PICK_STRATEGY,
+                            ),
+                        ),
                         modifier = destinationModifier,
                         parentLoop = loop,
                     )

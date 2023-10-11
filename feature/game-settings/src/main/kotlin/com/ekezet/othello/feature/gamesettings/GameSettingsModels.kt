@@ -38,6 +38,7 @@ internal data class GameSettingsState(
     internal val onStrategySelect: (disk: Disk, strategy: Strategy?) -> Unit,
     internal val onShowPossibleMovesClick: () -> Unit,
     internal val onShowBoardPositionsClick: () -> Unit,
+    internal val onGrayscaleModeClick: () -> Unit,
 ) {
     internal val Disk.isNotHuman: Boolean
         inline get() = if (isLight) {

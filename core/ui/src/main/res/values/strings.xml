@@ -15,6 +15,9 @@
 
     <string name="game_settings__header__board">Board</string>
     <string name="game_settings__header__players">Players</string>
+    <string name="game_settings__switch__grayscale_mode">Grayscale mode</string>
     <string name="game_settings__switch__prefer_sides">Prefer sides</string>
+    <string name="game_settings__switch__show_positions">Show positions</string>
+    <string name="game_settings__switch__show_possible_moves">Show possible moves</string>
     <string name="game_settings__title__strategy">%s strategy</string>
 </resources>

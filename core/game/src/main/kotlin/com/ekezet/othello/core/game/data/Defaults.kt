@@ -29,6 +29,7 @@ val defaultDisplayOptions: BoardDisplayOptions
     inline get() = BoardDisplayOptions(
         showPossibleMoves = true,
         showBoardPositions = false,
+        isGrayscaleMode = false,
     )
 
 val defaultDarkStrategy: Strategy? = HumanPlayer

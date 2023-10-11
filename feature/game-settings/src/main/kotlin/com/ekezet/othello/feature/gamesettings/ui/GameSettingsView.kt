@@ -3,6 +3,7 @@ package com.ekezet.othello.feature.gamesettings.ui
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -52,7 +53,9 @@ internal fun GameSettingsState.GameSettingsViewImpl(
     val sheetState = rememberModalBottomSheetState()
 
     LazyColumn(
-        modifier = modifier,
+        modifier = Modifier
+            .padding(top = 16.dp)
+            .then(modifier),
         verticalArrangement = Arrangement.spacedBy(24.dp),
     ) {
         item {
@@ -69,7 +72,7 @@ internal fun GameSettingsState.GameSettingsViewImpl(
             )
         }
 
-        item { Divider() }
+        item { Divider(modifier = Modifier.padding(horizontal = 32.dp)) }
 
         item {
             SelectedStrategy(
@@ -89,7 +92,7 @@ internal fun GameSettingsState.GameSettingsViewImpl(
 
         item {
             SwitchRow(
-                label = "Show possible moves",
+                label = stringResource(id = string.game_settings__switch__show_possible_moves),
                 checked = displayOptions.showPossibleMoves,
                 onCheckedChange = { onShowPossibleMovesClick() },
             )
@@ -97,9 +100,17 @@ internal fun GameSettingsState.GameSettingsViewImpl(
 
         item {
             SwitchRow(
-                label = "Show board positions",
+                label = stringResource(id = string.game_settings__switch__show_positions),
                 checked = displayOptions.showBoardPositions,
                 onCheckedChange = { onShowBoardPositionsClick() },
+            )
+        }
+
+        item {
+            SwitchRow(
+                label = stringResource(id = string.game_settings__switch__grayscale_mode),
+                checked = displayOptions.isGrayscaleMode,
+                onCheckedChange = { onGrayscaleModeClick() },
             )
         }
     }
@@ -116,5 +127,7 @@ private fun SettingsHeader(text: String) {
         text = text,
         style = MaterialTheme.typography.titleSmall,
         color = MaterialTheme.colorScheme.primary,
+        modifier = Modifier
+            .padding(horizontal = 16.dp),
     )
 }

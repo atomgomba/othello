@@ -56,7 +56,7 @@ internal data object OnShowPossibleMovesClicked : GameSettingsAction {
         val updated = copy(
             displayOptions = displayOptions.copy(
                 showPossibleMoves = !displayOptions.showPossibleMoves,
-            )
+            ),
         )
         return outcome(updated, PublishGameSettings(updated))
     }
@@ -66,8 +66,19 @@ internal data object OnShowBoardPositionsClicked : GameSettingsAction {
     override fun GameSettingsModel.proceed(): Next<GameSettingsModel, GameSettingsDependency> {
         val updated = copy(
             displayOptions = displayOptions.copy(
-                showBoardPositions = !displayOptions.showBoardPositions
-            )
+                showBoardPositions = !displayOptions.showBoardPositions,
+            ),
+        )
+        return outcome(updated, PublishGameSettings(updated))
+    }
+}
+
+internal data object OnGrayscaleModeClicked : GameSettingsAction {
+    override fun GameSettingsModel.proceed(): Next<GameSettingsModel, GameSettingsDependency> {
+        val updated = copy(
+            displayOptions = displayOptions.copy(
+                isGrayscaleMode = !displayOptions.isGrayscaleMode,
+            ),
         )
         return outcome(updated, PublishGameSettings(updated))
     }

@@ -2,6 +2,7 @@ package com.ekezet.othello.feature.gameboard
 
 import androidx.compose.animation.core.AnimationConstants.DefaultDurationMillis
 import androidx.compose.runtime.Stable
+import androidx.compose.ui.graphics.Color
 import com.ekezet.hurok.ParentLoop
 import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.data.models.DiskCount
@@ -66,14 +67,20 @@ internal data class GameBoardState(
     val opponentName: String?,
     val diskCount: DiskCount,
     val nextMovePosition: Position?,
-    val showPossibleMoves: Boolean,
-    val showBoardPositions: Boolean,
+    val displayOptions: BoardDisplayOptions,
     val ended: GameEnd?,
     val celebrate: Boolean,
     val isHumanPlayer: Boolean,
     val passed: Boolean,
     val onCellClick: (x: Int, y: Int) -> Unit,
-)
+) {
+    internal val boardBackground: Color
+        inline get() = if (displayOptions.isGrayscaleMode) {
+            Color(0xFFC0C0C0)
+        } else {
+            Color(0xFF338033)
+        }
+}
 
 typealias GameBoardScope = ParentLoop<GameBoardModel, Unit>
 

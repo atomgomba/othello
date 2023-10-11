@@ -152,11 +152,12 @@ private fun HorizontalPositions(
         modifier = Modifier
             .padding(start = positionSize)
             .fillMaxWidth()
-            .height(positionSize)
+            .height(positionSize),
     ) {
         for ((i, letter) in PositionLetters.withIndex()) {
             Text(
-                text = letter.toString(), textAlign = TextAlign.Center,
+                text = letter.toString(),
+                textAlign = TextAlign.Center,
                 color = if (nextMovePosition?.x == i) Color.Unspecified else MaterialTheme.colorScheme.outlineVariant,
                 modifier = Modifier.weight(CELL_WEIGHT),
             )

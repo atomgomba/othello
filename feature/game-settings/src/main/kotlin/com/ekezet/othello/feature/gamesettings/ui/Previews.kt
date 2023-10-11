@@ -22,6 +22,7 @@ private val defaultState = GameSettingsState(
     onStrategySelect = { _, _ -> },
     onShowPossibleMovesClick = {},
     onShowBoardPositionsClick = {},
+    onGrayscaleModeClick = {},
 )
 
 @OptIn(ExperimentalMaterial3Api::class)

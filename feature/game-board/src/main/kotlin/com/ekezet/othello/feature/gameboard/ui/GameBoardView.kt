@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
@@ -78,7 +79,7 @@ private fun GameBoardState.GameBoardViewImpl(
     modifier: Modifier = Modifier,
 ) = with(loop) {
     Box(
-        modifier = modifier,
+        modifier = modifier.then(Modifier.padding(16.dp)),
     ) {
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -89,7 +90,8 @@ private fun GameBoardState.GameBoardViewImpl(
             item {
                 GameBoard(
                     board = board,
-                    showPositions = showBoardPositions,
+                    background = boardBackground,
+                    showPositions = displayOptions.showBoardPositions,
                     nextMovePosition = nextMovePosition,
                     ended = ended,
                     overlay = overlay,

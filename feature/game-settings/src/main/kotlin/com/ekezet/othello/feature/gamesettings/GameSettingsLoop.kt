@@ -35,6 +35,7 @@ internal class GameSettingsLoop private constructor(
             onStrategySelect = { disk, strategy -> emit(OnStrategyItemClicked(disk, strategy)) },
             onShowPossibleMovesClick = { emit(OnShowPossibleMovesClicked) },
             onShowBoardPositionsClick = { emit(OnShowBoardPositionsClicked) },
+            onGrayscaleModeClick = { emit(OnGrayscaleModeClicked) },
         )
     }
 
