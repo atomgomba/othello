@@ -40,9 +40,6 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun GameSettingsState.StrategyPicker(
-    // FIXME
-    selectingStrategyFor: Disk?,
-    // FIXME
     pickStrategyFor: Disk?,
     sheetState: SheetState,
 ) {

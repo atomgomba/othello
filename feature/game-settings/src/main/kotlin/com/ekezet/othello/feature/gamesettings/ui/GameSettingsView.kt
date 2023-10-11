@@ -105,7 +105,6 @@ internal fun GameSettingsState.GameSettingsViewImpl(
     }
 
     StrategyPicker(
-        selectingStrategyFor = selectingStrategyFor,
         pickStrategyFor = pickStrategyFor,
         sheetState = sheetState,
     )
