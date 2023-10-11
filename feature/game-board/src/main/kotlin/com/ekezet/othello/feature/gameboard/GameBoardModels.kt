@@ -1,5 +1,6 @@
 package com.ekezet.othello.feature.gameboard
 
+import androidx.compose.animation.core.AnimationConstants.DefaultDurationMillis
 import androidx.compose.runtime.Stable
 import com.ekezet.hurok.ParentLoop
 import com.ekezet.othello.core.data.models.Disk
@@ -20,7 +21,7 @@ import com.ekezet.othello.feature.gameboard.ui.viewModels.BoardOverlayList
 /**
  * Give a little time for humans to follow changes on the board
  */
-internal const val ACTION_DELAY_MILLIS = 500L
+internal const val ACTION_DELAY_MILLIS: Long = DefaultDurationMillis.times(1.5F).toLong()
 
 data class GameBoardModel(
     internal val gameState: GameState = defaultGameState,

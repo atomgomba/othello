@@ -41,10 +41,12 @@ internal sealed interface OverlayItem : HasComposeKey {
             get() = "valid-move-indicator-${disk.isDark}"
     }
 
-    data object NextMoveIndicatorOverlayItem : OverlayItem {
+    data class NextMoveIndicatorOverlayItem(
+        private val disk: Disk,
+    ) : OverlayItem {
         @Composable
         override fun Composable() {
-            NextMoveIndicator()
+            NextMoveIndicator(disk)
         }
 
         override val composeKey: Any

@@ -75,7 +75,7 @@ internal class GameBoardLoop private constructor(args: GameSettings) :
         }
 
         if (nextMovePosition != null) {
-            items.putAt(nextMovePosition, NextMoveIndicatorOverlayItem)
+            items.putAt(nextMovePosition, NextMoveIndicatorOverlayItem(currentDisk))
         }
 
         return items.toList()
