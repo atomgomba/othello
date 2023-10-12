@@ -17,17 +17,17 @@ import kotlinx.coroutines.launch
 @Composable
 internal fun NextMoveIndicator(disk: Disk) {
     val scope = rememberCoroutineScope()
-    val progress = remember { Animatable(initialValue = 0F) }
+    val size = remember { Animatable(initialValue = 0F) }
 
     Surface(
         shape = CircleShape,
-        color = disk.color.copy(alpha = .6F),
-        modifier = Modifier.fillMaxSize(progress.value),
+        color = disk.color,
+        modifier = Modifier.fillMaxSize(size.value),
     ) {}
 
     SideEffect {
         scope.launch {
-            progress.animateTo(.5F, spring())
+            size.animateTo(.8F, spring())
         }
     }
 }
