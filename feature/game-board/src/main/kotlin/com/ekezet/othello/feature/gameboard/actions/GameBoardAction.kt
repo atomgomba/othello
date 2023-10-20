@@ -58,7 +58,7 @@ internal data class OnTurnPassed(
     val newState: GameState,
 ) : GameBoardAction {
     override fun GameBoardModel.proceed() =
-        change(resetNextTurn(newState, passed = true).pickNextMoveAt(nextPosition))
+        change(resetNextTurn(newState).pickNextMoveAt(nextPosition))
 }
 
 internal data class OnGameEnded(val result: GameEnd) : GameBoardAction {

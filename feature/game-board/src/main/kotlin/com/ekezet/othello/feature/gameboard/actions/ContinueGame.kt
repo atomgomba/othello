@@ -16,7 +16,8 @@ internal fun GameBoardModel.nextTurn(newState: GameState): Next<GameBoardModel, 
     val effects = mutableListOf<GameBoardEffect>()
     val strategy = if (newState.currentDisk.isLight) lightStrategy else darkStrategy
     val nextMove = strategy?.deriveNext(newState)
-    if (nextMove != null) {
+    if (strategy != null && nextMove != null) {
+        // only wait if next player is not human
         effects.add(WaitBeforeNextTurn(nextMove))
     }
     return ContinueGame.outcome(
@@ -26,9 +27,12 @@ internal fun GameBoardModel.nextTurn(newState: GameState): Next<GameBoardModel, 
 }
 
 internal fun GameBoardModel.passTurn(newState: GameState): Next<GameBoardModel, Unit> {
-    val strategy = if (newState.currentDisk.isLight) lightStrategy else darkStrategy
-    val nextMove = strategy?.deriveNext(newState)
-    return ContinueGame.trigger(WaitBeforePass(nextMove, newState))
+    val nextStrategy = if (newState.currentDisk.isLight) lightStrategy else darkStrategy
+    val nextMove = nextStrategy?.deriveNext(newState)
+    return ContinueGame.outcome(
+        model = resetNextTurn(nextState = newState, passed = true),
+        WaitBeforePass(nextMove, newState),
+    )
 }
 
 internal fun GameBoardModel.finishGame(newState: GameState, winner: Disk?) = ContinueGame.outcome(
