@@ -2,7 +2,7 @@ package com.ekezet.othello.feature.gameboard
 
 import com.ekezet.hurok.Loop
 import com.ekezet.hurok.LoopBuilder
-import com.ekezet.othello.core.game.GameState
+import com.ekezet.othello.core.game.OthelloGameState
 import com.ekezet.othello.core.game.data.GameSettings
 import com.ekezet.othello.feature.gameboard.GameEnd.EndedWin
 import com.ekezet.othello.feature.gameboard.actions.GameBoardAction
@@ -15,26 +15,29 @@ import com.ekezet.othello.feature.gameboard.ui.viewModels.newEmptyOverlay
 import com.ekezet.othello.feature.gameboard.ui.viewModels.putAt
 import com.ekezet.othello.feature.gameboard.ui.viewModels.toList
 
-internal class GameBoardLoop private constructor(args: GameSettings) :
-    Loop<GameBoardState, GameBoardModel, GameSettings, Unit, GameBoardAction>(
-        args = args,
-    ) {
-
-    override fun initModel() = GameBoardModel()
-
-    override fun onLoopStarted() {
-        emit(OnGameStarted)
-    }
+internal class GameBoardLoop private constructor(
+    model: GameBoardModel,
+    args: GameSettings,
+    firstAction: GameBoardAction,
+) : Loop<GameBoardState, GameBoardModel, GameSettings, Unit, GameBoardAction>(
+    model = model,
+    args = args,
+    firstAction = firstAction,
+) {
+    private val actions = GameBoardStateActions(
+        onCellClick = { x, y -> emit(OnMoveMade(x to y)) },
+    )
 
     override fun GameBoardModel.applyArgs(args: GameSettings): GameBoardModel {
-        val strategyChanged = lightStrategy != args.lightStrategy || darkStrategy != args.darkStrategy
+        val strategyChanged =
+            lightStrategy != args.lightStrategy || darkStrategy != args.darkStrategy
         return copy(
             displayOptions = args.displayOptions,
             lightStrategy = args.lightStrategy,
             darkStrategy = args.darkStrategy,
         ).run {
             if (strategyChanged) {
-                resetNextTurn(GameState.new())
+                resetNextTurn(OthelloGameState.new())
             } else {
                 this
             }
@@ -43,6 +46,7 @@ internal class GameBoardLoop private constructor(args: GameSettings) :
 
     override fun renderState(model: GameBoardModel) = with(model) {
         GameBoardState(
+            actions = actions,
             board = gameState.currentBoard.toList(),
             overlay = createOverlayItems(),
             currentDisk = gameState.currentDisk,
@@ -57,7 +61,6 @@ internal class GameBoardLoop private constructor(args: GameSettings) :
             passed = passed,
             celebrate = ended is EndedWin && isHumanPlayer(ended.winner),
             isHumanPlayer = isHumanPlayer(gameState.currentDisk),
-            onCellClick = { x, y -> emit(OnMoveMade(x to y)) },
         )
     }
 
@@ -82,11 +85,12 @@ internal class GameBoardLoop private constructor(args: GameSettings) :
 
     internal companion object Builder :
         LoopBuilder<GameBoardState, GameBoardModel, GameSettings, Unit, GameBoardAction> {
-        override fun invoke(
+        override fun build(
             args: GameSettings?,
-            dependency: Unit?,
         ) = GameBoardLoop(
+            model = GameBoardModel(),
             args = requireNotNull(args) { "Arguments must be set" },
+            firstAction = OnGameStarted,
         )
     }
 }

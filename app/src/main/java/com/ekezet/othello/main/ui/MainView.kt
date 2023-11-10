@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -32,14 +31,17 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.navigation.NavHostController
+import androidx.navigation.NavOptions
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.ekezet.hurok.AnyActionEmitter
 import com.ekezet.hurok.compose.LoopWrapper
 import com.ekezet.othello.R.string
 import com.ekezet.othello.core.data.models.Disk
+import com.ekezet.othello.core.data.models.valueOf
 import com.ekezet.othello.core.game.data.BoardDisplayOptions
 import com.ekezet.othello.core.game.data.GameSettings
 import com.ekezet.othello.core.game.store.GameSettingsStore
@@ -47,10 +49,11 @@ import com.ekezet.othello.core.ui.R
 import com.ekezet.othello.feature.gameboard.ui.GameBoardView
 import com.ekezet.othello.feature.gamesettings.ui.GameSettingsView
 import com.ekezet.othello.main.MainLoop
-import com.ekezet.othello.main.MainLoopScope
 import com.ekezet.othello.main.MainState
 import com.ekezet.othello.main.navigation.MainDestinations
-import com.ekezet.othello.main.navigation.MainDestinations.GameSettings.PICK_STRATEGY
+import com.ekezet.othello.main.navigation.MainDestinations.GameBoardDestination
+import com.ekezet.othello.main.navigation.MainDestinations.GameSettingsDestination
+import com.ekezet.othello.main.navigation.MainDestinations.GameSettingsDestination.PickStrategy
 import kotlinx.coroutines.CoroutineScope
 import org.koin.compose.koinInject
 
@@ -67,10 +70,9 @@ internal fun MainView(
         builder = MainLoop,
         args = gameSettings,
         parentScope = parentScope,
-        dependency = koinInject(),
-    ) { loop ->
+    ) { mainEmitter ->
         MainViewImpl(
-            loop = loop,
+            mainEmitter = mainEmitter,
             gameSettings = gameSettings,
             navController = navController,
         )
@@ -81,7 +83,7 @@ internal fun MainView(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun MainState.MainViewImpl(
-    loop: MainLoopScope,
+    mainEmitter: AnyActionEmitter,
     gameSettings: GameSettings,
     navController: NavHostController,
 ) {
@@ -89,7 +91,16 @@ private fun MainState.MainViewImpl(
         "ViewModelStoreOwner must be provided"
     }
     val destinationModifier = Modifier.fillMaxSize()
-    var currentDestination: String by remember { mutableStateOf(MainDestinations.Start.label) }
+    var currentDestination: String by remember { mutableStateOf(MainDestinations.Start) }
+    val navOptions = remember {
+        NavOptions.Builder()
+            .setPopUpTo(
+                route = MainDestinations.Start,
+                inclusive = false,
+                saveState = true,
+            )
+            .build()
+    }
 
     Scaffold(
         topBar = {
@@ -101,7 +112,7 @@ private fun MainState.MainViewImpl(
                 title = { Text(stringResource(string.app_name)) },
                 navigationIcon = {
                     AnimatedVisibility(
-                        visible = currentDestination == MainDestinations.GameSettings.label
+                        visible = currentDestination == GameSettingsDestination.id
                     ) {
                         IconButton(onClick = { navController.popBackStack() }) {
                             Icon(
@@ -113,7 +124,7 @@ private fun MainState.MainViewImpl(
                 },
                 actions = {
                     AnimatedVisibility(
-                        visible = currentDestination == MainDestinations.GameBoard.label,
+                        visible = currentDestination == GameBoardDestination.id,
                     ) {
                         GameBoardToolbarActions(gameSettings.displayOptions)
                     }
@@ -125,8 +136,8 @@ private fun MainState.MainViewImpl(
                 BottomAppBar {
                     MainDestinations.All.forEach { destination ->
                         IconToggleButton(
-                            checked = currentDestination == destination.label,
-                            onCheckedChange = { navigate(destination.label) },
+                            checked = currentDestination == destination.id,
+                            onCheckedChange = { navigate(destination.id, navOptions) },
                         ) {
                             Icon(
                                 imageVector = destination.icon,
@@ -140,21 +151,22 @@ private fun MainState.MainViewImpl(
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = MainDestinations.Start.label,
+            startDestination = MainDestinations.Start,
             modifier = Modifier.padding(innerPadding),
         ) {
             composable(
-                route = MainDestinations.GameBoard.label,
+                route = GameBoardDestination.id,
             ) {
-                currentDestination = MainDestinations.GameBoard.label
+                currentDestination = GameBoardDestination.id
                 CompositionLocalProvider(LocalViewModelStoreOwner provides viewModelStoreOwner) {
                     GameBoardView(
                         args = gameSettings,
+                        parentEmitter = mainEmitter,
                         modifier = destinationModifier,
-                        parentLoop = loop,
                         onStrategyClick = { disk ->
                             navController.navigate(
-                                "${MainDestinations.GameSettings.label}?$PICK_STRATEGY=$disk",
+                                "${GameSettingsDestination.id}?$PickStrategy=$disk",
+                                navOptions,
                             )
                         },
                     )
@@ -162,23 +174,22 @@ private fun MainState.MainViewImpl(
             }
 
             composable(
-                route = "${MainDestinations.GameSettings.label}?$PICK_STRATEGY={$PICK_STRATEGY}",
+                route = "${GameSettingsDestination.id}?$PickStrategy={$PickStrategy}",
                 arguments = listOf(
-                    navArgument(PICK_STRATEGY) {
+                    navArgument(PickStrategy) {
                         type = NavType.StringType
                         nullable = true
                         defaultValue = null
                     },
                 ),
             ) { entry ->
-                currentDestination = MainDestinations.GameSettings.label
+                currentDestination = GameSettingsDestination.id
                 CompositionLocalProvider(LocalViewModelStoreOwner provides viewModelStoreOwner) {
                     GameSettingsView(
                         args = gameSettings,
                         modifier = destinationModifier,
-                        parentLoop = loop,
-                        pickStrategyFor = Disk.valueOf(
-                            entry.arguments?.getString(PICK_STRATEGY),
+                        selectStrategyFor = Disk.valueOf(
+                            entry.arguments?.getString(PickStrategy),
                         ),
                     )
                 }
@@ -192,7 +203,7 @@ private fun MainState.GameBoardToolbarActions(
     options: BoardDisplayOptions,
 ) = with(options) {
     Row {
-        IconButton(onClick = onNewGameClick) {
+        IconButton(onClick = actions.onNewGameClick) {
             Icon(
                 imageVector = Icons.Default.Refresh,
                 contentDescription = stringResource(R.string.main__menu__new_game),
@@ -201,20 +212,13 @@ private fun MainState.GameBoardToolbarActions(
 
         IconToggleButton(
             checked = showPossibleMoves,
-            onCheckedChange = { onToggleIndicatorsClick() },
+            onCheckedChange = { actions.onToggleIndicatorsClick() },
         ) {
             Icon(
                 painter = painterResource(
                     id = if (showPossibleMoves) R.drawable.ic_visibility else R.drawable.ic_visibility_off,
                 ),
                 contentDescription = stringResource(R.string.main__menu__toggle_indicators),
-            )
-        }
-
-        IconButton(onClick = onShareGameClick) {
-            Icon(
-                imageVector = Icons.Default.Share,
-                contentDescription = stringResource(R.string.main__menu__share_board),
             )
         }
     }

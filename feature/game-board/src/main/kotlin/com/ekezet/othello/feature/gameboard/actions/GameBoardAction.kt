@@ -4,8 +4,8 @@ import com.ekezet.hurok.Action
 import com.ekezet.hurok.Action.Next
 import com.ekezet.othello.core.data.models.Position
 import com.ekezet.othello.core.data.serialize.asString
-import com.ekezet.othello.core.game.GameState
 import com.ekezet.othello.core.game.NextTurn
+import com.ekezet.othello.core.game.OthelloGameState
 import com.ekezet.othello.core.game.PassTurn
 import com.ekezet.othello.core.game.Tie
 import com.ekezet.othello.core.game.Win
@@ -30,7 +30,7 @@ internal data object OnGameStarted : GameBoardAction {
 
 internal data class OnMoveMade(val position: Position) : GameBoardAction {
     override fun GameBoardModel.proceed() = if (gameState.validMoves.isValid(position)) {
-        change(pickNextMoveAt(position))
+        mutate(pickNextMoveAt(position))
     } else {
         skip
     }
@@ -55,12 +55,12 @@ internal data object ContinueGame : GameBoardAction {
 
 internal data class OnTurnPassed(
     val nextPosition: Position?,
-    val newState: GameState,
+    val newState: OthelloGameState,
 ) : GameBoardAction {
     override fun GameBoardModel.proceed() =
-        change(resetNextTurn(newState).pickNextMoveAt(nextPosition))
+        mutate(resetNextTurn(newState).pickNextMoveAt(nextPosition))
 }
 
 internal data class OnGameEnded(val result: GameEnd) : GameBoardAction {
-    override fun GameBoardModel.proceed() = change(copy(ended = result))
+    override fun GameBoardModel.proceed() = mutate(copy(ended = result))
 }

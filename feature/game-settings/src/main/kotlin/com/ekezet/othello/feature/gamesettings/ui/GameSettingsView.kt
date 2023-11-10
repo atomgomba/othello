@@ -14,7 +14,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.ekezet.hurok.AnyParentLoop
 import com.ekezet.hurok.compose.LoopWrapper
 import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.game.data.GameSettings
@@ -22,32 +21,28 @@ import com.ekezet.othello.core.ui.R.string
 import com.ekezet.othello.feature.gamesettings.GameSettingsLoop
 import com.ekezet.othello.feature.gamesettings.GameSettingsState
 import com.ekezet.othello.feature.gamesettings.ui.components.SelectedStrategy
-import com.ekezet.othello.feature.gamesettings.ui.components.StrategyPicker
+import com.ekezet.othello.feature.gamesettings.ui.components.StrategySelector
 import com.ekezet.othello.feature.gamesettings.ui.components.SwitchRow
-import org.koin.compose.koinInject
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GameSettingsView(
     args: GameSettings,
-    pickStrategyFor: Disk?,
+    selectStrategyFor: Disk?,
     modifier: Modifier = Modifier,
-    parentLoop: AnyParentLoop? = null,
 ) {
     LoopWrapper(
         builder = GameSettingsLoop,
-        parentLoop = parentLoop,
-        dependency = koinInject(),
         args = args,
     ) {
-        GameSettingsViewImpl(pickStrategyFor, modifier)
+        GameSettingsViewImpl(selectStrategyFor, modifier)
     }
 }
 
 @ExperimentalMaterial3Api
 @Composable
 internal fun GameSettingsState.GameSettingsViewImpl(
-    pickStrategyFor: Disk?,
+    selectStrategyFor: Disk?,
     modifier: Modifier = Modifier,
 ) {
     val sheetState = rememberModalBottomSheetState()
@@ -94,7 +89,7 @@ internal fun GameSettingsState.GameSettingsViewImpl(
             SwitchRow(
                 label = stringResource(id = string.game_settings__switch__show_possible_moves),
                 checked = displayOptions.showPossibleMoves,
-                onCheckedChange = { onShowPossibleMovesClick() },
+                onCheckedChange = { actions.onShowPossibleMovesClick() },
             )
         }
 
@@ -102,7 +97,7 @@ internal fun GameSettingsState.GameSettingsViewImpl(
             SwitchRow(
                 label = stringResource(id = string.game_settings__switch__show_positions),
                 checked = displayOptions.showBoardPositions,
-                onCheckedChange = { onShowBoardPositionsClick() },
+                onCheckedChange = { actions.onShowBoardPositionsClick() },
             )
         }
 
@@ -110,13 +105,13 @@ internal fun GameSettingsState.GameSettingsViewImpl(
             SwitchRow(
                 label = stringResource(id = string.game_settings__switch__grayscale_mode),
                 checked = displayOptions.isGrayscaleMode,
-                onCheckedChange = { onGrayscaleModeClick() },
+                onCheckedChange = { actions.onGrayscaleModeClick() },
             )
         }
     }
 
-    StrategyPicker(
-        pickStrategyFor = pickStrategyFor,
+    StrategySelector(
+        selectStrategyFor = selectStrategyFor,
         sheetState = sheetState,
     )
 }

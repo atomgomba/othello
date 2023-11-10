@@ -39,8 +39,8 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun GameSettingsState.StrategyPicker(
-    pickStrategyFor: Disk?,
+internal fun GameSettingsState.StrategySelector(
+    selectStrategyFor: Disk?,
     sheetState: SheetState,
 ) {
     val scope = rememberCoroutineScope()
@@ -48,7 +48,7 @@ internal fun GameSettingsState.StrategyPicker(
 
     if (selectingStrategyFor != null) {
         // open normal selection
-        StrategyPickerImpl(selectingStrategyFor, sheetState)
+        StrategySelectorImpl(selectingStrategyFor, sheetState)
     }
 
     LaunchedEffect(key1 = selectingStrategyFor) {
@@ -58,11 +58,11 @@ internal fun GameSettingsState.StrategyPicker(
         }
     }
 
-    if (isFirstTimePicker && pickStrategyFor != null) {
-        LaunchedEffect(key1 = pickStrategyFor) {
+    if (isFirstTimePicker && selectStrategyFor != null) {
+        LaunchedEffect(key1 = selectStrategyFor) {
             if (!sheetState.isVisible && selectingStrategyFor == null) {
                 // picker isn't already open, open it now
-                onShowStrategiesClick(pickStrategyFor)
+                actions.onStrategySelectorClick(selectStrategyFor)
             }
         }
         isFirstTimePicker = false
@@ -71,12 +71,12 @@ internal fun GameSettingsState.StrategyPicker(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun GameSettingsState.StrategyPickerImpl(
+private fun GameSettingsState.StrategySelectorImpl(
     disk: Disk,
     sheetState: SheetState,
 ) {
     ModalBottomSheet(
-        onDismissRequest = onDismissStrategies,
+        onDismissRequest = actions.onStrategySelectorDismiss,
         sheetState = sheetState,
     ) {
         Column {
@@ -95,7 +95,7 @@ private fun GameSettingsState.StrategyPickerImpl(
                 StrategyListItem(
                     strategy = strategy,
                     isSelected = disk.isStrategySelected(strategy),
-                    onClick = { onStrategySelect(disk, strategy) },
+                    onClick = { actions.onStrategySelect(disk, strategy) },
                 )
             }
 

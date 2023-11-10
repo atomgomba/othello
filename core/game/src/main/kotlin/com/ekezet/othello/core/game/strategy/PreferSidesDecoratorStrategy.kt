@@ -5,7 +5,7 @@ import com.ekezet.othello.core.data.models.BoardWidth
 import com.ekezet.othello.core.data.models.Position
 import com.ekezet.othello.core.data.models.x
 import com.ekezet.othello.core.data.models.y
-import com.ekezet.othello.core.game.GameState
+import com.ekezet.othello.core.game.OthelloGameState
 
 class PreferSidesDecoratorStrategy(
     override val wrapped: Strategy,
@@ -16,7 +16,7 @@ class PreferSidesDecoratorStrategy(
     private val sidesX = setOf(0, BoardWidth - 1)
     private val sidesY = setOf(0, BoardHeight - 1)
 
-    override fun deriveNext(state: GameState): Position? = with(state) {
+    override fun deriveNext(state: OthelloGameState): Position? = with(state) {
         validMoves.shuffled().firstOrNull { it.position.x in sidesX || it.position.y in sidesY }?.position
             ?: wrapped.deriveNext(state)
     }

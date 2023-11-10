@@ -21,24 +21,37 @@ data class GameSettingsModel(
     override val displayOptions: BoardDisplayOptions = defaultDisplayOptions,
     internal val selectingStrategyFor: Disk? = null,
 ) : IGameSettings {
-    internal fun resetSelection() = copy(selectingStrategyFor = null)
+    internal fun showStrategySelectorFor(player: Disk) = copy(selectingStrategyFor = player)
+    internal fun dismissStrategySelector() = copy(selectingStrategyFor = null)
+    internal fun setStrategyFor(player: Disk, strategy: Strategy?) =
+        if (player.isDark) {
+            copy(darkStrategy = strategy)
+        } else {
+            copy(lightStrategy = strategy)
+        }
+            .dismissStrategySelector()
 }
 
 @Immutable
+internal data class GameSettingsStateActions(
+    val onStrategySelectorClick: (disk: Disk) -> Unit,
+    val onStrategySelectorDismiss: () -> Unit,
+    val onPreferSidesToggle: (disk: Disk, prefer: Boolean) -> Unit,
+    val onStrategySelect: (disk: Disk, strategy: Strategy?) -> Unit,
+    val onShowPossibleMovesClick: () -> Unit,
+    val onShowBoardPositionsClick: () -> Unit,
+    val onGrayscaleModeClick: () -> Unit,
+)
+
+@Immutable
 internal data class GameSettingsState(
-    internal val isLightPreferSides: Boolean,
-    internal val isDarkPreferSides: Boolean,
-    internal val displayOptions: BoardDisplayOptions,
-    internal val lightStrategy: Strategy? = defaultLightStrategy,
-    internal val darkStrategy: Strategy? = defaultDarkStrategy,
-    internal val selectingStrategyFor: Disk?,
-    internal val onShowStrategiesClick: (disk: Disk) -> Unit,
-    internal val onDismissStrategies: () -> Unit,
-    internal val onPreferSidesClick: (disk: Disk, prefer: Boolean) -> Unit,
-    internal val onStrategySelect: (disk: Disk, strategy: Strategy?) -> Unit,
-    internal val onShowPossibleMovesClick: () -> Unit,
-    internal val onShowBoardPositionsClick: () -> Unit,
-    internal val onGrayscaleModeClick: () -> Unit,
+    val actions: GameSettingsStateActions,
+    val isLightPreferSides: Boolean,
+    val isDarkPreferSides: Boolean,
+    val displayOptions: BoardDisplayOptions,
+    val lightStrategy: Strategy? = defaultLightStrategy,
+    val darkStrategy: Strategy? = defaultDarkStrategy,
+    val selectingStrategyFor: Disk?,
 ) {
     internal val Disk.isNotHuman: Boolean
         inline get() = if (isLight) {

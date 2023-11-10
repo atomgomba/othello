@@ -4,13 +4,13 @@ import com.ekezet.othello.core.data.models.diskCount
 import com.ekezet.othello.core.data.serialize.BoardSerializer
 import com.ekezet.othello.core.data.serialize.asString
 import com.ekezet.othello.core.game.BoardFactory
-import com.ekezet.othello.core.game.GameState
+import com.ekezet.othello.core.game.OthelloGameState
 import com.ekezet.othello.core.game.PastMove
 import com.ekezet.othello.core.game.data.IGameSettings
 import com.ekezet.othello.core.game.strategy.requiredName
 
 object GameStateSerializer {
-    fun toString(gameState: GameState, gameSetting: IGameSettings) = buildString {
+    fun toString(gameState: OthelloGameState, gameSetting: IGameSettings) = buildString {
         appendLine(serializedHeader(gameSetting))
         for (pastMove in gameState.history) {
             appendLine(pastMoveToString(pastMove))
@@ -31,7 +31,7 @@ object GameStateSerializer {
         appendLine(BoardSerializer.toString(pastMove.board))
     }
 
-    fun fromString(data: String): GameState {
+    fun fromString(data: String): OthelloGameState {
         TODO()
     }
 

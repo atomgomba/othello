@@ -36,7 +36,7 @@ internal fun GameSettingsState.SelectedStrategy(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable { onShowStrategiesClick(disk) }
+                .clickable { actions.onStrategySelectorClick(disk) }
                 .padding(horizontal = 16.dp),
         ) {
             Column {
@@ -75,7 +75,7 @@ internal fun GameSettingsState.SelectedStrategy(
                 label = stringResource(id = string.game_settings__switch__prefer_sides),
                 checked = preferSides,
                 onCheckedChange = { checked ->
-                    onPreferSidesClick(disk, checked)
+                    actions.onPreferSidesToggle(disk, checked)
                 },
             )
         }

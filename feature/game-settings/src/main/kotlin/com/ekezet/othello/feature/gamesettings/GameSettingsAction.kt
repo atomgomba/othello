@@ -3,52 +3,44 @@ package com.ekezet.othello.feature.gamesettings
 import com.ekezet.hurok.Action
 import com.ekezet.hurok.Action.Next
 import com.ekezet.othello.core.data.models.Disk
-import com.ekezet.othello.core.data.models.isLight
 import com.ekezet.othello.core.game.strategy.DecoratedStrategy
 import com.ekezet.othello.core.game.strategy.PreferSidesDecoratorStrategy.Companion.preferSides
 import com.ekezet.othello.core.game.strategy.Strategy
 
 internal sealed interface GameSettingsAction : Action<GameSettingsModel, GameSettingsDependency>
 
-internal data class OnSelectStrategyClicked(val disk: Disk) : GameSettingsAction {
-    override fun GameSettingsModel.proceed() = change(copy(selectingStrategyFor = disk))
+internal data class OnStrategySelectorClicked(val player: Disk) : GameSettingsAction {
+    override fun GameSettingsModel.proceed() = mutate(showStrategySelectorFor(player))
 }
 
-internal data object OnSelectStrategyDismissed : GameSettingsAction {
-    override fun GameSettingsModel.proceed() = change(resetSelection())
+internal data object OnStrategySelectorDismissed : GameSettingsAction {
+    override fun GameSettingsModel.proceed() = mutate(dismissStrategySelector())
 }
 
-internal data class OnStrategyItemClicked(val disk: Disk, val strategy: Strategy?) :
-    GameSettingsAction {
+internal data class OnStrategySelected(
+    val disk: Disk,
+    val strategy: Strategy?,
+) : GameSettingsAction {
     override fun GameSettingsModel.proceed(): Next<GameSettingsModel, GameSettingsDependency> {
-        val updated = if (disk.isLight) {
-            copy(lightStrategy = strategy)
-        } else {
-            copy(darkStrategy = strategy)
-        }
-        return outcome(
-            updated.resetSelection(),
-            PublishGameSettings(updated),
-        )
+        val updated = setStrategyFor(disk, strategy)
+        return outcome(updated, PublishGameSettings(updated))
     }
 }
 
-internal data class OnPreferSidesClicked(val disk: Disk, val prefer: Boolean) : GameSettingsAction {
+internal data class OnPreferSidesToggled(val disk: Disk, val prefer: Boolean) : GameSettingsAction {
     override fun GameSettingsModel.proceed(): Next<GameSettingsModel, GameSettingsDependency> {
-        val updated = if (disk.isLight) {
-            copy(lightStrategy = setPreferSidesStrategy(prefer, lightStrategy))
-        } else {
-            copy(darkStrategy = setPreferSidesStrategy(prefer, darkStrategy))
-        }
+        val updated = setStrategyFor(disk, setPreferSides(disk, prefer))
         return outcome(updated, PublishGameSettings(updated))
     }
 
-    private fun setPreferSidesStrategy(prefer: Boolean, strategy: Strategy?): Strategy? =
-        if (prefer) {
+    private fun GameSettingsModel.setPreferSides(disk: Disk, prefer: Boolean): Strategy? {
+        val strategy = if (disk.isDark) darkStrategy else lightStrategy
+        return if (prefer) {
             strategy?.preferSides()
         } else {
             if (strategy is DecoratedStrategy) strategy.wrapped else strategy
         }
+    }
 }
 
 internal data object OnShowPossibleMovesClicked : GameSettingsAction {

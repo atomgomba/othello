@@ -3,11 +3,11 @@ package com.ekezet.othello.feature.gameboard
 import androidx.compose.animation.core.AnimationConstants.DefaultDurationMillis
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
-import com.ekezet.hurok.ParentLoop
+import com.ekezet.hurok.ActionEmitter
 import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.data.models.DiskCount
 import com.ekezet.othello.core.data.models.Position
-import com.ekezet.othello.core.game.GameState
+import com.ekezet.othello.core.game.OthelloGameState
 import com.ekezet.othello.core.game.data.BoardDisplayOptions
 import com.ekezet.othello.core.game.data.IGameSettings
 import com.ekezet.othello.core.game.data.defaultDarkStrategy
@@ -25,7 +25,7 @@ import com.ekezet.othello.feature.gameboard.ui.viewModels.BoardOverlayList
 internal const val ACTION_DELAY_MILLIS: Long = DefaultDurationMillis.times(1.5F).toLong()
 
 data class GameBoardModel(
-    internal val gameState: GameState = defaultGameState,
+    internal val gameState: OthelloGameState = defaultGameState,
     override val displayOptions: BoardDisplayOptions = defaultDisplayOptions,
     override val lightStrategy: Strategy? = defaultLightStrategy,
     override val darkStrategy: Strategy? = defaultDarkStrategy,
@@ -43,7 +43,7 @@ data class GameBoardModel(
             else -> error("Expected Light or Dark, but was $disk")
         }
 
-    internal fun resetNextTurn(nextState: GameState = defaultGameState, passed: Boolean = false) =
+    internal fun resetNextTurn(nextState: OthelloGameState = defaultGameState, passed: Boolean = false) =
         copy(
             gameState = nextState,
             nextMovePosition = null,
@@ -57,7 +57,13 @@ data class GameBoardModel(
 }
 
 @Immutable
+internal data class GameBoardStateActions(
+    val onCellClick: (x: Int, y: Int) -> Unit,
+)
+
+@Immutable
 internal data class GameBoardState(
+    val actions: GameBoardStateActions,
     val board: BoardList,
     val overlay: BoardOverlayList,
     val currentTurn: Int,
@@ -72,7 +78,6 @@ internal data class GameBoardState(
     val celebrate: Boolean,
     val isHumanPlayer: Boolean,
     val passed: Boolean,
-    val onCellClick: (x: Int, y: Int) -> Unit,
 ) {
     internal val boardBackground: Color
         inline get() = if (displayOptions.isGrayscaleMode) {
@@ -82,7 +87,7 @@ internal data class GameBoardState(
         }
 }
 
-typealias GameBoardScope = ParentLoop<GameBoardModel, Unit>
+typealias GameBoardEmitter = ActionEmitter<GameBoardModel, Unit>
 
 sealed interface GameEnd {
     data class EndedWin(val winner: Disk) : GameEnd

@@ -13,7 +13,7 @@ import com.ekezet.othello.core.data.serialize.asString
 import com.ekezet.othello.core.game.throwable.InvalidMoveException
 import timber.log.Timber
 
-data class GameState(
+data class OthelloGameState(
     val currentBoard: Board,
     val history: MoveHistory,
 ) {
@@ -67,7 +67,7 @@ data class GameState(
     }
 
     private fun generateNextTurn(
-        nextState: GameState,
+        nextState: OthelloGameState,
         nextBoard: Board,
     ): MoveResult = if (nextState.validMoves.isNotEmpty()) {
         // next player has a valid move, continue the game
@@ -109,7 +109,7 @@ data class GameState(
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as GameState
+        other as OthelloGameState
 
         if (!currentBoard.contentDeepEquals(other.currentBoard)) return false
         if (history != other.history) return false
@@ -124,7 +124,7 @@ data class GameState(
     }
 
     companion object {
-        fun new(board: Board = BoardFactory.starter()) = GameState(
+        fun new(board: Board = BoardFactory.starter()) = OthelloGameState(
             currentBoard = board,
             history = emptyList(),
         )

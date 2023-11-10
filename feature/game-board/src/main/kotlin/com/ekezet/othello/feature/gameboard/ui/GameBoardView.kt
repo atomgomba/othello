@@ -26,7 +26,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import com.ekezet.hurok.AnyParentLoop
+import com.ekezet.hurok.AnyActionEmitter
 import com.ekezet.hurok.compose.LoopWrapper
 import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.data.models.isLight
@@ -37,8 +37,8 @@ import com.ekezet.othello.core.ui.R.string
 import com.ekezet.othello.core.ui.components.GamePiece
 import com.ekezet.othello.core.ui.orHumanPlayer
 import com.ekezet.othello.feature.gameboard.ACTION_DELAY_MILLIS
+import com.ekezet.othello.feature.gameboard.GameBoardEmitter
 import com.ekezet.othello.feature.gameboard.GameBoardLoop
-import com.ekezet.othello.feature.gameboard.GameBoardScope
 import com.ekezet.othello.feature.gameboard.GameBoardState
 import com.ekezet.othello.feature.gameboard.GameEnd.EndedTie
 import com.ekezet.othello.feature.gameboard.GameEnd.EndedWin
@@ -58,14 +58,14 @@ private val highlightColor: Color
 @Composable
 fun GameBoardView(
     args: GameSettings,
+    parentEmitter: AnyActionEmitter,
     onStrategyClick: OnStrategyClick,
     modifier: Modifier = Modifier,
-    parentLoop: AnyParentLoop? = null,
 ) {
     LoopWrapper(
         builder = GameBoardLoop,
-        parentLoop = parentLoop,
         args = args,
+        parentEmitter = parentEmitter,
     ) { loop ->
         GameBoardViewImpl(loop, onStrategyClick, modifier)
     }
@@ -74,7 +74,7 @@ fun GameBoardView(
 @ExperimentalLayoutApi
 @Composable
 private fun GameBoardState.GameBoardViewImpl(
-    loop: GameBoardScope,
+    loop: GameBoardEmitter,
     onStrategyClick: OnStrategyClick,
     modifier: Modifier = Modifier,
 ) = with(loop) {
@@ -96,7 +96,7 @@ private fun GameBoardState.GameBoardViewImpl(
                     ended = ended,
                     overlay = overlay,
                     isClickable = isHumanPlayer,
-                    onCellClick = onCellClick,
+                    onCellClick = actions.onCellClick,
                 )
             }
 

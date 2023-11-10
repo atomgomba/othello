@@ -1,27 +1,28 @@
 package com.ekezet.othello.main
 
-import com.ekezet.hurok.AnyParentLoop
+import com.ekezet.hurok.AnyActionEmitter
 import com.ekezet.hurok.Loop
 import com.ekezet.hurok.LoopBuilder
 import com.ekezet.othello.core.game.data.GameSettings
-import com.ekezet.othello.feature.gameboard.GameBoardScope
+import com.ekezet.othello.feature.gameboard.GameBoardEmitter
 
 internal class MainLoop private constructor(
+    model: MainModel,
     args: GameSettings,
     dependency: MainDependency,
-) :
-    Loop<MainState, MainModel, GameSettings, MainDependency, MainAction>(
-        args = args,
-        dependency = dependency,
-    ) {
-
-    override fun initModel() = MainModel()
+) : Loop<MainState, MainModel, GameSettings, MainDependency, MainAction>(
+    model = model,
+    args = args,
+    dependency = dependency,
+) {
+    private val actions = MainStateActions(
+        onNewGameClick = { emit(OnNewGameClicked) },
+        onToggleIndicatorsClick = { emit(OnToggleIndicatorsClicked) },
+    )
 
     override fun renderState(model: MainModel) =
         MainState(
-            onNewGameClick = { emit(OnNewGameClicked) },
-            onToggleIndicatorsClick = { emit(OnToggleIndicatorsClicked) },
-            onShareGameClick = { emit(OnShareGameClicked) },
+            actions = actions,
         )
 
     override fun MainModel.applyArgs(args: GameSettings) = copy(
@@ -31,18 +32,18 @@ internal class MainLoop private constructor(
     )
 
     @Suppress("UNCHECKED_CAST")
-    override fun MainDependency.onAddChildLoop(child: AnyParentLoop) {
-        gameBoardScope = child as? GameBoardScope
+    override fun MainDependency.onAddChildEmitter(child: AnyActionEmitter) {
+        gameBoardEmitter = (child as? GameBoardEmitter) ?: gameBoardEmitter
     }
 
     internal companion object Builder :
         LoopBuilder<MainState, MainModel, GameSettings, MainDependency, MainAction> {
-        override fun invoke(
+        override fun build(
             args: GameSettings?,
-            dependency: MainDependency?,
         ) = MainLoop(
+            model = MainModel(),
             args = requireNotNull(args) { "Args must be set" },
-            dependency = requireNotNull(dependency) { "Dependency must be set" },
+            dependency = MainDependency(),
         )
     }
 }

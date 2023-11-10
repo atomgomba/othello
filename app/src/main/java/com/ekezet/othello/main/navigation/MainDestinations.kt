@@ -6,27 +6,26 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.ui.graphics.vector.ImageVector
 
 sealed interface MainDestinations {
-    val label: String
+    val id: String
     val icon: ImageVector
 
     companion object {
-        val Start = GameBoard
-
+        val Start: String = GameBoardDestination.id
         val All = listOf(
-            GameBoard,
-            GameSettings,
+            GameBoardDestination,
+            GameSettingsDestination,
         )
     }
 
-    data object GameBoard : MainDestinations {
-        override val label: String = "game-board"
+    data object GameBoardDestination : MainDestinations {
+        override val id: String = "game-board"
         override val icon: ImageVector = Icons.Default.PlayArrow
     }
 
-    data object GameSettings : MainDestinations {
-        override val label: String = "game-settings"
+    data object GameSettingsDestination : MainDestinations {
+        override val id: String = "game-settings"
         override val icon: ImageVector = Icons.Default.Settings
 
-        const val PICK_STRATEGY = "pickStrategy"
+        const val PickStrategy = "pickStrategy"
     }
 }

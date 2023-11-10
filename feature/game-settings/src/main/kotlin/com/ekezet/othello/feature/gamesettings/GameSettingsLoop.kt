@@ -5,14 +5,24 @@ import com.ekezet.hurok.LoopBuilder
 import com.ekezet.othello.core.game.data.GameSettings
 import com.ekezet.othello.core.game.strategy.PreferSidesDecoratorStrategy
 
-internal class GameSettingsLoop private constructor(
+internal class GameSettingsLoop internal constructor(
+    model: GameSettingsModel,
     args: GameSettings,
     dependency: GameSettingsDependency,
 ) : Loop<GameSettingsState, GameSettingsModel, GameSettings, GameSettingsDependency, GameSettingsAction>(
+    model = model,
     args = args,
     dependency = dependency,
 ) {
-    override fun initModel() = GameSettingsModel()
+    private val actions = GameSettingsStateActions(
+        onStrategySelectorClick = { disk -> emit(OnStrategySelectorClicked(disk)) },
+        onStrategySelectorDismiss = { emit(OnStrategySelectorDismissed) },
+        onPreferSidesToggle = { disk, prefer -> emit(OnPreferSidesToggled(disk, prefer)) },
+        onStrategySelect = { disk, strategy -> emit(OnStrategySelected(disk, strategy)) },
+        onShowPossibleMovesClick = { emit(OnShowPossibleMovesClicked) },
+        onShowBoardPositionsClick = { emit(OnShowBoardPositionsClicked) },
+        onGrayscaleModeClick = { emit(OnGrayscaleModeClicked) },
+    )
 
     override fun GameSettingsModel.applyArgs(args: GameSettings) =
         copy(
@@ -23,30 +33,22 @@ internal class GameSettingsLoop private constructor(
 
     override fun renderState(model: GameSettingsModel) = with(model) {
         GameSettingsState(
+            actions = actions,
             darkStrategy = darkStrategy,
             lightStrategy = lightStrategy,
             isDarkPreferSides = darkStrategy is PreferSidesDecoratorStrategy,
             isLightPreferSides = lightStrategy is PreferSidesDecoratorStrategy,
             displayOptions = displayOptions,
             selectingStrategyFor = selectingStrategyFor,
-            onShowStrategiesClick = { disk -> emit(OnSelectStrategyClicked(disk)) },
-            onDismissStrategies = { emit(OnSelectStrategyDismissed) },
-            onPreferSidesClick = { disk, prefer -> emit(OnPreferSidesClicked(disk, prefer)) },
-            onStrategySelect = { disk, strategy -> emit(OnStrategyItemClicked(disk, strategy)) },
-            onShowPossibleMovesClick = { emit(OnShowPossibleMovesClicked) },
-            onShowBoardPositionsClick = { emit(OnShowBoardPositionsClicked) },
-            onGrayscaleModeClick = { emit(OnGrayscaleModeClicked) },
         )
     }
 
     internal companion object Builder :
         LoopBuilder<GameSettingsState, GameSettingsModel, GameSettings, GameSettingsDependency, GameSettingsAction> {
-        override fun invoke(
-            args: GameSettings?,
-            dependency: GameSettingsDependency?,
-        ) = GameSettingsLoop(
+        override fun build(args: GameSettings?) = GameSettingsLoop(
+            model = GameSettingsModel(),
             args = requireNotNull(args) { "Arguments must be set" },
-            dependency = requireNotNull(dependency) { "Dependency must be set" },
+            dependency = GameSettingsDependency(),
         )
     }
 }

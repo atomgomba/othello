@@ -1,12 +1,12 @@
 package com.ekezet.othello.core.game.strategy
 
 import com.ekezet.othello.core.data.models.Position
-import com.ekezet.othello.core.game.GameState
+import com.ekezet.othello.core.game.OthelloGameState
 
 interface Strategy {
     val name: String
 
-    fun deriveNext(state: GameState): Position?
+    fun deriveNext(state: OthelloGameState): Position?
 
     companion object Factory
 }

@@ -1,15 +1,15 @@
 package com.ekezet.othello.core.game.strategy
 
 import com.ekezet.othello.core.data.models.Position
-import com.ekezet.othello.core.game.GameState
+import com.ekezet.othello.core.game.OthelloGameState
 
 /**
  * Just picks a random valid move.
  */
-object RandomStrategy : Strategy {
+data object RandomStrategy : Strategy {
     override val name: String
         get() = "Random Pick"
 
-    override fun deriveNext(state: GameState): Position? =
+    override fun deriveNext(state: OthelloGameState): Position? =
         state.validMoves.shuffled().firstOrNull()?.position
 }

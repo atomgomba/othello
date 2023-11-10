@@ -5,15 +5,11 @@ value class Disk private constructor(
     val isDark: Boolean,
 ) {
     companion object {
+        @JvmStatic
         val Light = Disk(false)
-        val Dark = Disk(true)
 
-        fun valueOf(value: String?): Disk? =
-            when (value) {
-                "$Light" -> Light
-                "$Dark" -> Dark
-                else -> null
-            }
+        @JvmStatic
+        val Dark = Disk(true)
     }
 
     override fun toString() = if (isDark) "Dark" else "Light"
@@ -23,3 +19,15 @@ fun Disk.flip() = if (isDark) Disk.Light else Disk.Dark
 
 val Disk.isLight: Boolean
     inline get() = !isDark
+
+fun Disk.Companion.valueOf(value: String?): Disk? = when (value) {
+    "$Dark" -> Dark
+    "$Light" -> Light
+    else -> null
+}
+
+fun Disk.Companion.valueOf(value: Boolean?): Disk? = when (value) {
+    false -> Dark
+    true -> Light
+    null -> null
+}
