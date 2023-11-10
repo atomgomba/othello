@@ -2,8 +2,8 @@ package com.ekezet.othello.core.game.strategy
 
 import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.data.models.Position
-import com.ekezet.othello.core.game.OthelloGameState
 import com.ekezet.othello.core.game.MoveHistory
+import com.ekezet.othello.core.game.OthelloGameState
 
 class ReplayStrategy(history: MoveHistory, disk: Disk) : Strategy {
     override val name: String

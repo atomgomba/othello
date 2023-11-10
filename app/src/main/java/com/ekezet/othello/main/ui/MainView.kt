@@ -112,7 +112,7 @@ private fun MainState.MainViewImpl(
                 title = { Text(stringResource(string.app_name)) },
                 navigationIcon = {
                     AnimatedVisibility(
-                        visible = currentDestination == GameSettingsDestination.id
+                        visible = currentDestination == GameSettingsDestination.id,
                     ) {
                         IconButton(onClick = { navController.popBackStack() }) {
                             Icon(

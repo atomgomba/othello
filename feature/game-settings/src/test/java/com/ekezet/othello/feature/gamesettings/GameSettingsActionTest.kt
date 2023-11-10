@@ -104,6 +104,7 @@ internal class GameSettingsActionTest {
     )
 
     private fun loopStateWithModel(
-        model: GameSettingsModel, args: GameSettings = testArgs,
+        model: GameSettingsModel,
+        args: GameSettings = testArgs,
     ): GameSettingsState = GameSettingsLoop(model, args, dependency).firstState
 }

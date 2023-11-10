@@ -50,7 +50,9 @@ internal fun SharedPreferences.load(): GameSettings =
     )
 
 private fun SharedPreferences.loadStrategy(
-    keyName: String, keyPref: String, default: Strategy? = HumanPlayer,
+    keyName: String,
+    keyPref: String,
+    default: Strategy? = HumanPlayer,
 ) = getString(keyName, default.wrappedName)
     ?.let { name -> Strategy.ofName(name) }
     ?.run {
