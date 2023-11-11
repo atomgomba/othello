@@ -8,9 +8,9 @@ android {
 }
 
 dependencies {
-    api(libs.androidx.compose.foundation)
-    api(libs.androidx.compose.material3)
-
     implementation(project(":core:data"))
     implementation(project(":core:game"))
+
+    api(libs.androidx.compose.foundation)
+    api(libs.androidx.compose.material3)
 }

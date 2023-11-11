@@ -13,7 +13,7 @@ class App : Application() {
         AppLogging.init(isDebug = BuildConfig.DEBUG)
 
         startKoin {
-            androidContext(this@App)
+            androidContext(baseContext)
 
             modules(mainModule())
         }

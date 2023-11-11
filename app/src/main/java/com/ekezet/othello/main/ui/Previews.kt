@@ -8,6 +8,8 @@ import com.ekezet.othello.core.game.data.GameSettings
 import com.ekezet.othello.core.ui.components.PreviewBase
 import com.ekezet.othello.main.MainLoop
 import com.ekezet.othello.main.MainModel
+import com.ekezet.othello.main.di.mainModule
+import com.ekezet.othello.main.navigation.MainDestinations
 
 private fun MainModel.toPreviewState() =
     renderState(::MainLoop, this)
@@ -15,10 +17,24 @@ private fun MainModel.toPreviewState() =
 @OptIn(ExperimentalLayoutApi::class)
 @Preview
 @Composable
-internal fun MainViewPreview_Default() {
+internal fun MainViewPreview_GameBoard_Default() {
     PreviewBase {
         MainModel()
             .toPreviewState()
-            .MainViewImpl(GameSettings())
+            .MainViewImpl(gameSettings = GameSettings())
+    }
+}
+
+@OptIn(ExperimentalLayoutApi::class)
+@Preview
+@Composable
+internal fun MainViewPreview_GameSettings_Default() {
+    PreviewBase(moduleList = listOf(mainModule())) {
+        MainModel()
+            .toPreviewState()
+            .MainViewImpl(
+                gameSettings = GameSettings(),
+                startDestination = MainDestinations.GameSettingsDestination.id,
+            )
     }
 }
