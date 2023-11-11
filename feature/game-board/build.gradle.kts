@@ -19,4 +19,9 @@ dependencies {
     implementation(libs.hurokCompose)
 
     implementation(libs.konfetti)
+
+    testImplementation(libs.junit4)
+    testImplementation(libs.junitParams)
+    testImplementation(libs.mockk)
+    testImplementation(libs.hurokTest)
 }

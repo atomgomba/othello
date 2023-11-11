@@ -6,10 +6,10 @@ import com.ekezet.hurok.LoopBuilder
 import com.ekezet.othello.core.game.data.GameSettings
 import com.ekezet.othello.feature.gameboard.GameBoardEmitter
 
-internal class MainLoop private constructor(
+internal class MainLoop internal constructor(
     model: MainModel,
-    args: GameSettings,
-    dependency: MainDependency,
+    args: GameSettings? = null,
+    dependency: MainDependency? = null,
 ) : Loop<MainState, MainModel, GameSettings, MainDependency, MainAction>(
     model = model,
     args = args,

@@ -7,8 +7,8 @@ import com.ekezet.othello.core.game.strategy.PreferSidesDecoratorStrategy
 
 internal class GameSettingsLoop internal constructor(
     model: GameSettingsModel,
-    args: GameSettings,
-    dependency: GameSettingsDependency,
+    args: GameSettings? = null,
+    dependency: GameSettingsDependency? = null,
 ) : Loop<GameSettingsState, GameSettingsModel, GameSettings, GameSettingsDependency, GameSettingsAction>(
     model = model,
     args = args,

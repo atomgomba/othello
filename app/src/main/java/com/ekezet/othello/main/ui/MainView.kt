@@ -61,9 +61,8 @@ import org.koin.compose.koinInject
 @Composable
 internal fun MainView(
     parentScope: CoroutineScope = rememberCoroutineScope(),
-    gameSettingsStore: GameSettingsStore = koinInject(),
-    navController: NavHostController = rememberNavController(),
 ) {
+    val gameSettingsStore: GameSettingsStore = koinInject()
     val gameSettings: GameSettings by gameSettingsStore.settings.collectAsState()
 
     LoopWrapper(
@@ -72,9 +71,8 @@ internal fun MainView(
         parentScope = parentScope,
     ) { mainEmitter ->
         MainViewImpl(
-            mainEmitter = mainEmitter,
             gameSettings = gameSettings,
-            navController = navController,
+            mainEmitter = mainEmitter,
         )
     }
 }
@@ -82,10 +80,10 @@ internal fun MainView(
 @ExperimentalLayoutApi
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun MainState.MainViewImpl(
-    mainEmitter: AnyActionEmitter,
+internal fun MainState.MainViewImpl(
     gameSettings: GameSettings,
-    navController: NavHostController,
+    mainEmitter: AnyActionEmitter? = null,
+    navController: NavHostController = rememberNavController(),
 ) {
     val viewModelStoreOwner = requireNotNull(LocalViewModelStoreOwner.current) {
         "ViewModelStoreOwner must be provided"

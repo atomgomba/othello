@@ -1,6 +1,6 @@
 package com.ekezet.othello.feature.gamesettings
 
-import com.ekezet.hurok.firstState
+import com.ekezet.hurok.renderState
 import com.ekezet.hurok.test.after
 import com.ekezet.hurok.test.matches
 import com.ekezet.othello.core.data.models.Disk
@@ -12,27 +12,14 @@ import com.ekezet.othello.core.game.strategy.Strategy
 import com.ekezet.othello.feature.gamesettings.ui.defaultModel
 import com.ekezet.othello.feature.gamesettings.ui.showDarkStrategySelectorModel
 import com.ekezet.othello.feature.gamesettings.ui.showLightStrategySelectorModel
-import io.mockk.MockKAnnotations
-import io.mockk.impl.annotations.MockK
 import junitparams.JUnitParamsRunner
 import junitparams.Parameters
-import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import kotlin.test.assertEquals
 
 @RunWith(JUnitParamsRunner::class)
 internal class GameSettingsActionTest {
-    @MockK
-    private lateinit var dependency: GameSettingsDependency
-
-    private val testArgs = GameSettings()
-
-    @Before
-    fun setUp() {
-        MockKAnnotations.init(this)
-    }
-
     @Test
     @Parameters(method = "paramsForDisk")
     fun `OnStrategySelectorClicked works correctly`(player: Disk?) {
@@ -49,7 +36,7 @@ internal class GameSettingsActionTest {
             assertNoEffects()
         }
 
-        val state = loopStateWithModel(expectedModel)
+        val state = renderState(::GameSettingsLoop, expectedModel)
         assertEquals(expectedModel.selectingStrategyFor, state.selectingStrategyFor)
     }
 
@@ -65,7 +52,7 @@ internal class GameSettingsActionTest {
             assertNoEffects()
         }
 
-        val state = loopStateWithModel(expectedModel)
+        val state = renderState(::GameSettingsLoop, expectedModel, GameSettings.from(expectedModel))
         assertEquals(expectedModel.selectingStrategyFor, state.selectingStrategyFor)
     }
 
@@ -83,7 +70,7 @@ internal class GameSettingsActionTest {
             assertEffects(expectedEffects)
         }
 
-        val state = loopStateWithModel(expectedModel, GameSettings.from(expectedModel))
+        val state = renderState(::GameSettingsLoop, expectedModel)
         if (disk.isDark) {
             assertEquals(expectedModel.darkStrategy, state.darkStrategy)
         } else if (disk.isLight) {
@@ -91,20 +78,17 @@ internal class GameSettingsActionTest {
         }
     }
 
+    @Suppress("unused")
     private fun paramsForDisk() = arrayOf(
         arrayOf(Disk.Dark),
         arrayOf(Disk.Light),
     )
 
+    @Suppress("unused")
     private fun paramsForDiskAndStrategy() = arrayOf(
         arrayOf(Disk.Dark, RandomStrategy),
         arrayOf(Disk.Dark, HumanPlayer),
         arrayOf(Disk.Light, RandomStrategy),
         arrayOf(Disk.Light, HumanPlayer),
     )
-
-    private fun loopStateWithModel(
-        model: GameSettingsModel,
-        args: GameSettings = testArgs,
-    ): GameSettingsState = GameSettingsLoop(model, args, dependency).firstState
 }

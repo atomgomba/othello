@@ -15,10 +15,10 @@ import com.ekezet.othello.feature.gameboard.ui.viewModels.newEmptyOverlay
 import com.ekezet.othello.feature.gameboard.ui.viewModels.putAt
 import com.ekezet.othello.feature.gameboard.ui.viewModels.toList
 
-internal class GameBoardLoop private constructor(
+internal class GameBoardLoop internal constructor(
     model: GameBoardModel,
-    args: GameSettings,
-    firstAction: GameBoardAction,
+    args: GameSettings? = null,
+    firstAction: GameBoardAction? = null,
 ) : Loop<GameBoardState, GameBoardModel, GameSettings, Unit, GameBoardAction>(
     model = model,
     args = args,

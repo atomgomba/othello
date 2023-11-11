@@ -58,7 +58,7 @@ private val highlightColor: Color
 @Composable
 fun GameBoardView(
     args: GameSettings,
-    parentEmitter: AnyActionEmitter,
+    parentEmitter: AnyActionEmitter?,
     onStrategyClick: OnStrategyClick,
     modifier: Modifier = Modifier,
 ) {

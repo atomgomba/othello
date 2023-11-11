@@ -54,7 +54,7 @@ internal data object ContinueGame : GameBoardAction {
 }
 
 internal data class OnTurnPassed(
-    val nextPosition: Position?,
+    val nextPosition: Position?, // ?
     val newState: OthelloGameState,
 ) : GameBoardAction {
     override fun GameBoardModel.proceed() =
