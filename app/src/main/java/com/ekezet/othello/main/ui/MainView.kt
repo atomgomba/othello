@@ -84,18 +84,18 @@ internal fun MainState.MainViewImpl(
     gameSettings: GameSettings,
     mainEmitter: AnyActionEmitter? = null,
     navController: NavHostController = rememberNavController(),
+    startDestination: String = MainDestinations.Start,
 ) {
     val viewModelStoreOwner = requireNotNull(LocalViewModelStoreOwner.current) {
         "ViewModelStoreOwner must be provided"
     }
     val destinationModifier = Modifier.fillMaxSize()
-    var currentDestination: String by remember { mutableStateOf(MainDestinations.Start) }
+    var currentDestination: String by remember { mutableStateOf(startDestination) }
     val navOptions = remember {
         NavOptions.Builder()
             .setPopUpTo(
-                route = MainDestinations.Start,
-                inclusive = false,
-                saveState = true,
+                route = startDestination,
+                inclusive = true,
             )
             .build()
     }
@@ -135,7 +135,7 @@ internal fun MainState.MainViewImpl(
                     MainDestinations.All.forEach { destination ->
                         IconToggleButton(
                             checked = currentDestination == destination.id,
-                            onCheckedChange = { navigate(destination.id, navOptions) },
+                            onCheckedChange = { navigate(destination.id, navOptions.takeUnless { currentDestination == startDestination }) },
                         ) {
                             Icon(
                                 imageVector = destination.icon,
@@ -149,7 +149,7 @@ internal fun MainState.MainViewImpl(
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = MainDestinations.Start,
+            startDestination = startDestination,
             modifier = Modifier.padding(innerPadding),
         ) {
             composable(
@@ -160,13 +160,13 @@ internal fun MainState.MainViewImpl(
                     GameBoardView(
                         args = gameSettings,
                         parentEmitter = mainEmitter,
-                        modifier = destinationModifier,
                         onStrategyClick = { disk ->
                             navController.navigate(
                                 "${GameSettingsDestination.id}?$PickStrategy=$disk",
                                 navOptions,
                             )
                         },
+                        modifier = destinationModifier,
                     )
                 }
             }
@@ -185,10 +185,10 @@ internal fun MainState.MainViewImpl(
                 CompositionLocalProvider(LocalViewModelStoreOwner provides viewModelStoreOwner) {
                     GameSettingsView(
                         args = gameSettings,
-                        modifier = destinationModifier,
                         selectStrategyFor = Disk.valueOf(
                             entry.arguments?.getString(PickStrategy),
                         ),
+                        modifier = destinationModifier,
                     )
                 }
             }
