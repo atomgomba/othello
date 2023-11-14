@@ -59,8 +59,8 @@ internal class GameBoardLoop internal constructor(
             displayOptions = displayOptions,
             ended = ended,
             passed = passed,
-            celebrate = ended is EndedWin && isHumanPlayer(ended.winner),
-            isHumanPlayer = isHumanPlayer(gameState.currentDisk),
+            celebrate = ended is EndedWin && ended.winner.isHumanPlayer,
+            isHumanPlayer = gameState.currentDisk.isHumanPlayer,
         )
     }
 

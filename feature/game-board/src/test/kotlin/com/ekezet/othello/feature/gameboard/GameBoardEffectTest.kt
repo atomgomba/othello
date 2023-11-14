@@ -1,23 +1,42 @@
 package com.ekezet.othello.feature.gameboard
 
 import com.ekezet.hurok.test.EffectTest
-import com.ekezet.othello.core.game.data.GameSettings
-import io.mockk.MockKAnnotations
-import org.junit.Before
+import com.ekezet.hurok.test.matches
+import com.ekezet.othello.core.data.models.Position
+import com.ekezet.othello.core.game.OthelloGameState
+import com.ekezet.othello.feature.gameboard.actions.OnGameEnded
+import com.ekezet.othello.feature.gameboard.actions.OnMoveMade
+import com.ekezet.othello.feature.gameboard.actions.OnTurnPassed
+import io.mockk.mockk
+import kotlinx.coroutines.test.runTest
+import org.junit.Test
 
 class GameBoardEffectTest : EffectTest() {
-    private lateinit var testLoop: GameBoardLoop
+    @Test
+    fun `WaitBeforeNextTurn works correctly`() = runTest {
+        val nextMove: Position = mockk()
 
-    private val initGameSettings = GameSettings()
+        Unit runWith WaitBeforeNextTurn(nextMove) matches {
+            assertActions(listOf(OnMoveMade(nextMove)))
+        }
+    }
 
-    @Before
-    fun setUp() {
-        MockKAnnotations.init(this)
+    @Test
+    fun `WaitBeforePassTurn works correctly`() = runTest {
+        val nextMove: Position = mockk()
+        val newState: OthelloGameState = mockk()
 
-        testLoop = GameBoardLoop(
-            model = GameBoardModel(),
-            args = initGameSettings,
-        )
-            .startTest()
+        Unit runWith WaitBeforePassTurn(nextMove, newState) matches {
+            assertActions(listOf(OnTurnPassed(nextMove, newState)))
+        }
+    }
+
+    @Test
+    fun `WaitBeforeGameEnd works correctly`() = runTest {
+        val result: GameEnd = mockk()
+
+        Unit runWith WaitBeforeGameEnd(result) matches {
+            assertActions(listOf(OnGameEnded(result)))
+        }
     }
 }

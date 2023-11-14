@@ -5,7 +5,6 @@ import com.ekezet.hurok.test.after
 import com.ekezet.hurok.test.matches
 import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.data.models.isLight
-import com.ekezet.othello.core.game.data.GameSettings
 import com.ekezet.othello.core.game.strategy.HumanPlayer
 import com.ekezet.othello.core.game.strategy.RandomStrategy
 import com.ekezet.othello.core.game.strategy.Strategy
@@ -36,8 +35,8 @@ internal class GameSettingsActionTest {
             assertNoEffects()
         }
 
-        val state = renderState(::GameSettingsLoop, expectedModel)
-        assertEquals(expectedModel.selectingStrategyFor, state.selectingStrategyFor)
+        val expectedState = renderState(::GameSettingsLoop, expectedModel)
+        assertEquals(expectedModel.selectingStrategyFor, expectedState.selectingStrategyFor)
     }
 
     @Test
@@ -52,8 +51,8 @@ internal class GameSettingsActionTest {
             assertNoEffects()
         }
 
-        val state = renderState(::GameSettingsLoop, expectedModel, GameSettings.from(expectedModel))
-        assertEquals(expectedModel.selectingStrategyFor, state.selectingStrategyFor)
+        val expectedState = renderState(::GameSettingsLoop, expectedModel)
+        assertEquals(expectedModel.selectingStrategyFor, expectedState.selectingStrategyFor)
     }
 
     @Test
@@ -70,11 +69,11 @@ internal class GameSettingsActionTest {
             assertEffects(expectedEffects)
         }
 
-        val state = renderState(::GameSettingsLoop, expectedModel)
+        val expectedState = renderState(::GameSettingsLoop, expectedModel)
         if (disk.isDark) {
-            assertEquals(expectedModel.darkStrategy, state.darkStrategy)
+            assertEquals(expectedModel.darkStrategy, expectedState.darkStrategy)
         } else if (disk.isLight) {
-            assertEquals(expectedModel.lightStrategy, state.lightStrategy)
+            assertEquals(expectedModel.lightStrategy, expectedState.lightStrategy)
         }
     }
 

@@ -1,6 +1,7 @@
 package com.ekezet.othello.main.ui
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,10 +15,14 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationRail
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
+import androidx.compose.material3.windowsizeclass.WindowHeightSizeClass
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
@@ -29,14 +34,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import com.ekezet.hurok.AnyActionEmitter
 import com.ekezet.hurok.compose.LoopWrapper
 import com.ekezet.othello.R.string
@@ -50,16 +54,17 @@ import com.ekezet.othello.feature.gameboard.ui.GameBoardView
 import com.ekezet.othello.feature.gamesettings.ui.GameSettingsView
 import com.ekezet.othello.main.MainLoop
 import com.ekezet.othello.main.MainState
-import com.ekezet.othello.main.navigation.MainDestinations
-import com.ekezet.othello.main.navigation.MainDestinations.GameBoardDestination
-import com.ekezet.othello.main.navigation.MainDestinations.GameSettingsDestination
-import com.ekezet.othello.main.navigation.MainDestinations.GameSettingsDestination.PickStrategy
+import com.ekezet.othello.main.navigation.MainRoutes
+import com.ekezet.othello.main.navigation.MainRoutes.GameBoardRoute
+import com.ekezet.othello.main.navigation.MainRoutes.GameSettingsRoute
+import com.ekezet.othello.main.navigation.MainRoutes.GameSettingsRoute.PickStrategy
 import kotlinx.coroutines.CoroutineScope
 import org.koin.compose.koinInject
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 internal fun MainView(
+    windowSizeClass: WindowSizeClass,
     parentScope: CoroutineScope = rememberCoroutineScope(),
 ) {
     val gameSettingsStore: GameSettingsStore = koinInject()
@@ -72,6 +77,7 @@ internal fun MainView(
     ) { mainEmitter ->
         MainViewImpl(
             gameSettings = gameSettings,
+            windowSizeClass = windowSizeClass,
             mainEmitter = mainEmitter,
         )
     }
@@ -82,9 +88,10 @@ internal fun MainView(
 @Composable
 internal fun MainState.MainViewImpl(
     gameSettings: GameSettings,
+    windowSizeClass: WindowSizeClass,
     mainEmitter: AnyActionEmitter? = null,
     navController: NavHostController = rememberNavController(),
-    startDestination: String = MainDestinations.Start,
+    startDestination: String = MainRoutes.Start,
 ) {
     val viewModelStoreOwner = requireNotNull(LocalViewModelStoreOwner.current) {
         "ViewModelStoreOwner must be provided"
@@ -92,13 +99,17 @@ internal fun MainState.MainViewImpl(
     val destinationModifier = Modifier.fillMaxSize()
     var currentDestination: String by remember { mutableStateOf(startDestination) }
     val navOptions = remember {
-        NavOptions.Builder()
+        NavOptions
+            .Builder()
             .setPopUpTo(
                 route = startDestination,
                 inclusive = true,
             )
             .build()
     }
+    val shouldShowBottomBar =
+        windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact || windowSizeClass.heightSizeClass == WindowHeightSizeClass.Compact
+    val shouldShowNavRail = !shouldShowBottomBar
 
     Scaffold(
         topBar = {
@@ -110,7 +121,7 @@ internal fun MainState.MainViewImpl(
                 title = { Text(stringResource(string.app_name)) },
                 navigationIcon = {
                     AnimatedVisibility(
-                        visible = currentDestination == GameSettingsDestination.id,
+                        visible = currentDestination == GameSettingsRoute.id,
                     ) {
                         IconButton(onClick = { navController.popBackStack() }) {
                             Icon(
@@ -122,7 +133,7 @@ internal fun MainState.MainViewImpl(
                 },
                 actions = {
                     AnimatedVisibility(
-                        visible = currentDestination == GameBoardDestination.id,
+                        visible = currentDestination == GameBoardRoute.id,
                     ) {
                         GameBoardToolbarActions(gameSettings.displayOptions)
                     }
@@ -130,12 +141,15 @@ internal fun MainState.MainViewImpl(
             )
         },
         bottomBar = {
-            with(navController) {
+            if (shouldShowBottomBar) {
                 BottomAppBar {
-                    MainDestinations.All.forEach { destination ->
+                    MainRoutes.All.forEach { destination ->
                         IconToggleButton(
                             checked = currentDestination == destination.id,
-                            onCheckedChange = { navigate(destination.id, navOptions.takeUnless { currentDestination == startDestination }) },
+                            onCheckedChange = {
+                                navController.navigate(destination.id,
+                                    navOptions.takeUnless { currentDestination == startDestination })
+                            },
                         ) {
                             Icon(
                                 imageVector = destination.icon,
@@ -147,49 +161,70 @@ internal fun MainState.MainViewImpl(
             }
         },
     ) { innerPadding ->
-        NavHost(
-            navController = navController,
-            startDestination = startDestination,
+        Row(
             modifier = Modifier.padding(innerPadding),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            composable(
-                route = GameBoardDestination.id,
-            ) {
-                currentDestination = GameBoardDestination.id
-                CompositionLocalProvider(LocalViewModelStoreOwner provides viewModelStoreOwner) {
-                    GameBoardView(
-                        args = gameSettings,
-                        parentEmitter = mainEmitter,
-                        onStrategyClick = { disk ->
-                            navController.navigate(
-                                "${GameSettingsDestination.id}?$PickStrategy=$disk",
-                                navOptions,
+            if (shouldShowNavRail) {
+                NavigationRail {
+                    MainRoutes.All.forEach { destination ->
+                        IconToggleButton(
+                            checked = currentDestination == destination.id,
+                            onCheckedChange = {
+                                navController.navigate(destination.id,
+                                    navOptions.takeUnless { currentDestination == startDestination })
+                            },
+                        ) {
+                            Icon(
+                                imageVector = destination.icon,
+                                contentDescription = null,
                             )
-                        },
-                        modifier = destinationModifier,
-                    )
+                        }
+                    }
                 }
             }
 
-            composable(
-                route = "${GameSettingsDestination.id}?$PickStrategy={$PickStrategy}",
-                arguments = listOf(
-                    navArgument(PickStrategy) {
-                        type = NavType.StringType
-                        nullable = true
-                        defaultValue = null
-                    },
-                ),
-            ) { entry ->
-                currentDestination = GameSettingsDestination.id
-                CompositionLocalProvider(LocalViewModelStoreOwner provides viewModelStoreOwner) {
-                    GameSettingsView(
-                        args = gameSettings,
-                        selectStrategyFor = Disk.valueOf(
-                            entry.arguments?.getString(PickStrategy),
-                        ),
-                        modifier = destinationModifier,
-                    )
+            NavHost(
+                navController = navController,
+                startDestination = startDestination,
+            ) {
+                composable(
+                    route = GameBoardRoute.spec,
+                ) {
+                    currentDestination = GameBoardRoute.id
+                    CompositionLocalProvider(
+                        LocalViewModelStoreOwner provides viewModelStoreOwner
+                    ) {
+                        GameBoardView(
+                            args = gameSettings,
+                            parentEmitter = mainEmitter,
+                            onStrategyClick = { disk ->
+                                navController.navigate(
+                                    "${GameSettingsRoute.id}?$PickStrategy=$disk",
+                                    navOptions,
+                                )
+                            },
+                            modifier = destinationModifier,
+                        )
+                    }
+                }
+
+                composable(
+                    route = GameSettingsRoute.spec,
+                    arguments = GameSettingsRoute.arguments,
+                ) { entry ->
+                    currentDestination = GameSettingsRoute.id
+                    CompositionLocalProvider(
+                        LocalViewModelStoreOwner provides viewModelStoreOwner
+                    ) {
+                        GameSettingsView(
+                            args = gameSettings,
+                            selectStrategyFor = Disk.valueOf(
+                                entry.arguments?.getString(PickStrategy),
+                            ),
+                            modifier = destinationModifier,
+                        )
+                    }
                 }
             }
         }

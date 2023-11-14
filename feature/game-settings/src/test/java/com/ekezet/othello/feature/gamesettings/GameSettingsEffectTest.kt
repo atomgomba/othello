@@ -1,13 +1,16 @@
 package com.ekezet.othello.feature.gamesettings
 
 import com.ekezet.hurok.test.EffectTest
-import com.ekezet.hurok.test.triggers
 import com.ekezet.othello.core.game.data.GameSettings
 import com.ekezet.othello.core.game.store.GameSettingsStore
 import com.ekezet.othello.core.game.strategy.HumanPlayer
 import io.mockk.MockKAnnotations
+import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.confirmVerified
 import io.mockk.impl.annotations.MockK
+import io.mockk.just
+import io.mockk.runs
 import org.junit.Before
 import org.junit.Test
 
@@ -17,28 +20,27 @@ internal class GameSettingsEffectTest : EffectTest() {
 
     private val initGameSettings = GameSettings()
 
-    private lateinit var testLoop: GameSettingsLoop
+    private lateinit var dependency: GameSettingsDependency
 
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
 
-        testLoop = GameSettingsLoop(
-            model = GameSettingsModel(),
-            args = initGameSettings,
-            dependency = GameSettingsDependency(
-                gameSettingsStore = mockGameSettingsStore,
-            ),
+        dependency = GameSettingsDependency(
+            gameSettingsStore = mockGameSettingsStore,
         )
-            .startTest()
     }
 
     @Test
     fun `PublishGameSettings works correctly`() {
         val settings = initGameSettings.copy(lightStrategy = HumanPlayer)
 
-        testLoop triggers PublishGameSettings(settings)
+        coEvery { mockGameSettingsStore.update(settings) } just runs
+
+        dependency runWith PublishGameSettings(settings)
 
         coVerify { mockGameSettingsStore.update(settings) }
+
+        confirmVerified(mockGameSettingsStore)
     }
 }

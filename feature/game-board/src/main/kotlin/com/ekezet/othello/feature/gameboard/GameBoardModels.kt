@@ -22,7 +22,9 @@ import com.ekezet.othello.feature.gameboard.ui.viewModels.BoardOverlayList
 /**
  * Give a little time for humans to follow changes on the board
  */
-internal const val ACTION_DELAY_MILLIS: Long = DefaultDurationMillis.times(1.5F).toLong()
+internal const val ACTION_DELAY_MILLIS: Long = DefaultDurationMillis
+    .times(1.5F)
+    .toLong()
 
 data class GameBoardModel(
     internal val gameState: OthelloGameState = defaultGameState,
@@ -36,20 +38,22 @@ data class GameBoardModel(
     internal val currentDisk: Disk
         inline get() = gameState.currentDisk
 
-    internal fun isHumanPlayer(disk: Disk): Boolean =
-        when (disk) {
+    internal val Disk.isHumanPlayer: Boolean
+        get() = when (this) {
             Disk.Light -> lightStrategy == HumanPlayer
             Disk.Dark -> darkStrategy == HumanPlayer
-            else -> error("Expected Light or Dark, but was $disk")
+            else -> error("Expected Light or Dark, but was $this")
         }
 
-    internal fun resetNextTurn(nextState: OthelloGameState = defaultGameState, passed: Boolean = false) =
-        copy(
-            gameState = nextState,
-            nextMovePosition = null,
-            ended = null,
-            passed = passed,
-        )
+    internal fun resetNextTurn(
+        nextState: OthelloGameState = defaultGameState,
+        passed: Boolean = false,
+    ) = copy(
+        gameState = nextState,
+        nextMovePosition = null,
+        ended = null,
+        passed = passed,
+    )
 
     internal fun pickNextMoveAt(position: Position?) = copy(
         nextMovePosition = position,

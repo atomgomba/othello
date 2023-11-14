@@ -19,7 +19,7 @@ internal data class WaitBeforeNextTurn(
     }
 }
 
-internal data class WaitBeforePass(
+internal data class WaitBeforePassTurn(
     private val nextMove: Position?,
     private val newState: OthelloGameState,
 ) : GameBoardEffect {
