@@ -41,7 +41,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.ekezet.hurok.AnyActionEmitter
+import com.ekezet.hurok.compose.LocalActionEmitter
 import com.ekezet.hurok.compose.LoopWrapper
 import com.ekezet.othello.R.string
 import com.ekezet.othello.core.data.models.Disk
@@ -75,11 +75,10 @@ internal fun MainView(
         builder = MainLoop,
         args = gameSettings,
         parentScope = parentScope,
-    ) { mainEmitter ->
+    ) {
         MainViewImpl(
             gameSettings = gameSettings,
             windowSizeClass = windowSizeClass,
-            mainEmitter = mainEmitter,
         )
     }
 }
@@ -90,7 +89,6 @@ internal fun MainView(
 internal fun MainState.MainViewImpl(
     gameSettings: GameSettings,
     windowSizeClass: WindowSizeClass,
-    mainEmitter: AnyActionEmitter? = null,
     startDestination: String = MainRoutes.Start,
 ) {
     val viewModelStoreOwner = requireNotNull(LocalViewModelStoreOwner.current) {
@@ -180,7 +178,7 @@ internal fun MainState.MainViewImpl(
                     ) {
                         GameBoardView(
                             args = gameSettings,
-                            parentEmitter = mainEmitter,
+                            parentEmitter = LocalActionEmitter.current,
                             onStrategyClick = { disk ->
                                 navigateTo(
                                     GameSettingsRoute.make(mapOf(PickStrategy to "$disk")),
