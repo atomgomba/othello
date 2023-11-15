@@ -26,11 +26,10 @@ import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -40,6 +39,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.ekezet.hurok.AnyActionEmitter
 import com.ekezet.hurok.compose.LoopWrapper
@@ -58,6 +58,7 @@ import com.ekezet.othello.main.navigation.MainRoutes
 import com.ekezet.othello.main.navigation.MainRoutes.GameBoardRoute
 import com.ekezet.othello.main.navigation.MainRoutes.GameSettingsRoute
 import com.ekezet.othello.main.navigation.MainRoutes.GameSettingsRoute.PickStrategy
+import com.ekezet.othello.main.navigation.stripRoute
 import kotlinx.coroutines.CoroutineScope
 import org.koin.compose.koinInject
 
@@ -90,14 +91,19 @@ internal fun MainState.MainViewImpl(
     gameSettings: GameSettings,
     windowSizeClass: WindowSizeClass,
     mainEmitter: AnyActionEmitter? = null,
-    navController: NavHostController = rememberNavController(),
     startDestination: String = MainRoutes.Start,
 ) {
     val viewModelStoreOwner = requireNotNull(LocalViewModelStoreOwner.current) {
         "ViewModelStoreOwner must be provided"
     }
-    val destinationModifier = Modifier.fillMaxSize()
-    var currentDestination: String by remember { mutableStateOf(startDestination) }
+
+    val navController: NavHostController = rememberNavController()
+    val currentBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentDestination by remember {
+        derivedStateOf {
+            currentBackStackEntry?.destination?.route?.stripRoute() ?: startDestination
+        }
+    }
     val navOptions = remember {
         NavOptions
             .Builder()
@@ -107,9 +113,17 @@ internal fun MainState.MainViewImpl(
             )
             .build()
     }
-    val shouldShowBottomBar =
-        windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact || windowSizeClass.heightSizeClass == WindowHeightSizeClass.Compact
+
+    fun navigateTo(route: String) {
+        navController.navigate(
+            route, navOptions.takeUnless { currentDestination == startDestination })
+    }
+
+    val shouldShowBottomBar = with(windowSizeClass) {
+        widthSizeClass == WindowWidthSizeClass.Compact || heightSizeClass == WindowHeightSizeClass.Compact
+    }
     val shouldShowNavRail = !shouldShowBottomBar
+    val destinationModifier = Modifier.fillMaxSize()
 
     Scaffold(
         topBar = {
@@ -142,22 +156,7 @@ internal fun MainState.MainViewImpl(
         },
         bottomBar = {
             if (shouldShowBottomBar) {
-                BottomAppBar {
-                    MainRoutes.All.forEach { destination ->
-                        IconToggleButton(
-                            checked = currentDestination == destination.id,
-                            onCheckedChange = {
-                                navController.navigate(destination.id,
-                                    navOptions.takeUnless { currentDestination == startDestination })
-                            },
-                        ) {
-                            Icon(
-                                imageVector = destination.icon,
-                                contentDescription = null,
-                            )
-                        }
-                    }
-                }
+                BottomAppBar { NavigationActions(currentDestination, ::navigateTo) }
             }
         },
     ) { innerPadding ->
@@ -166,22 +165,7 @@ internal fun MainState.MainViewImpl(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             if (shouldShowNavRail) {
-                NavigationRail {
-                    MainRoutes.All.forEach { destination ->
-                        IconToggleButton(
-                            checked = currentDestination == destination.id,
-                            onCheckedChange = {
-                                navController.navigate(destination.id,
-                                    navOptions.takeUnless { currentDestination == startDestination })
-                            },
-                        ) {
-                            Icon(
-                                imageVector = destination.icon,
-                                contentDescription = null,
-                            )
-                        }
-                    }
-                }
+                NavigationRail { NavigationActions(currentDestination, ::navigateTo) }
             }
 
             NavHost(
@@ -191,7 +175,6 @@ internal fun MainState.MainViewImpl(
                 composable(
                     route = GameBoardRoute.spec,
                 ) {
-                    currentDestination = GameBoardRoute.id
                     CompositionLocalProvider(
                         LocalViewModelStoreOwner provides viewModelStoreOwner
                     ) {
@@ -199,9 +182,8 @@ internal fun MainState.MainViewImpl(
                             args = gameSettings,
                             parentEmitter = mainEmitter,
                             onStrategyClick = { disk ->
-                                navController.navigate(
-                                    "${GameSettingsRoute.id}?$PickStrategy=$disk",
-                                    navOptions,
+                                navigateTo(
+                                    GameSettingsRoute.make(mapOf(PickStrategy to "$disk")),
                                 )
                             },
                             modifier = destinationModifier,
@@ -213,7 +195,6 @@ internal fun MainState.MainViewImpl(
                     route = GameSettingsRoute.spec,
                     arguments = GameSettingsRoute.arguments,
                 ) { entry ->
-                    currentDestination = GameSettingsRoute.id
                     CompositionLocalProvider(
                         LocalViewModelStoreOwner provides viewModelStoreOwner
                     ) {
@@ -252,6 +233,21 @@ private fun MainState.GameBoardToolbarActions(
                     id = if (showPossibleMoves) R.drawable.ic_visibility else R.drawable.ic_visibility_off,
                 ),
                 contentDescription = stringResource(R.string.main__menu__toggle_indicators),
+            )
+        }
+    }
+}
+
+@Composable
+private fun NavigationActions(currentDestination: String, onClick: (String) -> Unit) {
+    MainRoutes.All.forEach { destination ->
+        IconToggleButton(
+            checked = currentDestination == destination.id,
+            onCheckedChange = { onClick(destination.id) },
+        ) {
+            Icon(
+                imageVector = destination.icon,
+                contentDescription = null,
             )
         }
     }
