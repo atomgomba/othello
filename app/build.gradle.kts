@@ -49,3 +49,10 @@ dependencies {
     implementation(project(":feature:game-board"))
     implementation(project(":feature:game-settings"))
 }
+
+dependencies {
+    kover(project(":app"))
+    kover(project(":core:game"))
+    kover(project(":feature:game-board"))
+    kover(project(":feature:game-settings"))
+}

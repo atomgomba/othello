@@ -1,5 +1,6 @@
 package com.ekezet.othello.core.game.data
 
+import com.ekezet.othello.core.data.ExcludeFromCoverage
 import com.ekezet.othello.core.game.strategy.Strategy
 
 interface IGameSettings {
@@ -14,6 +15,7 @@ data class GameSettings(
     override val darkStrategy: Strategy? = defaultDarkStrategy,
 ) : IGameSettings {
     companion object {
+        @ExcludeFromCoverage
         fun from(other: IGameSettings) = with(other) {
             GameSettings(
                 displayOptions = displayOptions,
