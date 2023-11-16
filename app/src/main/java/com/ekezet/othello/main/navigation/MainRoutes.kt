@@ -5,8 +5,11 @@ import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NamedNavArgument
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
+import com.ekezet.othello.core.data.models.Disk
+import com.ekezet.othello.core.data.models.valueOf
 import com.ekezet.othello.core.ui.navigation.Route
 
 sealed class MainRoutes : Route() {
@@ -27,7 +30,7 @@ sealed class MainRoutes : Route() {
         override val id: String = "game-settings"
         override val icon: ImageVector = Icons.Default.Settings
 
-        const val PickStrategy = "pickStrategy"
+        private const val PickStrategy = "pickStrategy"
 
         override val spec: String
             get() = "$id?$PickStrategy={$PickStrategy}"
@@ -43,5 +46,13 @@ sealed class MainRoutes : Route() {
 
         override fun make(params: Map<String, String?>): String =
             "$id?$PickStrategy=${params["disk"]}"
+
+        fun make(pickStrategyFor: Disk): String =
+            make(mapOf(PickStrategy to pickStrategyFor.toString()))
+
+        fun findPickStrategy(entry: NavBackStackEntry): Disk? =
+            Disk.valueOf(
+                entry.arguments?.getString(PickStrategy),
+            )
     }
 }

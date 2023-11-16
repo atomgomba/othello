@@ -1,25 +1,13 @@
 package com.ekezet.othello.main.ui
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.BottomAppBar
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconToggleButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationRail
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.material3.windowsizeclass.WindowHeightSizeClass
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
@@ -31,8 +19,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.navigation.NavHostController
@@ -43,13 +29,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.ekezet.hurok.compose.LocalActionEmitter
 import com.ekezet.hurok.compose.LoopWrapper
-import com.ekezet.othello.R.string
-import com.ekezet.othello.core.data.models.Disk
-import com.ekezet.othello.core.data.models.valueOf
-import com.ekezet.othello.core.game.data.BoardDisplayOptions
 import com.ekezet.othello.core.game.data.GameSettings
 import com.ekezet.othello.core.game.store.GameSettingsStore
-import com.ekezet.othello.core.ui.R
 import com.ekezet.othello.feature.gameboard.ui.GameBoardView
 import com.ekezet.othello.feature.gamesettings.ui.GameSettingsView
 import com.ekezet.othello.main.MainLoop
@@ -57,8 +38,9 @@ import com.ekezet.othello.main.MainState
 import com.ekezet.othello.main.navigation.MainRoutes
 import com.ekezet.othello.main.navigation.MainRoutes.GameBoardRoute
 import com.ekezet.othello.main.navigation.MainRoutes.GameSettingsRoute
-import com.ekezet.othello.main.navigation.MainRoutes.GameSettingsRoute.PickStrategy
 import com.ekezet.othello.main.navigation.stripRoute
+import com.ekezet.othello.main.ui.components.MainTopAppBar
+import com.ekezet.othello.main.ui.components.NavigationActions
 import kotlinx.coroutines.CoroutineScope
 import org.koin.compose.koinInject
 
@@ -84,7 +66,6 @@ internal fun MainView(
 }
 
 @ExperimentalLayoutApi
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun MainState.MainViewImpl(
     gameSettings: GameSettings,
@@ -114,7 +95,9 @@ internal fun MainState.MainViewImpl(
 
     fun navigateTo(route: String) {
         navController.navigate(
-            route, navOptions.takeUnless { currentDestination == startDestination })
+            route,
+            navOptions.takeUnless { currentDestination == startDestination },
+        )
     }
 
     val shouldShowBottomBar = with(windowSizeClass) {
@@ -125,32 +108,7 @@ internal fun MainState.MainViewImpl(
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                colors = topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.primary,
-                ),
-                title = { Text(stringResource(string.app_name)) },
-                navigationIcon = {
-                    AnimatedVisibility(
-                        visible = currentDestination == GameSettingsRoute.id,
-                    ) {
-                        IconButton(onClick = { navController.popBackStack() }) {
-                            Icon(
-                                imageVector = Icons.Default.ArrowBack,
-                                contentDescription = null,
-                            )
-                        }
-                    }
-                },
-                actions = {
-                    AnimatedVisibility(
-                        visible = currentDestination == GameBoardRoute.id,
-                    ) {
-                        GameBoardToolbarActions(gameSettings.displayOptions)
-                    }
-                },
-            )
+            MainTopAppBar(currentDestination, navController, gameSettings)
         },
         bottomBar = {
             if (shouldShowBottomBar) {
@@ -174,15 +132,13 @@ internal fun MainState.MainViewImpl(
                     route = GameBoardRoute.spec,
                 ) {
                     CompositionLocalProvider(
-                        LocalViewModelStoreOwner provides viewModelStoreOwner
+                        LocalViewModelStoreOwner provides viewModelStoreOwner,
                     ) {
                         GameBoardView(
                             args = gameSettings,
                             parentEmitter = LocalActionEmitter.current,
                             onStrategyClick = { disk ->
-                                navigateTo(
-                                    GameSettingsRoute.make(mapOf(PickStrategy to "$disk")),
-                                )
+                                navigateTo(GameSettingsRoute.make(disk))
                             },
                             modifier = destinationModifier,
                         )
@@ -194,59 +150,16 @@ internal fun MainState.MainViewImpl(
                     arguments = GameSettingsRoute.arguments,
                 ) { entry ->
                     CompositionLocalProvider(
-                        LocalViewModelStoreOwner provides viewModelStoreOwner
+                        LocalViewModelStoreOwner provides viewModelStoreOwner,
                     ) {
                         GameSettingsView(
                             args = gameSettings,
-                            selectStrategyFor = Disk.valueOf(
-                                entry.arguments?.getString(PickStrategy),
-                            ),
+                            selectStrategyFor = GameSettingsRoute.findPickStrategy(entry),
                             modifier = destinationModifier,
                         )
                     }
                 }
             }
-        }
-    }
-}
-
-@Composable
-private fun MainState.GameBoardToolbarActions(
-    options: BoardDisplayOptions,
-) = with(options) {
-    Row {
-        IconButton(onClick = actions.onNewGameClick) {
-            Icon(
-                imageVector = Icons.Default.Refresh,
-                contentDescription = stringResource(R.string.main__menu__new_game),
-            )
-        }
-
-        IconToggleButton(
-            checked = showPossibleMoves,
-            onCheckedChange = { actions.onToggleIndicatorsClick() },
-        ) {
-            Icon(
-                painter = painterResource(
-                    id = if (showPossibleMoves) R.drawable.ic_visibility else R.drawable.ic_visibility_off,
-                ),
-                contentDescription = stringResource(R.string.main__menu__toggle_indicators),
-            )
-        }
-    }
-}
-
-@Composable
-private fun NavigationActions(currentDestination: String, onClick: (String) -> Unit) {
-    MainRoutes.All.forEach { destination ->
-        IconToggleButton(
-            checked = currentDestination == destination.id,
-            onCheckedChange = { onClick(destination.id) },
-        ) {
-            Icon(
-                imageVector = destination.icon,
-                contentDescription = null,
-            )
         }
     }
 }

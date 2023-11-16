@@ -8,8 +8,8 @@ import com.ekezet.othello.core.game.data.IGameSettings
 import com.ekezet.othello.core.game.data.defaultDarkStrategy
 import com.ekezet.othello.core.game.data.defaultDisplayOptions
 import com.ekezet.othello.core.game.data.defaultLightStrategy
-import com.ekezet.othello.core.game.store.HasGameSettingsStore
 import com.ekezet.othello.core.game.store.GameSettingsStore
+import com.ekezet.othello.core.game.store.HasGameSettingsStore
 import com.ekezet.othello.core.game.strategy.DecoratedStrategy
 import com.ekezet.othello.core.game.strategy.Strategy
 import org.koin.core.component.KoinComponent
