@@ -7,12 +7,12 @@ android {
 }
 
 dependencies {
+    implementation(project(":core:data"))
+    implementation(project(":core:logging"))
+
     implementation(libs.kotlinx.coroutines.android)
 
     implementation(libs.hurokBase)
-
-    implementation(project(":core:data"))
-    implementation(project(":core:logging"))
 
     testImplementation(libs.junit4)
 }

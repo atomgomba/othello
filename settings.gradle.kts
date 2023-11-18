@@ -1,5 +1,8 @@
+import java.util.Properties
+
 pluginManagement {
     includeBuild("build-logic")
+
     repositories {
         google()
         mavenCentral()
@@ -7,12 +10,26 @@ pluginManagement {
     }
 }
 
+@Suppress("UnstableApiUsage")
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+
     repositories {
         mavenLocal()
         google()
         mavenCentral()
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/atomgomba/hurok")
+            credentials {
+                Properties().apply {
+                    load(file("local.properties").inputStream())
+
+                    username = find("GITHUB_ACTOR")
+                    password = find("GITHUB_TOKEN")
+                }
+            }
+        }
     }
 }
 
@@ -27,3 +44,6 @@ include(":core:ui")
 
 include(":feature:game-board")
 include(":feature:game-settings")
+
+fun Properties.find(key: String): String? =
+    getProperty(key) ?: System.getenv(key)
