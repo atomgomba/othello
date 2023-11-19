@@ -34,13 +34,6 @@ android {
 }
 
 dependencies {
-    implementation(libs.androidx.activity.compose)
-    implementation(libs.androidx.compose.material3.windowSizeClass)
-    implementation(libs.androidx.navigation.compose)
-
-    implementation(libs.hurokBase)
-    implementation(libs.hurokCompose)
-
     implementation(project(":core:data"))
     implementation(project(":core:game"))
     implementation(project(":core:logging"))
@@ -48,11 +41,27 @@ dependencies {
 
     implementation(project(":feature:game-board"))
     implementation(project(":feature:game-settings"))
+
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.compose.material3.windowSizeClass)
+    implementation(libs.androidx.navigation.compose)
+
+    implementation(libs.hurokBase)
+    implementation(libs.hurokCompose)
+
+    testImplementation(libs.junit4)
+    testImplementation(libs.mockk)
+    testImplementation(libs.hurokTest)
 }
 
 dependencies {
     kover(project(":app"))
+    
+    kover(project(":core:data"))
     kover(project(":core:game"))
+    kover(project(":core:logging"))
+    kover(project(":core:ui"))
+
     kover(project(":feature:game-board"))
     kover(project(":feature:game-settings"))
 }

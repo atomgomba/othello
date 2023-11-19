@@ -150,7 +150,7 @@ class GameBoardActionTest {
     fun `ContinueGame works correctly if move is invalid`(disk: Disk?) {
         val nextMovePosition = Position(2, 3)
         val gameState: OthelloGameState = mockk {
-            every { proceed(any(), any()) } throws InvalidMoveException()
+            every { proceed(any()) } throws InvalidMoveException()
             every { currentDisk } returns disk!!
         }
 
@@ -164,8 +164,7 @@ class GameBoardActionTest {
         }
 
         verify {
-            gameState.proceed(nextMovePosition, disk!!)
-            gameState.currentDisk
+            gameState.proceed(nextMovePosition)
         }
 
         confirmVerified(gameState)
@@ -180,7 +179,7 @@ class GameBoardActionTest {
         }
         val currentMovePosition = Position(2, 3)
         val gameState: OthelloGameState = mockk {
-            every { proceed(any(), any()) } returns NextTurn(nextState)
+            every { proceed(any()) } returns NextTurn(nextState)
             every { currentDisk } returns disk!!
         }
 
@@ -202,8 +201,7 @@ class GameBoardActionTest {
         }
 
         verify {
-            gameState.proceed(currentMovePosition, disk!!)
-            gameState.currentDisk
+            gameState.proceed(currentMovePosition)
             @Suppress("UnusedEquals")
             mockLightStrategy.equals(mockLightStrategy)
         }
@@ -225,11 +223,11 @@ class GameBoardActionTest {
         val nextMovePosition = Position(1, 1)
         val nextState: OthelloGameState = mockk {
             every { currentDisk } returns disk!!.flip()
+            every { lastState } returns mockk()
         }
         val currentMovePosition = Position(2, 3)
         val gameState: OthelloGameState = mockk {
-            every { proceed(any(), any()) } returns PassTurn(nextState)
-            every { currentDisk } returns disk!!
+            every { proceed(any()) } returns PassTurn(nextState)
         }
 
         every { mockLightStrategy.deriveNext(nextState) } returns nextMovePosition
@@ -254,8 +252,7 @@ class GameBoardActionTest {
         }
 
         verify {
-            gameState.proceed(currentMovePosition, disk!!)
-            gameState.currentDisk
+            gameState.proceed(currentMovePosition)
             @Suppress("UnusedEquals")
             mockLightStrategy.equals(mockLightStrategy)
         }
@@ -284,7 +281,7 @@ class GameBoardActionTest {
         }
         val currentMovePosition = Position(2, 3)
         val gameState: OthelloGameState = mockk {
-            every { proceed(any(), any()) } returns Win(nextState, disk!!)
+            every { proceed(any()) } returns Win(nextState, disk!!)
             every { currentDisk } returns disk
         }
 
@@ -304,8 +301,7 @@ class GameBoardActionTest {
         }
 
         verify {
-            gameState.proceed(currentMovePosition, disk!!)
-            gameState.currentDisk
+            gameState.proceed(currentMovePosition)
         }
 
         confirmVerified(gameState)
@@ -319,7 +315,7 @@ class GameBoardActionTest {
         }
         val currentMovePosition = Position(2, 3)
         val gameState: OthelloGameState = mockk {
-            every { proceed(any(), any()) } returns Tie(nextState)
+            every { proceed(any()) } returns Tie(nextState)
             every { currentDisk } returns disk!!
         }
 
@@ -339,8 +335,7 @@ class GameBoardActionTest {
         }
 
         verify {
-            gameState.proceed(currentMovePosition, disk!!)
-            gameState.currentDisk
+            gameState.proceed(currentMovePosition)
         }
 
         confirmVerified(gameState)

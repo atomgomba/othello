@@ -8,11 +8,14 @@ import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
+import com.ekezet.othello.core.data.ExcludeFromCoverage
 import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.data.models.valueOf
 import com.ekezet.othello.core.ui.navigation.Route
 
+@ExcludeFromCoverage
 sealed class MainRoutes : Route() {
+    @ExcludeFromCoverage
     companion object {
         val Start: String = GameBoardRoute.id
         val All = listOf(
@@ -21,11 +24,13 @@ sealed class MainRoutes : Route() {
         )
     }
 
+    @ExcludeFromCoverage
     data object GameBoardRoute : MainRoutes() {
         override val id: String = "game-board"
         override val icon: ImageVector = Icons.Default.PlayArrow
     }
 
+    @ExcludeFromCoverage
     data object GameSettingsRoute : MainRoutes() {
         override val id: String = "game-settings"
         override val icon: ImageVector = Icons.Default.Settings

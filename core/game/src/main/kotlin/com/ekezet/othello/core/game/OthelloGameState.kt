@@ -10,6 +10,7 @@ import com.ekezet.othello.core.data.models.putAt
 import com.ekezet.othello.core.data.models.putAtAndClone
 import com.ekezet.othello.core.data.serialize.BoardSerializer
 import com.ekezet.othello.core.data.serialize.asString
+import com.ekezet.othello.core.game.data.defaultGameState
 import com.ekezet.othello.core.game.throwable.InvalidMoveException
 import timber.log.Timber
 
@@ -34,23 +35,25 @@ data class OthelloGameState(
         currentBoard.diskCount
     }
 
-    @Throws(
-        InvalidMoveException::class,
-    )
-    fun proceed(moveAt: Position?, disk: Disk): MoveResult {
+    val lastState: OthelloGameState
+        get() = history.last().run {
+            OthelloGameState(currentBoard = board, history = history.dropLast(1))
+        }
+
+    @Throws(InvalidMoveException::class)
+    fun proceed(moveAt: Position?): MoveResult {
         if (moveAt == null || validMoves.isInvalid(moveAt)) {
-            Timber.w("Invalid move attempt: $disk @ ${moveAt?.asString()}")
+            Timber.w("Invalid move attempt: $currentDisk @ ${moveAt?.asString()}")
             throw InvalidMoveException()
         }
-        Timber.d("Next move (turn: ${turn + 1}): $disk @ ${moveAt.asString()}")
-        val nextBoard = currentBoard.putAtAndClone(moveAt, disk)
+        Timber.d("Move (turn: ${turn + 1}): $currentDisk @ ${moveAt.asString()}")
+        val nextBoard = currentBoard.putAtAndClone(moveAt, currentDisk)
         val validSegments = validMoves
             .filter { it.position == moveAt }
             .map { it.segment }
         for (segment in validSegments) {
-            val parts = segment.parts()
-            for (position in parts) {
-                nextBoard.putAt(position, disk)
+            for (position in segment.parts()) {
+                nextBoard.putAt(position, currentDisk)
             }
         }
         val nextState = copy(
@@ -58,7 +61,7 @@ data class OthelloGameState(
             history = history + PastMove(
                 board = nextBoard.deepClone(),
                 moveAt = moveAt,
-                disk = disk,
+                disk = currentDisk,
                 turn = turn + 1,
             ),
         )
@@ -76,7 +79,7 @@ data class OthelloGameState(
     } else {
         val nextDisk = nextState.currentDisk
         val hasMoreValidMoves = nextBoard
-            .findValidMoves(nextDisk)
+            .findValidMoves(currentDisk)
             .isNotEmpty()
         if (hasMoreValidMoves) {
             // current player still has a valid move, next player passes
@@ -124,9 +127,14 @@ data class OthelloGameState(
     }
 
     companion object {
-        fun new(board: Board = BoardFactory.starter()) = OthelloGameState(
-            currentBoard = board,
-            history = emptyList(),
-        )
+        fun new(board: Board? = null) =
+            if (board == null) {
+                defaultGameState
+            } else {
+                OthelloGameState(
+                    currentBoard = board,
+                    history = emptyList(),
+                )
+            }
     }
 }

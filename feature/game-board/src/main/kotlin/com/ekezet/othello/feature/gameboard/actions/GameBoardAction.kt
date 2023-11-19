@@ -39,7 +39,7 @@ internal data class OnMoveMade(val position: Position) : GameBoardAction {
 internal data object ContinueGame : GameBoardAction {
     override fun GameBoardModel.proceed(): Next<GameBoardModel, Unit> {
         val moveResult = try {
-            gameState.proceed(nextMovePosition, currentDisk)
+            gameState.proceed(nextMovePosition)
         } catch (e: InvalidMoveException) {
             Timber.w("Invalid move at ${nextMovePosition?.asString()}")
             return skip

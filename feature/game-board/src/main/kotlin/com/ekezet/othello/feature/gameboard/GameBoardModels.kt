@@ -49,7 +49,7 @@ data class GameBoardModel(
         nextState: OthelloGameState = defaultGameState,
         passed: Boolean = false,
     ) = copy(
-        gameState = nextState,
+        gameState = if (passed) nextState.lastState else nextState,
         nextMovePosition = null,
         ended = null,
         passed = passed,

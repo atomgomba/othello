@@ -15,4 +15,5 @@ dependencies {
     implementation(libs.hurokBase)
 
     testImplementation(libs.junit4)
+    testImplementation(libs.mockk)
 }
