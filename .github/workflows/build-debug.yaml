@@ -1,0 +1,55 @@
+name: Build debug APK
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v2
+
+      - name: Set up caching
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}-${{ hashFiles('**/gradle/*.toml') }}
+
+      - name: Set up JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: '17'
+
+      - name: Build the app
+        run: ./gradlew assembleDebug
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: Debug APK
+          path: app/build/outputs/apk/debug/app-debug.apk
+
+  test:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v2
+
+      - name: Set up caching
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}-${{ hashFiles('**/gradle/*.toml') }}
+
+      - name: Set up JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: '17'
+
+      - name: Run unit tests
+        run: ./gradlew testDebugUnitTest --stacktrace

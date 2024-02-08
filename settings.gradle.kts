@@ -23,10 +23,12 @@ dependencyResolutionManagement {
             url = uri("https://maven.pkg.github.com/atomgomba/hurok")
             credentials {
                 Properties().apply {
-                    load(file("local.properties").inputStream())
+                    runCatching {
+                        load(file("local.properties").inputStream())
+                    }
 
-                    username = find("GITHUB_ACTOR")
-                    password = find("GITHUB_TOKEN")
+                    username = find("GHP_ACTOR")
+                    password = find("GHP_TOKEN")
                 }
             }
         }
