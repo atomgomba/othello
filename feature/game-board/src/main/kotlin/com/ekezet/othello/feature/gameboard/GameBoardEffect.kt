@@ -24,7 +24,7 @@ internal data class WaitBeforePassTurn(
     private val newState: OthelloGameState,
 ) : GameBoardEffect {
     override suspend fun GameBoardEmitter.trigger(dependency: Unit?) {
-        delay(ACTION_DELAY_MILLIS)
+        delay(ACTION_DELAY_MILLIS * 2)
         emit(OnTurnPassed(nextMove, newState))
     }
 }
