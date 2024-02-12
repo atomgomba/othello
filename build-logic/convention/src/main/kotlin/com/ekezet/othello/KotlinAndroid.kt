@@ -15,7 +15,7 @@ private val javaVersion = JavaVersion.VERSION_17
  * Configure base Kotlin with Android options
  */
 internal fun Project.configureKotlinAndroid(
-    commonExtension: CommonExtension<*, *, *, *, *>,
+    commonExtension: CommonExtension<*, *, *, *, *, *>,
 ) {
     commonExtension.apply {
         compileSdk = AndroidAppConventionPlugin.compileSdkLevel

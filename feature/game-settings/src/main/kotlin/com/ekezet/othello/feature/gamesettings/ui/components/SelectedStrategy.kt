@@ -23,6 +23,8 @@ import com.ekezet.othello.core.ui.components.GamePiece
 import com.ekezet.othello.core.ui.orHumanPlayer
 import com.ekezet.othello.core.ui.stringResource
 import com.ekezet.othello.feature.gamesettings.GameSettingsState
+import com.ekezet.othello.feature.gamesettings.OnPreferSidesToggled
+import com.ekezet.othello.feature.gamesettings.OnStrategySelectorClicked
 
 @Composable
 internal fun GameSettingsState.SelectedStrategy(
@@ -36,7 +38,7 @@ internal fun GameSettingsState.SelectedStrategy(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable { actions.onStrategySelectorClick(disk) }
+                .clickable { emit(OnStrategySelectorClicked(disk)) }
                 .padding(horizontal = 16.dp),
         ) {
             Column {
@@ -75,7 +77,7 @@ internal fun GameSettingsState.SelectedStrategy(
                 label = stringResource(id = string.game_settings__switch__prefer_sides),
                 checked = preferSides,
                 onCheckedChange = { checked ->
-                    actions.onPreferSidesToggle(disk, checked)
+                    emit(OnPreferSidesToggled(disk, checked))
                 },
             )
         }

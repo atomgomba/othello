@@ -4,6 +4,7 @@ import AndroidAppConventionPlugin.Companion.minSdkLevel
 import com.android.build.api.dsl.LibraryExtension
 import com.ekezet.othello.configureKoin
 import com.ekezet.othello.configureKotlinAndroid
+import com.ekezet.othello.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
@@ -33,6 +34,7 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
 
             dependencies {
                 add("testImplementation", kotlin("test"))
+                add("testImplementation", libs.findLibrary("kotlinx-coroutines-test").get())
             }
         }
     }

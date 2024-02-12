@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.ekezet.othello.core.game.BoardFactory
 import com.ekezet.othello.core.ui.components.PreviewBase
-import com.ekezet.othello.feature.gameboard.ui.viewModels.toList
+import com.ekezet.othello.feature.gameboard.ui.viewModels.toImmutableList
 
 @ExperimentalLayoutApi
 @Preview
@@ -13,7 +13,7 @@ import com.ekezet.othello.feature.gameboard.ui.viewModels.toList
 private fun GameBoardPreviewDefault() {
     PreviewBase {
         GameBoard(
-            board = BoardFactory.starter().toList(),
+            board = BoardFactory.starter().toImmutableList(),
         )
     }
 }
@@ -24,7 +24,7 @@ private fun GameBoardPreviewDefault() {
 private fun GameBoardPreviewShowPositions() {
     PreviewBase {
         GameBoard(
-            board = BoardFactory.starter().toList(),
+            board = BoardFactory.starter().toImmutableList(),
             showPositions = true,
         )
     }

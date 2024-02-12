@@ -8,6 +8,7 @@ import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.ui.components.PreviewBase
 import com.ekezet.othello.feature.gamesettings.GameSettingsLoop
 import com.ekezet.othello.feature.gamesettings.GameSettingsModel
+import com.ekezet.othello.feature.gamesettings.GameSettingsRenderer
 
 internal val defaultModel = GameSettingsModel()
 
@@ -16,7 +17,7 @@ internal val showDarkStrategySelectorModel = defaultModel.showStrategySelectorFo
 internal val showLightStrategySelectorModel = defaultModel.showStrategySelectorFor(Disk.Light)
 
 private fun GameSettingsModel.toPreviewState() =
-    renderState(::GameSettingsLoop, this)
+    renderState(::GameSettingsLoop, this, GameSettingsRenderer())
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview

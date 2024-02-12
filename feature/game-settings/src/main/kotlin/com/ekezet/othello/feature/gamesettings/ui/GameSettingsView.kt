@@ -5,8 +5,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -20,6 +20,9 @@ import com.ekezet.othello.core.game.data.GameSettings
 import com.ekezet.othello.core.ui.R.string
 import com.ekezet.othello.feature.gamesettings.GameSettingsLoop
 import com.ekezet.othello.feature.gamesettings.GameSettingsState
+import com.ekezet.othello.feature.gamesettings.OnGrayscaleModeClicked
+import com.ekezet.othello.feature.gamesettings.OnShowBoardPositionsClicked
+import com.ekezet.othello.feature.gamesettings.OnShowPossibleMovesClicked
 import com.ekezet.othello.feature.gamesettings.ui.components.SelectedStrategy
 import com.ekezet.othello.feature.gamesettings.ui.components.StrategySelector
 import com.ekezet.othello.feature.gamesettings.ui.components.SwitchRow
@@ -67,7 +70,7 @@ internal fun GameSettingsState.GameSettingsViewImpl(
             )
         }
 
-        item { Divider(modifier = Modifier.padding(horizontal = 32.dp)) }
+        item { HorizontalDivider(modifier = Modifier.padding(horizontal = 32.dp)) }
 
         item {
             SelectedStrategy(
@@ -89,7 +92,7 @@ internal fun GameSettingsState.GameSettingsViewImpl(
             SwitchRow(
                 label = stringResource(id = string.game_settings__switch__show_possible_moves),
                 checked = displayOptions.showPossibleMoves,
-                onCheckedChange = { actions.onShowPossibleMovesClick() },
+                onCheckedChange = { emit(OnShowPossibleMovesClicked) },
             )
         }
 
@@ -97,7 +100,7 @@ internal fun GameSettingsState.GameSettingsViewImpl(
             SwitchRow(
                 label = stringResource(id = string.game_settings__switch__show_positions),
                 checked = displayOptions.showBoardPositions,
-                onCheckedChange = { actions.onShowBoardPositionsClick() },
+                onCheckedChange = { emit(OnShowBoardPositionsClicked) },
             )
         }
 
@@ -105,7 +108,7 @@ internal fun GameSettingsState.GameSettingsViewImpl(
             SwitchRow(
                 label = stringResource(id = string.game_settings__switch__grayscale_mode),
                 checked = displayOptions.isGrayscaleMode,
-                onCheckedChange = { actions.onGrayscaleModeClick() },
+                onCheckedChange = { emit(OnGrayscaleModeClicked) },
             )
         }
     }

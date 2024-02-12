@@ -1,6 +1,7 @@
 package com.ekezet.othello.feature.gamesettings
 
 import androidx.compose.runtime.Immutable
+import com.ekezet.hurok.ViewState
 import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.data.models.isLight
 import com.ekezet.othello.core.game.data.BoardDisplayOptions
@@ -33,26 +34,14 @@ data class GameSettingsModel(
 }
 
 @Immutable
-internal data class GameSettingsStateActions(
-    val onStrategySelectorClick: (disk: Disk) -> Unit,
-    val onStrategySelectorDismiss: () -> Unit,
-    val onPreferSidesToggle: (disk: Disk, prefer: Boolean) -> Unit,
-    val onStrategySelect: (disk: Disk, strategy: Strategy?) -> Unit,
-    val onShowPossibleMovesClick: () -> Unit,
-    val onShowBoardPositionsClick: () -> Unit,
-    val onGrayscaleModeClick: () -> Unit,
-)
-
-@Immutable
 internal data class GameSettingsState(
-    val actions: GameSettingsStateActions,
     val isLightPreferSides: Boolean,
     val isDarkPreferSides: Boolean,
     val displayOptions: BoardDisplayOptions,
     val lightStrategy: Strategy? = defaultLightStrategy,
     val darkStrategy: Strategy? = defaultDarkStrategy,
     val selectingStrategyFor: Disk?,
-) {
+) : ViewState<GameSettingsModel, GameSettingsDependency>() {
     internal val Disk.isNotHuman: Boolean
         inline get() = if (isLight) {
             lightName != null

@@ -29,6 +29,7 @@ import androidx.compose.ui.zIndex
 import com.ekezet.hurok.AnyActionEmitter
 import com.ekezet.hurok.compose.LoopWrapper
 import com.ekezet.othello.core.data.models.Disk
+import com.ekezet.othello.core.data.models.Position
 import com.ekezet.othello.core.data.models.isLight
 import com.ekezet.othello.core.data.models.numDark
 import com.ekezet.othello.core.data.models.numLight
@@ -43,6 +44,7 @@ import com.ekezet.othello.feature.gameboard.GameBoardState
 import com.ekezet.othello.feature.gameboard.GameEnd.EndedTie
 import com.ekezet.othello.feature.gameboard.GameEnd.EndedWin
 import com.ekezet.othello.feature.gameboard.actions.ContinueGame
+import com.ekezet.othello.feature.gameboard.actions.OnMoveMade
 import com.ekezet.othello.feature.gameboard.actions.OnStrategyClick
 import com.ekezet.othello.feature.gameboard.ui.components.GameBoard
 import kotlinx.coroutines.delay
@@ -96,7 +98,7 @@ private fun GameBoardState.GameBoardViewImpl(
                     ended = ended,
                     overlay = overlay,
                     isClickable = isHumanPlayer,
-                    onCellClick = actions.onCellClick,
+                    onCellClick = { x, y -> emit(OnMoveMade(Position(x, y))) },
                 )
             }
 

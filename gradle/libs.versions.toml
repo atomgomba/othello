@@ -1,24 +1,24 @@
 [versions]
 androidDesugarJdkLibs = "2.0.4"
-androidGradlePlugin = "8.1.4"
-androidxActivity = "1.8.1"
+androidGradlePlugin = "8.4.0"
+androidxActivity = "1.9.0"
 androidxAppCompat = "1.6.1"
-androidxComposeBom = "2023.10.01"
-androidxComposeCompiler = "1.5.3"
-androidxComposeRuntimeTracing = "1.0.0-alpha05"
-androidxCore = "1.12.0"
-androidxLifecycle = "2.6.2"
-androidxNavigation = "2.7.5"
-hurok = "0.1.0"
+androidxComposeBom = "2024.05.00"
+androidxComposeCompiler = "1.5.9"
+androidxComposeRuntimeTracing = "1.0.0-beta01"
+androidxCore = "1.13.1"
+androidxLifecycle = "2.7.0"
+androidxNavigation = "2.7.7"
+hurok = "1.0.0"
 junit4 = "4.13.2"
 junitParams = "1.1.1"
 koinBom = "3.5.1"
 konfetti = "2.0.3"
-kotlin = "1.9.10"
-kotlinxCoroutines = "1.7.3"
+kotlin = "1.9.22"
+kotlinxCoroutines = "1.8.0"
 kotlinxKover = "0.7.4"
-kotlinxImmutable = "0.3.6"
-ksp = "1.9.10-1.0.13"
+kotlinxImmutable = "0.3.7"
+ksp = "1.9.22-1.0.17"
 mockk = "1.13.8"
 timber = "5.0.1"
 
@@ -43,7 +43,7 @@ androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = 
 androidx-lifecycle-runtimeCompose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidxLifecycle" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidxNavigation" }
 hurokBase = { group = "com.ekezet.hurok", name = "base", version.ref = "hurok" }
-hurokCompose = { group = "com.ekezet.hurok", name = "android-compose", version.ref = "hurok" }
+hurokCompose = { group = "com.ekezet.hurok", name = "compose", version.ref = "hurok" }
 hurokTest = { group = "com.ekezet.hurok", name = "test", version.ref = "hurok" }
 junit4 = { group = "junit", name = "junit", version.ref = "junit4" }
 junitParams = { group = "pl.pragmatists", name = "JUnitParams", version.ref = "junitParams" }

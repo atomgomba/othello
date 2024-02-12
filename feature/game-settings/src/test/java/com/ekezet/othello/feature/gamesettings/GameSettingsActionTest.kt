@@ -19,6 +19,8 @@ import kotlin.test.assertEquals
 
 @RunWith(JUnitParamsRunner::class)
 internal class GameSettingsActionTest {
+    private val renderer = GameSettingsRenderer()
+
     @Test
     @Parameters(method = "paramsForDisk")
     fun `OnStrategySelectorClicked works correctly`(player: Disk?) {
@@ -35,7 +37,7 @@ internal class GameSettingsActionTest {
             assertNoEffects()
         }
 
-        val expectedState = renderState(::GameSettingsLoop, expectedModel)
+        val expectedState = renderState(::GameSettingsLoop, expectedModel, renderer)
         assertEquals(expectedModel.selectingStrategyFor, expectedState.selectingStrategyFor)
     }
 
@@ -51,7 +53,7 @@ internal class GameSettingsActionTest {
             assertNoEffects()
         }
 
-        val expectedState = renderState(::GameSettingsLoop, expectedModel)
+        val expectedState = renderState(::GameSettingsLoop, expectedModel, renderer)
         assertEquals(expectedModel.selectingStrategyFor, expectedState.selectingStrategyFor)
     }
 
@@ -69,7 +71,7 @@ internal class GameSettingsActionTest {
             assertEffects(expectedEffects)
         }
 
-        val expectedState = renderState(::GameSettingsLoop, expectedModel)
+        val expectedState = renderState(::GameSettingsLoop, expectedModel, renderer)
         if (disk.isDark) {
             assertEquals(expectedModel.darkStrategy, expectedState.darkStrategy)
         } else if (disk.isLight) {

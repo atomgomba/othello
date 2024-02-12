@@ -13,13 +13,15 @@ import com.ekezet.othello.core.game.data.BoardDisplayOptions
 import com.ekezet.othello.core.ui.R.drawable
 import com.ekezet.othello.core.ui.R.string
 import com.ekezet.othello.main.MainState
+import com.ekezet.othello.main.OnNewGameClicked
+import com.ekezet.othello.main.OnToggleIndicatorsClicked
 
 @Composable
 internal fun MainState.GameBoardToolbarActions(
     options: BoardDisplayOptions,
 ) = with(options) {
     Row {
-        IconButton(onClick = actions.onNewGameClick) {
+        IconButton(onClick = { emit(OnNewGameClicked) }) {
             Icon(
                 imageVector = Icons.Default.Refresh,
                 contentDescription = stringResource(string.main__menu__new_game),
@@ -28,7 +30,7 @@ internal fun MainState.GameBoardToolbarActions(
 
         IconToggleButton(
             checked = showPossibleMoves,
-            onCheckedChange = { actions.onToggleIndicatorsClick() },
+            onCheckedChange = { emit(OnToggleIndicatorsClicked) },
         ) {
             Icon(
                 painter = painterResource(

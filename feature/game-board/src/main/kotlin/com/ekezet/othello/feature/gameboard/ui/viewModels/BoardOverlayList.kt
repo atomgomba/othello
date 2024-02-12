@@ -5,8 +5,8 @@ import kotlinx.collections.immutable.toImmutableList
 
 internal typealias BoardOverlayList = ImmutableList<ImmutableList<OverlayItem?>>
 
-internal fun BoardOverlay.toList(): BoardOverlayList = buildList {
-    for (row in this@toList) {
+internal fun BoardOverlay.toImmutableList(): BoardOverlayList = buildList {
+    for (row in this@toImmutableList) {
         add(row.toList().toImmutableList())
     }
 }.toImmutableList()

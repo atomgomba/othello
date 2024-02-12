@@ -35,6 +35,9 @@ import com.ekezet.othello.core.ui.R.string
 import com.ekezet.othello.core.ui.nameOrHumanPlayer
 import com.ekezet.othello.core.ui.stringResource
 import com.ekezet.othello.feature.gamesettings.GameSettingsState
+import com.ekezet.othello.feature.gamesettings.OnStrategySelected
+import com.ekezet.othello.feature.gamesettings.OnStrategySelectorClicked
+import com.ekezet.othello.feature.gamesettings.OnStrategySelectorDismissed
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -62,7 +65,7 @@ internal fun GameSettingsState.StrategySelector(
         LaunchedEffect(key1 = selectStrategyFor) {
             if (!sheetState.isVisible && selectingStrategyFor == null) {
                 // picker isn't already open, open it now
-                actions.onStrategySelectorClick(selectStrategyFor)
+                emit(OnStrategySelectorClicked(selectStrategyFor))
             }
         }
         isFirstTimePicker = false
@@ -76,7 +79,7 @@ private fun GameSettingsState.StrategySelectorImpl(
     sheetState: SheetState,
 ) {
     ModalBottomSheet(
-        onDismissRequest = actions.onStrategySelectorDismiss,
+        onDismissRequest = { emit(OnStrategySelectorDismissed) },
         sheetState = sheetState,
     ) {
         Column {
@@ -95,7 +98,7 @@ private fun GameSettingsState.StrategySelectorImpl(
                 StrategyListItem(
                     strategy = strategy,
                     isSelected = disk.isStrategySelected(strategy),
-                    onClick = { actions.onStrategySelect(disk, strategy) },
+                    onClick = { emit(OnStrategySelected(disk, strategy)) },
                 )
             }
 

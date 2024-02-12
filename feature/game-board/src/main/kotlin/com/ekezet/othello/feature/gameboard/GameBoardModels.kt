@@ -4,6 +4,7 @@ import androidx.compose.animation.core.AnimationConstants.DefaultDurationMillis
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
 import com.ekezet.hurok.ActionEmitter
+import com.ekezet.hurok.ViewState
 import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.data.models.DiskCount
 import com.ekezet.othello.core.data.models.Position
@@ -61,13 +62,7 @@ data class GameBoardModel(
 }
 
 @Immutable
-internal data class GameBoardStateActions(
-    val onCellClick: (x: Int, y: Int) -> Unit,
-)
-
-@Immutable
 internal data class GameBoardState(
-    val actions: GameBoardStateActions,
     val board: BoardList,
     val overlay: BoardOverlayList,
     val currentTurn: Int,
@@ -82,7 +77,7 @@ internal data class GameBoardState(
     val celebrate: Boolean,
     val isHumanPlayer: Boolean,
     val passed: Boolean,
-) {
+) : ViewState<GameBoardModel, Unit>() {
     internal val boardBackground: Color
         inline get() = if (displayOptions.isGrayscaleMode) {
             Color(0xFFC0C0C0)

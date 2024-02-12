@@ -8,23 +8,15 @@ import com.ekezet.othello.feature.gameboard.GameBoardEmitter
 
 internal class MainLoop internal constructor(
     model: MainModel,
+    renderer: MainRenderer,
     args: GameSettings? = null,
     dependency: MainDependency? = null,
 ) : Loop<MainState, MainModel, GameSettings, MainDependency, MainAction>(
     model = model,
+    renderer = renderer,
     args = args,
     dependency = dependency,
 ) {
-    private val actions = MainStateActions(
-        onNewGameClick = { emit(OnNewGameClicked) },
-        onToggleIndicatorsClick = { emit(OnToggleIndicatorsClicked) },
-    )
-
-    override fun renderState(model: MainModel) =
-        MainState(
-            actions = actions,
-        )
-
     override fun MainModel.applyArgs(args: GameSettings) = copy(
         displayOptions = args.displayOptions,
         lightStrategy = args.lightStrategy,
@@ -42,6 +34,7 @@ internal class MainLoop internal constructor(
             args: GameSettings?,
         ) = MainLoop(
             model = MainModel(),
+            renderer = MainRenderer(),
             args = requireNotNull(args) { "Args must be set" },
             dependency = MainDependency(),
         )

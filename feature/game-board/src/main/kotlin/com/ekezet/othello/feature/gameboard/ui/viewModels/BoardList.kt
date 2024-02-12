@@ -7,8 +7,8 @@ import kotlinx.collections.immutable.toImmutableList
 
 internal typealias BoardList = ImmutableList<ImmutableList<Disk?>>
 
-internal fun Board.toList(): BoardList = buildList {
-    for (row in this@toList) {
+internal fun Board.toImmutableList(): BoardList = buildList {
+    for (row in this@toImmutableList) {
         add(row.toList().toImmutableList())
     }
 }.toImmutableList()

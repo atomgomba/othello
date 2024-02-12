@@ -1,6 +1,7 @@
 package com.ekezet.othello.main
 
 import androidx.compose.runtime.Immutable
+import com.ekezet.hurok.ViewState
 import com.ekezet.othello.core.game.data.BoardDisplayOptions
 import com.ekezet.othello.core.game.data.IGameSettings
 import com.ekezet.othello.core.game.data.defaultDarkStrategy
@@ -20,15 +21,7 @@ internal data class MainModel(
 ) : IGameSettings
 
 @Immutable
-internal data class MainStateActions(
-    val onNewGameClick: () -> Unit,
-    val onToggleIndicatorsClick: () -> Unit,
-)
-
-@Immutable
-internal data class MainState(
-    val actions: MainStateActions,
-)
+internal data object MainState : ViewState<MainModel, MainDependency>()
 
 internal class MainDependency(
     gameSettingsStore: GameSettingsStore? = null,

@@ -1,14 +1,24 @@
 name: Build debug APK
 
-on: [push]
+on:
+  release:
+    types: [created]
+
+env:
+  GPR_USERNAME: ${{ github.actor }}
+  GPR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
   build:
+    permissions:
+      contents: read
+      packages: read
+
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout source
         uses: actions/checkout@v2
-
       - name: Set up caching
         uses: actions/cache@v2
         with:
@@ -16,15 +26,12 @@ jobs:
             ~/.gradle/caches
             ~/.gradle/wrapper
           key: ${{ runner.os }}-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}-${{ hashFiles('**/gradle/*.toml') }}
-
       - name: Set up JDK
         uses: actions/setup-java@v1
         with:
           java-version: '17'
-
       - name: Build the app
         run: ./gradlew assembleDebug
-
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
@@ -37,7 +44,6 @@ jobs:
     steps:
       - name: Checkout source
         uses: actions/checkout@v2
-
       - name: Set up caching
         uses: actions/cache@v2
         with:
@@ -45,11 +51,9 @@ jobs:
             ~/.gradle/caches
             ~/.gradle/wrapper
           key: ${{ runner.os }}-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}-${{ hashFiles('**/gradle/*.toml') }}
-
       - name: Set up JDK
         uses: actions/setup-java@v1
         with:
           java-version: '17'
-
       - name: Run unit tests
         run: ./gradlew testDebugUnitTest --stacktrace
