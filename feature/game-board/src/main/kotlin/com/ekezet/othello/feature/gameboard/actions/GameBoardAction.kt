@@ -3,7 +3,6 @@ package com.ekezet.othello.feature.gameboard.actions
 import com.ekezet.hurok.Action
 import com.ekezet.hurok.Action.Next
 import com.ekezet.othello.core.data.models.Position
-import com.ekezet.othello.core.data.serialize.asString
 import com.ekezet.othello.core.game.NextTurn
 import com.ekezet.othello.core.game.OthelloGameState
 import com.ekezet.othello.core.game.PassTurn
@@ -39,9 +38,9 @@ internal data class OnMoveMade(val position: Position) : GameBoardAction {
 internal data object ContinueGame : GameBoardAction {
     override fun GameBoardModel.proceed(): Next<GameBoardModel, Unit> {
         val moveResult = try {
-            gameState.proceed(nextMovePosition)
+            gameState.proceed(nextMovePosition ?: return skip)
         } catch (e: InvalidMoveException) {
-            Timber.w("Invalid move at ${nextMovePosition?.asString()}")
+            Timber.w(e)
             return skip
         }
         return when (moveResult) {

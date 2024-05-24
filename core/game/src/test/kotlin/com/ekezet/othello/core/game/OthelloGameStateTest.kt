@@ -16,13 +16,6 @@ class OthelloGameStateTest {
         subject.proceed((7 to 7))
     }
 
-    @Test(expected = InvalidMoveException::class)
-    fun testNullMove() {
-        val subject = OthelloGameState.new()
-
-        subject.proceed(null)
-    }
-
     @Test
     fun testTurn() {
         val subject = OthelloGameState(

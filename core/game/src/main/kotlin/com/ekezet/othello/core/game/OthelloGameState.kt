@@ -41,10 +41,9 @@ data class OthelloGameState(
         }
 
     @Throws(InvalidMoveException::class)
-    fun proceed(moveAt: Position?): MoveResult {
-        if (moveAt == null || validMoves.isInvalid(moveAt)) {
-            Timber.w("Invalid move attempt: $currentDisk @ ${moveAt?.asString()}")
-            throw InvalidMoveException()
+    fun proceed(moveAt: Position): MoveResult {
+        if (validMoves.isInvalid(moveAt)) {
+            throw InvalidMoveException(disk = currentDisk, invalidPosition = moveAt)
         }
         Timber.d("Move (turn: ${turn + 1}): $currentDisk @ ${moveAt.asString()}")
         val nextBoard = currentBoard.putAtAndClone(moveAt, currentDisk)

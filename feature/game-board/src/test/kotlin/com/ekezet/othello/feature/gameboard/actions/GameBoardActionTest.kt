@@ -150,8 +150,8 @@ class GameBoardActionTest {
     fun `ContinueGame works correctly if move is invalid`(disk: Disk?) {
         val nextMovePosition = Position(2, 3)
         val gameState: OthelloGameState = mockk {
-            every { proceed(any()) } throws InvalidMoveException()
-            every { currentDisk } returns disk!!
+            every { proceed(any()) } throws InvalidMoveException(disk!!, nextMovePosition)
+            every { currentDisk } returns disk
         }
 
         val initModel = testModel.copy(
