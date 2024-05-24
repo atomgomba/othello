@@ -11,6 +11,7 @@ import androidx.navigation.navArgument
 import com.ekezet.othello.core.data.ExcludeFromCoverage
 import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.data.models.valueOf
+import com.ekezet.othello.core.ui.R
 import com.ekezet.othello.core.ui.navigation.Route
 
 @ExcludeFromCoverage
@@ -28,12 +29,14 @@ sealed class MainRoutes : Route() {
     data object GameBoardRoute : MainRoutes() {
         override val id: String = "game-board"
         override val icon: ImageVector = Icons.Default.PlayArrow
+        override val labelRes: Int = R.string.main__nav__game_board
     }
 
     @ExcludeFromCoverage
     data object GameSettingsRoute : MainRoutes() {
         override val id: String = "game-settings"
         override val icon: ImageVector = Icons.Default.Settings
+        override val labelRes: Int = R.string.main__nav__game_settings
 
         private const val PickStrategy = "pickStrategy"
 
@@ -53,7 +56,7 @@ sealed class MainRoutes : Route() {
             "$id?$PickStrategy=${params["disk"]}"
 
         fun make(pickStrategyFor: Disk): String =
-            make(mapOf(PickStrategy to pickStrategyFor.toString()))
+            make(mapOf("disk" to pickStrategyFor.toString()))
 
         fun findPickStrategy(entry: NavBackStackEntry): Disk? =
             Disk.valueOf(

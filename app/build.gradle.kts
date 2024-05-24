@@ -44,6 +44,7 @@ dependencies {
 
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.material3.windowSizeClass)
+    implementation(libs.androidx.compose.material3.adaptiveNavigationSuite)
     implementation(libs.androidx.navigation.compose)
 
     implementation(libs.hurokBase)

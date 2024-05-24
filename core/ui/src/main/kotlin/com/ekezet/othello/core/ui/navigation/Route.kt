@@ -6,6 +6,7 @@ import androidx.navigation.NamedNavArgument
 abstract class Route {
     abstract val id: String
     abstract val icon: ImageVector
+    abstract val labelRes: Int
 
     open val spec: String
         get() = id
