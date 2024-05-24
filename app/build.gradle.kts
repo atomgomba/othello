@@ -53,15 +53,3 @@ dependencies {
     testImplementation(libs.mockk)
     testImplementation(libs.hurokTest)
 }
-
-dependencies {
-    kover(project(":app"))
-    
-    kover(project(":core:data"))
-    kover(project(":core:game"))
-    kover(project(":core:logging"))
-    kover(project(":core:ui"))
-
-    kover(project(":feature:game-board"))
-    kover(project(":feature:game-settings"))
-}

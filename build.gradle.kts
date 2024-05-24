@@ -1,22 +1,8 @@
-import kotlinx.kover.gradle.plugin.dsl.KoverReportExtension
-
 plugins {
-    id("com.android.application") version libs.versions.androidGradlePlugin apply false
-    id("com.android.library") version libs.versions.androidGradlePlugin apply false
-    id("org.jetbrains.kotlin.android") version libs.versions.kotlin apply false
-    id("org.jetbrains.kotlinx.kover") version libs.versions.kotlinxKover apply false
-}
-
-allprojects {
-    apply(plugin = "org.jetbrains.kotlinx.kover")
-
-    configure<KoverReportExtension> {
-        filters {
-            excludes {
-                annotatedBy("Composable", "Immutable", "Stable", "*ExcludeFromCoverage")
-                classes("*.BuildConfig")
-                packages("*.ui", "*.ui.*", "*.di", "*.di.*")
-            }
-        }
-    }
+    alias(libs.plugins.android.application) apply false
+    alias(libs.plugins.android.library) apply false
+    alias(libs.plugins.android.test) apply false
+    alias(libs.plugins.compose.compiler) apply false
+    alias(libs.plugins.kotlin.android) apply false
+    alias(libs.plugins.kotlinx.kover) apply false
 }
