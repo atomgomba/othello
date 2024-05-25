@@ -2,23 +2,24 @@ package com.ekezet.othello.core.game
 
 import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.data.serialize.BoardSerializer
+import com.ekezet.othello.core.game.state.CurrentGameState
 import com.ekezet.othello.core.game.throwable.InvalidMoveException
 import io.mockk.mockk
 import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
 
-class OthelloGameStateTest {
+class CurrentGameStateTest {
     @Test(expected = InvalidMoveException::class)
     fun testInvalidMove() {
-        val subject = OthelloGameState.new()
+        val subject = CurrentGameState.new()
 
         subject.proceed((7 to 7))
     }
 
     @Test
     fun testTurn() {
-        val subject = OthelloGameState(
+        val subject = CurrentGameState(
             currentBoard = BoardFactory.starter(),
             history = listOf(mockk(), mockk()),
         )
@@ -28,7 +29,7 @@ class OthelloGameStateTest {
 
     @Test
     fun testCurrentDisk() {
-        val subject = OthelloGameState(
+        val subject = CurrentGameState(
             currentBoard = BoardFactory.starter(),
             history = listOf(mockk(), mockk()),
         )
@@ -38,7 +39,7 @@ class OthelloGameStateTest {
 
     @Test
     fun testValidMoves() {
-        val subject = OthelloGameState.new(BoardFactory.starter())
+        val subject = CurrentGameState.new(BoardFactory.starter())
 
         val expected = setOf(
             ValidMove(
@@ -64,7 +65,7 @@ class OthelloGameStateTest {
 
     @Test
     fun testDiskCount() {
-        val subject = OthelloGameState.new(BoardFactory.starter())
+        val subject = CurrentGameState.new(BoardFactory.starter())
 
         assertEquals((2 to 2), subject.diskCount)
     }
@@ -84,7 +85,7 @@ class OthelloGameStateTest {
         """
         )
 
-        val subject = OthelloGameState.new(board)
+        val subject = CurrentGameState.new(board)
 
         val result = subject.proceed((4 to 5))
 
@@ -108,7 +109,7 @@ class OthelloGameStateTest {
         """
         )
 
-        val subject = OthelloGameState.new(board)
+        val subject = CurrentGameState.new(board)
 
         val result = subject.proceed((6 to 7))
 
@@ -131,7 +132,7 @@ class OthelloGameStateTest {
         """
         )
 
-        val subject = OthelloGameState.new(board)
+        val subject = CurrentGameState.new(board)
 
         val result = subject.proceed((7 to 7))
 
@@ -154,7 +155,7 @@ class OthelloGameStateTest {
         """
         )
 
-        val subject = OthelloGameState.new(board)
+        val subject = CurrentGameState.new(board)
 
         val result = subject.proceed((7 to 7))
 
@@ -165,16 +166,16 @@ class OthelloGameStateTest {
     @Test
     fun testEquals() {
         assertEquals(
-            OthelloGameState.new(BoardFactory.starter()),
-            OthelloGameState.new(BoardFactory.starter())
+            CurrentGameState.new(BoardFactory.starter()),
+            CurrentGameState.new(BoardFactory.starter())
         )
     }
 
     @Test
     fun testHashcode() {
         assertEquals(
-            OthelloGameState.new(BoardFactory.starter()).hashCode(),
-            OthelloGameState.new(BoardFactory.starter()).hashCode()
+            CurrentGameState.new(BoardFactory.starter()).hashCode(),
+            CurrentGameState.new(BoardFactory.starter()).hashCode()
         )
     }
 }

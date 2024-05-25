@@ -3,7 +3,7 @@ package com.ekezet.othello.feature.gameboard
 import com.ekezet.hurok.test.EffectTest
 import com.ekezet.hurok.test.matches
 import com.ekezet.othello.core.data.models.Position
-import com.ekezet.othello.core.game.OthelloGameState
+import com.ekezet.othello.core.game.state.CurrentGameState
 import com.ekezet.othello.core.game.store.MoveHistoryStore
 import com.ekezet.othello.feature.gameboard.actions.OnGameEnded
 import com.ekezet.othello.feature.gameboard.actions.OnMoveMade
@@ -42,7 +42,7 @@ class GameBoardEffectTest : EffectTest() {
     @Test
     fun `WaitBeforePassTurn works correctly`() = runTest {
         val nextMove: Position = mockk()
-        val newState: OthelloGameState = mockk()
+        val newState: CurrentGameState = mockk()
 
         dependency runWith WaitBeforePassTurn(nextMove, newState) matches {
             assertActions(listOf(OnTurnPassed(nextMove, newState)))

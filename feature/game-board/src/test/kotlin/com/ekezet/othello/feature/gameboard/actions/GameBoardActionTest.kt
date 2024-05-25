@@ -7,14 +7,14 @@ import com.ekezet.othello.core.data.models.Position
 import com.ekezet.othello.core.data.models.flip
 import com.ekezet.othello.core.data.models.isLight
 import com.ekezet.othello.core.game.NextTurn
-import com.ekezet.othello.core.game.OthelloGameState
 import com.ekezet.othello.core.game.PassTurn
 import com.ekezet.othello.core.game.Tie
 import com.ekezet.othello.core.game.ValidMove
 import com.ekezet.othello.core.game.Win
+import com.ekezet.othello.core.game.state.CurrentGameState
 import com.ekezet.othello.core.game.strategy.HumanPlayer
 import com.ekezet.othello.core.game.strategy.Strategy
-import com.ekezet.othello.core.game.throwable.InvalidMoveException
+import com.ekezet.othello.core.game.throwable.InvalidNewMoveException
 import com.ekezet.othello.feature.gameboard.GameBoardModel
 import com.ekezet.othello.feature.gameboard.GameEnd
 import com.ekezet.othello.feature.gameboard.GameEnd.EndedTie
@@ -63,7 +63,7 @@ class GameBoardActionTest {
     @Test
     fun `OnGameStarted works correctly if Dark is NPC`() {
         val nextMove = Position(42, 42)
-        val gameState: OthelloGameState = mockk()
+        val gameState: CurrentGameState = mockk()
         val darkStrategy: Strategy = mockk {
             every { deriveNext(gameState) } returns nextMove
         }
@@ -86,7 +86,7 @@ class GameBoardActionTest {
 
     @Test
     fun `OnGameStarted works correctly if Dark is NPC and cannot move`() {
-        val gameState: OthelloGameState = mockk()
+        val gameState: CurrentGameState = mockk()
         val darkStrategy: Strategy = mockk {
             every { deriveNext(gameState) } returns null
         }
@@ -110,7 +110,7 @@ class GameBoardActionTest {
     @Test
     fun `OnMoveMade works correctly if move is valid`() {
         val position = Position(1, 2)
-        val gameState: OthelloGameState = mockk {
+        val gameState: CurrentGameState = mockk {
             every { validMoves } returns setOf(ValidMove(position, mockk()))
         }
 
@@ -149,8 +149,8 @@ class GameBoardActionTest {
     @Parameters(method = "paramsForDisk")
     fun `ContinueGame works correctly if move is invalid`(disk: Disk?) {
         val nextMovePosition = Position(2, 3)
-        val gameState: OthelloGameState = mockk {
-            every { proceed(any()) } throws InvalidMoveException(disk!!, nextMovePosition)
+        val gameState: CurrentGameState = mockk {
+            every { proceed(any()) } throws InvalidNewMoveException(disk!!, nextMovePosition)
             every { currentDisk } returns disk
         }
 
@@ -174,11 +174,11 @@ class GameBoardActionTest {
     @Parameters(method = "paramsForDisk")
     fun `ContinueGame works correctly if next turn`(disk: Disk?) {
         val nextMovePosition = Position(1, 1)
-        val nextState: OthelloGameState = mockk {
+        val nextState: CurrentGameState = mockk {
             every { currentDisk } returns disk!!.flip()
         }
         val currentMovePosition = Position(2, 3)
-        val gameState: OthelloGameState = mockk {
+        val gameState: CurrentGameState = mockk {
             every { proceed(any()) } returns NextTurn(nextState)
             every { currentDisk } returns disk!!
         }
@@ -221,12 +221,12 @@ class GameBoardActionTest {
     @Parameters(method = "paramsForDisk")
     fun `ContinueGame works correctly if pass turn`(disk: Disk?) {
         val nextMovePosition = Position(1, 1)
-        val nextState: OthelloGameState = mockk {
+        val nextState: CurrentGameState = mockk {
             every { currentDisk } returns disk!!.flip()
             every { lastState } returns mockk()
         }
         val currentMovePosition = Position(2, 3)
-        val gameState: OthelloGameState = mockk {
+        val gameState: CurrentGameState = mockk {
             every { proceed(any()) } returns PassTurn(nextState)
         }
 
@@ -276,11 +276,11 @@ class GameBoardActionTest {
     @Test
     @Parameters(method = "paramsForDisk")
     fun `ContinueGame works correctly if player wins`(disk: Disk?) {
-        val nextState: OthelloGameState = mockk {
+        val nextState: CurrentGameState = mockk {
             every { currentDisk } returns disk!!.flip()
         }
         val currentMovePosition = Position(2, 3)
-        val gameState: OthelloGameState = mockk {
+        val gameState: CurrentGameState = mockk {
             every { proceed(any()) } returns Win(nextState, disk!!)
             every { currentDisk } returns disk
         }
@@ -310,11 +310,11 @@ class GameBoardActionTest {
     @Test
     @Parameters(method = "paramsForDisk")
     fun `ContinueGame works correctly if game is a tie`(disk: Disk?) {
-        val nextState: OthelloGameState = mockk {
+        val nextState: CurrentGameState = mockk {
             every { currentDisk } returns disk!!.flip()
         }
         val currentMovePosition = Position(2, 3)
-        val gameState: OthelloGameState = mockk {
+        val gameState: CurrentGameState = mockk {
             every { proceed(any()) } returns Tie(nextState)
             every { currentDisk } returns disk!!
         }
@@ -344,7 +344,7 @@ class GameBoardActionTest {
     @Test
     fun `OnTurnPassed works correctly`() {
         val nextPosition = (1 to 1)
-        val newState: OthelloGameState = mockk()
+        val newState: CurrentGameState = mockk()
 
         val initModel = testModel
 

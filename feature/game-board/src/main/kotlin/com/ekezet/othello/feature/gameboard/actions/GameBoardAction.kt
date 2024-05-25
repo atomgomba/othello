@@ -4,11 +4,11 @@ import com.ekezet.hurok.Action
 import com.ekezet.hurok.Action.Next
 import com.ekezet.othello.core.data.models.Position
 import com.ekezet.othello.core.game.NextTurn
-import com.ekezet.othello.core.game.OthelloGameState
 import com.ekezet.othello.core.game.PassTurn
 import com.ekezet.othello.core.game.Tie
 import com.ekezet.othello.core.game.Win
 import com.ekezet.othello.core.game.isValid
+import com.ekezet.othello.core.game.state.CurrentGameState
 import com.ekezet.othello.core.game.throwable.InvalidMoveException
 import com.ekezet.othello.feature.gameboard.GameBoardDependency
 import com.ekezet.othello.feature.gameboard.GameBoardModel
@@ -55,7 +55,7 @@ internal data object ContinueGame : GameBoardAction {
 
 internal data class OnTurnPassed(
     val nextPosition: Position?,
-    val newState: OthelloGameState,
+    val newState: CurrentGameState,
 ) : GameBoardAction {
     override fun GameBoardModel.proceed() =
         mutate(resetNextTurn(newState).pickNextMoveAt(nextPosition))

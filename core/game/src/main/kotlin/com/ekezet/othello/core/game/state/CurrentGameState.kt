@@ -1,4 +1,4 @@
-package com.ekezet.othello.core.game
+package com.ekezet.othello.core.game.state
 
 import com.ekezet.othello.core.data.models.Board
 import com.ekezet.othello.core.data.models.Disk
@@ -10,40 +10,52 @@ import com.ekezet.othello.core.data.models.putAt
 import com.ekezet.othello.core.data.models.putAtAndClone
 import com.ekezet.othello.core.data.serialize.BoardSerializer
 import com.ekezet.othello.core.data.serialize.asString
+import com.ekezet.othello.core.game.MoveHistory
+import com.ekezet.othello.core.game.MoveResult
+import com.ekezet.othello.core.game.NextTurn
+import com.ekezet.othello.core.game.PassTurn
+import com.ekezet.othello.core.game.PastMove
+import com.ekezet.othello.core.game.Tie
+import com.ekezet.othello.core.game.ValidMove
+import com.ekezet.othello.core.game.Win
 import com.ekezet.othello.core.game.data.defaultGameState
+import com.ekezet.othello.core.game.findValidMoves
+import com.ekezet.othello.core.game.isInvalid
+import com.ekezet.othello.core.game.parts
 import com.ekezet.othello.core.game.throwable.InvalidMoveException
+import com.ekezet.othello.core.game.throwable.InvalidNewMoveException
 import timber.log.Timber
 
-data class OthelloGameState(
-    val currentBoard: Board,
-    val history: MoveHistory,
-) {
-    val turn: Int get() = history.size
+data class CurrentGameState(
+    override val currentBoard: Board,
+    override val history: MoveHistory,
+) : OthelloGameState {
+    override val turn: Int get() = history.size
 
-    val currentDisk: Disk
+    override val currentDisk: Disk
         get() = if ((turn % 2) == 0) {
             Disk.Dark
         } else {
             Disk.Light
         }
 
-    val validMoves: Set<ValidMove> by lazy {
+    override val validMoves: Set<ValidMove> by lazy {
         currentBoard.findValidMoves(currentDisk)
     }
 
-    val diskCount: DiskCount by lazy {
+    override val diskCount: DiskCount by lazy {
         currentBoard.diskCount
     }
 
-    val lastState: OthelloGameState
+    override val lastState: CurrentGameState
         get() = history.last().run {
-            OthelloGameState(currentBoard = board, history = history.dropLast(1))
+            CurrentGameState(currentBoard = board, history = history.dropLast(1))
         }
 
     @Throws(InvalidMoveException::class)
-    fun proceed(moveAt: Position): MoveResult {
+    override fun proceed(moveAt: Position): MoveResult {
         if (validMoves.isInvalid(moveAt)) {
-            throw InvalidMoveException(disk = currentDisk, invalidPosition = moveAt)
+            throw InvalidNewMoveException(disk = currentDisk, invalidPosition = moveAt)
         }
         Timber.d("Move (turn: ${turn + 1}): $currentDisk @ ${moveAt.asString()}")
         val nextBoard = currentBoard.putAtAndClone(moveAt, currentDisk)
@@ -69,7 +81,7 @@ data class OthelloGameState(
     }
 
     private fun generateNextTurn(
-        nextState: OthelloGameState,
+        nextState: CurrentGameState,
         nextBoard: Board,
     ): MoveResult = if (nextState.validMoves.isNotEmpty()) {
         // next player has a valid move, continue the game
@@ -111,7 +123,7 @@ data class OthelloGameState(
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as OthelloGameState
+        other as CurrentGameState
 
         if (!currentBoard.contentDeepEquals(other.currentBoard)) return false
         if (history != other.history) return false
@@ -130,7 +142,7 @@ data class OthelloGameState(
             if (board == null) {
                 defaultGameState
             } else {
-                OthelloGameState(
+                CurrentGameState(
                     currentBoard = board,
                     history = emptyList(),
                 )

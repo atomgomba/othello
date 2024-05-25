@@ -1,7 +1,7 @@
 package com.ekezet.othello.core.game.strategy
 
 import com.ekezet.othello.core.data.models.Position
-import com.ekezet.othello.core.game.OthelloGameState
+import com.ekezet.othello.core.game.state.OthelloGameState
 
 /**
  * Just picks a random valid move.

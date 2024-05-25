@@ -8,13 +8,14 @@ import com.ekezet.hurok.ViewState
 import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.data.models.DiskCount
 import com.ekezet.othello.core.data.models.Position
-import com.ekezet.othello.core.game.OthelloGameState
 import com.ekezet.othello.core.game.data.BoardDisplayOptions
 import com.ekezet.othello.core.game.data.IGameSettings
 import com.ekezet.othello.core.game.data.defaultDarkStrategy
 import com.ekezet.othello.core.game.data.defaultDisplayOptions
 import com.ekezet.othello.core.game.data.defaultGameState
 import com.ekezet.othello.core.game.data.defaultLightStrategy
+import com.ekezet.othello.core.game.state.CurrentGameState
+import com.ekezet.othello.core.game.state.OthelloGameState
 import com.ekezet.othello.core.game.store.MoveHistoryStore
 import com.ekezet.othello.core.game.strategy.HumanPlayer
 import com.ekezet.othello.core.game.strategy.Strategy
@@ -50,7 +51,7 @@ data class GameBoardModel(
         }
 
     internal fun resetNextTurn(
-        nextState: OthelloGameState = defaultGameState,
+        nextState: CurrentGameState = defaultGameState,
         passed: Boolean = false,
     ) = copy(
         gameState = if (passed) nextState.lastState else nextState,

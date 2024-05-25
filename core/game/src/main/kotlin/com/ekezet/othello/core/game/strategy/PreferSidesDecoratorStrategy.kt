@@ -5,7 +5,7 @@ import com.ekezet.othello.core.data.models.BoardWidth
 import com.ekezet.othello.core.data.models.Position
 import com.ekezet.othello.core.data.models.x
 import com.ekezet.othello.core.data.models.y
-import com.ekezet.othello.core.game.OthelloGameState
+import com.ekezet.othello.core.game.state.OthelloGameState
 
 class PreferSidesDecoratorStrategy(
     override val wrapped: Strategy,

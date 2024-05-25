@@ -3,6 +3,8 @@ package com.ekezet.othello.core.game
 import com.ekezet.othello.core.data.models.Board
 import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.data.models.Position
+import com.ekezet.othello.core.game.state.CurrentGameState
+import com.ekezet.othello.core.game.state.PastGameState
 
 data class PastMove(
     val board: Board,
@@ -30,3 +32,12 @@ data class PastMove(
 }
 
 typealias MoveHistory = List<PastMove>
+
+fun MoveHistory.toPastGameState(fromIndex: Int): PastGameState {
+    val pastMoves = subList(fromIndex, size - 1)
+    val pastState = CurrentGameState(
+        currentBoard = pastMoves.last().board,
+        history = pastMoves,
+    )
+    return PastGameState(pastState)
+}

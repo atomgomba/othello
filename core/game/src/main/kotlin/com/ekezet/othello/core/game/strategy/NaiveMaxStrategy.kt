@@ -1,8 +1,8 @@
 package com.ekezet.othello.core.game.strategy
 
 import com.ekezet.othello.core.data.models.Position
-import com.ekezet.othello.core.game.OthelloGameState
 import com.ekezet.othello.core.game.parts
+import com.ekezet.othello.core.game.state.OthelloGameState
 
 /**
  * Simply takes the move which results in the highest number of disks flipped.

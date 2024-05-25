@@ -2,7 +2,7 @@ package com.ekezet.othello.core.game.data
 
 import com.ekezet.othello.core.data.models.Board
 import com.ekezet.othello.core.data.serialize.BoardSerializer
-import com.ekezet.othello.core.game.OthelloGameState
+import com.ekezet.othello.core.game.state.CurrentGameState
 import com.ekezet.othello.core.game.strategy.HumanPlayer
 import com.ekezet.othello.core.game.strategy.NaiveMaxStrategy
 import com.ekezet.othello.core.game.strategy.PreferSidesDecoratorStrategy.Companion.preferSides
@@ -22,8 +22,8 @@ val defaultBoard: Board
         """,
     )
 
-val defaultGameState: OthelloGameState
-    inline get() = OthelloGameState.new(defaultBoard)
+val defaultGameState: CurrentGameState
+    inline get() = CurrentGameState.new(defaultBoard)
 
 val defaultDisplayOptions: BoardDisplayOptions
     inline get() = BoardDisplayOptions(
