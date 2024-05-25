@@ -136,7 +136,9 @@ internal fun MainState.MainViewImpl(
                     CompositionLocalProvider(
                         LocalViewModelStoreOwner provides viewModelStoreOwner,
                     ) {
-                        GameHistoryView()
+                        GameHistoryView(
+                            modifier = destinationModifier,
+                        )
                     }
                 }
 
