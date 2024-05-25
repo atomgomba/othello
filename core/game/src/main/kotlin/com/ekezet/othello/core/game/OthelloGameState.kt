@@ -76,12 +76,12 @@ data class OthelloGameState(
         Timber.d("Continue turn ${nextState.turn + 1}")
         NextTurn(state = nextState)
     } else {
-        val nextDisk = nextState.currentDisk
         val hasMoreValidMoves = nextBoard
             .findValidMoves(currentDisk)
             .isNotEmpty()
         if (hasMoreValidMoves) {
             // current player still has a valid move, next player passes
+            val nextDisk = nextState.currentDisk
             Timber.d("Player passed ($nextDisk)")
             PassTurn(
                 state = nextState.copy(

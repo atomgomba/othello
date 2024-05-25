@@ -15,10 +15,13 @@ import com.ekezet.othello.core.game.data.defaultDarkStrategy
 import com.ekezet.othello.core.game.data.defaultDisplayOptions
 import com.ekezet.othello.core.game.data.defaultGameState
 import com.ekezet.othello.core.game.data.defaultLightStrategy
+import com.ekezet.othello.core.game.store.MoveHistoryStore
 import com.ekezet.othello.core.game.strategy.HumanPlayer
 import com.ekezet.othello.core.game.strategy.Strategy
 import com.ekezet.othello.feature.gameboard.ui.viewModels.BoardList
 import com.ekezet.othello.feature.gameboard.ui.viewModels.BoardOverlayList
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.get
 
 /**
  * Give a little time for humans to follow changes on the board
@@ -77,7 +80,7 @@ internal data class GameBoardState(
     val celebrate: Boolean,
     val isHumanPlayer: Boolean,
     val passed: Boolean,
-) : ViewState<GameBoardModel, Unit>() {
+) : ViewState<GameBoardModel, GameBoardDependency>() {
     internal val boardBackground: Color
         inline get() = if (displayOptions.isGrayscaleMode) {
             Color(0xFFC0C0C0)
@@ -86,7 +89,13 @@ internal data class GameBoardState(
         }
 }
 
-typealias GameBoardEmitter = ActionEmitter<GameBoardModel, Unit>
+class GameBoardDependency(
+    moveHistoryStore: MoveHistoryStore? = null,
+) : KoinComponent {
+    val moveHistoryStore: MoveHistoryStore = moveHistoryStore ?: get()
+}
+
+typealias GameBoardEmitter = ActionEmitter<GameBoardModel, GameBoardDependency>
 
 sealed interface GameEnd {
     data class EndedWin(val winner: Disk) : GameEnd

@@ -10,12 +10,13 @@ import com.ekezet.othello.core.game.Tie
 import com.ekezet.othello.core.game.Win
 import com.ekezet.othello.core.game.isValid
 import com.ekezet.othello.core.game.throwable.InvalidMoveException
+import com.ekezet.othello.feature.gameboard.GameBoardDependency
 import com.ekezet.othello.feature.gameboard.GameBoardModel
 import com.ekezet.othello.feature.gameboard.GameEnd
 import com.ekezet.othello.feature.gameboard.WaitBeforeNextTurn
 import timber.log.Timber
 
-internal sealed interface GameBoardAction : Action<GameBoardModel, Unit>
+internal sealed interface GameBoardAction : Action<GameBoardModel, GameBoardDependency>
 
 internal data object OnGameStarted : GameBoardAction {
     override fun GameBoardModel.proceed() = if (ended != null || darkStrategy == null) {
@@ -36,7 +37,7 @@ internal data class OnMoveMade(val position: Position) : GameBoardAction {
 }
 
 internal data object ContinueGame : GameBoardAction {
-    override fun GameBoardModel.proceed(): Next<GameBoardModel, Unit> {
+    override fun GameBoardModel.proceed(): Next<GameBoardModel, GameBoardDependency> {
         val moveResult = try {
             gameState.proceed(nextMovePosition ?: return skip)
         } catch (e: InvalidMoveException) {

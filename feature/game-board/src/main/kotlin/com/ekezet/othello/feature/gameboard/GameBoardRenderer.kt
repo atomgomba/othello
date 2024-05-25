@@ -9,7 +9,7 @@ import com.ekezet.othello.feature.gameboard.ui.viewModels.newEmptyOverlay
 import com.ekezet.othello.feature.gameboard.ui.viewModels.putAt
 import com.ekezet.othello.feature.gameboard.ui.viewModels.toImmutableList
 
-internal class GameBoardRenderer : Renderer<GameBoardModel, Unit, GameBoardState> {
+internal class GameBoardRenderer : Renderer<GameBoardModel, GameBoardDependency, GameBoardState> {
     override fun renderState(model: GameBoardModel) = with(model) {
         GameBoardState(
             board = gameState.currentBoard.toImmutableList(),

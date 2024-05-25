@@ -11,11 +11,13 @@ internal class GameBoardLoop internal constructor(
     model: GameBoardModel,
     renderer: GameBoardRenderer,
     args: GameSettings? = null,
+    dependency: GameBoardDependency? = null,
     firstAction: GameBoardAction? = null,
-) : Loop<GameBoardState, GameBoardModel, GameSettings, Unit, GameBoardAction>(
+) : Loop<GameBoardState, GameBoardModel, GameSettings, GameBoardDependency, GameBoardAction>(
     model = model,
     renderer = renderer,
     args = args,
+    dependency = dependency,
     firstAction = firstAction,
 ) {
     override fun GameBoardModel.applyArgs(args: GameSettings): GameBoardModel {
@@ -35,13 +37,14 @@ internal class GameBoardLoop internal constructor(
     }
 
     internal companion object Builder :
-        LoopBuilder<GameBoardState, GameBoardModel, GameSettings, Unit, GameBoardAction> {
+        LoopBuilder<GameBoardState, GameBoardModel, GameSettings, GameBoardDependency, GameBoardAction> {
         override fun build(
             args: GameSettings?,
         ) = GameBoardLoop(
             model = GameBoardModel(),
             renderer = GameBoardRenderer(),
             args = requireNotNull(args) { "Arguments must be set" },
+            dependency = GameBoardDependency(),
             firstAction = OnGameStarted,
         )
     }
