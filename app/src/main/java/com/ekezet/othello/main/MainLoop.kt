@@ -3,26 +3,24 @@ package com.ekezet.othello.main
 import com.ekezet.hurok.AnyActionEmitter
 import com.ekezet.hurok.Loop
 import com.ekezet.hurok.LoopBuilder
-import com.ekezet.othello.core.game.data.GameSettings
 import com.ekezet.othello.feature.gameboard.GameBoardEmitter
 
 internal class MainLoop internal constructor(
     model: MainModel,
     renderer: MainRenderer,
-    args: GameSettings? = null,
-    firstAction: MainAction? = null,
+    args: MainArgs? = null,
     dependency: MainDependency? = null,
-) : Loop<MainState, MainModel, GameSettings, MainDependency, MainAction>(
+) : Loop<MainState, MainModel, MainArgs, MainDependency, MainAction>(
     model = model,
     renderer = renderer,
     args = args,
-    firstAction = firstAction,
     dependency = dependency,
 ) {
-    override fun MainModel.applyArgs(args: GameSettings) = copy(
-        displayOptions = args.displayOptions,
-        lightStrategy = args.lightStrategy,
-        darkStrategy = args.darkStrategy,
+    override fun MainModel.applyArgs(args: MainArgs) = copy(
+        displayOptions = args.gameSettings.displayOptions,
+        lightStrategy = args.gameSettings.lightStrategy,
+        darkStrategy = args.gameSettings.darkStrategy,
+        hasGameHistory = args.moveHistory.isNotEmpty(),
     )
 
     @Suppress("UNCHECKED_CAST")
@@ -31,14 +29,13 @@ internal class MainLoop internal constructor(
     }
 
     internal companion object Builder :
-        LoopBuilder<MainState, MainModel, GameSettings, MainDependency, MainAction> {
+        LoopBuilder<MainState, MainModel, MainArgs, MainDependency, MainAction> {
         override fun build(
-            args: GameSettings?,
+            args: MainArgs?,
         ) = MainLoop(
             model = MainModel(),
             renderer = MainRenderer(),
             args = requireNotNull(args) { "Args must be set" },
-            firstAction = FirstAction,
             dependency = MainDependency(),
         )
     }

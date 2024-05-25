@@ -9,8 +9,9 @@ import com.ekezet.othello.core.game.data.IGameSettings
 import com.ekezet.othello.core.game.data.defaultDarkStrategy
 import com.ekezet.othello.core.game.data.defaultDisplayOptions
 import com.ekezet.othello.core.game.data.defaultLightStrategy
+import com.ekezet.othello.core.game.dependency.GameSettingsPublisher
 import com.ekezet.othello.core.game.store.GameSettingsStore
-import com.ekezet.othello.core.game.store.HasGameSettingsStore
+import com.ekezet.othello.core.game.store.MoveHistoryStore
 import com.ekezet.othello.core.game.strategy.DecoratedStrategy
 import com.ekezet.othello.core.game.strategy.Strategy
 import org.koin.core.component.KoinComponent
@@ -41,7 +42,7 @@ internal data class GameSettingsState(
     val lightStrategy: Strategy? = defaultLightStrategy,
     val darkStrategy: Strategy? = defaultDarkStrategy,
     val selectingStrategyFor: Disk?,
-) : ViewState<GameSettingsModel, GameSettingsDependency>() {
+) : ViewState<GameSettingsModel, GameGameSettingsDependency>() {
     internal val Disk.isNotHuman: Boolean
         inline get() = if (isLight) {
             lightName != null
@@ -68,8 +69,10 @@ internal data class GameSettingsState(
         current == other || (current is DecoratedStrategy && current.wrapped == other)
 }
 
-internal class GameSettingsDependency(
+internal class GameGameSettingsDependency(
     gameSettingsStore: GameSettingsStore? = null,
-) : KoinComponent, HasGameSettingsStore {
+    moveHistoryStore: MoveHistoryStore? = null
+) : KoinComponent, GameSettingsPublisher {
     override val gameSettingsStore: GameSettingsStore = gameSettingsStore ?: get()
+    override val moveHistoryStore: MoveHistoryStore = moveHistoryStore ?: get()
 }

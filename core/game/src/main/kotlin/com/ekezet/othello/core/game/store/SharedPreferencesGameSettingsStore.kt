@@ -14,17 +14,13 @@ internal class SharedPreferencesGameSettingsStore(
 ) : GameSettingsStore {
     private val prefs = context.getSharedPreferences("game-settings", Context.MODE_PRIVATE)
 
-    private val _settings: MutableStateFlow<GameSettings> = MutableStateFlow(load())
+    private val _settings: MutableStateFlow<GameSettings> = MutableStateFlow(prefs.load())
     override val settings: StateFlow<GameSettings>
         get() = _settings.asStateFlow()
 
     override suspend fun update(new: IGameSettings) {
         val data = GameSettings.from(new)
         _settings.value = data
-        persist(data)
+        prefs.persist(data)
     }
-
-    private fun persist(data: IGameSettings) = prefs.persist(data)
-
-    private fun load(): GameSettings = prefs.load()
 }

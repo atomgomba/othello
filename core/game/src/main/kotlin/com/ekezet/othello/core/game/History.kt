@@ -31,6 +31,8 @@ data class PastMove(
     }
 }
 
+val PastMove.isPass: Boolean get() = moveAt == null
+
 typealias MoveHistory = List<PastMove>
 
 fun MoveHistory.toPastGameState(fromIndex: Int): PastGameState {

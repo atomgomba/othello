@@ -6,6 +6,9 @@ import com.ekezet.othello.core.game.state.OthelloGameState
 interface Strategy {
     val name: String
 
+    /**
+     * Returns the next valid move derived from the [state], or null if there's none.
+     */
     fun deriveNext(state: OthelloGameState): Position?
 
     companion object Factory

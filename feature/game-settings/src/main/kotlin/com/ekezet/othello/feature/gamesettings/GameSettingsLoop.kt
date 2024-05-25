@@ -8,8 +8,8 @@ internal class GameSettingsLoop internal constructor(
     model: GameSettingsModel,
     renderer: GameSettingsRenderer,
     args: GameSettings? = null,
-    dependency: GameSettingsDependency? = null,
-) : Loop<GameSettingsState, GameSettingsModel, GameSettings, GameSettingsDependency, GameSettingsAction>(
+    dependency: GameGameSettingsDependency? = null,
+) : Loop<GameSettingsState, GameSettingsModel, GameSettings, GameGameSettingsDependency, GameSettingsAction>(
     model = model,
     renderer = renderer,
     args = args,
@@ -23,12 +23,12 @@ internal class GameSettingsLoop internal constructor(
         )
 
     internal companion object Builder :
-        LoopBuilder<GameSettingsState, GameSettingsModel, GameSettings, GameSettingsDependency, GameSettingsAction> {
+        LoopBuilder<GameSettingsState, GameSettingsModel, GameSettings, GameGameSettingsDependency, GameSettingsAction> {
         override fun build(args: GameSettings?) = GameSettingsLoop(
             model = GameSettingsModel(),
             renderer = GameSettingsRenderer(),
             args = requireNotNull(args) { "Arguments must be set" },
-            dependency = GameSettingsDependency(),
+            dependency = GameGameSettingsDependency(),
         )
     }
 }

@@ -7,6 +7,9 @@ interface IGameSettings {
     val displayOptions: BoardDisplayOptions
     val lightStrategy: Strategy?
     val darkStrategy: Strategy?
+
+    fun containsDifferentStrategy(other: IGameSettings) =
+        other.darkStrategy != darkStrategy || other.lightStrategy != lightStrategy
 }
 
 data class GameSettings(

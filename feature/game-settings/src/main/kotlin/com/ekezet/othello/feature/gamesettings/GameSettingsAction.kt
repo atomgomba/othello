@@ -7,7 +7,7 @@ import com.ekezet.othello.core.game.strategy.DecoratedStrategy
 import com.ekezet.othello.core.game.strategy.PreferSidesDecoratorStrategy.Companion.preferSides
 import com.ekezet.othello.core.game.strategy.Strategy
 
-internal sealed interface GameSettingsAction : Action<GameSettingsModel, GameSettingsDependency>
+internal sealed interface GameSettingsAction : Action<GameSettingsModel, GameGameSettingsDependency>
 
 internal data class OnStrategySelectorClicked(val player: Disk) : GameSettingsAction {
     override fun GameSettingsModel.proceed() = mutate(showStrategySelectorFor(player))
@@ -21,14 +21,14 @@ internal data class OnStrategySelected(
     val disk: Disk,
     val strategy: Strategy?,
 ) : GameSettingsAction {
-    override fun GameSettingsModel.proceed(): Next<GameSettingsModel, GameSettingsDependency> {
+    override fun GameSettingsModel.proceed(): Next<GameSettingsModel, GameGameSettingsDependency> {
         val updated = setStrategyFor(disk, strategy)
         return outcome(updated, PublishGameSettings(updated))
     }
 }
 
 internal data class OnPreferSidesToggled(val disk: Disk, val prefer: Boolean) : GameSettingsAction {
-    override fun GameSettingsModel.proceed(): Next<GameSettingsModel, GameSettingsDependency> {
+    override fun GameSettingsModel.proceed(): Next<GameSettingsModel, GameGameSettingsDependency> {
         val updated = setStrategyFor(disk, setPreferSides(disk, prefer))
         return outcome(updated, PublishGameSettings(updated))
     }
@@ -44,7 +44,7 @@ internal data class OnPreferSidesToggled(val disk: Disk, val prefer: Boolean) : 
 }
 
 internal data object OnShowPossibleMovesClicked : GameSettingsAction {
-    override fun GameSettingsModel.proceed(): Next<GameSettingsModel, GameSettingsDependency> {
+    override fun GameSettingsModel.proceed(): Next<GameSettingsModel, GameGameSettingsDependency> {
         val updated = copy(
             displayOptions = displayOptions.copy(
                 showPossibleMoves = !displayOptions.showPossibleMoves,
@@ -55,7 +55,7 @@ internal data object OnShowPossibleMovesClicked : GameSettingsAction {
 }
 
 internal data object OnShowBoardPositionsClicked : GameSettingsAction {
-    override fun GameSettingsModel.proceed(): Next<GameSettingsModel, GameSettingsDependency> {
+    override fun GameSettingsModel.proceed(): Next<GameSettingsModel, GameGameSettingsDependency> {
         val updated = copy(
             displayOptions = displayOptions.copy(
                 showBoardPositions = !displayOptions.showBoardPositions,
@@ -66,7 +66,7 @@ internal data object OnShowBoardPositionsClicked : GameSettingsAction {
 }
 
 internal data object OnGrayscaleModeClicked : GameSettingsAction {
-    override fun GameSettingsModel.proceed(): Next<GameSettingsModel, GameSettingsDependency> {
+    override fun GameSettingsModel.proceed(): Next<GameSettingsModel, GameGameSettingsDependency> {
         val updated = copy(
             displayOptions = displayOptions.copy(
                 isGrayscaleMode = !displayOptions.isGrayscaleMode,

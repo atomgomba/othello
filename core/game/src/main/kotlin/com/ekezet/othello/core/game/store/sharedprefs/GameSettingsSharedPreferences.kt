@@ -38,8 +38,8 @@ internal fun SharedPreferences.persist(data: IGameSettings) = with(edit()) {
 
 internal fun SharedPreferences.load(): GameSettings =
     GameSettings(
-        lightStrategy = loadStrategy(KEY_LIGHT_NAME, KEY_LIGHT_PREFER_SIDES, defaultLightStrategy),
-        darkStrategy = loadStrategy(KEY_DARK_NAME, KEY_DARK_PREFER_SIDES, defaultDarkStrategy),
+        lightStrategy = getStrategy(KEY_LIGHT_NAME, KEY_LIGHT_PREFER_SIDES, defaultLightStrategy),
+        darkStrategy = getStrategy(KEY_DARK_NAME, KEY_DARK_PREFER_SIDES, defaultDarkStrategy),
         displayOptions = with(defaultDisplayOptions) {
             BoardDisplayOptions(
                 showPossibleMoves = getBoolean(KEY_SHOW_POSSIBLE_MOVES, showPossibleMoves),
@@ -49,7 +49,7 @@ internal fun SharedPreferences.load(): GameSettings =
         },
     )
 
-private fun SharedPreferences.loadStrategy(
+private fun SharedPreferences.getStrategy(
     keyName: String,
     keyPref: String,
     default: Strategy? = HumanPlayer,

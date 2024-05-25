@@ -3,7 +3,7 @@
     <string name="main__menu__new_game">Reset game</string>
     <string name="main__menu__share_board">Share board</string>
     <string name="main__menu__toggle_indicators">Toggle indicators</string>
-    <string name="main__nav__game_board">Game</string>
+    <string name="main__nav__game_board">Play</string>
     <string name="main__nav__game_history">History</string>
     <string name="main__nav__game_settings">Settings</string>
 
@@ -15,6 +15,8 @@
     <string name="game_board__footer__winner">Winner!</string>
     <string name="game_board__header__passed">Passed Turn</string>
     <string name="game_board__header__turn">Turn: %d</string>
+
+    <string name="game_history__title__num_of_moves">Number of moves: %d</string>
 
     <string name="game_settings__header__board">Board</string>
     <string name="game_settings__header__players">Players</string>

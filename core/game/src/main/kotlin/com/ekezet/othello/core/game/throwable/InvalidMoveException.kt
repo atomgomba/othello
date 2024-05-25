@@ -4,7 +4,7 @@ import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.data.models.Position
 import com.ekezet.othello.core.data.serialize.asString
 
-abstract class InvalidMoveException : IllegalStateException()
+sealed class InvalidMoveException : IllegalStateException()
 
 data class InvalidNewMoveException(
     val disk: Disk,
@@ -16,5 +16,5 @@ data class InvalidNewMoveException(
 
 class InvalidPastMoveException: InvalidMoveException() {
     override val message: String
-        get() = "Move history cannot be overridden"
+        get() = "Move history cannot be changed"
 }

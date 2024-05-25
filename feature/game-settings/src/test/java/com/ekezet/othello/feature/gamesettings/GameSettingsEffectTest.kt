@@ -20,13 +20,13 @@ internal class GameSettingsEffectTest : EffectTest() {
 
     private val initGameSettings = GameSettings()
 
-    private lateinit var dependency: GameSettingsDependency
+    private lateinit var dependency: GameGameSettingsDependency
 
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
 
-        dependency = GameSettingsDependency(
+        dependency = GameGameSettingsDependency(
             gameSettingsStore = mockGameSettingsStore,
         )
     }

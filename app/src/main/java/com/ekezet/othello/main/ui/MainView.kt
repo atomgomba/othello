@@ -22,11 +22,14 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.ekezet.hurok.compose.LocalActionEmitter
 import com.ekezet.hurok.compose.LoopWrapper
+import com.ekezet.othello.core.game.MoveHistory
 import com.ekezet.othello.core.game.data.GameSettings
 import com.ekezet.othello.core.game.store.GameSettingsStore
+import com.ekezet.othello.core.game.store.MoveHistoryStore
 import com.ekezet.othello.feature.gameboard.ui.GameBoardView
 import com.ekezet.othello.feature.gamehistory.ui.GameHistoryView
 import com.ekezet.othello.feature.gamesettings.ui.GameSettingsView
+import com.ekezet.othello.main.MainArgs
 import com.ekezet.othello.main.MainLoop
 import com.ekezet.othello.main.MainState
 import com.ekezet.othello.main.navigation.MainRoutes
@@ -47,13 +50,17 @@ internal fun MainView(
     val gameSettingsStore: GameSettingsStore = koinInject()
     val gameSettings: GameSettings by gameSettingsStore.settings.collectAsState()
 
+    val moveHistoryStore: MoveHistoryStore = koinInject()
+    val moveHistory: MoveHistory by moveHistoryStore.history.collectAsState()
+
     LoopWrapper(
         builder = MainLoop,
-        args = gameSettings,
+        args = MainArgs(gameSettings = gameSettings, moveHistory = moveHistory),
         parentScope = parentScope,
     ) {
         MainViewImpl(
             gameSettings = gameSettings,
+            moveHistory = moveHistory,
         )
     }
 }
@@ -62,6 +69,7 @@ internal fun MainView(
 @Composable
 internal fun MainState.MainViewImpl(
     gameSettings: GameSettings,
+    moveHistory: MoveHistory,
     startDestination: String = MainRoutes.Start,
 ) {
     val viewModelStoreOwner = requireNotNull(LocalViewModelStoreOwner.current) {
@@ -137,6 +145,7 @@ internal fun MainState.MainViewImpl(
                         LocalViewModelStoreOwner provides viewModelStoreOwner,
                     ) {
                         GameHistoryView(
+                            args = moveHistory,
                             modifier = destinationModifier,
                         )
                     }

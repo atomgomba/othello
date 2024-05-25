@@ -57,7 +57,7 @@ data class CurrentGameState(
         if (validMoves.isInvalid(moveAt)) {
             throw InvalidNewMoveException(disk = currentDisk, invalidPosition = moveAt)
         }
-        Timber.d("Move (turn: ${turn + 1}): $currentDisk @ ${moveAt.asString()}")
+        Timber.i("Move (turn: ${turn + 1}): $currentDisk @ ${moveAt.asString()}")
         val nextBoard = currentBoard.putAtAndClone(moveAt, currentDisk)
         val validSegments = validMoves
             .filter { it.position == moveAt }
@@ -85,7 +85,7 @@ data class CurrentGameState(
         nextBoard: Board,
     ): MoveResult = if (nextState.validMoves.isNotEmpty()) {
         // next player has a valid move, continue the game
-        Timber.d("Continue turn ${nextState.turn + 1}")
+        Timber.i("Continue turn ${nextState.turn + 1}")
         NextTurn(state = nextState)
     } else {
         val hasMoreValidMoves = nextBoard
@@ -94,14 +94,14 @@ data class CurrentGameState(
         if (hasMoreValidMoves) {
             // current player still has a valid move, next player passes
             val nextDisk = nextState.currentDisk
-            Timber.d("Player passed ($nextDisk)")
+            Timber.i("Player passed ($nextDisk)")
             PassTurn(
                 state = nextState.copy(
                     history = nextState.history + PastMove(
                         board = nextBoard.deepClone(),
                         moveAt = null,
                         disk = nextDisk,
-                        turn = turn + 1,
+                        turn = nextState.turn + 1,
                     ),
                 ),
             )
@@ -109,11 +109,11 @@ data class CurrentGameState(
             // nobody can move, it's a win or a tie
             val (numDark, numLight) = nextState.diskCount
             if (numDark == numLight) {
-                Timber.d("It's a tie!")
+                Timber.i("It's a tie!")
                 Tie(state = nextState)
             } else {
                 val winner = if (numDark < numLight) Disk.Light else Disk.Dark
-                Timber.d("We have a winner! ($winner)")
+                Timber.i("We have a winner! ($winner)")
                 Win(state = nextState, winner = winner)
             }
         }

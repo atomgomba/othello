@@ -16,8 +16,8 @@ import androidx.navigation.NavHostController
 import com.ekezet.othello.R.string
 import com.ekezet.othello.core.game.data.GameSettings
 import com.ekezet.othello.main.MainState
+import com.ekezet.othello.main.navigation.MainRoutes
 import com.ekezet.othello.main.navigation.MainRoutes.GameBoardRoute
-import com.ekezet.othello.main.navigation.MainRoutes.GameSettingsRoute
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
@@ -34,7 +34,7 @@ internal fun MainState.MainTopAppBar(
         title = { Text(stringResource(string.app_name)) },
         navigationIcon = {
             AnimatedVisibility(
-                visible = currentDestination == GameSettingsRoute.id,
+                visible = currentDestination != MainRoutes.Start,
             ) {
                 IconButton(onClick = { navController.popBackStack() }) {
                     Icon(

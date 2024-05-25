@@ -3,7 +3,6 @@ package com.ekezet.othello.feature.gameboard
 import com.ekezet.hurok.Effect
 import com.ekezet.othello.core.data.models.Position
 import com.ekezet.othello.core.game.state.CurrentGameState
-import com.ekezet.othello.core.game.PastMove
 import com.ekezet.othello.feature.gameboard.actions.OnGameEnded
 import com.ekezet.othello.feature.gameboard.actions.OnMoveMade
 import com.ekezet.othello.feature.gameboard.actions.OnTurnPassed
@@ -39,16 +38,10 @@ internal data class WaitBeforeGameEnd(
     }
 }
 
-internal data class PublishPastMove(
-    private val pastMove: PastMove,
+internal data class PublishPastMoves(
+    private val newState: CurrentGameState,
 ) : GameBoardEffect {
     override suspend fun GameBoardEmitter.trigger(dependency: GameBoardDependency?) = dependency?.run {
-        moveHistoryStore.add(pastMove)
-    }
-}
-
-internal data object ResetPastMoves : GameBoardEffect {
-    override suspend fun GameBoardEmitter.trigger(dependency: GameBoardDependency?) = dependency?.run {
-        moveHistoryStore.reset()
+        moveHistoryStore.reset(newState.history)
     }
 }
