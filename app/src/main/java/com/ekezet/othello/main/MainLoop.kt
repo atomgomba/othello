@@ -10,11 +10,13 @@ internal class MainLoop internal constructor(
     model: MainModel,
     renderer: MainRenderer,
     args: GameSettings? = null,
+    firstAction: MainAction? = null,
     dependency: MainDependency? = null,
 ) : Loop<MainState, MainModel, GameSettings, MainDependency, MainAction>(
     model = model,
     renderer = renderer,
     args = args,
+    firstAction = firstAction,
     dependency = dependency,
 ) {
     override fun MainModel.applyArgs(args: GameSettings) = copy(
@@ -36,6 +38,7 @@ internal class MainLoop internal constructor(
             model = MainModel(),
             renderer = MainRenderer(),
             args = requireNotNull(args) { "Args must be set" },
+            firstAction = FirstAction,
             dependency = MainDependency(),
         )
     }

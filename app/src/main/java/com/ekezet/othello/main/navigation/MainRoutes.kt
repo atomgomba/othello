@@ -1,6 +1,7 @@
 package com.ekezet.othello.main.navigation
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -21,6 +22,7 @@ sealed class MainRoutes : Route() {
         val Start: String = GameBoardRoute.id
         val All = listOf(
             GameBoardRoute,
+            GameHistoryRoute,
             GameSettingsRoute,
         )
     }
@@ -30,6 +32,13 @@ sealed class MainRoutes : Route() {
         override val id: String = "game-board"
         override val icon: ImageVector = Icons.Default.PlayArrow
         override val labelRes: Int = R.string.main__nav__game_board
+    }
+
+    @ExcludeFromCoverage
+    data object GameHistoryRoute : MainRoutes() {
+        override val id: String = "game-history"
+        override val icon: ImageVector = Icons.Default.History
+        override val labelRes: Int = R.string.main__nav__game_history
     }
 
     @ExcludeFromCoverage

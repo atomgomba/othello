@@ -98,7 +98,13 @@ internal fun MainState.MainViewImpl(
         },
     ) { innerPadding ->
         NavigationSuiteScaffold(
-            navigationSuiteItems = { navigationActions(currentDestination, ::navigateTo) },
+            navigationSuiteItems = {
+                navigationActions(
+                    currentDestination = currentDestination,
+                    onClick = ::navigateTo,
+                    hasGameHistory = hasGameHistory,
+                )
+           },
             modifier = Modifier.padding(innerPadding),
         ) {
             NavHost(

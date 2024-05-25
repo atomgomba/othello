@@ -6,6 +6,10 @@ import com.ekezet.othello.core.game.data.defaultGameState
 
 internal sealed interface MainAction : Action<MainModel, MainDependency>
 
+internal data object FirstAction : MainAction {
+    override fun MainModel.proceed() = trigger(CollectData)
+}
+
 internal data object OnNewGameClicked : MainAction {
     override fun MainModel.proceed() =
         trigger(UpdateGameBoardGameState(defaultGameState))
@@ -20,4 +24,10 @@ internal data object OnToggleIndicatorsClicked : MainAction {
         )
         return outcome(newSettings, PublishGameSettings(newSettings))
     }
+}
+
+internal data class OnMoveHistoryChanged(
+    private val isNotEmpty: Boolean,
+) : MainAction {
+    override fun MainModel.proceed() = mutate(copy(hasGameHistory = isNotEmpty))
 }
