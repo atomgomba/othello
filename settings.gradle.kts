@@ -39,15 +39,16 @@ dependencyResolutionManagement {
 
 rootProject.name = "othello"
 
-include(":app")
-
-include(":core:data")
-include(":core:game")
-include(":core:logging")
-include(":core:ui")
-
-include(":feature:game-board")
-include(":feature:game-settings")
+include(
+    ":app",
+    ":core:data",
+    ":core:game",
+    ":core:logging",
+    ":core:ui",
+    ":feature:game-board",
+    ":feature:game-history",
+    ":feature:game-settings",
+)
 
 fun Properties.find(key: String): String? =
     getProperty(key) ?: System.getenv(key)

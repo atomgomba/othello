@@ -25,11 +25,13 @@ import com.ekezet.hurok.compose.LoopWrapper
 import com.ekezet.othello.core.game.data.GameSettings
 import com.ekezet.othello.core.game.store.GameSettingsStore
 import com.ekezet.othello.feature.gameboard.ui.GameBoardView
+import com.ekezet.othello.feature.gamehistory.ui.GameHistoryView
 import com.ekezet.othello.feature.gamesettings.ui.GameSettingsView
 import com.ekezet.othello.main.MainLoop
 import com.ekezet.othello.main.MainState
 import com.ekezet.othello.main.navigation.MainRoutes
 import com.ekezet.othello.main.navigation.MainRoutes.GameBoardRoute
+import com.ekezet.othello.main.navigation.MainRoutes.GameHistoryRoute
 import com.ekezet.othello.main.navigation.MainRoutes.GameSettingsRoute
 import com.ekezet.othello.main.navigation.stripRoute
 import com.ekezet.othello.main.ui.components.MainTopAppBar
@@ -125,6 +127,16 @@ internal fun MainState.MainViewImpl(
                             },
                             modifier = destinationModifier,
                         )
+                    }
+                }
+
+                composable(
+                    route = GameHistoryRoute.spec,
+                ) {
+                    CompositionLocalProvider(
+                        LocalViewModelStoreOwner provides viewModelStoreOwner,
+                    ) {
+                        GameHistoryView()
                     }
                 }
 

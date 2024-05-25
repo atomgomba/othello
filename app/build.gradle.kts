@@ -40,6 +40,7 @@ dependencies {
     implementation(project(":core:ui"))
 
     implementation(project(":feature:game-board"))
+    implementation(project(":feature:game-history"))
     implementation(project(":feature:game-settings"))
 
     implementation(libs.androidx.activity.compose)
