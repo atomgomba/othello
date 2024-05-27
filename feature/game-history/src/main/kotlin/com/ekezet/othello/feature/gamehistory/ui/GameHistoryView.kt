@@ -14,8 +14,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -43,6 +43,7 @@ import com.ekezet.othello.feature.gamehistory.ui.viewModels.HistoryItem
 @Composable
 fun GameHistoryView(
     args: GameHistoryArgs,
+    listState: LazyListState,
     modifier: Modifier = Modifier,
 ) {
     LoopWrapper(
@@ -50,6 +51,7 @@ fun GameHistoryView(
         args = args,
     ) {
         GameHistoryViewImpl(
+            listState = listState,
             modifier = modifier,
         )
     }
@@ -57,10 +59,9 @@ fun GameHistoryView(
 
 @Composable
 private fun GameHistoryState.GameHistoryViewImpl(
+    listState: LazyListState,
     modifier: Modifier,
 ) {
-    val listState = rememberLazyListState()
-
     Column(
         modifier = modifier.then(
             Modifier
@@ -87,7 +88,7 @@ private fun GameHistoryState.GameHistoryViewImpl(
             }
 
             if (gameEnd != null) {
-                item {
+                item(key = "end-result") {
                     when (gameEnd) {
                         GameEnd.EndedTie -> Text("Tie! ${lastState.diskCount}")
                         is GameEnd.EndedWin -> Text("Winner: ${gameEnd.winner} ${lastState.diskCount}")
