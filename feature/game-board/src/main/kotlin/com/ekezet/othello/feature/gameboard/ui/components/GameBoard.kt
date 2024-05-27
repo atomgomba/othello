@@ -37,9 +37,9 @@ import com.ekezet.othello.core.ui.components.GamePiece
 import com.ekezet.othello.core.ui.theme.BoardBackground
 import com.ekezet.othello.core.ui.viewModels.BoardList
 import com.ekezet.othello.core.ui.viewModels.getAt
-import com.ekezet.othello.feature.gameboard.GameEnd
-import com.ekezet.othello.feature.gameboard.GameEnd.EndedTie
-import com.ekezet.othello.feature.gameboard.GameEnd.EndedWin
+import com.ekezet.othello.core.game.GameEnd
+import com.ekezet.othello.core.game.GameEnd.EndedTie
+import com.ekezet.othello.core.game.GameEnd.EndedWin
 import com.ekezet.othello.feature.gameboard.ui.viewModels.BoardOverlayList
 import com.ekezet.othello.feature.gameboard.ui.viewModels.getAt
 

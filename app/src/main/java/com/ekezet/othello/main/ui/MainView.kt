@@ -22,10 +22,10 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.ekezet.hurok.compose.LocalActionEmitter
 import com.ekezet.hurok.compose.LoopWrapper
-import com.ekezet.othello.core.game.MoveHistory
+import com.ekezet.othello.core.game.GameHistory
 import com.ekezet.othello.core.game.data.GameSettings
+import com.ekezet.othello.core.game.store.GameHistoryStore
 import com.ekezet.othello.core.game.store.GameSettingsStore
-import com.ekezet.othello.core.game.store.MoveHistoryStore
 import com.ekezet.othello.feature.gameboard.ui.GameBoardView
 import com.ekezet.othello.feature.gamehistory.ui.GameHistoryView
 import com.ekezet.othello.feature.gamesettings.ui.GameSettingsView
@@ -50,17 +50,20 @@ internal fun MainView(
     val gameSettingsStore: GameSettingsStore = koinInject()
     val gameSettings: GameSettings by gameSettingsStore.settings.collectAsState()
 
-    val moveHistoryStore: MoveHistoryStore = koinInject()
-    val moveHistory: MoveHistory by moveHistoryStore.history.collectAsState()
+    val gameHistoryStore: GameHistoryStore = koinInject()
+    val gameHistory: GameHistory by gameHistoryStore.history.collectAsState()
 
     LoopWrapper(
         builder = MainLoop,
-        args = MainArgs(gameSettings = gameSettings, moveHistory = moveHistory),
+        args = MainArgs(
+            gameSettings = gameSettings,
+            hasGameHistory = gameHistory.history.isNotEmpty(),
+        ),
         parentScope = parentScope,
     ) {
         MainViewImpl(
             gameSettings = gameSettings,
-            moveHistory = moveHistory,
+            gameHistory = gameHistory,
         )
     }
 }
@@ -69,7 +72,7 @@ internal fun MainView(
 @Composable
 internal fun MainState.MainViewImpl(
     gameSettings: GameSettings,
-    moveHistory: MoveHistory,
+    gameHistory: GameHistory,
     startDestination: String = MainRoutes.Start,
 ) {
     val viewModelStoreOwner = requireNotNull(LocalViewModelStoreOwner.current) {
@@ -145,7 +148,7 @@ internal fun MainState.MainViewImpl(
                         LocalViewModelStoreOwner provides viewModelStoreOwner,
                     ) {
                         GameHistoryView(
-                            args = moveHistory,
+                            args = gameHistory,
                             modifier = destinationModifier,
                         )
                     }

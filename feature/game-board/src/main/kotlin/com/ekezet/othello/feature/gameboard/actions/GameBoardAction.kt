@@ -12,7 +12,7 @@ import com.ekezet.othello.core.game.state.CurrentGameState
 import com.ekezet.othello.core.game.throwable.InvalidMoveException
 import com.ekezet.othello.feature.gameboard.GameBoardDependency
 import com.ekezet.othello.feature.gameboard.GameBoardModel
-import com.ekezet.othello.feature.gameboard.GameEnd
+import com.ekezet.othello.core.game.GameEnd
 import com.ekezet.othello.feature.gameboard.WaitBeforeNextTurn
 import timber.log.Timber
 

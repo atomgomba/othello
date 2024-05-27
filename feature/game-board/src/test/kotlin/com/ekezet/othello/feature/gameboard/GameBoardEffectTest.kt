@@ -3,8 +3,9 @@ package com.ekezet.othello.feature.gameboard
 import com.ekezet.hurok.test.EffectTest
 import com.ekezet.hurok.test.matches
 import com.ekezet.othello.core.data.models.Position
+import com.ekezet.othello.core.game.GameEnd
 import com.ekezet.othello.core.game.state.CurrentGameState
-import com.ekezet.othello.core.game.store.MoveHistoryStore
+import com.ekezet.othello.core.game.store.GameHistoryStore
 import com.ekezet.othello.feature.gameboard.actions.OnGameEnded
 import com.ekezet.othello.feature.gameboard.actions.OnMoveMade
 import com.ekezet.othello.feature.gameboard.actions.OnTurnPassed
@@ -17,7 +18,7 @@ import org.junit.Test
 
 class GameBoardEffectTest : EffectTest() {
     @MockK
-    private lateinit var mockMoveHistoryStore: MoveHistoryStore
+    private lateinit var mockGameHistoryStore: GameHistoryStore
 
     private lateinit var dependency: GameBoardDependency
 
@@ -26,7 +27,7 @@ class GameBoardEffectTest : EffectTest() {
         MockKAnnotations.init(this)
 
         dependency = GameBoardDependency(
-            moveHistoryStore = mockMoveHistoryStore,
+            gameHistoryStore = mockGameHistoryStore,
         )
     }
 

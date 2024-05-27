@@ -2,6 +2,7 @@ package com.ekezet.othello.feature.gameboard
 
 import com.ekezet.hurok.Effect
 import com.ekezet.othello.core.data.models.Position
+import com.ekezet.othello.core.game.GameEnd
 import com.ekezet.othello.core.game.state.CurrentGameState
 import com.ekezet.othello.feature.gameboard.actions.OnGameEnded
 import com.ekezet.othello.feature.gameboard.actions.OnMoveMade
@@ -40,8 +41,9 @@ internal data class WaitBeforeGameEnd(
 
 internal data class PublishPastMoves(
     private val newState: CurrentGameState,
+    private val gameEnd: GameEnd? = null,
 ) : GameBoardEffect {
     override suspend fun GameBoardEmitter.trigger(dependency: GameBoardDependency?) = dependency?.run {
-        moveHistoryStore.reset(newState.history)
+        gameHistoryStore.reset(newState.history, gameEnd)
     }
 }

@@ -16,9 +16,9 @@ import com.ekezet.othello.core.game.strategy.HumanPlayer
 import com.ekezet.othello.core.game.strategy.Strategy
 import com.ekezet.othello.core.game.throwable.InvalidNewMoveException
 import com.ekezet.othello.feature.gameboard.GameBoardModel
-import com.ekezet.othello.feature.gameboard.GameEnd
-import com.ekezet.othello.feature.gameboard.GameEnd.EndedTie
-import com.ekezet.othello.feature.gameboard.GameEnd.EndedWin
+import com.ekezet.othello.core.game.GameEnd
+import com.ekezet.othello.core.game.GameEnd.EndedTie
+import com.ekezet.othello.core.game.GameEnd.EndedWin
 import com.ekezet.othello.feature.gameboard.WaitBeforeGameEnd
 import com.ekezet.othello.feature.gameboard.WaitBeforeNextTurn
 import com.ekezet.othello.feature.gameboard.WaitBeforePassTurn

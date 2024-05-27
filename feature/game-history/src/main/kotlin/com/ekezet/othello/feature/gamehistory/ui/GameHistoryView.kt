@@ -29,19 +29,20 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.ekezet.hurok.compose.LoopWrapper
 import com.ekezet.othello.core.data.serialize.asString
-import com.ekezet.othello.core.game.MoveHistory
+import com.ekezet.othello.core.game.GameEnd
 import com.ekezet.othello.core.ui.R
 import com.ekezet.othello.core.ui.components.GamePiece
 import com.ekezet.othello.core.ui.components.GamePieceWithBorder
 import com.ekezet.othello.core.ui.theme.BoardBackground
 import com.ekezet.othello.core.ui.viewModels.BoardList
+import com.ekezet.othello.feature.gamehistory.GameHistoryArgs
 import com.ekezet.othello.feature.gamehistory.GameHistoryLoop
 import com.ekezet.othello.feature.gamehistory.GameHistoryState
 import com.ekezet.othello.feature.gamehistory.ui.viewModels.HistoryItem
 
 @Composable
 fun GameHistoryView(
-    args: MoveHistory,
+    args: GameHistoryArgs,
     modifier: Modifier = Modifier,
 ) {
     LoopWrapper(
@@ -83,6 +84,15 @@ private fun GameHistoryState.GameHistoryViewImpl(
         ) {
             items(items = historyItems, key = { it.composeKey }) {
                 HistoryItemView(item = it)
+            }
+
+            if (gameEnd != null) {
+                item {
+                    when (gameEnd) {
+                        GameEnd.EndedTie -> Text("Tie! ${lastState.diskCount}")
+                        is GameEnd.EndedWin -> Text("Winner: ${gameEnd.winner} ${lastState.diskCount}")
+                    }
+                }
             }
         }
     }

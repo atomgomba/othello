@@ -20,7 +20,7 @@ internal class MainLoop internal constructor(
         displayOptions = args.gameSettings.displayOptions,
         lightStrategy = args.gameSettings.lightStrategy,
         darkStrategy = args.gameSettings.darkStrategy,
-        hasGameHistory = args.moveHistory.isNotEmpty(),
+        hasGameHistory = args.hasGameHistory,
     )
 
     @Suppress("UNCHECKED_CAST")

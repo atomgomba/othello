@@ -12,7 +12,7 @@ abstract class PublishGameSettings<TModel : Any, TDependency : GameSettingsPubli
         val currentSettings: IGameSettings = gameSettingsStore.settings.value
         gameSettingsStore.update(settings)
         if (currentSettings.containsDifferentStrategy(settings)) {
-            moveHistoryStore.reset()
+            gameHistoryStore.reset()
         }
     }
 }

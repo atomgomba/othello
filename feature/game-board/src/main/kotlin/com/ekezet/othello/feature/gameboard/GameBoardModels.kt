@@ -8,6 +8,7 @@ import com.ekezet.hurok.ViewState
 import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.data.models.DiskCount
 import com.ekezet.othello.core.data.models.Position
+import com.ekezet.othello.core.game.GameEnd
 import com.ekezet.othello.core.game.data.BoardDisplayOptions
 import com.ekezet.othello.core.game.data.IGameSettings
 import com.ekezet.othello.core.game.data.defaultDarkStrategy
@@ -16,7 +17,7 @@ import com.ekezet.othello.core.game.data.defaultGameState
 import com.ekezet.othello.core.game.data.defaultLightStrategy
 import com.ekezet.othello.core.game.state.CurrentGameState
 import com.ekezet.othello.core.game.state.OthelloGameState
-import com.ekezet.othello.core.game.store.MoveHistoryStore
+import com.ekezet.othello.core.game.store.GameHistoryStore
 import com.ekezet.othello.core.game.strategy.HumanPlayer
 import com.ekezet.othello.core.game.strategy.Strategy
 import com.ekezet.othello.core.ui.viewModels.BoardList
@@ -91,14 +92,9 @@ internal data class GameBoardState(
 }
 
 class GameBoardDependency(
-    moveHistoryStore: MoveHistoryStore? = null,
+    gameHistoryStore: GameHistoryStore? = null,
 ) : KoinComponent {
-    val moveHistoryStore: MoveHistoryStore = moveHistoryStore ?: get()
+    val gameHistoryStore: GameHistoryStore = gameHistoryStore ?: get()
 }
 
 typealias GameBoardEmitter = ActionEmitter<GameBoardModel, GameBoardDependency>
-
-sealed interface GameEnd {
-    data class EndedWin(val winner: Disk) : GameEnd
-    data object EndedTie : GameEnd
-}

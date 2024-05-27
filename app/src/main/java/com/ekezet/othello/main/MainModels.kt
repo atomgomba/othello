@@ -3,15 +3,14 @@ package com.ekezet.othello.main
 import androidx.compose.runtime.Immutable
 import com.ekezet.hurok.ActionEmitter
 import com.ekezet.hurok.ViewState
-import com.ekezet.othello.core.game.MoveHistory
 import com.ekezet.othello.core.game.data.BoardDisplayOptions
 import com.ekezet.othello.core.game.data.IGameSettings
 import com.ekezet.othello.core.game.data.defaultDarkStrategy
 import com.ekezet.othello.core.game.data.defaultDisplayOptions
 import com.ekezet.othello.core.game.data.defaultLightStrategy
 import com.ekezet.othello.core.game.dependency.GameSettingsPublisher
+import com.ekezet.othello.core.game.store.GameHistoryStore
 import com.ekezet.othello.core.game.store.GameSettingsStore
-import com.ekezet.othello.core.game.store.MoveHistoryStore
 import com.ekezet.othello.core.game.strategy.Strategy
 import com.ekezet.othello.feature.gameboard.GameBoardEmitter
 import org.koin.core.component.KoinComponent
@@ -32,15 +31,15 @@ internal data class MainState(
 @Immutable
 internal data class MainArgs(
     val gameSettings: IGameSettings,
-    val moveHistory: MoveHistory,
+    val hasGameHistory: Boolean,
 )
 
 internal class MainDependency(
     gameSettingsStore: GameSettingsStore? = null,
-    moveHistoryStore: MoveHistoryStore? = null,
+    gameHistoryStore: GameHistoryStore? = null,
 ) : KoinComponent, GameSettingsPublisher {
     override val gameSettingsStore: GameSettingsStore = gameSettingsStore ?: get()
-    override val moveHistoryStore: MoveHistoryStore = moveHistoryStore ?: get()
+    override val gameHistoryStore: GameHistoryStore = gameHistoryStore ?: get()
 
     var gameBoardEmitter: GameBoardEmitter? = null
 }

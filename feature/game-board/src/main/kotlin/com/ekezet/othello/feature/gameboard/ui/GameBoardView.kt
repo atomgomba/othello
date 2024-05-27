@@ -41,8 +41,8 @@ import com.ekezet.othello.feature.gameboard.ACTION_DELAY_MILLIS
 import com.ekezet.othello.feature.gameboard.GameBoardEmitter
 import com.ekezet.othello.feature.gameboard.GameBoardLoop
 import com.ekezet.othello.feature.gameboard.GameBoardState
-import com.ekezet.othello.feature.gameboard.GameEnd.EndedTie
-import com.ekezet.othello.feature.gameboard.GameEnd.EndedWin
+import com.ekezet.othello.core.game.GameEnd.EndedTie
+import com.ekezet.othello.core.game.GameEnd.EndedWin
 import com.ekezet.othello.feature.gameboard.actions.ContinueGame
 import com.ekezet.othello.feature.gameboard.actions.OnMoveMade
 import com.ekezet.othello.feature.gameboard.actions.OnStrategyClick

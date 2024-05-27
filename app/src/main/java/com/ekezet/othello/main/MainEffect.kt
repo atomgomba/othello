@@ -25,6 +25,6 @@ internal data class UpdateGameBoardGameState(
 internal data object ResetPastMoves : MainEffect {
     override suspend fun MainActionEmitter.trigger(dependency: MainDependency?) =
         dependency?.run {
-            moveHistoryStore.reset()
+            gameHistoryStore.reset()
         }
 }
