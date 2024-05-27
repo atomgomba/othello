@@ -2,6 +2,7 @@ package com.ekezet.othello.core.ui.components
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
@@ -19,7 +20,9 @@ internal val LightColor = Color.White
 @Composable
 fun GamePiece(disk: Disk, modifier: Modifier = Modifier) {
     Box(
-        modifier = modifier,
+        modifier = modifier.then(
+            Modifier.aspectRatio(1F),
+        ),
         contentAlignment = Alignment.Center,
     ) {
         Surface(

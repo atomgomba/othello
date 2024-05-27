@@ -19,7 +19,7 @@ import com.ekezet.othello.core.game.state.OthelloGameState
 import com.ekezet.othello.core.game.store.MoveHistoryStore
 import com.ekezet.othello.core.game.strategy.HumanPlayer
 import com.ekezet.othello.core.game.strategy.Strategy
-import com.ekezet.othello.feature.gameboard.ui.viewModels.BoardList
+import com.ekezet.othello.core.ui.viewModels.BoardList
 import com.ekezet.othello.feature.gameboard.ui.viewModels.BoardOverlayList
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get

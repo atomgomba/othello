@@ -2,6 +2,7 @@ package com.ekezet.othello.feature.gamehistory
 
 import com.ekezet.hurok.Renderer
 import com.ekezet.othello.core.game.MoveHistory
+import com.ekezet.othello.core.ui.viewModels.toImmutableList
 import com.ekezet.othello.feature.gamehistory.ui.viewModels.HistoryItem
 import kotlinx.collections.immutable.toImmutableList
 import timber.log.Timber
@@ -18,6 +19,7 @@ internal class GameHistoryRenderer : Renderer<GameHistoryModel, GameHistoryDepen
             turn = it.turn,
             move = it.moveAt,
             disk = it.disk,
+            board = it.board.toImmutableList(),
         )
     }
 }

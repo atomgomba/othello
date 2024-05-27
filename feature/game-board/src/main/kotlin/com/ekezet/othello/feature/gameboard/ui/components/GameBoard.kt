@@ -34,10 +34,12 @@ import com.ekezet.othello.core.data.models.x
 import com.ekezet.othello.core.data.models.y
 import com.ekezet.othello.core.data.serialize.PositionLetters
 import com.ekezet.othello.core.ui.components.GamePiece
+import com.ekezet.othello.core.ui.theme.BoardBackground
+import com.ekezet.othello.core.ui.viewModels.BoardList
+import com.ekezet.othello.core.ui.viewModels.getAt
 import com.ekezet.othello.feature.gameboard.GameEnd
 import com.ekezet.othello.feature.gameboard.GameEnd.EndedTie
 import com.ekezet.othello.feature.gameboard.GameEnd.EndedWin
-import com.ekezet.othello.feature.gameboard.ui.viewModels.BoardList
 import com.ekezet.othello.feature.gameboard.ui.viewModels.BoardOverlayList
 import com.ekezet.othello.feature.gameboard.ui.viewModels.getAt
 
@@ -52,7 +54,7 @@ private val boardCornerRadius = 16.dp
 internal fun GameBoard(
     board: BoardList,
     modifier: Modifier = Modifier,
-    background: Color = Color(0xFF338033),
+    background: Color = BoardBackground,
     showPositions: Boolean = false,
     nextMovePosition: Position? = null,
     ended: GameEnd? = null,
@@ -80,13 +82,13 @@ internal fun GameBoard(
 @Composable
 private fun GameBoardImpl(
     board: BoardList,
-    background: Color = Color(0xFF338033),
+    background: Color,
     showPositions: Boolean,
-    nextMovePosition: Position? = null,
-    ended: GameEnd? = null,
-    overlay: BoardOverlayList? = null,
-    isClickable: Boolean = true,
-    onCellClick: (x: Int, y: Int) -> Unit = { _, _ -> },
+    nextMovePosition: Position?,
+    ended: GameEnd?,
+    overlay: BoardOverlayList?,
+    isClickable: Boolean,
+    onCellClick: (x: Int, y: Int) -> Unit,
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(borderWidth),

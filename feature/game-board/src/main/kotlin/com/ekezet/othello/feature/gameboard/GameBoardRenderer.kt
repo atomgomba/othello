@@ -1,6 +1,7 @@
 package com.ekezet.othello.feature.gameboard
 
 import com.ekezet.hurok.Renderer
+import com.ekezet.othello.core.ui.viewModels.toImmutableList
 import com.ekezet.othello.feature.gameboard.GameEnd.EndedWin
 import com.ekezet.othello.feature.gameboard.ui.viewModels.BoardOverlayList
 import com.ekezet.othello.feature.gameboard.ui.viewModels.OverlayItem.NextMoveIndicatorOverlayItem
