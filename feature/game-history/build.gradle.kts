@@ -13,6 +13,7 @@ dependencies {
     implementation(project(":core:logging"))
     implementation(project(":core:ui"))
 
+    implementation(libs.androidx.compose.material.iconsExtended)
     implementation(libs.kotlinx.immutable)
 
     implementation(libs.hurokBase)

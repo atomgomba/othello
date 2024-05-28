@@ -1,44 +1,42 @@
 package com.ekezet.othello.feature.gamehistory.ui
 
+import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDownward
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment.Companion.Center
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.ekezet.hurok.compose.LoopWrapper
-import com.ekezet.othello.core.data.serialize.asString
-import com.ekezet.othello.core.game.GameEnd
 import com.ekezet.othello.core.ui.R
-import com.ekezet.othello.core.ui.components.GamePiece
-import com.ekezet.othello.core.ui.components.GamePieceWithBorder
-import com.ekezet.othello.core.ui.theme.BoardBackground
-import com.ekezet.othello.core.ui.viewModels.BoardList
 import com.ekezet.othello.feature.gamehistory.GameHistoryArgs
 import com.ekezet.othello.feature.gamehistory.GameHistoryLoop
 import com.ekezet.othello.feature.gamehistory.GameHistoryState
-import com.ekezet.othello.feature.gamehistory.ui.viewModels.HistoryItem
+import com.ekezet.othello.feature.gamehistory.ui.components.GameEndItemView
+import com.ekezet.othello.feature.gamehistory.ui.components.HistoryItemView
+import kotlinx.coroutines.launch
 
 @Composable
 fun GameHistoryView(
@@ -62,120 +60,89 @@ private fun GameHistoryState.GameHistoryViewImpl(
     listState: LazyListState,
     modifier: Modifier,
 ) {
-    Column(
+    Scaffold(
         modifier = modifier.then(
             Modifier
                 .padding(16.dp)
                 .fillMaxSize()
         ),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-    ) {
-        Text(
-            text = stringResource(
-                id = R.string.game_history__title__num_of_moves,
-                historyItems.size,
-            ),
-            style = MaterialTheme.typography.headlineSmall,
-        )
-
-        LazyColumn(
-            state = listState,
+        floatingActionButton = {
+            if (historyItems.isNotEmpty()) {
+                ListNavigationFab(listState, historyItems.size - 1)
+            }
+        },
+    ) { paddingValues ->
+        Column(
+            modifier = Modifier.padding(paddingValues),
             verticalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier.fillMaxSize(),
         ) {
-            items(items = historyItems, key = { it.composeKey }) {
-                HistoryItemView(item = it)
-            }
+            Text(
+                text = stringResource(R.string.game_history__title__num_of_moves, historyItems.size),
+                style = MaterialTheme.typography.headlineSmall,
+            )
 
-            if (gameEnd != null) {
-                item(key = "end-result") {
-                    when (gameEnd) {
-                        GameEnd.EndedTie -> Text("Tie! ${lastState.diskCount}")
-                        is GameEnd.EndedWin -> Text("Winner: ${gameEnd.winner} ${lastState.diskCount}")
-                    }
-                }
-            }
-        }
-    }
-}
-
-@Composable
-internal fun HistoryItemView(item: HistoryItem) = with(item) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(IntrinsicSize.Min),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-        ) {
-            Column(
-                modifier = Modifier.fillMaxHeight(),
+            LazyColumn(
+                state = listState,
                 verticalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier.fillMaxSize(),
             ) {
-                Text(
-                    text = "$turn",
-                    style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.colorScheme.outline,
-                    modifier = Modifier.width(32.dp),
-                )
+                items(items = historyItems, key = { it.composeKey }) {
+                    HistoryItemView(item = it)
+                }
 
-                Row(
-                    modifier = Modifier.height(IntrinsicSize.Max),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(16.dp),
-                ) {
-                    GamePieceWithBorder(
-                        disk = disk,
-                        modifier = Modifier.size(48.dp),
-                    )
+                if (gameEnd != null) {
+                    item(key = "end-result") {
+                        GameEndItemView(gameEnd, lastState)
+                    }
+                }
 
-                    Text(
-                        text = if (move == null) {
-                            stringResource(id = R.string.game_history__list__pass)
-                        } else {
-                            stringResource(id = R.string.game_history__list__move, move.asString())
-                        },
-                        style = MaterialTheme.typography.headlineMedium,
-                    )
+                item("bottom-spacer") {
+                    Spacer(Modifier.height(96.dp))
                 }
             }
-
-            Spacer(Modifier.weight(1F))
-
-            GameBoardThumbnail(board = board)
         }
-
-        HorizontalDivider()
     }
 }
 
 @Composable
-private fun GameBoardThumbnail(board: BoardList) {
-    Surface(
-        color = BoardBackground,
-        shape = RoundedCornerShape(6.dp),
-        modifier = Modifier.padding(4.dp),
-    ) {
-        Column(modifier = Modifier.padding(4.dp)) {
-            for (row in board) {
-                Row {
-                    for (disk in row) {
-                        Box(
-                            modifier = Modifier.size(12.dp),
-                        ) {
-                            disk?.let { disk ->
-                                GamePiece(
-                                    disk = disk,
-                                    modifier = Modifier.align(Center),
-                                )
-                            }
-                        }
-                    }
+private fun ListNavigationFab(
+    listState: LazyListState,
+    lastItemIndex: Int,
+) {
+    var canScrollUp by remember { mutableStateOf(false) }
+
+    LaunchedEffect(listState) {
+        snapshotFlow { listState.firstVisibleItemIndex }.collect { firstItemIndex ->
+            canScrollUp = lastItemIndex / 2 < firstItemIndex
+        }
+    }
+
+    val coroutineScope = rememberCoroutineScope()
+    val rotationDeg = remember { Animatable(0F) }
+
+    LaunchedEffect(canScrollUp) {
+        if (canScrollUp) {
+            rotationDeg.animateTo(180F)
+        } else {
+            rotationDeg.animateTo(0F)
+        }
+    }
+
+    FloatingActionButton(
+        onClick = {
+            coroutineScope.launch {
+                if (canScrollUp) {
+                    listState.animateScrollToItem(0)
+                } else {
+                    listState.animateScrollToItem(lastItemIndex)
                 }
             }
-        }
+        },
+    ) {
+        Icon(
+            imageVector = Icons.Default.ArrowDownward,
+            contentDescription = null,
+            modifier = Modifier.rotate(rotationDeg.value),
+        )
     }
 }

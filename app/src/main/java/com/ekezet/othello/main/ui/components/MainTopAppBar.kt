@@ -13,11 +13,13 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
-import com.ekezet.othello.R.string
 import com.ekezet.othello.core.game.data.GameSettings
+import com.ekezet.othello.core.ui.R
 import com.ekezet.othello.main.MainState
 import com.ekezet.othello.main.navigation.MainRoutes
 import com.ekezet.othello.main.navigation.MainRoutes.GameBoardRoute
+import com.ekezet.othello.main.navigation.MainRoutes.GameHistoryRoute
+import com.ekezet.othello.main.navigation.MainRoutes.GameSettingsRoute
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
@@ -31,7 +33,17 @@ internal fun MainState.MainTopAppBar(
             containerColor = MaterialTheme.colorScheme.primaryContainer,
             titleContentColor = MaterialTheme.colorScheme.primary,
         ),
-        title = { Text(stringResource(string.app_name)) },
+        title = {
+            Text(
+                stringResource(
+                    when (currentDestination) {
+                        GameHistoryRoute.id -> R.string.main__nav__game_history
+                        GameSettingsRoute.id -> R.string.main__nav__game_settings
+                        else -> R.string.app_name
+                    }
+                )
+            )
+        },
         navigationIcon = {
             AnimatedVisibility(
                 visible = currentDestination != MainRoutes.Start,
