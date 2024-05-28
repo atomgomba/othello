@@ -22,6 +22,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.ekezet.othello.core.data.models.x
+import com.ekezet.othello.core.data.models.y
 import com.ekezet.othello.core.data.serialize.asString
 import com.ekezet.othello.core.ui.R
 import com.ekezet.othello.core.ui.components.GameBoard
@@ -85,6 +87,9 @@ internal fun HistoryItemView(item: HistoryItem) = with(item) {
                     boardCornerRadius = 4.dp,
                     isClickable = false,
                     modifier = Modifier.size(96.dp),
+                    overlayFactory = { colIndex, rowIndex ->
+                        PastMoveIndicator.takeIf { colIndex == move!!.x && rowIndex == move.y }
+                    },
                 )
             }
         }

@@ -16,6 +16,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -92,19 +93,21 @@ private fun ListNavigationFab(
     listState: LazyListState,
     lastItemIndex: Int,
 ) {
-    var canScrollUp by remember { mutableStateOf(false) }
+    var isScrollingUp by remember { mutableStateOf(false) }
+    var lastFirstVisibleItemIndex by remember { mutableIntStateOf(0) }
 
     LaunchedEffect(listState) {
         snapshotFlow { listState.firstVisibleItemIndex }.collect { firstItemIndex ->
-            canScrollUp = lastItemIndex / 2 < firstItemIndex
+            isScrollingUp = firstItemIndex < lastFirstVisibleItemIndex
+            lastFirstVisibleItemIndex = firstItemIndex
         }
     }
 
     val coroutineScope = rememberCoroutineScope()
     val rotationDeg = remember { Animatable(0F) }
 
-    LaunchedEffect(canScrollUp) {
-        if (canScrollUp) {
+    LaunchedEffect(isScrollingUp) {
+        if (isScrollingUp) {
             rotationDeg.animateTo(180F)
         } else {
             rotationDeg.animateTo(0F)
@@ -114,7 +117,7 @@ private fun ListNavigationFab(
     FloatingActionButton(
         onClick = {
             coroutineScope.launch {
-                if (canScrollUp) {
+                if (isScrollingUp) {
                     listState.animateScrollToItem(0)
                 } else {
                     listState.animateScrollToItem(lastItemIndex)

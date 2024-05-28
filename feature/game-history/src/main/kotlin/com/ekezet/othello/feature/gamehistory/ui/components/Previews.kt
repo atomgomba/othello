@@ -45,7 +45,7 @@ private fun GameEndItemViewWinPreview() {
 
 private val moveHistoryMoveItem = HistoryItem(
     turn = 42,
-    move = Position(4, 2),
+    move = Position(4, 5),
     disk = Disk.Dark,
     board = defaultBoard.toImmutableList(),
 )
