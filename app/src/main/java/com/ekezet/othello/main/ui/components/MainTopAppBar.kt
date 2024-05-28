@@ -13,6 +13,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
+import com.ekezet.othello.core.game.GameHistory
 import com.ekezet.othello.core.game.data.GameSettings
 import com.ekezet.othello.core.ui.R
 import com.ekezet.othello.main.MainState
@@ -27,6 +28,7 @@ internal fun MainState.MainTopAppBar(
     currentDestination: String,
     navController: NavHostController,
     gameSettings: GameSettings,
+    gameHistory: GameHistory,
 ) {
     TopAppBar(
         colors = TopAppBarDefaults.topAppBarColors(
@@ -35,13 +37,15 @@ internal fun MainState.MainTopAppBar(
         ),
         title = {
             Text(
-                stringResource(
+                text =
                     when (currentDestination) {
-                        GameHistoryRoute.id -> R.string.main__nav__game_history
-                        GameSettingsRoute.id -> R.string.main__nav__game_settings
-                        else -> R.string.app_name
+                        GameHistoryRoute.id ->
+                            stringResource(R.string.game_history__title__num_of_moves, gameHistory.history.size)
+                        GameSettingsRoute.id ->
+                            stringResource(R.string.main__nav__game_settings)
+                        else ->
+                            stringResource(R.string.app_name)
                     }
-                )
             )
         },
         navigationIcon = {

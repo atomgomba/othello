@@ -110,7 +110,7 @@ internal fun MainState.MainViewImpl(
 
     Scaffold(
         topBar = {
-            MainTopAppBar(currentDestination, navController, gameSettings)
+            MainTopAppBar(currentDestination, navController, gameSettings, gameHistory)
         },
     ) { innerPadding ->
         NavigationSuiteScaffold(

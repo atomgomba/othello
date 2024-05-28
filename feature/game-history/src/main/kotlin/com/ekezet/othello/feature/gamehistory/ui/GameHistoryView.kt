@@ -1,8 +1,6 @@
 package com.ekezet.othello.feature.gamehistory.ui
 
 import androidx.compose.animation.core.Animatable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -14,9 +12,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDownward
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -27,10 +23,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.ekezet.hurok.compose.LoopWrapper
-import com.ekezet.othello.core.ui.R
 import com.ekezet.othello.feature.gamehistory.GameHistoryArgs
 import com.ekezet.othello.feature.gamehistory.GameHistoryLoop
 import com.ekezet.othello.feature.gamehistory.GameHistoryState
@@ -62,9 +56,7 @@ private fun GameHistoryState.GameHistoryViewImpl(
 ) {
     Scaffold(
         modifier = modifier.then(
-            Modifier
-                .padding(16.dp)
-                .fillMaxSize()
+            Modifier.fillMaxSize()
         ),
         floatingActionButton = {
             if (historyItems.isNotEmpty()) {
@@ -72,33 +64,24 @@ private fun GameHistoryState.GameHistoryViewImpl(
             }
         },
     ) { paddingValues ->
-        Column(
-            modifier = Modifier.padding(paddingValues),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
+        LazyColumn(
+            state = listState,
+            modifier = Modifier
+                .padding(paddingValues)
+                .fillMaxSize(),
         ) {
-            Text(
-                text = stringResource(R.string.game_history__title__num_of_moves, historyItems.size),
-                style = MaterialTheme.typography.headlineSmall,
-            )
+            items(items = historyItems, key = { it.composeKey }) {
+                HistoryItemView(item = it)
+            }
 
-            LazyColumn(
-                state = listState,
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier.fillMaxSize(),
-            ) {
-                items(items = historyItems, key = { it.composeKey }) {
-                    HistoryItemView(item = it)
+            if (gameEnd != null) {
+                item(key = "end-result") {
+                    GameEndItemView(gameEnd, lastState)
                 }
+            }
 
-                if (gameEnd != null) {
-                    item(key = "end-result") {
-                        GameEndItemView(gameEnd, lastState)
-                    }
-                }
-
-                item("bottom-spacer") {
-                    Spacer(Modifier.height(96.dp))
-                }
+            item("bottom-spacer") {
+                Spacer(Modifier.height(96.dp))
             }
         }
     }

@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.ekezet.othello.core.game.BoardFactory
+import com.ekezet.othello.core.ui.components.GameBoard
 import com.ekezet.othello.core.ui.components.PreviewBase
 import com.ekezet.othello.core.ui.viewModels.toImmutableList
 

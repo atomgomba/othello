@@ -33,20 +33,21 @@ import com.ekezet.othello.core.data.models.Position
 import com.ekezet.othello.core.data.models.isLight
 import com.ekezet.othello.core.data.models.numDark
 import com.ekezet.othello.core.data.models.numLight
+import com.ekezet.othello.core.game.GameEnd.EndedTie
+import com.ekezet.othello.core.game.GameEnd.EndedWin
 import com.ekezet.othello.core.game.data.GameSettings
 import com.ekezet.othello.core.ui.R.string
+import com.ekezet.othello.core.ui.components.GameBoard
 import com.ekezet.othello.core.ui.components.GamePiece
 import com.ekezet.othello.core.ui.orHumanPlayer
 import com.ekezet.othello.feature.gameboard.ACTION_DELAY_MILLIS
 import com.ekezet.othello.feature.gameboard.GameBoardEmitter
 import com.ekezet.othello.feature.gameboard.GameBoardLoop
 import com.ekezet.othello.feature.gameboard.GameBoardState
-import com.ekezet.othello.core.game.GameEnd.EndedTie
-import com.ekezet.othello.core.game.GameEnd.EndedWin
 import com.ekezet.othello.feature.gameboard.actions.ContinueGame
 import com.ekezet.othello.feature.gameboard.actions.OnMoveMade
 import com.ekezet.othello.feature.gameboard.actions.OnStrategyClick
-import com.ekezet.othello.feature.gameboard.ui.components.GameBoard
+import com.ekezet.othello.feature.gameboard.ui.viewModels.getAt
 import kotlinx.coroutines.delay
 import nl.dionsegijn.konfetti.compose.KonfettiView
 import nl.dionsegijn.konfetti.core.Party
@@ -96,7 +97,7 @@ private fun GameBoardState.GameBoardViewImpl(
                     showPositions = displayOptions.showBoardPositions,
                     nextMovePosition = nextMovePosition,
                     ended = ended,
-                    overlay = overlay,
+                    overlayFactory = { colIndex, rowIndex -> overlay.getAt(colIndex, rowIndex) },
                     isClickable = isHumanPlayer,
                     onCellClick = { x, y -> emit(OnMoveMade(Position(x, y))) },
                 )

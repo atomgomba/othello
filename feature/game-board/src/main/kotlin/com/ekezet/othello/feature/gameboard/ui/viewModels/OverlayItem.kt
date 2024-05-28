@@ -3,15 +3,14 @@ package com.ekezet.othello.feature.gameboard.ui.viewModels
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import com.ekezet.othello.core.data.models.Disk
-import com.ekezet.othello.core.ui.viewModels.HasComposeKey
+import com.ekezet.othello.core.ui.viewModels.Sprite
 import com.ekezet.othello.feature.gameboard.ui.components.overlay.NextMoveIndicator
 import com.ekezet.othello.feature.gameboard.ui.components.overlay.ValidMoveIndicator
 import java.util.Stack
 
-internal sealed interface OverlayItem : HasComposeKey {
-    @Composable
-    fun Composable()
-
+@Immutable
+internal sealed interface OverlayItem : Sprite {
+    @Immutable
     data class StackedOverlayItem(
         private val items: Stack<OverlayItem>,
     ) : OverlayItem {
@@ -40,6 +39,7 @@ internal sealed interface OverlayItem : HasComposeKey {
             get() = "valid-move-indicator-${disk.isDark}"
     }
 
+    @Immutable
     data class NextMoveIndicatorOverlayItem(
         private val disk: Disk,
     ) : OverlayItem {

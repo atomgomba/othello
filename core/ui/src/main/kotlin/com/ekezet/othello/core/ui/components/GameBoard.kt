@@ -1,4 +1,4 @@
-package com.ekezet.othello.feature.gameboard.ui.components
+package com.ekezet.othello.core.ui.components
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
@@ -26,6 +26,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.ekezet.othello.core.data.models.BoardHeight
 import com.ekezet.othello.core.data.models.BoardWidth
@@ -33,32 +34,30 @@ import com.ekezet.othello.core.data.models.Position
 import com.ekezet.othello.core.data.models.x
 import com.ekezet.othello.core.data.models.y
 import com.ekezet.othello.core.data.serialize.PositionLetters
-import com.ekezet.othello.core.ui.components.GamePiece
-import com.ekezet.othello.core.ui.theme.BoardBackground
-import com.ekezet.othello.core.ui.viewModels.BoardList
-import com.ekezet.othello.core.ui.viewModels.getAt
 import com.ekezet.othello.core.game.GameEnd
 import com.ekezet.othello.core.game.GameEnd.EndedTie
 import com.ekezet.othello.core.game.GameEnd.EndedWin
-import com.ekezet.othello.feature.gameboard.ui.viewModels.BoardOverlayList
-import com.ekezet.othello.feature.gameboard.ui.viewModels.getAt
+import com.ekezet.othello.core.ui.theme.BoardBackground
+import com.ekezet.othello.core.ui.viewModels.BoardList
+import com.ekezet.othello.core.ui.viewModels.Sprite
+import com.ekezet.othello.core.ui.viewModels.getAt
 
 internal val borderWidth = 1.dp
 private const val LOSER_ALPHA = .333F
 private const val CELL_WEIGHT = 1F / BoardWidth
 private val positionSize = 24.dp
-private val boardCornerRadius = 16.dp
 
 @ExperimentalLayoutApi
 @Composable
-internal fun GameBoard(
+fun GameBoard(
     board: BoardList,
     modifier: Modifier = Modifier,
     background: Color = BoardBackground,
+    boardCornerRadius: Dp = 16.dp,
     showPositions: Boolean = false,
     nextMovePosition: Position? = null,
     ended: GameEnd? = null,
-    overlay: BoardOverlayList? = null,
+    overlayFactory: (colIndex: Int, rowIndex: Int) -> Sprite? = { _, _ -> null },
     isClickable: Boolean = true,
     onCellClick: (x: Int, y: Int) -> Unit = { _, _ -> },
 ) {
@@ -67,10 +66,11 @@ internal fun GameBoard(
             GameBoardImpl(
                 board = board,
                 background = background,
+                boardCornerRadius = boardCornerRadius,
                 showPositions = showPositions,
                 nextMovePosition = nextMovePosition,
                 ended = ended,
-                overlay = overlay,
+                overlayFactory = overlayFactory,
                 isClickable = isClickable,
                 onCellClick = onCellClick,
             )
@@ -83,10 +83,11 @@ internal fun GameBoard(
 private fun GameBoardImpl(
     board: BoardList,
     background: Color,
+    boardCornerRadius: Dp,
     showPositions: Boolean,
     nextMovePosition: Position?,
     ended: GameEnd?,
-    overlay: BoardOverlayList?,
+    overlayFactory: (colIndex: Int, rowIndex: Int) -> Sprite?,
     isClickable: Boolean,
     onCellClick: (x: Int, y: Int) -> Unit,
 ) {
@@ -105,7 +106,7 @@ private fun GameBoardImpl(
             ) {
                 for (colIndex in 0 until BoardWidth) {
                     val disk = board.getAt(colIndex, rowIndex)
-                    val overlayItem = overlay?.getAt(colIndex, rowIndex)
+                    val overlayItem = overlayFactory(colIndex, rowIndex)
 
                     if (showPositions && colIndex == 0) {
                         VerticalPosition(number = rowIndex + 1, nextMovePosition = nextMovePosition)
@@ -114,7 +115,7 @@ private fun GameBoardImpl(
                     key(colIndex, rowIndex, disk, overlayItem?.composeKey, ended) {
                         Box(
                             modifier = Modifier
-                                .roundedCell(colIndex, rowIndex)
+                                .roundedCell(colIndex, rowIndex, boardCornerRadius)
                                 .background(color = background)
                                 .weight(CELL_WEIGHT)
                                 .aspectRatio(1F)
@@ -187,14 +188,14 @@ private fun VerticalPosition(
     }
 }
 
-private fun Modifier.roundedCell(x: Int, y: Int) = if (x == 0 && y == 0) {
-    clip(shape = RoundedCornerShape(topStart = boardCornerRadius))
+private fun Modifier.roundedCell(x: Int, y: Int, radius: Dp) = if (x == 0 && y == 0) {
+    clip(shape = RoundedCornerShape(topStart = radius))
 } else if (x == 7 && y == 0) {
-    clip(shape = RoundedCornerShape(topEnd = boardCornerRadius))
+    clip(shape = RoundedCornerShape(topEnd = radius))
 } else if (x == 0 && y == 7) {
-    clip(shape = RoundedCornerShape(bottomStart = boardCornerRadius))
+    clip(shape = RoundedCornerShape(bottomStart = radius))
 } else if (x == 7 && y == 7) {
-    clip(shape = RoundedCornerShape(bottomEnd = boardCornerRadius))
+    clip(shape = RoundedCornerShape(bottomEnd = radius))
 } else {
     this
 }
