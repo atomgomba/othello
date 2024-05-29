@@ -28,9 +28,9 @@ import com.ekezet.othello.core.game.GameHistory
 import com.ekezet.othello.core.game.data.GameSettings
 import com.ekezet.othello.core.game.store.GameHistoryStore
 import com.ekezet.othello.core.game.store.GameSettingsStore
+import com.ekezet.othello.core.ui.render.HistoryImagesRenderer
 import com.ekezet.othello.feature.gameboard.ui.GameBoardView
 import com.ekezet.othello.feature.gamehistory.GameHistoryArgs
-import com.ekezet.othello.core.ui.render.HistoryImagesRenderer
 import com.ekezet.othello.feature.gamehistory.ui.GameHistoryView
 import com.ekezet.othello.feature.gamesettings.ui.GameSettingsView
 import com.ekezet.othello.main.MainArgs
@@ -107,8 +107,8 @@ internal fun MainState.MainViewImpl(
 
     fun navigateTo(route: String) {
         navController.navigate(
-            route,
-            navOptions.takeUnless { currentDestination == startDestination },
+            route = route,
+            navOptions = navOptions.takeUnless { currentDestination == startDestination },
         )
     }
 
