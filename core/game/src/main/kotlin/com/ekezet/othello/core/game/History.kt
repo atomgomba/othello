@@ -19,7 +19,9 @@ data class PastMove(
         other as PastMove
 
         if (!board.contentDeepEquals(other.board)) return false
-        if (moveAt != other) return false
+        if (moveAt != other.moveAt) return false
+        if (turn != other.turn) return false
+        if (disk != other.disk) return false
 
         return true
     }
@@ -27,6 +29,8 @@ data class PastMove(
     override fun hashCode(): Int {
         var result = board.contentDeepHashCode()
         result = 31 * result + (moveAt?.hashCode() ?: 0)
+        result = 31 * result + turn
+        result = 31 * result + disk.hashCode()
         return result
     }
 }
