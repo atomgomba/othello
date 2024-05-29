@@ -1,5 +1,6 @@
 package com.ekezet.othello.feature.gamehistory.ui.components
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,20 +14,18 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.ekezet.othello.core.data.models.x
-import com.ekezet.othello.core.data.models.y
 import com.ekezet.othello.core.data.serialize.asString
 import com.ekezet.othello.core.ui.R
-import com.ekezet.othello.core.ui.components.GameBoard
 import com.ekezet.othello.core.ui.components.GamePieceWithBorder
 import com.ekezet.othello.feature.gamehistory.ui.viewModels.HistoryItem
 
@@ -81,17 +80,13 @@ internal fun HistoryItemView(item: HistoryItem) = with(item) {
 
             Spacer(Modifier.weight(1F))
 
-            key(turn) {
-                GameBoard(
-                    board = board,
-                    boardCornerRadius = 4.dp,
-                    isClickable = false,
-                    modifier = Modifier.size(96.dp),
-                    overlayFactory = { colIndex, rowIndex ->
-                        PastMoveIndicator.takeIf {
-                            move != null && colIndex == move.x && rowIndex == move.y
-                        }
-                    },
+            if (image != null) {
+                Image(
+                    bitmap = image,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(100.dp)
+                        .clip(RoundedCornerShape(6.dp)),
                 )
             }
         }

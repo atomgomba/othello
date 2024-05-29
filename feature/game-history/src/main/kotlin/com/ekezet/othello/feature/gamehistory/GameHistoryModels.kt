@@ -1,5 +1,6 @@
 package com.ekezet.othello.feature.gamehistory
 
+import android.graphics.Bitmap
 import androidx.compose.runtime.Immutable
 import com.ekezet.hurok.ActionEmitter
 import com.ekezet.hurok.ViewState
@@ -13,6 +14,7 @@ import kotlinx.collections.immutable.ImmutableList
 internal data class GameHistoryModel(
     val moveHistory: MoveHistory = emptyList(),
     val gameEnd: GameEnd? = null,
+    val historyImages: Map<String, Bitmap> = emptyMap(),
 )
 
 @Immutable
@@ -22,7 +24,10 @@ internal data class GameHistoryState(
     val lastState: PastGameState,
 ) : ViewState<GameHistoryModel, GameHistoryDependency>()
 
-typealias GameHistoryArgs = GameHistory
+data class GameHistoryArgs(
+    val history: GameHistory,
+    val historyImages: Map<String, Bitmap>,
+)
 
 internal object GameHistoryDependency
 

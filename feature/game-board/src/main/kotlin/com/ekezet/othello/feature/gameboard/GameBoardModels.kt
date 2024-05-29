@@ -20,6 +20,7 @@ import com.ekezet.othello.core.game.state.OthelloGameState
 import com.ekezet.othello.core.game.store.GameHistoryStore
 import com.ekezet.othello.core.game.strategy.HumanPlayer
 import com.ekezet.othello.core.game.strategy.Strategy
+import com.ekezet.othello.core.ui.render.HistoryImagesRenderer
 import com.ekezet.othello.core.ui.viewModels.BoardList
 import com.ekezet.othello.feature.gameboard.ui.viewModels.BoardOverlayList
 import org.koin.core.component.KoinComponent
@@ -93,8 +94,10 @@ internal data class GameBoardState(
 
 class GameBoardDependency(
     gameHistoryStore: GameHistoryStore? = null,
+    historyImagesRenderer: HistoryImagesRenderer? = null,
 ) : KoinComponent {
     val gameHistoryStore: GameHistoryStore = gameHistoryStore ?: get()
+    val historyImagesRenderer: HistoryImagesRenderer = historyImagesRenderer ?: get()
 }
 
 typealias GameBoardEmitter = ActionEmitter<GameBoardModel, GameBoardDependency>

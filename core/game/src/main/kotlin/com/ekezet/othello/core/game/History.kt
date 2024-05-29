@@ -3,6 +3,7 @@ package com.ekezet.othello.core.game
 import com.ekezet.othello.core.data.models.Board
 import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.data.models.Position
+import com.ekezet.othello.core.data.serialize.BoardSerializer
 import com.ekezet.othello.core.game.state.CurrentGameState
 import com.ekezet.othello.core.game.state.PastGameState
 
@@ -12,6 +13,10 @@ data class PastMove(
     val turn: Int,
     val disk: Disk,
 ) {
+    val renderId: String by lazy {
+        moveAt.toString() + "-" + BoardSerializer.toString(board)
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false

@@ -7,16 +7,19 @@ internal class GameHistoryLoop(
     model: GameHistoryModel,
     renderer: GameHistoryRenderer,
     args: GameHistoryArgs? = null,
+    firstAction: GameHistoryAction? = null,
     dependency: GameHistoryDependency? = null,
 ) : Loop<GameHistoryState, GameHistoryModel, GameHistoryArgs, GameHistoryDependency, GameHistoryAction>(
     model = model,
     renderer = renderer,
     args = args,
+    firstAction = firstAction,
     dependency = dependency,
 ) {
     override fun GameHistoryModel.applyArgs(args: GameHistoryArgs) = copy(
-        moveHistory = args.history,
-        gameEnd = args.gameEnd,
+        moveHistory = args.history.history,
+        gameEnd = args.history.gameEnd,
+        historyImages = args.historyImages,
     )
 
     internal companion object Builder : LoopBuilder<GameHistoryState, GameHistoryModel, GameHistoryArgs, GameHistoryDependency, GameHistoryAction> {

@@ -1,5 +1,6 @@
 package com.ekezet.othello.main.ui
 
+import android.graphics.Bitmap
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -28,6 +29,8 @@ import com.ekezet.othello.core.game.data.GameSettings
 import com.ekezet.othello.core.game.store.GameHistoryStore
 import com.ekezet.othello.core.game.store.GameSettingsStore
 import com.ekezet.othello.feature.gameboard.ui.GameBoardView
+import com.ekezet.othello.feature.gamehistory.GameHistoryArgs
+import com.ekezet.othello.core.ui.render.HistoryImagesRenderer
 import com.ekezet.othello.feature.gamehistory.ui.GameHistoryView
 import com.ekezet.othello.feature.gamesettings.ui.GameSettingsView
 import com.ekezet.othello.main.MainArgs
@@ -54,6 +57,9 @@ internal fun MainView(
     val gameHistoryStore: GameHistoryStore = koinInject()
     val gameHistory: GameHistory by gameHistoryStore.history.collectAsState()
 
+    val historyRenderer: HistoryImagesRenderer = koinInject()
+    val historyImages by historyRenderer.historyImages.collectAsState()
+
     LoopWrapper(
         builder = MainLoop,
         args = MainArgs(
@@ -65,6 +71,7 @@ internal fun MainView(
         MainViewImpl(
             gameSettings = gameSettings,
             gameHistory = gameHistory,
+            historyImages = historyImages,
         )
     }
 }
@@ -74,6 +81,7 @@ internal fun MainView(
 internal fun MainState.MainViewImpl(
     gameSettings: GameSettings,
     gameHistory: GameHistory,
+    historyImages: Map<String, Bitmap>,
     startDestination: String = MainRoutes.Start,
 ) {
     val viewModelStoreOwner = requireNotNull(LocalViewModelStoreOwner.current) {
@@ -151,7 +159,10 @@ internal fun MainState.MainViewImpl(
                         LocalViewModelStoreOwner provides viewModelStoreOwner,
                     ) {
                         GameHistoryView(
-                            args = gameHistory,
+                            args = GameHistoryArgs(
+                                history = gameHistory,
+                                historyImages = historyImages,
+                            ),
                             listState = historyListState,
                             modifier = destinationModifier,
                         )
