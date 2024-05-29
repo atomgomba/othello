@@ -100,7 +100,7 @@ internal fun MainState.MainViewImpl(
             .Builder()
             .setPopUpTo(
                 route = startDestination,
-                inclusive = true,
+                inclusive = false,
             )
             .build()
     }
