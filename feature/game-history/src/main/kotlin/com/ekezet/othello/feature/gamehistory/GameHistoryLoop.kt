@@ -20,6 +20,7 @@ internal class GameHistoryLoop(
         moveHistory = args.history.history,
         gameEnd = args.history.gameEnd,
         historyImages = args.historyImages,
+        gameSettings = args.gameSettings,
     )
 
     internal companion object Builder : LoopBuilder<GameHistoryState, GameHistoryModel, GameHistoryArgs, GameHistoryDependency, GameHistoryAction> {

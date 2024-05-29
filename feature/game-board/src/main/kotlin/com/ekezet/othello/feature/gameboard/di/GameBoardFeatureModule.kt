@@ -6,7 +6,7 @@ import com.ekezet.othello.feature.gameboard.GameBoardLoop
 import org.koin.dsl.module
 
 fun gameBoardFeatureModule() = module {
-    single { GameBoardLoop.build(GameSettings()) }
+    single { GameBoardLoop.build(GameSettings.Default) }
 
     single<GameBoardEmitter> { get<GameBoardLoop>() }
 }

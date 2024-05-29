@@ -21,6 +21,8 @@ import com.ekezet.othello.core.game.store.GameHistoryStore
 import com.ekezet.othello.core.game.strategy.HumanPlayer
 import com.ekezet.othello.core.game.strategy.Strategy
 import com.ekezet.othello.core.ui.render.HistoryImagesRenderer
+import com.ekezet.othello.core.ui.theme.BoardBackground
+import com.ekezet.othello.core.ui.theme.BoardBackgroundGrayscale
 import com.ekezet.othello.core.ui.viewModels.BoardList
 import com.ekezet.othello.feature.gameboard.ui.viewModels.BoardOverlayList
 import org.koin.core.component.KoinComponent
@@ -86,9 +88,9 @@ internal data class GameBoardState(
 ) : ViewState<GameBoardModel, GameBoardDependency>() {
     internal val boardBackground: Color
         inline get() = if (displayOptions.isGrayscaleMode) {
-            Color(0xFFC0C0C0)
+            BoardBackgroundGrayscale
         } else {
-            Color(0xFF338033)
+            BoardBackground
         }
 }
 

@@ -18,7 +18,7 @@ internal class GameSettingsEffectTest : EffectTest() {
     @MockK
     private lateinit var mockGameSettingsStore: GameSettingsStore
 
-    private val initGameSettings = GameSettings()
+    private val initGameSettings = GameSettings.Default
 
     private lateinit var dependency: GameGameSettingsDependency
 

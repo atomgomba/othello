@@ -162,6 +162,7 @@ internal fun MainState.MainViewImpl(
                             args = GameHistoryArgs(
                                 history = gameHistory,
                                 historyImages = historyImages,
+                                gameSettings = gameSettings,
                             ),
                             listState = historyListState,
                             modifier = destinationModifier,

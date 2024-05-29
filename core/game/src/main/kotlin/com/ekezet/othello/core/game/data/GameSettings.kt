@@ -13,11 +13,18 @@ interface IGameSettings {
 }
 
 data class GameSettings(
-    override val displayOptions: BoardDisplayOptions = defaultDisplayOptions,
-    override val lightStrategy: Strategy? = defaultLightStrategy,
-    override val darkStrategy: Strategy? = defaultDarkStrategy,
+    override val displayOptions: BoardDisplayOptions,
+    override val lightStrategy: Strategy?,
+    override val darkStrategy: Strategy?,
 ) : IGameSettings {
     companion object {
+        val Default: GameSettings
+            get() = GameSettings(
+                displayOptions = defaultDisplayOptions,
+                lightStrategy = defaultLightStrategy,
+                darkStrategy = defaultDarkStrategy,
+            )
+
         @ExcludeFromCoverage
         fun from(other: IGameSettings) = with(other) {
             GameSettings(

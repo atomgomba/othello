@@ -72,7 +72,7 @@ private fun GameHistoryState.GameHistoryViewImpl(
                 .fillMaxSize(),
         ) {
             items(items = historyItems, key = { it.composeKey }) {
-                HistoryItemView(item = it)
+                HistoryItemView(item = it, isGrayscaleMode = isGrayscaleMode)
             }
 
             if (gameEnd != null) {

@@ -4,7 +4,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -17,21 +16,25 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.ekezet.othello.core.data.serialize.asString
 import com.ekezet.othello.core.ui.R
 import com.ekezet.othello.core.ui.components.GamePieceWithBorder
+import com.ekezet.othello.core.ui.theme.BoardBackground
+import com.ekezet.othello.core.ui.theme.BoardBackgroundGrayscale
 import com.ekezet.othello.feature.gamehistory.ui.viewModels.HistoryItem
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
-internal fun HistoryItemView(item: HistoryItem) = with(item) {
+internal fun HistoryItemView(
+    item: HistoryItem,
+    isGrayscaleMode: Boolean = false,
+) = with(item) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -81,13 +84,16 @@ internal fun HistoryItemView(item: HistoryItem) = with(item) {
             Spacer(Modifier.weight(1F))
 
             if (image != null) {
-                Image(
-                    bitmap = image,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(100.dp)
-                        .clip(RoundedCornerShape(6.dp)),
-                )
+                Surface(
+                    shape = RoundedCornerShape(6.dp),
+                    color = if (isGrayscaleMode) BoardBackgroundGrayscale else BoardBackground,
+                ) {
+                    Image(
+                        bitmap = image,
+                        contentDescription = null,
+                        modifier = Modifier.size(100.dp),
+                    )
+                }
             }
         }
 

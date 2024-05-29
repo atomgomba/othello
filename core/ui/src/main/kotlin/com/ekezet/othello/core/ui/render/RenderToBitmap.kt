@@ -11,7 +11,6 @@ import com.ekezet.othello.core.data.models.x
 import com.ekezet.othello.core.data.models.y
 import com.ekezet.othello.core.game.PastMove
 import com.ekezet.othello.core.ui.components.color
-import com.ekezet.othello.core.ui.theme.BoardBackground
 
 fun PastMove.renderToBitmap(drawBorder: Boolean = false): Bitmap {
     val (width, height) = listOf(640F, 640F)
@@ -23,7 +22,6 @@ fun PastMove.renderToBitmap(drawBorder: Boolean = false): Bitmap {
     var y = cellPadding
     val paint = Paint()
     Canvas(bitmap).apply {
-        drawColor(BoardBackground.toArgb())
         for ((rowIndex, row) in board.withIndex()) {
             x = cellPadding
             if (drawBorder) {

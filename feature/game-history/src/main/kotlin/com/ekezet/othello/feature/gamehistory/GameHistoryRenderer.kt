@@ -8,13 +8,16 @@ import com.ekezet.othello.feature.gamehistory.ui.viewModels.HistoryItem
 import kotlinx.collections.immutable.toImmutableList
 
 internal class GameHistoryRenderer : Renderer<GameHistoryModel, GameHistoryDependency, GameHistoryState> {
-    override fun renderState(model: GameHistoryModel) = GameHistoryState(
-        historyItems = model.render(),
-        gameEnd = model.gameEnd,
-        lastState = model.moveHistory.toPastGameState(),
-    )
+    override fun renderState(model: GameHistoryModel) = with(model) {
+        GameHistoryState(
+            historyItems = renderHistoryItems(),
+            gameEnd = gameEnd,
+            lastState = moveHistory.toPastGameState(),
+            isGrayscaleMode = gameSettings.displayOptions.isGrayscaleMode,
+        )
+    }
 
-    private fun GameHistoryModel.render() = moveHistory.map {
+    private fun GameHistoryModel.renderHistoryItems() = moveHistory.map {
         HistoryItem(
             turn = it.turn,
             move = it.moveAt,
