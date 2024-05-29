@@ -9,7 +9,7 @@ import kotlinx.collections.immutable.toImmutableList
 
 internal class GameHistoryRenderer : Renderer<GameHistoryModel, GameHistoryDependency, GameHistoryState> {
     override fun renderState(model: GameHistoryModel) = GameHistoryState(
-        historyItems = model.moveHistory.render().toImmutableList(),
+        historyItems = model.moveHistory.render(),
         gameEnd = model.gameEnd,
         lastState = model.moveHistory.toPastGameState(),
     )
@@ -21,5 +21,5 @@ internal class GameHistoryRenderer : Renderer<GameHistoryModel, GameHistoryDepen
             disk = it.disk,
             board = it.board.toImmutableList(),
         )
-    }
+    }.toImmutableList()
 }

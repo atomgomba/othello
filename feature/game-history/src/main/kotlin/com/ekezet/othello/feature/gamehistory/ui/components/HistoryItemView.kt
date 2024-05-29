@@ -88,7 +88,9 @@ internal fun HistoryItemView(item: HistoryItem) = with(item) {
                     isClickable = false,
                     modifier = Modifier.size(96.dp),
                     overlayFactory = { colIndex, rowIndex ->
-                        PastMoveIndicator.takeIf { colIndex == move!!.x && rowIndex == move.y }
+                        PastMoveIndicator.takeIf {
+                            move != null && colIndex == move.x && rowIndex == move.y
+                        }
                     },
                 )
             }
