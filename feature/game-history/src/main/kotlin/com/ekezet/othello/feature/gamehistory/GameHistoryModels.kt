@@ -7,6 +7,7 @@ import com.ekezet.hurok.ViewState
 import com.ekezet.othello.core.game.GameEnd
 import com.ekezet.othello.core.game.GameHistory
 import com.ekezet.othello.core.game.MoveHistory
+import com.ekezet.othello.core.game.data.Default
 import com.ekezet.othello.core.game.data.GameSettings
 import com.ekezet.othello.core.game.state.PastGameState
 import com.ekezet.othello.feature.gamehistory.ui.viewModels.HistoryItem

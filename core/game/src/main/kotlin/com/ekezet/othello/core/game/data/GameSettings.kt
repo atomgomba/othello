@@ -17,21 +17,14 @@ data class GameSettings(
     override val lightStrategy: Strategy?,
     override val darkStrategy: Strategy?,
 ) : IGameSettings {
-    companion object {
-        val Default: GameSettings
-            get() = GameSettings(
-                displayOptions = defaultDisplayOptions,
-                lightStrategy = defaultLightStrategy,
-                darkStrategy = defaultDarkStrategy,
-            )
+    companion object
+}
 
-        @ExcludeFromCoverage
-        fun from(other: IGameSettings) = with(other) {
-            GameSettings(
-                displayOptions = displayOptions,
-                lightStrategy = lightStrategy,
-                darkStrategy = darkStrategy,
-            )
-        }
-    }
+@ExcludeFromCoverage
+fun GameSettings.Companion.from(other: IGameSettings) = with(other) {
+    GameSettings(
+        displayOptions = displayOptions,
+        lightStrategy = lightStrategy,
+        darkStrategy = darkStrategy,
+    )
 }

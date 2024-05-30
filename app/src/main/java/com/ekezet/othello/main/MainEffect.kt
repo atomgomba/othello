@@ -4,6 +4,7 @@ import com.ekezet.hurok.Effect
 import com.ekezet.othello.core.game.data.IGameSettings
 import com.ekezet.othello.core.game.effect.PublishGameSettings
 import com.ekezet.othello.core.game.state.CurrentGameState
+import com.ekezet.othello.core.game.state.OthelloGameState
 import com.ekezet.othello.feature.gameboard.actions.OnUpdateGameState
 
 internal sealed interface MainEffect : Effect<MainModel, MainDependency>
@@ -13,7 +14,7 @@ internal data class PublishGameSettings(
 ) : MainEffect, PublishGameSettings<MainModel, MainDependency>()
 
 internal data class UpdateGameBoardGameState(
-    private val newState: CurrentGameState,
+    private val newState: OthelloGameState,
 ) : MainEffect {
     override suspend fun MainActionEmitter.trigger(
         dependency: MainDependency?,

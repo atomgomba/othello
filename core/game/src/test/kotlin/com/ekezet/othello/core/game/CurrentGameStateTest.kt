@@ -2,7 +2,10 @@ package com.ekezet.othello.core.game
 
 import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.data.serialize.BoardSerializer
+import com.ekezet.othello.core.game.data.Default
 import com.ekezet.othello.core.game.state.CurrentGameState
+import com.ekezet.othello.core.game.state.OthelloGameState
+import com.ekezet.othello.core.game.state.new
 import com.ekezet.othello.core.game.throwable.InvalidMoveException
 import io.mockk.mockk
 import org.junit.Test
@@ -12,7 +15,7 @@ import kotlin.test.assertIs
 class CurrentGameStateTest {
     @Test(expected = InvalidMoveException::class)
     fun testInvalidMove() {
-        val subject = CurrentGameState.new()
+        val subject = OthelloGameState.Default
 
         subject.proceed((7 to 7))
     }

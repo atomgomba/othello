@@ -5,22 +5,22 @@ import com.ekezet.hurok.ViewState
 import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.data.models.isLight
 import com.ekezet.othello.core.game.data.BoardDisplayOptions
+import com.ekezet.othello.core.game.data.Default
+import com.ekezet.othello.core.game.data.DefaultDarkStrategy
+import com.ekezet.othello.core.game.data.DefaultLightStrategy
 import com.ekezet.othello.core.game.data.IGameSettings
-import com.ekezet.othello.core.game.data.defaultDarkStrategy
-import com.ekezet.othello.core.game.data.defaultDisplayOptions
-import com.ekezet.othello.core.game.data.defaultLightStrategy
 import com.ekezet.othello.core.game.dependency.GameSettingsPublisher
-import com.ekezet.othello.core.game.store.GameSettingsStore
 import com.ekezet.othello.core.game.store.GameHistoryStore
+import com.ekezet.othello.core.game.store.GameSettingsStore
 import com.ekezet.othello.core.game.strategy.DecoratedStrategy
 import com.ekezet.othello.core.game.strategy.Strategy
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 
 data class GameSettingsModel(
-    override val lightStrategy: Strategy? = defaultLightStrategy,
-    override val darkStrategy: Strategy? = defaultDarkStrategy,
-    override val displayOptions: BoardDisplayOptions = defaultDisplayOptions,
+    override val lightStrategy: Strategy? = DefaultLightStrategy,
+    override val darkStrategy: Strategy? = DefaultDarkStrategy,
+    override val displayOptions: BoardDisplayOptions = BoardDisplayOptions.Default,
     internal val selectingStrategyFor: Disk? = null,
 ) : IGameSettings {
     internal fun showStrategySelectorFor(player: Disk) = copy(selectingStrategyFor = player)
@@ -39,8 +39,8 @@ internal data class GameSettingsState(
     val isLightPreferSides: Boolean,
     val isDarkPreferSides: Boolean,
     val displayOptions: BoardDisplayOptions,
-    val lightStrategy: Strategy? = defaultLightStrategy,
-    val darkStrategy: Strategy? = defaultDarkStrategy,
+    val lightStrategy: Strategy? = DefaultLightStrategy,
+    val darkStrategy: Strategy? = DefaultDarkStrategy,
     val selectingStrategyFor: Disk?,
 ) : ViewState<GameSettingsModel, GameGameSettingsDependency>() {
     internal val Disk.isNotHuman: Boolean

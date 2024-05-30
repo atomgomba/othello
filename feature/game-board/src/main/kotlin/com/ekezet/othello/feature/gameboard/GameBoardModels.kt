@@ -10,12 +10,10 @@ import com.ekezet.othello.core.data.models.DiskCount
 import com.ekezet.othello.core.data.models.Position
 import com.ekezet.othello.core.game.GameEnd
 import com.ekezet.othello.core.game.data.BoardDisplayOptions
+import com.ekezet.othello.core.game.data.Default
+import com.ekezet.othello.core.game.data.DefaultDarkStrategy
+import com.ekezet.othello.core.game.data.DefaultLightStrategy
 import com.ekezet.othello.core.game.data.IGameSettings
-import com.ekezet.othello.core.game.data.defaultDarkStrategy
-import com.ekezet.othello.core.game.data.defaultDisplayOptions
-import com.ekezet.othello.core.game.data.defaultGameState
-import com.ekezet.othello.core.game.data.defaultLightStrategy
-import com.ekezet.othello.core.game.state.CurrentGameState
 import com.ekezet.othello.core.game.state.OthelloGameState
 import com.ekezet.othello.core.game.store.GameHistoryStore
 import com.ekezet.othello.core.game.strategy.HumanPlayer
@@ -36,10 +34,10 @@ internal const val ACTION_DELAY_MILLIS: Long = DefaultDurationMillis
     .toLong()
 
 data class GameBoardModel(
-    internal val gameState: OthelloGameState = defaultGameState,
-    override val displayOptions: BoardDisplayOptions = defaultDisplayOptions,
-    override val lightStrategy: Strategy? = defaultLightStrategy,
-    override val darkStrategy: Strategy? = defaultDarkStrategy,
+    internal val gameState: OthelloGameState = OthelloGameState.Default,
+    override val displayOptions: BoardDisplayOptions = BoardDisplayOptions.Default,
+    override val lightStrategy: Strategy? = DefaultLightStrategy,
+    override val darkStrategy: Strategy? = DefaultDarkStrategy,
     internal val nextMovePosition: Position? = null,
     internal val passed: Boolean = false,
     internal val ended: GameEnd? = null,
@@ -55,7 +53,7 @@ data class GameBoardModel(
         }
 
     internal fun resetNextTurn(
-        nextState: CurrentGameState = defaultGameState,
+        nextState: OthelloGameState = OthelloGameState.Default,
         passed: Boolean = false,
     ) = copy(
         gameState = if (passed) nextState.lastState else nextState,

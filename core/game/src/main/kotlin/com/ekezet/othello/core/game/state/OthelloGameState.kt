@@ -20,4 +20,6 @@ interface OthelloGameState {
 
     @Throws(InvalidMoveException::class)
     fun proceed(moveAt: Position): MoveResult
+
+    companion object
 }

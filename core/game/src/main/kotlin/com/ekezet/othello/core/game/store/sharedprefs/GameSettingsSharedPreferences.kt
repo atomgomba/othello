@@ -2,11 +2,11 @@ package com.ekezet.othello.core.game.store.sharedprefs
 
 import android.content.SharedPreferences
 import com.ekezet.othello.core.game.data.BoardDisplayOptions
+import com.ekezet.othello.core.game.data.Default
+import com.ekezet.othello.core.game.data.DefaultDarkStrategy
+import com.ekezet.othello.core.game.data.DefaultLightStrategy
 import com.ekezet.othello.core.game.data.GameSettings
 import com.ekezet.othello.core.game.data.IGameSettings
-import com.ekezet.othello.core.game.data.defaultDarkStrategy
-import com.ekezet.othello.core.game.data.defaultDisplayOptions
-import com.ekezet.othello.core.game.data.defaultLightStrategy
 import com.ekezet.othello.core.game.strategy.HumanPlayer
 import com.ekezet.othello.core.game.strategy.PreferSidesDecoratorStrategy
 import com.ekezet.othello.core.game.strategy.PreferSidesDecoratorStrategy.Companion.preferSides
@@ -38,9 +38,9 @@ internal fun SharedPreferences.persist(data: IGameSettings) = with(edit()) {
 
 internal fun SharedPreferences.load(): GameSettings =
     GameSettings(
-        lightStrategy = getStrategy(KEY_LIGHT_NAME, KEY_LIGHT_PREFER_SIDES, defaultLightStrategy),
-        darkStrategy = getStrategy(KEY_DARK_NAME, KEY_DARK_PREFER_SIDES, defaultDarkStrategy),
-        displayOptions = with(defaultDisplayOptions) {
+        lightStrategy = getStrategy(KEY_LIGHT_NAME, KEY_LIGHT_PREFER_SIDES, DefaultLightStrategy),
+        darkStrategy = getStrategy(KEY_DARK_NAME, KEY_DARK_PREFER_SIDES, DefaultDarkStrategy),
+        displayOptions = with(BoardDisplayOptions.Default) {
             BoardDisplayOptions(
                 showPossibleMoves = getBoolean(KEY_SHOW_POSSIBLE_MOVES, showPossibleMoves),
                 showBoardPositions = getBoolean(KEY_SHOW_BOARD_POSITIONS, showBoardPositions),

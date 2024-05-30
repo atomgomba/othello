@@ -1,5 +1,6 @@
 package com.ekezet.othello.feature.gameboard.di
 
+import com.ekezet.othello.core.game.data.Default
 import com.ekezet.othello.core.game.data.GameSettings
 import com.ekezet.othello.feature.gameboard.GameBoardEmitter
 import com.ekezet.othello.feature.gameboard.GameBoardLoop

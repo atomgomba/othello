@@ -1,6 +1,7 @@
 package com.ekezet.othello.feature.gamesettings
 
 import com.ekezet.hurok.test.EffectTest
+import com.ekezet.othello.core.game.data.Default
 import com.ekezet.othello.core.game.data.GameSettings
 import com.ekezet.othello.core.game.store.GameSettingsStore
 import com.ekezet.othello.core.game.strategy.HumanPlayer

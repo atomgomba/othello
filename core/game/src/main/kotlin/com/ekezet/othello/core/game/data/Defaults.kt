@@ -3,12 +3,14 @@ package com.ekezet.othello.core.game.data
 import com.ekezet.othello.core.data.models.Board
 import com.ekezet.othello.core.data.serialize.BoardSerializer
 import com.ekezet.othello.core.game.state.CurrentGameState
+import com.ekezet.othello.core.game.state.OthelloGameState
+import com.ekezet.othello.core.game.state.new
 import com.ekezet.othello.core.game.strategy.HumanPlayer
 import com.ekezet.othello.core.game.strategy.NaiveMaxStrategy
 import com.ekezet.othello.core.game.strategy.PreferSidesDecoratorStrategy.Companion.preferSides
 import com.ekezet.othello.core.game.strategy.Strategy
 
-val defaultBoard: Board
+val DefaultBoard: Board
     inline get() = BoardSerializer.fromString(
         """
         --------
@@ -22,16 +24,23 @@ val defaultBoard: Board
         """,
     )
 
-val defaultGameState: CurrentGameState
-    inline get() = CurrentGameState.new(defaultBoard)
+val OthelloGameState.Companion.Default: OthelloGameState
+    inline get() = CurrentGameState.new(DefaultBoard)
 
-val defaultDisplayOptions: BoardDisplayOptions
+val BoardDisplayOptions.Companion.Default: BoardDisplayOptions
     inline get() = BoardDisplayOptions(
         showPossibleMoves = true,
         showBoardPositions = false,
         isGrayscaleMode = false,
     )
 
-val defaultDarkStrategy: Strategy? = HumanPlayer
+val DefaultDarkStrategy: Strategy? = HumanPlayer
 
-val defaultLightStrategy: Strategy = NaiveMaxStrategy.preferSides()
+val DefaultLightStrategy: Strategy = NaiveMaxStrategy.preferSides()
+
+val GameSettings.Companion.Default: GameSettings
+    inline get() = GameSettings(
+        displayOptions = BoardDisplayOptions.Default,
+        lightStrategy = DefaultLightStrategy,
+        darkStrategy = DefaultDarkStrategy,
+    )

@@ -3,6 +3,7 @@ package com.ekezet.othello.core.game.store
 import android.content.Context
 import com.ekezet.othello.core.game.data.GameSettings
 import com.ekezet.othello.core.game.data.IGameSettings
+import com.ekezet.othello.core.game.data.from
 import com.ekezet.othello.core.game.store.sharedprefs.load
 import com.ekezet.othello.core.game.store.sharedprefs.persist
 import kotlinx.coroutines.flow.MutableStateFlow

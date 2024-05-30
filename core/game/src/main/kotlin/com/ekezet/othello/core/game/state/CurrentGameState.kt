@@ -18,7 +18,6 @@ import com.ekezet.othello.core.game.PastMove
 import com.ekezet.othello.core.game.Tie
 import com.ekezet.othello.core.game.ValidMove
 import com.ekezet.othello.core.game.Win
-import com.ekezet.othello.core.game.data.defaultGameState
 import com.ekezet.othello.core.game.findValidMoves
 import com.ekezet.othello.core.game.isInvalid
 import com.ekezet.othello.core.game.parts
@@ -137,15 +136,11 @@ data class CurrentGameState(
         return result
     }
 
-    companion object {
-        fun new(board: Board? = null) =
-            if (board == null) {
-                defaultGameState
-            } else {
-                CurrentGameState(
-                    currentBoard = board,
-                    history = emptyList(),
-                )
-            }
-    }
+    companion object
 }
+
+fun CurrentGameState.Companion.new(board: Board): OthelloGameState =
+    CurrentGameState(
+        currentBoard = board,
+        history = emptyList(),
+    )
