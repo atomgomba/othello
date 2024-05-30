@@ -155,6 +155,10 @@ internal fun MainState.MainViewImpl(
                 composable(
                     route = GameHistoryRoute.spec,
                 ) {
+                    if (!hasGameHistory) {
+                        navigateTo(MainRoutes.Start)
+                        return@composable
+                    }
                     CompositionLocalProvider(
                         LocalViewModelStoreOwner provides viewModelStoreOwner,
                     ) {
