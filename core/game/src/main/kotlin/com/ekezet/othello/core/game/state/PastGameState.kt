@@ -6,10 +6,13 @@ import com.ekezet.othello.core.game.throwable.InvalidMoveException
 import com.ekezet.othello.core.game.throwable.InvalidPastMoveException
 
 data class PastGameState(
-    private val wrapped: OthelloGameState,
+    private val wrapped: CurrentGameState,
 ) : OthelloGameState by wrapped {
     @Throws(InvalidMoveException::class)
     override fun proceed(moveAt: Position): MoveResult {
         throw InvalidPastMoveException()
     }
 }
+
+val OthelloGameState.isPastState: Boolean
+    inline get() = this is PastGameState

@@ -16,5 +16,5 @@ data class InvalidNewMoveException(
 
 class InvalidPastMoveException: InvalidMoveException() {
     override val message: String
-        get() = "Move history cannot be changed"
+        get() = "Past game state cannot be modified"
 }
