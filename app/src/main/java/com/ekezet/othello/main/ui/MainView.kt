@@ -48,14 +48,12 @@ import org.koin.compose.koinInject
 @Composable
 internal fun MainView(
     parentScope: CoroutineScope = rememberCoroutineScope(),
+    gameSettingsStore: GameSettingsStore = koinInject(),
+    gameHistoryStore: GameHistoryStore = koinInject(),
+    historyRenderer: HistoryImagesRenderer = koinInject(),
 ) {
-    val gameSettingsStore: GameSettingsStore = koinInject()
     val gameSettings: GameSettings by gameSettingsStore.settings.collectAsState()
-
-    val gameHistoryStore: GameHistoryStore = koinInject()
     val gameHistory: GameHistory by gameHistoryStore.history.collectAsState()
-
-    val historyRenderer: HistoryImagesRenderer = koinInject()
     val historyImages by historyRenderer.historyImages.collectAsState()
 
     LoopWrapper(
