@@ -8,14 +8,12 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.NavHost
@@ -84,10 +82,6 @@ internal fun MainState.MainViewImpl(
     historyImages: Map<String, Bitmap>,
     startDestination: String = MainRoutes.Start,
 ) {
-    val viewModelStoreOwner = requireNotNull(LocalViewModelStoreOwner.current) {
-        "ViewModelStoreOwner must be provided"
-    }
-
     val navController: NavHostController = rememberNavController()
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination by remember {
@@ -101,15 +95,15 @@ internal fun MainState.MainViewImpl(
             .setPopUpTo(
                 route = startDestination,
                 inclusive = false,
+                saveState = true,
             )
+            .setLaunchSingleTop(true)
+            .setRestoreState(true)
             .build()
     }
 
     fun navigateTo(route: String) {
-        navController.navigate(
-            route = route,
-            navOptions = navOptions.takeUnless { currentDestination == startDestination },
-        )
+        navController.navigate(route = route, navOptions = navOptions)
     }
 
     val destinationModifier = Modifier.fillMaxSize()
@@ -128,7 +122,7 @@ internal fun MainState.MainViewImpl(
                     onClick = ::navigateTo,
                     hasGameHistory = hasGameHistory,
                 )
-           },
+            },
             modifier = Modifier.padding(innerPadding),
         ) {
             NavHost(
@@ -138,18 +132,14 @@ internal fun MainState.MainViewImpl(
                 composable(
                     route = GameBoardRoute.spec,
                 ) {
-                    CompositionLocalProvider(
-                        LocalViewModelStoreOwner provides viewModelStoreOwner,
-                    ) {
-                        GameBoardView(
-                            args = gameSettings,
-                            parentEmitter = LocalActionEmitter.current,
-                            onStrategyClick = { disk ->
-                                navigateTo(GameSettingsRoute.make(disk))
-                            },
-                            modifier = destinationModifier,
-                        )
-                    }
+                    GameBoardView(
+                        args = gameSettings,
+                        parentEmitter = LocalActionEmitter.current,
+                        onStrategyClick = { disk ->
+                            navigateTo(GameSettingsRoute.make(pickStrategyFor = disk))
+                        },
+                        modifier = destinationModifier,
+                    )
                 }
 
                 composable(
@@ -159,34 +149,26 @@ internal fun MainState.MainViewImpl(
                         navigateTo(MainRoutes.Start)
                         return@composable
                     }
-                    CompositionLocalProvider(
-                        LocalViewModelStoreOwner provides viewModelStoreOwner,
-                    ) {
-                        GameHistoryView(
-                            args = GameHistoryArgs(
-                                history = gameHistory,
-                                historyImages = historyImages,
-                                gameSettings = gameSettings,
-                            ),
-                            listState = historyListState,
-                            modifier = destinationModifier,
-                        )
-                    }
+                    GameHistoryView(
+                        args = GameHistoryArgs(
+                            history = gameHistory,
+                            historyImages = historyImages,
+                            gameSettings = gameSettings,
+                        ),
+                        listState = historyListState,
+                        modifier = destinationModifier,
+                    )
                 }
 
                 composable(
                     route = GameSettingsRoute.spec,
                     arguments = GameSettingsRoute.arguments,
                 ) { entry ->
-                    CompositionLocalProvider(
-                        LocalViewModelStoreOwner provides viewModelStoreOwner,
-                    ) {
-                        GameSettingsView(
-                            args = gameSettings,
-                            selectStrategyFor = GameSettingsRoute.findPickStrategy(entry),
-                            modifier = destinationModifier,
-                        )
-                    }
+                    GameSettingsView(
+                        args = gameSettings,
+                        selectStrategyFor = GameSettingsRoute.findPickStrategy(entry),
+                        modifier = destinationModifier,
+                    )
                 }
             }
         }
