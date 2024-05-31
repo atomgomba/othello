@@ -13,6 +13,8 @@ internal data class HistoryItem(
     val move: Position?,
     val disk: Disk,
     val board: BoardList,
+    val darkCount: Int,
+    val lightCount: Int,
     val image: ImageBitmap? = null,
 ) : HasComposeKey {
     override val composeKey: Any

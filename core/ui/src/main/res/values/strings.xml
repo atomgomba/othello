@@ -21,8 +21,8 @@
     <string name="game_history__title__num_of_moves">History (moves: %d)</string>
     <string name="game_history__list__move">Moved to %s</string>
     <string name="game_history__list__pass">Passed</string>
-    <string name="game_history__list__ended_win">Winner: %s (%d vs. %d)</string>
-    <string name="game_history__list__ended_tie">Tie (%d)</string>
+    <string name="game_history__list__ended_win">Winner!</string>
+    <string name="game_history__list__ended_tie">Tie game!</string>
 
     <string name="game_settings__header__board">Board</string>
     <string name="game_settings__header__players">Players</string>
