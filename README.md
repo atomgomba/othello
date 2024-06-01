@@ -6,6 +6,18 @@ This is a sample app for the [hurok UDF framework](https://github.com/atomgomba/
 
 ## Changes
 
+### v3
+
+* Game history
+
+### v2  
+
+* Adaptive navigation
+
 ### v1
 
 * First release
+
+## License
+
+This game is released under the Apache 2.0 license. Please see [LICENSE](https://raw.githubusercontent.com/atomgomba/othello/v2/LICENSE) for details.
