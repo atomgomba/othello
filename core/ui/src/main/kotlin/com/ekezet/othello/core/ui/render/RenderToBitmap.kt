@@ -12,53 +12,52 @@ import com.ekezet.othello.core.data.models.y
 import com.ekezet.othello.core.game.PastMove
 import com.ekezet.othello.core.ui.components.color
 
+private const val bitmapWidth = 640F
+private const val bitmapHeight = 640F
+private const val cellWidth = bitmapWidth / BoardWidth
+private const val cellHeight = bitmapHeight / BoardHeight
+private const val cellPadding = cellWidth * 0.1F
+private const val gamePieceSize = cellWidth - (2F * cellPadding)
+private const val diskRadius = gamePieceSize / 2F
+
+private val borderPaint = Paint().apply {
+    style = Paint.Style.STROKE
+    color = Color.White.toArgb()
+    strokeWidth = cellPadding / 4
+}
+
+private val diskPaint = Paint().apply {
+    style = Paint.Style.FILL
+}
+
+private val movePaint = Paint().apply {
+    color = Color(255, 98, 0).toArgb()
+    style = Paint.Style.STROKE
+    strokeWidth = gamePieceSize / 4
+}
+
 fun PastMove.renderToBitmap(drawBorder: Boolean = false): Bitmap {
-    val (width, height) = listOf(640F, 640F)
-    val (cellWidth, cellHeight) = listOf(width / BoardWidth, height / BoardHeight)
-    val cellPadding = cellWidth * 0.1F
-    val gamePieceSize = cellWidth - (2 * cellPadding)
-    val bitmap = Bitmap.createBitmap(width.toInt(), height.toInt(), Bitmap.Config.ARGB_8888)
+    val bitmap = Bitmap.createBitmap(bitmapWidth.toInt(), bitmapHeight.toInt(), Bitmap.Config.ARGB_8888)
     var x: Float
     var y = cellPadding
-    val paint = Paint()
     Canvas(bitmap).apply {
         for ((rowIndex, row) in board.withIndex()) {
             x = cellPadding
             if (drawBorder) {
-                paint.style = Paint.Style.STROKE
-                paint.color = Color.White.toArgb()
-                paint.strokeWidth = cellPadding / 4
-                drawLine(0F, rowIndex * cellHeight, width, rowIndex * cellHeight, paint)
+                drawLine(0F, rowIndex * cellHeight, bitmapWidth, rowIndex * cellHeight, borderPaint)
             }
             for ((colIndex, disk) in row.withIndex()) {
                 if (drawBorder) {
-                    paint.style = Paint.Style.STROKE
-                    paint.color = Color.White.toArgb()
-                    drawLine(colIndex * cellWidth, 0F, colIndex * cellWidth, height, paint)
+                    drawLine(colIndex * cellWidth, 0F, colIndex * cellWidth, bitmapHeight, borderPaint)
                 }
                 if (disk != null) {
-                    paint.style = Paint.Style.FILL
-                    paint.color = disk.color.toArgb()
-                    drawCircle(
-                        x + gamePieceSize / 2,
-                        y + gamePieceSize / 2,
-                        gamePieceSize / 2F,
-                        paint
-                    )
+                    diskPaint.color = disk.color.toArgb()
+                    drawCircle(x + diskRadius, y + diskRadius, diskRadius, diskPaint)
                     val move = moveAt
                     if (move != null && colIndex == move.x && rowIndex == move.y) {
-                        paint.color = Color(255, 98, 0).toArgb()
-                        paint.style = Paint.Style.STROKE
-                        paint.strokeWidth = gamePieceSize / 4F
-                        drawCircle(
-                            x + gamePieceSize / 2,
-                            y + gamePieceSize / 2,
-                            gamePieceSize / 2F,
-                            paint
-                        )
+                        drawCircle(x + diskRadius, y + diskRadius, diskRadius, movePaint)
                     }
                 }
-                paint.reset()
                 x += cellWidth
             }
             y += cellHeight
