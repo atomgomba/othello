@@ -94,12 +94,16 @@ private fun ListNavigationFab(
     lastItemIndex: Int,
 ) {
     var isScrollingUp by remember { mutableStateOf(false) }
-    var lastFirstVisibleItemIndex by remember { mutableIntStateOf(0) }
+    var lastScrollOffset by remember { mutableIntStateOf(0) }
 
     LaunchedEffect(listState) {
-        snapshotFlow { listState.firstVisibleItemIndex }.collect { firstItemIndex ->
-            isScrollingUp = firstItemIndex < lastFirstVisibleItemIndex
-            lastFirstVisibleItemIndex = firstItemIndex
+        snapshotFlow { listState.firstVisibleItemScrollOffset }.collect { scrollOffset ->
+            isScrollingUp = when {
+                listState.canScrollForward && !listState.canScrollBackward -> false
+                !listState.canScrollForward && listState.canScrollBackward -> true
+                else -> scrollOffset < lastScrollOffset
+            }
+            lastScrollOffset = scrollOffset
         }
     }
 

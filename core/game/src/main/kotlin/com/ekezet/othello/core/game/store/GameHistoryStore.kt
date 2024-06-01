@@ -13,6 +13,6 @@ class GameHistoryStore {
 
     fun reset(history: MoveHistory = emptyList(), gameEnd: GameEnd? = null) {
         _history.value = GameHistory(history.toList(), gameEnd)
-        Timber.d("Move history has been reset")
+        Timber.d("Move history has been reset. Moves: ${history.size}")
     }
 }
