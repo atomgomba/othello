@@ -2,7 +2,10 @@ package com.ekezet.othello
 
 import com.android.build.api.dsl.CommonExtension
 import org.gradle.api.Project
+import org.gradle.kotlin.dsl.assign
+import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
+import org.jetbrains.kotlin.compose.compiler.gradle.ComposeCompilerGradlePluginExtension
 
 internal fun Project.configureAndroidCompose(
     commonExtension: CommonExtension<*, *, *, *, *, *>,
@@ -23,5 +26,10 @@ internal fun Project.configureAndroidCompose(
             add("debugImplementation", libs.findLibrary("androidx.compose.ui.testManifest").get())
             add("debugImplementation", libs.findLibrary("androidx.compose.ui.tooling").get())
         }
+    }
+
+    configure<ComposeCompilerGradlePluginExtension> {
+        enableStrongSkippingMode = true
+        includeSourceInformation = true
     }
 }

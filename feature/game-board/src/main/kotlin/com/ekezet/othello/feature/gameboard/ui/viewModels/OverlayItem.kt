@@ -1,16 +1,16 @@
 package com.ekezet.othello.feature.gameboard.ui.viewModels
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.Stable
 import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.ui.viewModels.Sprite
 import com.ekezet.othello.feature.gameboard.ui.components.overlay.NextMoveIndicator
 import com.ekezet.othello.feature.gameboard.ui.components.overlay.ValidMoveIndicator
 import java.util.Stack
 
-@Immutable
+@Stable
 internal sealed interface OverlayItem : Sprite {
-    @Immutable
+    @Stable
     data class StackedOverlayItem(
         private val items: Stack<OverlayItem>,
     ) : OverlayItem {
@@ -20,13 +20,12 @@ internal sealed interface OverlayItem : Sprite {
         }
 
         override val composeKey: Any
-            // FIXME: This is not always unique
-            get() = "overlays-${items.size}"
+            get() = "overlays-" + items.map { it.composeKey }.joinToString("-")
 
         fun push(item: OverlayItem) = copy(items = items.apply { push(item) })
     }
 
-    @Immutable
+    @Stable
     data class ValidMoveIndicatorOverlayItem(
         private val disk: Disk,
     ) : OverlayItem {
@@ -39,7 +38,7 @@ internal sealed interface OverlayItem : Sprite {
             get() = "valid-move-indicator-${disk.isDark}"
     }
 
-    @Immutable
+    @Stable
     data class NextMoveIndicatorOverlayItem(
         private val disk: Disk,
     ) : OverlayItem {

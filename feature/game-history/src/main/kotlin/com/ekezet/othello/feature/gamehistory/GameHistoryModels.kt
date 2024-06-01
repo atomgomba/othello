@@ -2,6 +2,7 @@ package com.ekezet.othello.feature.gamehistory
 
 import android.graphics.Bitmap
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.Stable
 import com.ekezet.hurok.ActionEmitter
 import com.ekezet.hurok.ViewState
 import com.ekezet.othello.core.game.GameEnd
@@ -28,6 +29,7 @@ internal data class GameHistoryState(
     val isGrayscaleMode: Boolean,
 ) : ViewState<GameHistoryModel, GameHistoryDependency>()
 
+@Stable
 data class GameHistoryArgs(
     val history: GameHistory,
     val historyImages: Map<String, Bitmap>,

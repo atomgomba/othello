@@ -1,6 +1,7 @@
 package com.ekezet.othello.main
 
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.Stable
 import com.ekezet.hurok.ActionEmitter
 import com.ekezet.hurok.ViewState
 import com.ekezet.othello.core.game.data.BoardDisplayOptions
@@ -28,7 +29,7 @@ internal data class MainState(
     val hasGameHistory: Boolean,
 ) : ViewState<MainModel, MainDependency>()
 
-@Immutable
+@Stable
 internal data class MainArgs(
     val gameSettings: IGameSettings,
     val hasGameHistory: Boolean,
