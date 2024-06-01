@@ -6,6 +6,9 @@ import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.data.models.Position
 import com.ekezet.othello.core.data.models.flip
 import com.ekezet.othello.core.data.models.isLight
+import com.ekezet.othello.core.game.GameEnd
+import com.ekezet.othello.core.game.GameEnd.EndedTie
+import com.ekezet.othello.core.game.GameEnd.EndedWin
 import com.ekezet.othello.core.game.NextTurn
 import com.ekezet.othello.core.game.PassTurn
 import com.ekezet.othello.core.game.Tie
@@ -16,9 +19,7 @@ import com.ekezet.othello.core.game.strategy.HumanPlayer
 import com.ekezet.othello.core.game.strategy.Strategy
 import com.ekezet.othello.core.game.throwable.InvalidNewMoveException
 import com.ekezet.othello.feature.gameboard.GameBoardModel
-import com.ekezet.othello.core.game.GameEnd
-import com.ekezet.othello.core.game.GameEnd.EndedTie
-import com.ekezet.othello.core.game.GameEnd.EndedWin
+import com.ekezet.othello.feature.gameboard.PublishPastMoves
 import com.ekezet.othello.feature.gameboard.WaitBeforeGameEnd
 import com.ekezet.othello.feature.gameboard.WaitBeforeNextTurn
 import com.ekezet.othello.feature.gameboard.WaitBeforePassTurn
@@ -35,6 +36,7 @@ import kotlin.test.assertFailsWith
 @RunWith(JUnitParamsRunner::class)
 class GameBoardActionTest {
     private val mockLightStrategy: Strategy = mockk()
+
     private val testModel = GameBoardModel(
         lightStrategy = mockLightStrategy,
     )
@@ -196,7 +198,9 @@ class GameBoardActionTest {
             assertModel(expectedModel)
 
             if (disk!!.isDark && expectedModel.darkStrategy == HumanPlayer) {
-                assertEffects(setOf(WaitBeforeNextTurn(nextMovePosition)))
+                assertEffects(setOf(WaitBeforeNextTurn(nextMovePosition), PublishPastMoves(nextState)))
+            } else {
+                assertEffects(setOf(PublishPastMoves(nextState)))
             }
         }
 
@@ -244,6 +248,7 @@ class GameBoardActionTest {
             } else if (disk.isLight && expectedModel.lightStrategy != HumanPlayer) {
                 add(WaitBeforePassTurn(null, nextState))
             }
+            add(PublishPastMoves(nextState))
         }
 
         initModel after ContinueGame matches {
@@ -293,6 +298,7 @@ class GameBoardActionTest {
         val expectedModel = initModel.resetNextTurn(nextState)
         val expectedEffects = buildSet {
             add(WaitBeforeGameEnd(EndedWin(disk!!)))
+            add(PublishPastMoves(newState = nextState, gameEnd = EndedWin(disk)))
         }
 
         initModel after ContinueGame matches {
@@ -326,7 +332,8 @@ class GameBoardActionTest {
 
         val expectedModel = initModel.resetNextTurn(nextState)
         val expectedEffects = buildSet {
-            add(WaitBeforeGameEnd(EndedTie))
+            add(WaitBeforeGameEnd(result = EndedTie))
+            add(PublishPastMoves(newState = nextState, gameEnd = EndedTie))
         }
 
         initModel after ContinueGame matches {
