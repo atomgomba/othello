@@ -2,6 +2,8 @@ plugins {
     id("othello.android.app")
     id("othello.android.app.versioning")
     id("othello.android.app.compose")
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.baselineprofile)
 }
 
 android {
@@ -51,8 +53,10 @@ dependencies {
 
     implementation(libs.hurokBase)
     implementation(libs.hurokCompose)
+    implementation(libs.androidx.profileinstaller)
 
     testImplementation(libs.junit4)
     testImplementation(libs.mockk)
     testImplementation(libs.hurokTest)
+    "baselineProfile"(project(":app:baselineprofile"))
 }
