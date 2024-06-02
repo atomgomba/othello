@@ -3,7 +3,6 @@ package com.ekezet.othello.main
 import com.ekezet.hurok.Effect
 import com.ekezet.othello.core.game.data.IGameSettings
 import com.ekezet.othello.core.game.effect.PublishGameSettings
-import com.ekezet.othello.core.game.state.CurrentGameState
 import com.ekezet.othello.core.game.state.OthelloGameState
 import com.ekezet.othello.feature.gameboard.actions.OnUpdateGameState
 

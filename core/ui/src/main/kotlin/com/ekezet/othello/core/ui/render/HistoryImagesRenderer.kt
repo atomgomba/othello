@@ -60,17 +60,17 @@ class HistoryImagesRenderer(
         mutex.withLock {
             renderJobs.remove(renderId)
         }
-        publishImages()
+        publishDoneImages()
     }
 
     private suspend fun finishJob(renderId: String, result: Bitmap) {
         mutex.withLock {
             renderJobs[renderId] = Done(renderId, result)
         }
-        publishImages()
+        publishDoneImages()
     }
 
-    private fun publishImages() {
+    private fun publishDoneImages() {
         val images = renderJobs.values
             .filterIsInstance<Done>()
             .associate { it.renderId to it.bitmap }
