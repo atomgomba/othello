@@ -6,6 +6,10 @@ This is a sample app for the [hurok UDF framework](https://github.com/atomgomba/
 
 ## Changes
 
+### v4
+
+* Add basic baseline profiles
+
 ### v3
 
 * Game history
