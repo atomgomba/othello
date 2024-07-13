@@ -1,4 +1,4 @@
-name: Build non-minified release APK
+name: Build unsigned release APK
 
 on:
   release:
@@ -31,12 +31,12 @@ jobs:
         with:
           java-version: '17'
       - name: Build the app
-        run: ./gradlew assembleNonMinifiedRelease
+        run: ./gradlew assembleRelease
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
-          name: Non-minified release APK
-          path: app/build/outputs/apk/nonMinifiedRelease/app-nonMinifiedRelease.apk
+          name: Unsigned release APK
+          path: app/build/outputs/apk/release/app-release-unsigned.apk
 
   test:
     runs-on: ubuntu-latest
