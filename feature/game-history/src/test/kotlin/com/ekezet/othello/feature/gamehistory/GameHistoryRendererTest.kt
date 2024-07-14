@@ -20,7 +20,6 @@ class GameHistoryRendererTest {
     private val subject = GameHistoryRenderer()
 
     @Test
-
     fun `renderState works correctly`() {
         val pastMove = PastMove(
             board = DefaultBoard,
@@ -38,8 +37,8 @@ class GameHistoryRendererTest {
             gameSettings = GameSettings.Default.copy(
                 displayOptions = BoardDisplayOptions.Default.copy(
                     isGrayscaleMode = isGrayscaleMode,
-                )
-            )
+                ),
+            ),
         )
 
         val result = subject.renderState(initModel)
@@ -54,7 +53,7 @@ class GameHistoryRendererTest {
                     darkCount = pastMove.board.diskCount.first,
                     lightCount = pastMove.board.diskCount.second,
                     image = null,
-                )
+                ),
             ),
             gameEnd = gameEnd,
             lastState = moveHistory.toPastGameState(),

@@ -1,7 +1,6 @@
 package com.ekezet.othello.feature.gamehistory.ui.components
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.tooling.preview.Preview
 import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.data.models.Position
@@ -67,7 +66,7 @@ private val moveHistoryMoveItem = HistoryItem(
     move = Position(4, 5),
     disk = Disk.Dark,
     board = DefaultBoard.toImmutableList(),
-    image = lastMoveImage.asImageBitmap(),
+    image = lastMoveImage,
     lightCount = 8,
     darkCount = 2,
 )
@@ -77,7 +76,7 @@ private val moveHistoryPassItem = HistoryItem(
     move = null,
     disk = Disk.Light,
     board = DefaultBoard.toImmutableList(),
-    image = lastPassImage.asImageBitmap(),
+    image = lastPassImage,
     lightCount = 8,
     darkCount = 2,
 )

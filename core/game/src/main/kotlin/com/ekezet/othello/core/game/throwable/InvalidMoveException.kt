@@ -14,7 +14,7 @@ data class InvalidNewMoveException(
         get() = "Invalid move attempt by $disk at ${invalidPosition.asString()}"
 }
 
-class InvalidPastMoveException: InvalidMoveException() {
+class InvalidPastMoveException : InvalidMoveException() {
     override val message: String
         get() = "Past game state cannot be modified"
 }

@@ -47,19 +47,19 @@ class CurrentGameStateTest {
         val expected = setOf(
             ValidMove(
                 position = (3 to 2),
-                segment = ValidSegment(start = (3 to 2), end = (3 to 4), isStartValid = true)
+                segment = ValidSegment(start = (3 to 2), end = (3 to 4), isStartValid = true),
             ),
             ValidMove(
                 position = (4 to 5),
-                segment = ValidSegment(start = (4 to 3), end = (4 to 5), isStartValid = false)
+                segment = ValidSegment(start = (4 to 3), end = (4 to 5), isStartValid = false),
             ),
             ValidMove(
                 position = (2 to 3),
-                segment = ValidSegment(start = (2 to 3), end = (4 to 3), isStartValid = true)
+                segment = ValidSegment(start = (2 to 3), end = (4 to 3), isStartValid = true),
             ),
             ValidMove(
                 position = (5 to 4),
-                segment = ValidSegment(start = (3 to 4), end = (5 to 4), isStartValid = false)
+                segment = ValidSegment(start = (3 to 4), end = (5 to 4), isStartValid = false),
             ),
         )
 
@@ -85,7 +85,7 @@ class CurrentGameStateTest {
         --------
         --------
         --------
-        """
+        """,
         )
 
         val subject = CurrentGameState.new(board)
@@ -109,7 +109,7 @@ class CurrentGameStateTest {
         xoooo---
         xooxo---
         xooooo--
-        """
+        """,
         )
 
         val subject = CurrentGameState.new(board)
@@ -132,7 +132,7 @@ class CurrentGameStateTest {
         xxxxxxxx
         xxxxxxxx
         xoooooo-
-        """
+        """,
         )
 
         val subject = CurrentGameState.new(board)
@@ -155,7 +155,7 @@ class CurrentGameStateTest {
         xxxxxxxx
         xxxxxxxx
         xoooooo-
-        """
+        """,
         )
 
         val subject = CurrentGameState.new(board)
@@ -170,7 +170,7 @@ class CurrentGameStateTest {
     fun testEquals() {
         assertEquals(
             CurrentGameState.new(BoardFactory.starter()),
-            CurrentGameState.new(BoardFactory.starter())
+            CurrentGameState.new(BoardFactory.starter()),
         )
     }
 
@@ -178,7 +178,7 @@ class CurrentGameStateTest {
     fun testHashcode() {
         assertEquals(
             CurrentGameState.new(BoardFactory.starter()).hashCode(),
-            CurrentGameState.new(BoardFactory.starter()).hashCode()
+            CurrentGameState.new(BoardFactory.starter()).hashCode(),
         )
     }
 }

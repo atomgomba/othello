@@ -12,7 +12,7 @@ object BoardSerializer {
         IllegalStateException::class,
     )
     fun fromLines(lines: List<String>): Board {
-        val data = lines.map { it.trim().replace("`", "") }.filterNot { it.isEmpty() }
+        val data = lines.map { it.trim().replace("`", "") }.filter { it.isNotEmpty() }
         var result = arrayOf<Array<Disk?>>()
         check(data.size == BoardHeight) { "BoardHeight must be $BoardHeight, but was ${data.size}" }
         for ((n, line) in data.withIndex()) {

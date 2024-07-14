@@ -16,4 +16,7 @@ dependencies {
     api(libs.kotlinx.immutable)
 
     implementation(libs.androidx.navigation.compose)
+
+    testImplementation(libs.mockk)
+    testImplementation(libs.turbine)
 }

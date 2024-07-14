@@ -57,7 +57,7 @@ private fun GameHistoryState.GameHistoryViewImpl(
 ) {
     Scaffold(
         modifier = modifier.then(
-            Modifier.fillMaxSize()
+            Modifier.fillMaxSize(),
         ),
         floatingActionButton = {
             if (historyItems.isNotEmpty()) {

@@ -6,7 +6,7 @@ import com.ekezet.othello.core.data.models.Position
 import com.ekezet.othello.core.game.GameEnd
 import com.ekezet.othello.core.game.state.CurrentGameState
 import com.ekezet.othello.core.game.store.GameHistoryStore
-import com.ekezet.othello.core.ui.render.HistoryImagesRenderer
+import com.ekezet.othello.core.ui.render.MovesRenderer
 import com.ekezet.othello.feature.gameboard.actions.OnGameEnded
 import com.ekezet.othello.feature.gameboard.actions.OnMoveMade
 import com.ekezet.othello.feature.gameboard.actions.OnTurnPassed
@@ -22,7 +22,7 @@ class GameBoardEffectTest : EffectTest() {
     private lateinit var mockGameHistoryStore: GameHistoryStore
 
     @MockK
-    private lateinit var mockHistoryImagesRenderer: HistoryImagesRenderer
+    private lateinit var mockMovesRenderer: MovesRenderer
 
     private lateinit var dependency: GameBoardDependency
 
@@ -32,7 +32,7 @@ class GameBoardEffectTest : EffectTest() {
 
         dependency = GameBoardDependency(
             gameHistoryStore = mockGameHistoryStore,
-            historyImagesRenderer = mockHistoryImagesRenderer,
+            movesRenderer = mockMovesRenderer,
         )
     }
 

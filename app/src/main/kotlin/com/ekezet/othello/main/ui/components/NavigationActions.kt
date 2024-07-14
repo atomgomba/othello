@@ -16,8 +16,9 @@ internal fun NavigationSuiteScope.navigationActions(
             icon = {
                 Icon(
                     imageVector = destination.icon,
-                    contentDescription = stringResource(id = destination.labelRes)
-                ) },
+                    contentDescription = stringResource(id = destination.labelRes),
+                )
+            },
             label = { Text(text = stringResource(id = destination.labelRes)) },
             selected = currentDestination == destination.id,
             onClick = { onClick(destination.id) },

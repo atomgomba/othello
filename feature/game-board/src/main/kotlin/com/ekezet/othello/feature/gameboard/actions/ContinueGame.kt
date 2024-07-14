@@ -17,7 +17,7 @@ import com.ekezet.othello.feature.gameboard.WaitBeforePassTurn
 
 internal fun GameBoardModel.nextTurn(newState: CurrentGameState): Next<GameBoardModel, GameBoardDependency> {
     val effects = mutableListOf<GameBoardEffect>(
-        PublishPastMoves(newState)
+        PublishPastMoves(newState),
     )
     val strategy = if (newState.currentDisk.isLight) lightStrategy else darkStrategy
     val nextMove = strategy?.deriveNext(newState)

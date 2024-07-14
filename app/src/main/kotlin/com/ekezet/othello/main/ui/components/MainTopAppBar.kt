@@ -30,24 +30,23 @@ internal fun MainState.MainTopAppBar(
     gameSettings: GameSettings,
     gameHistory: GameHistory,
 ) {
+    val titleString = when (currentDestination) {
+        GameHistoryRoute.id ->
+            stringResource(R.string.game_history__title__num_of_moves, gameHistory.history.size)
+
+        GameSettingsRoute.id ->
+            stringResource(R.string.main__nav__game_settings)
+
+        else ->
+            stringResource(R.string.app_name)
+    }
+
     TopAppBar(
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer,
             titleContentColor = MaterialTheme.colorScheme.primary,
         ),
-        title = {
-            Text(
-                text =
-                    when (currentDestination) {
-                        GameHistoryRoute.id ->
-                            stringResource(R.string.game_history__title__num_of_moves, gameHistory.history.size)
-                        GameSettingsRoute.id ->
-                            stringResource(R.string.main__nav__game_settings)
-                        else ->
-                            stringResource(R.string.app_name)
-                    }
-            )
-        },
+        title = { Text(titleString) },
         navigationIcon = {
             AnimatedVisibility(
                 visible = currentDestination != MainRoutes.Start,

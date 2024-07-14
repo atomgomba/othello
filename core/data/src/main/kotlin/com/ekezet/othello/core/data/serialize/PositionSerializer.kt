@@ -12,7 +12,8 @@ val PositionNumbers: List<Char> by lazy {
     ('1'..'8').toList()
 }
 
-fun Position.asString() = buildString {
-    append(PositionLetters[x])
-    append(PositionNumbers[y])
+fun Position?.asString() = if (this == null) {
+    "passed"
+} else {
+    "${PositionLetters[x]}${PositionNumbers[y]}"
 }

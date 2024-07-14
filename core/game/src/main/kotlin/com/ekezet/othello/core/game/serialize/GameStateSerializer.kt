@@ -4,9 +4,9 @@ import com.ekezet.othello.core.data.models.diskCount
 import com.ekezet.othello.core.data.serialize.BoardSerializer
 import com.ekezet.othello.core.data.serialize.asString
 import com.ekezet.othello.core.game.BoardFactory
-import com.ekezet.othello.core.game.state.CurrentGameState
 import com.ekezet.othello.core.game.PastMove
 import com.ekezet.othello.core.game.data.IGameSettings
+import com.ekezet.othello.core.game.state.CurrentGameState
 import com.ekezet.othello.core.game.strategy.requiredName
 
 object GameStateSerializer {

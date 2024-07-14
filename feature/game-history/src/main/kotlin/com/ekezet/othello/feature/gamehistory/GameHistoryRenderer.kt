@@ -1,6 +1,5 @@
 package com.ekezet.othello.feature.gamehistory
 
-import androidx.compose.ui.graphics.asImageBitmap
 import com.ekezet.hurok.Renderer
 import com.ekezet.othello.core.data.models.diskCount
 import com.ekezet.othello.core.game.toPastGameState
@@ -25,7 +24,7 @@ internal class GameHistoryRenderer : Renderer<GameHistoryModel, GameHistoryDepen
             move = it.moveAt,
             disk = it.disk,
             board = it.board.toImmutableList(),
-            image = historyImages[it.renderId]?.asImageBitmap(),
+            image = historyImages[it.uuid],
             darkCount = darkCount,
             lightCount = lightCount,
         )

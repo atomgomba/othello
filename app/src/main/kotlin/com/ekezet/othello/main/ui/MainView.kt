@@ -1,6 +1,5 @@
 package com.ekezet.othello.main.ui
 
-import android.graphics.Bitmap
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -14,6 +13,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.NavHost
@@ -26,7 +26,7 @@ import com.ekezet.othello.core.game.GameHistory
 import com.ekezet.othello.core.game.data.GameSettings
 import com.ekezet.othello.core.game.store.GameHistoryStore
 import com.ekezet.othello.core.game.store.GameSettingsStore
-import com.ekezet.othello.core.ui.render.HistoryImagesRenderer
+import com.ekezet.othello.core.ui.render.MovesRenderer
 import com.ekezet.othello.feature.gameboard.ui.GameBoardView
 import com.ekezet.othello.feature.gamehistory.GameHistoryArgs
 import com.ekezet.othello.feature.gamehistory.ui.GameHistoryView
@@ -50,11 +50,11 @@ internal fun MainView(
     parentScope: CoroutineScope = rememberCoroutineScope(),
     gameSettingsStore: GameSettingsStore = koinInject(),
     gameHistoryStore: GameHistoryStore = koinInject(),
-    historyRenderer: HistoryImagesRenderer = koinInject(),
+    historyRenderer: MovesRenderer = koinInject(),
 ) {
     val gameSettings: GameSettings by gameSettingsStore.settings.collectAsState()
     val gameHistory: GameHistory by gameHistoryStore.history.collectAsState()
-    val historyImages by historyRenderer.historyImages.collectAsState()
+    val historyImages by historyRenderer.renderedImages.collectAsState()
 
     LoopWrapper(
         builder = MainLoop,
@@ -77,7 +77,7 @@ internal fun MainView(
 internal fun MainState.MainViewImpl(
     gameSettings: GameSettings,
     gameHistory: GameHistory,
-    historyImages: Map<String, Bitmap>,
+    historyImages: Map<String, ImageBitmap>,
     startDestination: String = MainRoutes.Start,
 ) {
     val navController: NavHostController = rememberNavController()

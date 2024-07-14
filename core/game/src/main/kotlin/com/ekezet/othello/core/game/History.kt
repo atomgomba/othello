@@ -4,6 +4,7 @@ import com.ekezet.othello.core.data.models.Board
 import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.data.models.Position
 import com.ekezet.othello.core.data.serialize.BoardSerializer
+import com.ekezet.othello.core.data.serialize.asString
 import com.ekezet.othello.core.game.data.DefaultBoard
 import com.ekezet.othello.core.game.state.CurrentGameState
 import com.ekezet.othello.core.game.state.PastGameState
@@ -14,8 +15,8 @@ data class PastMove(
     val turn: Int,
     val disk: Disk,
 ) {
-    val renderId: String by lazy {
-        moveAt.toString() + "-" + BoardSerializer.toString(board)
+    val uuid: String by lazy {
+        moveAt.asString() + ":" + BoardSerializer.toLines(board).joinToString()
     }
 
     override fun equals(other: Any?): Boolean {

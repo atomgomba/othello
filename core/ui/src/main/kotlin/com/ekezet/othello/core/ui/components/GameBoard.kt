@@ -42,7 +42,7 @@ import com.ekezet.othello.core.ui.viewModels.BoardList
 import com.ekezet.othello.core.ui.viewModels.Sprite
 import com.ekezet.othello.core.ui.viewModels.getAt
 
-internal val borderWidth = 1.dp
+private val borderWidth = 1.dp
 private const val LOSER_ALPHA = .333F
 private const val CELL_WEIGHT = 1F / BoardWidth
 private val positionSize = 24.dp

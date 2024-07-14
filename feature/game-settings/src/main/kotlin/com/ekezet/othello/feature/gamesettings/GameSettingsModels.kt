@@ -71,7 +71,7 @@ internal data class GameSettingsState(
 
 internal class GameGameSettingsDependency(
     gameSettingsStore: GameSettingsStore? = null,
-    gameHistoryStore: GameHistoryStore? = null
+    gameHistoryStore: GameHistoryStore? = null,
 ) : KoinComponent, GameSettingsPublisher {
     override val gameSettingsStore: GameSettingsStore = gameSettingsStore ?: get()
     override val gameHistoryStore: GameHistoryStore = gameHistoryStore ?: get()
