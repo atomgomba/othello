@@ -3,7 +3,7 @@ package com.ekezet.othello.main.navigation
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
-class StripRouteKtTest {
+internal class StripRouteKtTest {
 
     @Test
     fun stripRoute() {

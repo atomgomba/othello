@@ -16,7 +16,7 @@ import kotlinx.collections.immutable.persistentListOf
 import org.junit.Test
 import kotlin.test.assertEquals
 
-class GameHistoryRendererTest {
+internal class GameHistoryRendererTest {
     private val subject = GameHistoryRenderer()
 
     @Test

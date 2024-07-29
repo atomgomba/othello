@@ -34,7 +34,7 @@ import org.junit.runner.RunWith
 import kotlin.test.assertFailsWith
 
 @RunWith(JUnitParamsRunner::class)
-class GameBoardActionTest {
+internal class GameBoardActionTest {
     private val mockLightStrategy: Strategy = mockk()
 
     private val testModel = GameBoardModel(

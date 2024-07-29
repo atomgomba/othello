@@ -6,7 +6,7 @@ import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-class ValidMovesKtTest {
+internal class ValidMovesKtTest {
     private val subject = Disk.Dark
     private val other = subject.flip()
 

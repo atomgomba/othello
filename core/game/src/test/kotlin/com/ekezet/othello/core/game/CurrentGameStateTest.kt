@@ -12,7 +12,7 @@ import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
 
-class CurrentGameStateTest {
+internal class CurrentGameStateTest {
     @Test(expected = InvalidMoveException::class)
     fun testInvalidMove() {
         val subject = OthelloGameState.Default

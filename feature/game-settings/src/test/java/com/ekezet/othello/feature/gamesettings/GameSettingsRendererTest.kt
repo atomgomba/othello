@@ -3,7 +3,7 @@ package com.ekezet.othello.feature.gamesettings
 import org.junit.Test
 import kotlin.test.assertEquals
 
-class GameSettingsRendererTest {
+internal class GameSettingsRendererTest {
     private val subject = GameSettingsRenderer()
 
     @Test

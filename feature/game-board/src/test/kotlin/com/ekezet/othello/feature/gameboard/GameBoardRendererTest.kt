@@ -14,7 +14,7 @@ import com.ekezet.othello.feature.gameboard.ui.viewModels.toImmutableList
 import org.junit.Test
 import kotlin.test.assertEquals
 
-class GameBoardRendererTest {
+internal class GameBoardRendererTest {
     private val subject = GameBoardRenderer()
 
     @Test

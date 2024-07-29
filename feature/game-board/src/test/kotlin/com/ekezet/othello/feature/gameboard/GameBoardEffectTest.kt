@@ -17,7 +17,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
 
-class GameBoardEffectTest : EffectTest() {
+internal class GameBoardEffectTest : EffectTest() {
     @MockK
     private lateinit var mockGameHistoryStore: GameHistoryStore
 

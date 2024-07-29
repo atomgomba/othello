@@ -4,7 +4,7 @@ import com.ekezet.othello.core.data.models.Position
 import org.junit.Test
 import kotlin.test.assertEquals
 
-class PositionSerializerKtTest {
+internal class PositionSerializerKtTest {
     @Test
     fun asString_NonNull() {
         assertEquals("A1", Position(0, 0).asString())

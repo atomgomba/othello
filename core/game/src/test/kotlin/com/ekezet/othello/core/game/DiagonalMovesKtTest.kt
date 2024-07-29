@@ -9,7 +9,7 @@ import org.junit.Test
 import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
 
-class DiagonalMovesKtTest {
+internal class DiagonalMovesKtTest {
     @Test
     fun getLeftDiagonal() {
         val result = board.getLeftDiagonal(2, 1)
