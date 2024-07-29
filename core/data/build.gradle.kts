@@ -5,3 +5,7 @@ plugins {
 android {
     namespace = "com.ekezet.othello.core.data"
 }
+
+dependencies {
+    testImplementation(libs.junit4)
+}
