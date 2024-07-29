@@ -2,7 +2,7 @@ package com.ekezet.othello.core.game
 
 import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.data.models.flip
-import org.junit.Test
+import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 

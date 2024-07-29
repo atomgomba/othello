@@ -15,7 +15,7 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
-import org.junit.Test
+import kotlin.test.Test
 
 internal class GameBoardEffectTest : EffectTest() {
     @MockK

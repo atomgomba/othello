@@ -13,7 +13,7 @@ import com.ekezet.othello.feature.gamesettings.ui.showDarkStrategySelectorModel
 import com.ekezet.othello.feature.gamesettings.ui.showLightStrategySelectorModel
 import junitparams.JUnitParamsRunner
 import junitparams.Parameters
-import org.junit.Test
+import kotlin.test.Test
 import org.junit.runner.RunWith
 import kotlin.test.assertEquals
 

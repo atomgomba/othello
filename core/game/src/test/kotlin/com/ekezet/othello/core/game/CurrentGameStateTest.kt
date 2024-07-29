@@ -8,7 +8,7 @@ import com.ekezet.othello.core.game.state.OthelloGameState
 import com.ekezet.othello.core.game.state.new
 import com.ekezet.othello.core.game.throwable.InvalidMoveException
 import io.mockk.mockk
-import org.junit.Test
+import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
 

@@ -1,7 +1,7 @@
 package com.ekezet.othello.core.data.serialize
 
 import com.ekezet.othello.core.data.models.Position
-import org.junit.Test
+import kotlin.test.Test
 import kotlin.test.assertEquals
 
 internal class PositionSerializerKtTest {

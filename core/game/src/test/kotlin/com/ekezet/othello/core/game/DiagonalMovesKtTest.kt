@@ -5,7 +5,7 @@ import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.data.models.getAt
 import com.ekezet.othello.core.data.models.x
 import com.ekezet.othello.core.data.serialize.BoardSerializer
-import org.junit.Test
+import kotlin.test.Test
 import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
 

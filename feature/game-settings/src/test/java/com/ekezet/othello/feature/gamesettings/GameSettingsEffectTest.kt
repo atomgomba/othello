@@ -15,7 +15,7 @@ import io.mockk.just
 import io.mockk.runs
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.junit.Before
-import org.junit.Test
+import kotlin.test.Test
 
 internal class GameSettingsEffectTest : EffectTest() {
     @MockK

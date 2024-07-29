@@ -1,6 +1,6 @@
 package com.ekezet.othello.feature.gamesettings
 
-import org.junit.Test
+import kotlin.test.Test
 import kotlin.test.assertEquals
 
 internal class GameSettingsRendererTest {

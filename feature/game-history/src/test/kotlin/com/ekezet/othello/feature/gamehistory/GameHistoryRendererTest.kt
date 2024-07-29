@@ -13,7 +13,7 @@ import com.ekezet.othello.core.game.toPastGameState
 import com.ekezet.othello.core.ui.viewModels.toImmutableList
 import com.ekezet.othello.feature.gamehistory.ui.viewModels.HistoryItem
 import kotlinx.collections.immutable.persistentListOf
-import org.junit.Test
+import kotlin.test.Test
 import kotlin.test.assertEquals
 
 internal class GameHistoryRendererTest {

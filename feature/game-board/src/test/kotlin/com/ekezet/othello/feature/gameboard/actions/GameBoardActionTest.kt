@@ -29,8 +29,8 @@ import io.mockk.mockk
 import io.mockk.verify
 import junitparams.JUnitParamsRunner
 import junitparams.Parameters
-import org.junit.Test
 import org.junit.runner.RunWith
+import kotlin.test.Test
 import kotlin.test.assertFailsWith
 
 @RunWith(JUnitParamsRunner::class)

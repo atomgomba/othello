@@ -11,7 +11,7 @@ import com.ekezet.othello.feature.gameboard.ui.viewModels.OverlayItem.ValidMoveI
 import com.ekezet.othello.feature.gameboard.ui.viewModels.newEmptyOverlay
 import com.ekezet.othello.feature.gameboard.ui.viewModels.putAt
 import com.ekezet.othello.feature.gameboard.ui.viewModels.toImmutableList
-import org.junit.Test
+import kotlin.test.Test
 import kotlin.test.assertEquals
 
 internal class GameBoardRendererTest {
