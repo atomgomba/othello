@@ -41,7 +41,6 @@ import com.ekezet.othello.core.ui.components.GameBoard
 import com.ekezet.othello.core.ui.components.GamePiece
 import com.ekezet.othello.core.ui.orHumanPlayer
 import com.ekezet.othello.feature.gameboard.ACTION_DELAY_MILLIS
-import com.ekezet.othello.feature.gameboard.GameBoardEmitter
 import com.ekezet.othello.feature.gameboard.GameBoardLoop
 import com.ekezet.othello.feature.gameboard.GameBoardState
 import com.ekezet.othello.feature.gameboard.actions.ContinueGame
@@ -69,18 +68,17 @@ fun GameBoardView(
         builder = GameBoardLoop,
         args = args,
         parentEmitter = parentEmitter,
-    ) { loop ->
-        GameBoardViewImpl(loop, onStrategyClick, modifier)
+    ) {
+        GameBoardViewImpl(onStrategyClick, modifier)
     }
 }
 
 @ExperimentalLayoutApi
 @Composable
 private fun GameBoardState.GameBoardViewImpl(
-    loop: GameBoardEmitter,
     onStrategyClick: OnStrategyClick,
     modifier: Modifier = Modifier,
-) = with(loop) {
+) {
     Box(
         modifier = modifier.then(Modifier.padding(16.dp)),
     ) {
@@ -114,7 +112,7 @@ private fun GameBoardState.GameBoardViewImpl(
     LaunchedEffect(nextMovePosition != null) {
         if (nextMovePosition != null) {
             delay(ACTION_DELAY_MILLIS)
-            loop.emit(ContinueGame)
+            emit(ContinueGame)
         }
     }
 }
