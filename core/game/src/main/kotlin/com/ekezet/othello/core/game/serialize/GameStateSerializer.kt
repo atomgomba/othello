@@ -10,8 +10,8 @@ import com.ekezet.othello.core.game.state.CurrentGameState
 import com.ekezet.othello.core.game.strategy.requiredName
 
 object GameStateSerializer {
-    fun toString(gameState: CurrentGameState, gameSetting: IGameSettings) = buildString {
-        appendLine(serializedHeader(gameSetting))
+    fun toString(gameState: CurrentGameState, gameSettings: IGameSettings) = buildString {
+        appendLine(serializedHeader(gameSettings))
         for (pastMove in gameState.history) {
             appendLine(pastMoveToString(pastMove))
         }
