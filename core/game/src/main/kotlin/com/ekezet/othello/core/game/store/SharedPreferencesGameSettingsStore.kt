@@ -20,7 +20,7 @@ internal class SharedPreferencesGameSettingsStore(
         get() = _settings.asStateFlow()
 
     override suspend fun update(new: IGameSettings) {
-        val data = GameSettings.from(new)
+        val data = GameSettings from new
         _settings.value = data
         prefs.persist(data)
     }

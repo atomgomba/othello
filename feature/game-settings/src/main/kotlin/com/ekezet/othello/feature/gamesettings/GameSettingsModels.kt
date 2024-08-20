@@ -34,6 +34,7 @@ data class GameSettingsModel(
             copy(lightStrategy = strategy)
         }
             .dismissStrategySelector()
+    internal fun toggleConfirmExit() = copy(confirmExit = !confirmExit)
 }
 
 @Immutable
@@ -41,9 +42,10 @@ internal data class GameSettingsState(
     val isLightPreferSides: Boolean,
     val isDarkPreferSides: Boolean,
     val displayOptions: BoardDisplayOptions,
-    val lightStrategy: Strategy? = DefaultLightStrategy,
-    val darkStrategy: Strategy? = DefaultDarkStrategy,
+    val lightStrategy: Strategy?,
+    val darkStrategy: Strategy?,
     val selectingStrategyFor: Disk?,
+    val confirmExit: Boolean,
 ) : ViewState<GameSettingsModel, GameGameSettingsDependency>() {
     internal val Disk.isNotHuman: Boolean
         inline get() = if (isLight) {

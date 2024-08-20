@@ -4,9 +4,6 @@ import android.content.Context
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import com.ekezet.othello.core.game.data.GameSettings
 import com.ekezet.othello.core.ui.R
 import com.ekezet.othello.main.MainState
@@ -19,14 +16,13 @@ internal fun MainState.ExitConfirmationSnackbar(
     settings: GameSettings,
     context: Context = koinInject(),
 ) {
-    val confirmExit by remember { derivedStateOf { settings.confirmExit } }
-
-    if (!confirmExit) {
-        return
-    }
-
-    LaunchedEffect(isExitMessageVisible) {
-        if (!(isExitMessageVisible)) {
+    LaunchedEffect(isExitMessageVisible, settings.confirmExit) {
+        if (!(isExitMessageVisible && settings.confirmExit)) {
+            if (!settings.confirmExit) {
+                // reset snackbar state if setting has changed
+                emit(OnCancelExitClicked)
+                hostState.currentSnackbarData?.dismiss()
+            }
             return@LaunchedEffect
         }
         hostState.showSnackbar(

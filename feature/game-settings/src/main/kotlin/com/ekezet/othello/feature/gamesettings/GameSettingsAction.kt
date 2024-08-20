@@ -75,3 +75,10 @@ internal data object OnGrayscaleModeClicked : GameSettingsAction {
         return outcome(updated, PublishGameSettings(updated))
     }
 }
+
+internal data object OnConfirmExitClicked: GameSettingsAction {
+    override fun GameSettingsModel.proceed(): Next<GameSettingsModel, GameGameSettingsDependency> {
+        val updated = toggleConfirmExit()
+        return outcome(updated, PublishGameSettings(updated))
+    }
+}

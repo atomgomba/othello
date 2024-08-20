@@ -8,6 +8,3 @@ internal class MainRenderer : Renderer<MainModel, MainDependency, MainState> {
         isExitMessageVisible = model.isExitMessageVisible,
     )
 }
-
-internal val MainModel.isExitMessageVisible: Boolean
-    get() = 0 < backPressCount

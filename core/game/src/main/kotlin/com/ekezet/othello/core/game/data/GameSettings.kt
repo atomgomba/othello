@@ -23,7 +23,7 @@ data class GameSettings(
 }
 
 @ExcludeFromCoverage
-fun GameSettings.Companion.from(other: IGameSettings) = with(other) {
+infix fun GameSettings.Companion.from(other: IGameSettings) = with(other) {
     GameSettings(
         displayOptions = displayOptions,
         lightStrategy = lightStrategy,

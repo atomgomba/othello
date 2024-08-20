@@ -12,6 +12,7 @@ internal class GameSettingsRenderer : Renderer<GameSettingsModel, GameGameSettin
             isLightPreferSides = lightStrategy is PreferSidesDecoratorStrategy,
             displayOptions = displayOptions,
             selectingStrategyFor = selectingStrategyFor,
+            confirmExit = confirmExit,
         )
     }
 }

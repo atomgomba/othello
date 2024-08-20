@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -20,6 +22,7 @@ import com.ekezet.othello.core.game.data.GameSettings
 import com.ekezet.othello.core.ui.R.string
 import com.ekezet.othello.feature.gamesettings.GameSettingsLoop
 import com.ekezet.othello.feature.gamesettings.GameSettingsState
+import com.ekezet.othello.feature.gamesettings.OnConfirmExitClicked
 import com.ekezet.othello.feature.gamesettings.OnGrayscaleModeClicked
 import com.ekezet.othello.feature.gamesettings.OnShowBoardPositionsClicked
 import com.ekezet.othello.feature.gamesettings.OnShowPossibleMovesClicked
@@ -33,12 +36,17 @@ fun GameSettingsView(
     args: GameSettings,
     selectStrategyFor: Disk?,
     modifier: Modifier = Modifier,
+    listState: LazyListState = rememberLazyListState(),
 ) {
     LoopWrapper(
         builder = GameSettingsLoop,
         args = args,
     ) {
-        GameSettingsViewImpl(selectStrategyFor, modifier)
+        GameSettingsViewImpl(
+            selectStrategyFor = selectStrategyFor,
+            modifier = modifier,
+            listState = listState,
+        )
     }
 }
 
@@ -47,6 +55,7 @@ fun GameSettingsView(
 internal fun GameSettingsState.GameSettingsViewImpl(
     selectStrategyFor: Disk?,
     modifier: Modifier = Modifier,
+    listState: LazyListState = rememberLazyListState(),
 ) {
     val sheetState = rememberModalBottomSheetState()
 
@@ -54,6 +63,7 @@ internal fun GameSettingsState.GameSettingsViewImpl(
         modifier = Modifier
             .padding(top = 16.dp)
             .then(modifier),
+        state = listState,
         verticalArrangement = Arrangement.spacedBy(24.dp),
     ) {
         item {
@@ -111,6 +121,24 @@ internal fun GameSettingsState.GameSettingsViewImpl(
                 onCheckedChange = { emit(OnGrayscaleModeClicked) },
             )
         }
+
+        item { Spacer(Modifier.height(4.dp)) }
+
+        item {
+            SettingsHeader(
+                text = stringResource(id = string.game_settings__header__app),
+            )
+        }
+
+        item {
+            SwitchRow(
+                label = stringResource(id = string.game_settings__switch__confirm_exit),
+                checked = confirmExit,
+                onCheckedChange = { emit(OnConfirmExitClicked) },
+            )
+        }
+
+        item { Spacer(Modifier.height(16.dp)) }
     }
 
     StrategySelector(

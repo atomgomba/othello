@@ -20,6 +20,7 @@ internal class GameSettingsLoop internal constructor(
             displayOptions = args.displayOptions,
             lightStrategy = args.lightStrategy,
             darkStrategy = args.darkStrategy,
+            confirmExit = args.confirmExit,
         )
 
     internal companion object Builder :

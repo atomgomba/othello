@@ -27,7 +27,10 @@ internal data class MainModel(
     override val confirmExit: Boolean = DefaultConfirmExit,
     val hasGameHistory: Boolean = false,
     val backPressCount: Int = 0,
-) : IGameSettings
+) : IGameSettings {
+    val isExitMessageVisible: Boolean
+        inline get() = 0 < backPressCount
+}
 
 @Immutable
 internal data class MainState(

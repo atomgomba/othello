@@ -85,10 +85,6 @@ internal fun MainState.MainViewImpl(
     historyImages: Map<String, ImageBitmap>,
     startDestination: String = MainRoutes.Start,
 ) {
-    BackHandler {
-        emit(OnBackPressed)
-    }
-
     val navController: NavHostController = rememberNavController()
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination by remember {
@@ -116,7 +112,12 @@ internal fun MainState.MainViewImpl(
     val destinationModifier = Modifier.fillMaxSize()
 
     val historyListState = rememberLazyListState()
+    val settingsListState = rememberLazyListState()
     val snackbarHostState = remember { SnackbarHostState() }
+
+    BackHandler {
+        emit(OnBackPressed)
+    }
 
     ExitConfirmationSnackbar(hostState = snackbarHostState, settings = gameSettings)
 
@@ -181,6 +182,7 @@ internal fun MainState.MainViewImpl(
                         args = gameSettings,
                         selectStrategyFor = GameSettingsRoute.findPickStrategy(entry),
                         modifier = destinationModifier,
+                        listState = settingsListState,
                     )
                 }
             }
