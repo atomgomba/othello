@@ -38,9 +38,12 @@ val DefaultDarkStrategy: Strategy? = HumanPlayer
 
 val DefaultLightStrategy: Strategy = NaiveMaxStrategy.preferSides()
 
+const val DefaultConfirmExit = true
+
 val GameSettings.Companion.Default: GameSettings
     inline get() = GameSettings(
         displayOptions = BoardDisplayOptions.Default,
         lightStrategy = DefaultLightStrategy,
         darkStrategy = DefaultDarkStrategy,
+        confirmExit = DefaultConfirmExit,
     )

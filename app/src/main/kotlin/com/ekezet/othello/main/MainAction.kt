@@ -22,3 +22,21 @@ internal data object OnToggleIndicatorsClicked : MainAction {
         return outcome(newSettings, PublishGameSettings(newSettings))
     }
 }
+
+internal data object OnBackPressed : MainAction {
+    override fun MainModel.proceed(): Next<MainModel, MainDependency>  {
+        val effects = buildSet<MainEffect> {
+            if (isExitMessageVisible) {
+                add(FinishActivity)
+            }
+        }
+        return outcome(
+            model = copy(backPressCount = backPressCount + 1),
+            effects = effects.toTypedArray(),
+        )
+    }
+}
+
+internal data object OnCancelExitClicked : MainAction {
+    override fun MainModel.proceed() = mutate(copy(backPressCount = 0))
+}

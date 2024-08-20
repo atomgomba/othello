@@ -1,10 +1,13 @@
 package com.ekezet.othello.main.ui
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -34,11 +37,13 @@ import com.ekezet.othello.feature.gamesettings.ui.GameSettingsView
 import com.ekezet.othello.main.MainArgs
 import com.ekezet.othello.main.MainLoop
 import com.ekezet.othello.main.MainState
+import com.ekezet.othello.main.OnBackPressed
 import com.ekezet.othello.main.navigation.MainRoutes
 import com.ekezet.othello.main.navigation.MainRoutes.GameBoardRoute
 import com.ekezet.othello.main.navigation.MainRoutes.GameHistoryRoute
 import com.ekezet.othello.main.navigation.MainRoutes.GameSettingsRoute
 import com.ekezet.othello.main.navigation.stripRoute
+import com.ekezet.othello.main.ui.components.ExitConfirmationSnackbar
 import com.ekezet.othello.main.ui.components.MainTopAppBar
 import com.ekezet.othello.main.ui.components.navigationActions
 import kotlinx.coroutines.CoroutineScope
@@ -80,6 +85,10 @@ internal fun MainState.MainViewImpl(
     historyImages: Map<String, ImageBitmap>,
     startDestination: String = MainRoutes.Start,
 ) {
+    BackHandler {
+        emit(OnBackPressed)
+    }
+
     val navController: NavHostController = rememberNavController()
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination by remember {
@@ -107,11 +116,17 @@ internal fun MainState.MainViewImpl(
     val destinationModifier = Modifier.fillMaxSize()
 
     val historyListState = rememberLazyListState()
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    ExitConfirmationSnackbar(hostState = snackbarHostState, settings = gameSettings)
 
     Scaffold(
         topBar = {
             MainTopAppBar(currentDestination, navController, gameSettings, gameHistory)
         },
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
+        }
     ) { innerPadding ->
         NavigationSuiteScaffold(
             navigationSuiteItems = {

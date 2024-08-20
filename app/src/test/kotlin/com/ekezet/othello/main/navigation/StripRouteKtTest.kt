@@ -1,7 +1,7 @@
 package com.ekezet.othello.main.navigation
 
-import kotlin.test.assertEquals
 import kotlin.test.Test
+import kotlin.test.assertEquals
 
 internal class StripRouteKtTest {
 

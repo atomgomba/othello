@@ -5,10 +5,12 @@
     <string name="main__menu__new_game">Reset game</string>
     <string name="main__menu__share_board">Share board</string>
     <string name="main__menu__toggle_indicators">Toggle indicators</string>
+    <string name="main__nav__confirm_exit">Press back again to exit</string>
     <string name="main__nav__game_board">Play</string>
     <string name="main__nav__game_history">History</string>
     <string name="main__nav__game_settings">Settings</string>
 
+    <string name="common__cancel">Cancel</string>
     <string name="common__dark">Dark</string>
     <string name="common__human_player">Human Player</string>
     <string name="common__light">Light</string>

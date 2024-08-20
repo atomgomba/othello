@@ -11,6 +11,7 @@ import com.ekezet.othello.core.data.models.Position
 import com.ekezet.othello.core.game.GameEnd
 import com.ekezet.othello.core.game.data.BoardDisplayOptions
 import com.ekezet.othello.core.game.data.Default
+import com.ekezet.othello.core.game.data.DefaultConfirmExit
 import com.ekezet.othello.core.game.data.DefaultDarkStrategy
 import com.ekezet.othello.core.game.data.DefaultLightStrategy
 import com.ekezet.othello.core.game.data.IGameSettings
@@ -38,6 +39,7 @@ data class GameBoardModel(
     override val displayOptions: BoardDisplayOptions = BoardDisplayOptions.Default,
     override val lightStrategy: Strategy? = DefaultLightStrategy,
     override val darkStrategy: Strategy? = DefaultDarkStrategy,
+    override val confirmExit: Boolean = DefaultConfirmExit,
     internal val nextMovePosition: Position? = null,
     internal val passed: Boolean = false,
     internal val ended: GameEnd? = null,

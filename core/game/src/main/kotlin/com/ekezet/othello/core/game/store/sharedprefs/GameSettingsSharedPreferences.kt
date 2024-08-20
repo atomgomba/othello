@@ -3,6 +3,7 @@ package com.ekezet.othello.core.game.store.sharedprefs
 import android.content.SharedPreferences
 import com.ekezet.othello.core.game.data.BoardDisplayOptions
 import com.ekezet.othello.core.game.data.Default
+import com.ekezet.othello.core.game.data.DefaultConfirmExit
 import com.ekezet.othello.core.game.data.DefaultDarkStrategy
 import com.ekezet.othello.core.game.data.DefaultLightStrategy
 import com.ekezet.othello.core.game.data.GameSettings
@@ -21,6 +22,7 @@ private const val KEY_DARK_PREFER_SIDES = "darkPreferSides"
 private const val KEY_SHOW_POSSIBLE_MOVES = "showPossibleMoves"
 private const val KEY_SHOW_BOARD_POSITIONS = "showBoardPositions"
 private const val KEY_IS_GRAYSCALE_MODE = "isGrayScaleMode"
+private const val KEY_CONFIRM_EXIT = "confirmExit"
 
 internal fun SharedPreferences.persist(data: IGameSettings) = with(edit()) {
     putString(KEY_LIGHT_NAME, data.lightStrategy?.wrappedName)
@@ -32,6 +34,8 @@ internal fun SharedPreferences.persist(data: IGameSettings) = with(edit()) {
     putBoolean(KEY_SHOW_POSSIBLE_MOVES, data.displayOptions.showPossibleMoves)
     putBoolean(KEY_SHOW_BOARD_POSITIONS, data.displayOptions.showBoardPositions)
     putBoolean(KEY_IS_GRAYSCALE_MODE, data.displayOptions.isGrayscaleMode)
+
+    putBoolean(KEY_CONFIRM_EXIT, data.confirmExit)
 
     apply()
 }
@@ -47,6 +51,7 @@ internal fun SharedPreferences.load(): GameSettings =
                 isGrayscaleMode = getBoolean(KEY_IS_GRAYSCALE_MODE, isGrayscaleMode),
             )
         },
+        confirmExit = getBoolean(KEY_CONFIRM_EXIT, DefaultConfirmExit),
     )
 
 private fun SharedPreferences.getStrategy(

@@ -28,3 +28,10 @@ internal data object ResetPastMoves : MainEffect {
             gameHistoryStore.reset()
         }
 }
+
+internal data object FinishActivity : MainEffect {
+    override suspend fun MainActionEmitter.trigger(dependency: MainDependency?) =
+        dependency?.run {
+            activity.finish()
+        }
+}

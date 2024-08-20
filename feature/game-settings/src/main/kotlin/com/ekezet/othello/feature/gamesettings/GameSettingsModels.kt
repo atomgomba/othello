@@ -6,6 +6,7 @@ import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.data.models.isLight
 import com.ekezet.othello.core.game.data.BoardDisplayOptions
 import com.ekezet.othello.core.game.data.Default
+import com.ekezet.othello.core.game.data.DefaultConfirmExit
 import com.ekezet.othello.core.game.data.DefaultDarkStrategy
 import com.ekezet.othello.core.game.data.DefaultLightStrategy
 import com.ekezet.othello.core.game.data.IGameSettings
@@ -21,6 +22,7 @@ data class GameSettingsModel(
     override val lightStrategy: Strategy? = DefaultLightStrategy,
     override val darkStrategy: Strategy? = DefaultDarkStrategy,
     override val displayOptions: BoardDisplayOptions = BoardDisplayOptions.Default,
+    override val confirmExit: Boolean = DefaultConfirmExit,
     internal val selectingStrategyFor: Disk? = null,
 ) : IGameSettings {
     internal fun showStrategySelectorFor(player: Disk) = copy(selectingStrategyFor = player)
