@@ -2,6 +2,7 @@ plugins {
     id("othello.android.app")
     id("othello.android.app.versioning")
     id("othello.android.app.compose")
+    id("othello.android.app.hurok")
     alias(libs.plugins.android.application)
     alias(libs.plugins.baselineprofile)
 }
@@ -56,13 +57,10 @@ dependencies {
     implementation(libs.androidx.compose.material3.windowSizeClass)
     implementation(libs.androidx.navigation.compose)
 
-    implementation(libs.hurokBase)
-    implementation(libs.hurokCompose)
     implementation(libs.androidx.profileinstaller)
 
     testImplementation(libs.junit4)
     testImplementation(libs.mockk)
-    testImplementation(libs.hurokTest)
 
     "baselineProfile"(project(":app:baselineprofile"))
 }

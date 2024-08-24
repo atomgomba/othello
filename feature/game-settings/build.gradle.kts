@@ -1,6 +1,7 @@
 plugins {
     id("othello.android.library")
     id("othello.android.library.compose")
+    id("othello.android.library.hurok")
 }
 
 android {
@@ -13,11 +14,7 @@ dependencies {
     implementation(project(":core:ui"))
     implementation(project(":core:logging"))
 
-    implementation(libs.hurokBase)
-    implementation(libs.hurokCompose)
-
     testImplementation(libs.junit4)
     testImplementation(libs.junitParams)
     testImplementation(libs.mockk)
-    testImplementation(libs.hurokTest)
 }

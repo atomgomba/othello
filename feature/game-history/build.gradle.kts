@@ -1,6 +1,7 @@
 plugins {
     id("othello.android.library")
     id("othello.android.library.compose")
+    id("othello.android.library.hurok")
 }
 
 android {
@@ -16,11 +17,7 @@ dependencies {
     implementation(libs.androidx.compose.material.iconsExtended)
     implementation(libs.kotlinx.immutable)
 
-    implementation(libs.hurokBase)
-    implementation(libs.hurokCompose)
-
     testImplementation(libs.junit4)
     testImplementation(libs.junitParams)
     testImplementation(libs.mockk)
-    testImplementation(libs.hurokTest)
 }

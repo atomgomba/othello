@@ -47,5 +47,13 @@ gradlePlugin {
             id = "othello.android.library.compose"
             implementationClass = "AndroidLibraryComposeConventionPlugin"
         }
+        register("androidHurokApp") {
+            id = "othello.android.app.hurok"
+            implementationClass = "AndroidAppHurokConventionPlugin"
+        }
+        register("androidHurokLibrary") {
+            id = "othello.android.library.hurok"
+            implementationClass = "AndroidLibraryHurokConventionPlugin"
+        }
     }
 }

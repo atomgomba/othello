@@ -1,6 +1,7 @@
 plugins {
     id("othello.android.library")
     id("othello.android.library.compose")
+    id("othello.android.library.hurok")
 }
 
 android {
@@ -15,13 +16,9 @@ dependencies {
 
     implementation(libs.kotlinx.immutable)
 
-    implementation(libs.hurokBase)
-    implementation(libs.hurokCompose)
-
     implementation(libs.konfetti)
 
     testImplementation(libs.junit4)
     testImplementation(libs.junitParams)
     testImplementation(libs.mockk)
-    testImplementation(libs.hurokTest)
 }
