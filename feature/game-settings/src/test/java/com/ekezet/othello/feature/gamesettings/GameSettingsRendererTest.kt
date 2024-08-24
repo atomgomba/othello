@@ -19,6 +19,7 @@ internal class GameSettingsRendererTest {
             isLightPreferSides = true,
             displayOptions = initModel.displayOptions,
             selectingStrategyFor = initModel.selectingStrategyFor,
+            confirmExit = initModel.confirmExit,
         )
 
         assertEquals(expectedState, result)
