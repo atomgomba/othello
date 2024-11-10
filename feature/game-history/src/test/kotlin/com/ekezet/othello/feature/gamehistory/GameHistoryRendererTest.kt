@@ -9,6 +9,8 @@ import com.ekezet.othello.core.game.data.BoardDisplayOptions
 import com.ekezet.othello.core.game.data.Default
 import com.ekezet.othello.core.game.data.DefaultBoard
 import com.ekezet.othello.core.game.data.GameSettings
+import com.ekezet.othello.core.game.data.HistoryDisplayOptions
+import com.ekezet.othello.core.game.data.HistorySettings
 import com.ekezet.othello.core.game.toPastGameState
 import com.ekezet.othello.core.ui.viewModels.toImmutableList
 import com.ekezet.othello.feature.gamehistory.ui.viewModels.HistoryItem
@@ -30,6 +32,7 @@ internal class GameHistoryRendererTest {
         val moveHistory = listOf(pastMove)
         val gameEnd = GameEnd.EndedTie
         val isGrayscaleMode = true
+        val alwaysScrollToBottom = false
 
         val initModel = GameHistoryModel(
             moveHistory = moveHistory,
@@ -39,6 +42,11 @@ internal class GameHistoryRendererTest {
                     isGrayscaleMode = isGrayscaleMode,
                 ),
             ),
+            historySettings = HistorySettings.Default.copy(
+                historyDisplayOptions = HistoryDisplayOptions.Default.copy(
+                    alwaysScrollToBottom = alwaysScrollToBottom,
+                )
+            )
         )
 
         val result = subject.renderState(initModel)
@@ -58,6 +66,7 @@ internal class GameHistoryRendererTest {
             gameEnd = gameEnd,
             lastState = moveHistory.toPastGameState(),
             isGrayscaleMode = isGrayscaleMode,
+            alwaysScrollToBottom = alwaysScrollToBottom,
         )
 
         assertEquals(expectedState, result)

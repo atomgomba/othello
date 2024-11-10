@@ -3,8 +3,10 @@ package com.ekezet.othello.feature.settings
 import com.ekezet.hurok.test.EffectTest
 import com.ekezet.othello.core.game.data.Default
 import com.ekezet.othello.core.game.data.GameSettings
+import com.ekezet.othello.core.game.data.HistorySettings
 import com.ekezet.othello.core.game.store.GameHistoryStore
 import com.ekezet.othello.core.game.store.GameSettingsStore
+import com.ekezet.othello.core.game.store.HistorySettingsStore
 import com.ekezet.othello.core.game.strategy.HumanPlayer
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
@@ -17,14 +19,18 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import org.junit.Before
 import kotlin.test.Test
 
-internal class GameSettingsEffectTest : EffectTest() {
+internal class SettingsEffectTest : EffectTest() {
     @MockK
     private lateinit var mockGameSettingsStore: GameSettingsStore
+
+    @MockK
+    private lateinit var mockHistorySettingsStore: HistorySettingsStore
 
     @MockK
     private lateinit var mockGameHistoryStore: GameHistoryStore
 
     private val initGameSettings = GameSettings.Default
+    private val initHistorySettings = HistorySettings.Default
 
     private lateinit var dependency: SettingsDependency
 
@@ -34,6 +40,7 @@ internal class GameSettingsEffectTest : EffectTest() {
 
         dependency = SettingsDependency(
             gameSettingsStore = mockGameSettingsStore,
+            historySettingsStore = mockHistorySettingsStore,
             gameHistoryStore = mockGameHistoryStore,
         )
     }
@@ -73,10 +80,27 @@ internal class GameSettingsEffectTest : EffectTest() {
 
         confirmAllVerified()
     }
+    @Test
+    fun `PublishHistorySettings works correctly`() {
+        val settings = initHistorySettings.copy()
+
+        coEvery { mockHistorySettingsStore.update(settings) } just runs
+        coEvery { mockHistorySettingsStore.settings } returns MutableStateFlow(initHistorySettings)
+
+        dependency runWith PublishHistorySettings(settings)
+
+        coVerify {
+            mockHistorySettingsStore.update(settings)
+        }
+
+        confirmAllVerified()
+    }
+
 
     private fun confirmAllVerified() {
         confirmVerified(
             mockGameSettingsStore,
+            mockHistorySettingsStore,
             mockGameHistoryStore,
         )
     }
