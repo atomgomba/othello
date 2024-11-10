@@ -46,8 +46,8 @@ internal data class OnPreferSidesToggled(val disk: Disk, val prefer: Boolean) : 
 internal data object OnShowPossibleMovesClicked : GameSettingsAction {
     override fun GameSettingsModel.proceed(): Next<GameSettingsModel, GameGameSettingsDependency> {
         val updated = copy(
-            displayOptions = displayOptions.copy(
-                showPossibleMoves = !displayOptions.showPossibleMoves,
+            boardDisplayOptions = boardDisplayOptions.copy(
+                showPossibleMoves = !boardDisplayOptions.showPossibleMoves,
             ),
         )
         return outcome(updated, PublishGameSettings(updated))
@@ -57,8 +57,8 @@ internal data object OnShowPossibleMovesClicked : GameSettingsAction {
 internal data object OnShowBoardPositionsClicked : GameSettingsAction {
     override fun GameSettingsModel.proceed(): Next<GameSettingsModel, GameGameSettingsDependency> {
         val updated = copy(
-            displayOptions = displayOptions.copy(
-                showBoardPositions = !displayOptions.showBoardPositions,
+            boardDisplayOptions = boardDisplayOptions.copy(
+                showBoardPositions = !boardDisplayOptions.showBoardPositions,
             ),
         )
         return outcome(updated, PublishGameSettings(updated))
@@ -68,8 +68,8 @@ internal data object OnShowBoardPositionsClicked : GameSettingsAction {
 internal data object OnGrayscaleModeClicked : GameSettingsAction {
     override fun GameSettingsModel.proceed(): Next<GameSettingsModel, GameGameSettingsDependency> {
         val updated = copy(
-            displayOptions = displayOptions.copy(
-                isGrayscaleMode = !displayOptions.isGrayscaleMode,
+            boardDisplayOptions = boardDisplayOptions.copy(
+                isGrayscaleMode = !boardDisplayOptions.isGrayscaleMode,
             ),
         )
         return outcome(updated, PublishGameSettings(updated))

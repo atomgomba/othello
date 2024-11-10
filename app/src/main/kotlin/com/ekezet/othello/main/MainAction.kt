@@ -15,8 +15,8 @@ internal data object OnNewGameClicked : MainAction {
 internal data object OnToggleIndicatorsClicked : MainAction {
     override fun MainModel.proceed(): Next<MainModel, MainDependency> {
         val newSettings = copy(
-            displayOptions = displayOptions.copy(
-                showPossibleMoves = !displayOptions.showPossibleMoves,
+            boardDisplayOptions = boardDisplayOptions.copy(
+                showPossibleMoves = !boardDisplayOptions.showPossibleMoves,
             ),
         )
         return outcome(newSettings, PublishGameSettings(newSettings))

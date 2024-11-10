@@ -17,7 +17,7 @@ internal class GameSettingsLoop internal constructor(
 ) {
     override fun GameSettingsModel.applyArgs(args: GameSettings) =
         copy(
-            displayOptions = args.displayOptions,
+            boardDisplayOptions = args.boardDisplayOptions,
             lightStrategy = args.lightStrategy,
             darkStrategy = args.darkStrategy,
             confirmExit = args.confirmExit,

@@ -34,6 +34,11 @@ val BoardDisplayOptions.Companion.Default: BoardDisplayOptions
         isGrayscaleMode = false,
     )
 
+val HistoryDisplayOptions.Companion.Default: HistoryDisplayOptions
+    inline get() = HistoryDisplayOptions(
+        alwaysScrollToBottom = true,
+    )
+
 val DefaultDarkStrategy: Strategy? = HumanPlayer
 
 val DefaultLightStrategy: Strategy = NaiveMaxStrategy.preferSides()
@@ -42,7 +47,7 @@ const val DefaultConfirmExit = true
 
 val GameSettings.Companion.Default: GameSettings
     inline get() = GameSettings(
-        displayOptions = BoardDisplayOptions.Default,
+        boardDisplayOptions = BoardDisplayOptions.Default,
         lightStrategy = DefaultLightStrategy,
         darkStrategy = DefaultDarkStrategy,
         confirmExit = DefaultConfirmExit,

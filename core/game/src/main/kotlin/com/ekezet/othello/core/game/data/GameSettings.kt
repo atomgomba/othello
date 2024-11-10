@@ -4,7 +4,7 @@ import com.ekezet.othello.core.data.ExcludeFromCoverage
 import com.ekezet.othello.core.game.strategy.Strategy
 
 interface IGameSettings {
-    val displayOptions: BoardDisplayOptions
+    val boardDisplayOptions: BoardDisplayOptions
     val lightStrategy: Strategy?
     val darkStrategy: Strategy?
     val confirmExit: Boolean
@@ -14,7 +14,7 @@ interface IGameSettings {
 }
 
 data class GameSettings(
-    override val displayOptions: BoardDisplayOptions,
+    override val boardDisplayOptions: BoardDisplayOptions,
     override val lightStrategy: Strategy?,
     override val darkStrategy: Strategy?,
     override val confirmExit: Boolean,
@@ -25,7 +25,7 @@ data class GameSettings(
 @ExcludeFromCoverage
 infix fun GameSettings.Companion.from(other: IGameSettings) = with(other) {
     GameSettings(
-        displayOptions = displayOptions,
+        boardDisplayOptions = boardDisplayOptions,
         lightStrategy = lightStrategy,
         darkStrategy = darkStrategy,
         confirmExit = confirmExit,

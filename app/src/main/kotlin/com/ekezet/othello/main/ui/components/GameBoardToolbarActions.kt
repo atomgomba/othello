@@ -9,7 +9,6 @@ import androidx.compose.material3.IconToggleButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import com.ekezet.othello.core.game.data.BoardDisplayOptions
 import com.ekezet.othello.core.ui.R.drawable
 import com.ekezet.othello.core.ui.R.string
 import com.ekezet.othello.main.MainState
@@ -18,8 +17,8 @@ import com.ekezet.othello.main.OnToggleIndicatorsClicked
 
 @Composable
 internal fun MainState.GameBoardToolbarActions(
-    options: BoardDisplayOptions,
-) = with(options) {
+    showPossibleMoves: Boolean,
+) {
     Row {
         IconButton(onClick = { emit(OnNewGameClicked) }) {
             Icon(

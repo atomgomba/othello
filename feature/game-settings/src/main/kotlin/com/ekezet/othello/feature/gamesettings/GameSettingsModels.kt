@@ -21,7 +21,7 @@ import org.koin.core.component.get
 data class GameSettingsModel(
     override val lightStrategy: Strategy? = DefaultLightStrategy,
     override val darkStrategy: Strategy? = DefaultDarkStrategy,
-    override val displayOptions: BoardDisplayOptions = BoardDisplayOptions.Default,
+    override val boardDisplayOptions: BoardDisplayOptions = BoardDisplayOptions.Default,
     override val confirmExit: Boolean = DefaultConfirmExit,
     internal val selectingStrategyFor: Disk? = null,
 ) : IGameSettings {
@@ -41,7 +41,7 @@ data class GameSettingsModel(
 internal data class GameSettingsState(
     val isLightPreferSides: Boolean,
     val isDarkPreferSides: Boolean,
-    val displayOptions: BoardDisplayOptions,
+    val boardDisplayOptions: BoardDisplayOptions,
     val lightStrategy: Strategy?,
     val darkStrategy: Strategy?,
     val selectingStrategyFor: Disk?,

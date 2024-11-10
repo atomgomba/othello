@@ -101,7 +101,7 @@ internal fun GameSettingsState.GameSettingsViewImpl(
         item {
             SwitchRow(
                 label = stringResource(id = string.game_settings__switch__show_possible_moves),
-                checked = displayOptions.showPossibleMoves,
+                checked = boardDisplayOptions.showPossibleMoves,
                 onCheckedChange = { emit(OnShowPossibleMovesClicked) },
             )
         }
@@ -109,7 +109,7 @@ internal fun GameSettingsState.GameSettingsViewImpl(
         item {
             SwitchRow(
                 label = stringResource(id = string.game_settings__switch__show_positions),
-                checked = displayOptions.showBoardPositions,
+                checked = boardDisplayOptions.showBoardPositions,
                 onCheckedChange = { emit(OnShowBoardPositionsClicked) },
             )
         }
@@ -117,7 +117,7 @@ internal fun GameSettingsState.GameSettingsViewImpl(
         item {
             SwitchRow(
                 label = stringResource(id = string.game_settings__switch__grayscale_mode),
-                checked = displayOptions.isGrayscaleMode,
+                checked = boardDisplayOptions.isGrayscaleMode,
                 onCheckedChange = { emit(OnGrayscaleModeClicked) },
             )
         }

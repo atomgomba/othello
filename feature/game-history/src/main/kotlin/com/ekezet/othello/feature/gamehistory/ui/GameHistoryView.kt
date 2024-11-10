@@ -1,5 +1,6 @@
 package com.ekezet.othello.feature.gamehistory.ui
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -55,13 +56,15 @@ private fun GameHistoryState.GameHistoryViewImpl(
     listState: LazyListState,
     modifier: Modifier,
 ) {
+    var notAllItemsVisible by remember { mutableStateOf(false) }
+
     Scaffold(
         modifier = modifier.then(
             Modifier.fillMaxSize(),
         ),
         floatingActionButton = {
-            if (historyItems.isNotEmpty()) {
-                ListNavigationFab(listState, historyItems.size - 1)
+            AnimatedVisibility(visible = historyItems.isNotEmpty() && notAllItemsVisible) {
+                ListNavigationFab(listState, historyItems.lastIndex)
             }
         },
     ) { paddingValues ->
@@ -84,6 +87,12 @@ private fun GameHistoryState.GameHistoryViewImpl(
             item("bottom-spacer") {
                 Spacer(Modifier.height(96.dp))
             }
+        }
+    }
+
+    LaunchedEffect(historyItems) {
+        snapshotFlow { listState.layoutInfo.visibleItemsInfo.size }.collect {
+            notAllItemsVisible = listState.layoutInfo.visibleItemsInfo.size < historyItems.lastIndex
         }
     }
 }

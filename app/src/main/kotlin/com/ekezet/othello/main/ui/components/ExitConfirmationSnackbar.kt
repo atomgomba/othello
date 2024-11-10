@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import com.ekezet.othello.core.game.data.GameSettings
 import com.ekezet.othello.core.ui.R
 import com.ekezet.othello.main.MainState
 import com.ekezet.othello.main.OnCancelExitClicked
@@ -13,12 +12,12 @@ import org.koin.compose.koinInject
 @Composable
 internal fun MainState.ExitConfirmationSnackbar(
     hostState: SnackbarHostState,
-    settings: GameSettings,
+    confirmExit: Boolean,
     context: Context = koinInject(),
 ) {
-    LaunchedEffect(isExitMessageVisible, settings.confirmExit) {
-        if (!(isExitMessageVisible && settings.confirmExit)) {
-            if (!settings.confirmExit) {
+    LaunchedEffect(isExitMessageVisible, confirmExit) {
+        if (!(isExitMessageVisible && confirmExit)) {
+            if (!confirmExit) {
                 // reset snackbar state if setting has changed
                 emit(OnCancelExitClicked)
                 hostState.currentSnackbarData?.dismiss()

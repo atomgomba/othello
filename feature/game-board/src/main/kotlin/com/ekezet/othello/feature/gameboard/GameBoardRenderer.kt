@@ -22,7 +22,7 @@ internal class GameBoardRenderer : Renderer<GameBoardModel, GameBoardDependency,
             opponentName = lightStrategy?.name,
             currentTurn = gameState.turn + 1,
             nextMovePosition = nextMovePosition,
-            displayOptions = displayOptions,
+            displayOptions = boardDisplayOptions,
             ended = ended,
             passed = passed,
             celebrate = ended is EndedWin && ended.winner.isHumanPlayer,
@@ -33,7 +33,7 @@ internal class GameBoardRenderer : Renderer<GameBoardModel, GameBoardDependency,
     private fun GameBoardModel.createOverlayItems(): BoardOverlayList {
         val items = gameState.currentBoard.newEmptyOverlay()
 
-        if (displayOptions.showPossibleMoves) {
+        if (boardDisplayOptions.showPossibleMoves) {
             val validMoves = gameState.validMoves
             if (validMoves.isNotEmpty()) {
                 for (move in validMoves) {

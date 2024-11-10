@@ -31,9 +31,9 @@ internal fun SharedPreferences.persist(data: IGameSettings) = with(edit()) {
     putString(KEY_DARK_NAME, data.darkStrategy?.wrappedName)
     putBoolean(KEY_DARK_PREFER_SIDES, data.darkStrategy is PreferSidesDecoratorStrategy)
 
-    putBoolean(KEY_SHOW_POSSIBLE_MOVES, data.displayOptions.showPossibleMoves)
-    putBoolean(KEY_SHOW_BOARD_POSITIONS, data.displayOptions.showBoardPositions)
-    putBoolean(KEY_IS_GRAYSCALE_MODE, data.displayOptions.isGrayscaleMode)
+    putBoolean(KEY_SHOW_POSSIBLE_MOVES, data.boardDisplayOptions.showPossibleMoves)
+    putBoolean(KEY_SHOW_BOARD_POSITIONS, data.boardDisplayOptions.showBoardPositions)
+    putBoolean(KEY_IS_GRAYSCALE_MODE, data.boardDisplayOptions.isGrayscaleMode)
 
     putBoolean(KEY_CONFIRM_EXIT, data.confirmExit)
 
@@ -44,7 +44,7 @@ internal fun SharedPreferences.load(): GameSettings =
     GameSettings(
         lightStrategy = getStrategy(KEY_LIGHT_NAME, KEY_LIGHT_PREFER_SIDES, DefaultLightStrategy),
         darkStrategy = getStrategy(KEY_DARK_NAME, KEY_DARK_PREFER_SIDES, DefaultDarkStrategy),
-        displayOptions = with(BoardDisplayOptions.Default) {
+        boardDisplayOptions = with(BoardDisplayOptions.Default) {
             BoardDisplayOptions(
                 showPossibleMoves = getBoolean(KEY_SHOW_POSSIBLE_MOVES, showPossibleMoves),
                 showBoardPositions = getBoolean(KEY_SHOW_BOARD_POSITIONS, showBoardPositions),

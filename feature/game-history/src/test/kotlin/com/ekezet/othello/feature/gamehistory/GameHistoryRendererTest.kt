@@ -35,7 +35,7 @@ internal class GameHistoryRendererTest {
             moveHistory = moveHistory,
             gameEnd = gameEnd,
             gameSettings = GameSettings.Default.copy(
-                displayOptions = BoardDisplayOptions.Default.copy(
+                boardDisplayOptions = BoardDisplayOptions.Default.copy(
                     isGrayscaleMode = isGrayscaleMode,
                 ),
             ),

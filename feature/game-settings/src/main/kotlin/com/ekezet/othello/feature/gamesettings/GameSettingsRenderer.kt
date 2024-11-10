@@ -10,7 +10,7 @@ internal class GameSettingsRenderer : Renderer<GameSettingsModel, GameGameSettin
             lightStrategy = lightStrategy,
             isDarkPreferSides = darkStrategy is PreferSidesDecoratorStrategy,
             isLightPreferSides = lightStrategy is PreferSidesDecoratorStrategy,
-            displayOptions = displayOptions,
+            boardDisplayOptions = boardDisplayOptions,
             selectingStrategyFor = selectingStrategyFor,
             confirmExit = confirmExit,
         )

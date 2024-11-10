@@ -40,7 +40,7 @@ internal class GameBoardRendererTest {
                 opponentName = lightStrategy?.name,
                 currentTurn = gameState.turn + 1,
                 nextMovePosition = nextMovePosition,
-                displayOptions = displayOptions,
+                displayOptions = boardDisplayOptions,
                 ended = ended,
                 passed = passed,
                 celebrate = false,
@@ -54,7 +54,7 @@ internal class GameBoardRendererTest {
     @Test
     fun `renderToState when showPossibleMoves is false`() {
         val initModel = GameBoardModel(
-            displayOptions = BoardDisplayOptions.Default.copy(
+            boardDisplayOptions = BoardDisplayOptions.Default.copy(
                 showPossibleMoves = false,
             ),
         )
@@ -72,7 +72,7 @@ internal class GameBoardRendererTest {
                 opponentName = lightStrategy?.name,
                 currentTurn = gameState.turn + 1,
                 nextMovePosition = nextMovePosition,
-                displayOptions = displayOptions,
+                displayOptions = boardDisplayOptions,
                 ended = ended,
                 passed = passed,
                 celebrate = false,
@@ -86,7 +86,7 @@ internal class GameBoardRendererTest {
     @Test
     fun `renderToState when nextMovePosition is set`() {
         val initModel = GameBoardModel(
-            displayOptions = BoardDisplayOptions.Default.copy(
+            boardDisplayOptions = BoardDisplayOptions.Default.copy(
                 showPossibleMoves = false,
             ),
             nextMovePosition = Position(2, 3),
@@ -108,7 +108,7 @@ internal class GameBoardRendererTest {
                 opponentName = lightStrategy?.name,
                 currentTurn = gameState.turn + 1,
                 nextMovePosition = nextMovePosition,
-                displayOptions = displayOptions,
+                displayOptions = boardDisplayOptions,
                 ended = ended,
                 passed = passed,
                 celebrate = false,
@@ -123,7 +123,7 @@ internal class GameBoardRendererTest {
     fun `renderToState when ended is set and human wins`() {
         val winner = Disk.Dark
         val initModel = GameBoardModel(
-            displayOptions = BoardDisplayOptions.Default.copy(
+            boardDisplayOptions = BoardDisplayOptions.Default.copy(
                 showPossibleMoves = false,
             ),
             ended = EndedWin(winner = winner),
@@ -142,7 +142,7 @@ internal class GameBoardRendererTest {
                 opponentName = lightStrategy?.name,
                 currentTurn = gameState.turn + 1,
                 nextMovePosition = nextMovePosition,
-                displayOptions = displayOptions,
+                displayOptions = boardDisplayOptions,
                 ended = ended,
                 passed = passed,
                 celebrate = true,

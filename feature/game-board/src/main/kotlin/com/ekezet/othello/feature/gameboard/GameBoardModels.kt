@@ -36,7 +36,7 @@ internal const val ACTION_DELAY_MILLIS: Long = DefaultDurationMillis
 
 data class GameBoardModel(
     internal val gameState: OthelloGameState = OthelloGameState.Default,
-    override val displayOptions: BoardDisplayOptions = BoardDisplayOptions.Default,
+    override val boardDisplayOptions: BoardDisplayOptions = BoardDisplayOptions.Default,
     override val lightStrategy: Strategy? = DefaultLightStrategy,
     override val darkStrategy: Strategy? = DefaultDarkStrategy,
     override val confirmExit: Boolean = DefaultConfirmExit,

@@ -17,7 +17,7 @@ internal class GameSettingsRendererTest {
             lightStrategy = initModel.lightStrategy,
             isDarkPreferSides = false,
             isLightPreferSides = true,
-            displayOptions = initModel.displayOptions,
+            boardDisplayOptions = initModel.boardDisplayOptions,
             selectingStrategyFor = initModel.selectingStrategyFor,
             confirmExit = initModel.confirmExit,
         )

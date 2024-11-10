@@ -23,7 +23,7 @@ import org.koin.core.component.get
 internal data class MainModel(
     override val darkStrategy: Strategy? = DefaultDarkStrategy,
     override val lightStrategy: Strategy? = DefaultLightStrategy,
-    override val displayOptions: BoardDisplayOptions = BoardDisplayOptions.Default,
+    override val boardDisplayOptions: BoardDisplayOptions = BoardDisplayOptions.Default,
     override val confirmExit: Boolean = DefaultConfirmExit,
     val hasGameHistory: Boolean = false,
     val backPressCount: Int = 0,

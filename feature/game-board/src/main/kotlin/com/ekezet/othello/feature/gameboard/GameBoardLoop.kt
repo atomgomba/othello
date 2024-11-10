@@ -24,7 +24,7 @@ internal class GameBoardLoop internal constructor(
     override fun GameBoardModel.applyArgs(args: GameSettings): GameBoardModel {
         val strategyChanged = containsDifferentStrategy(args)
         return copy(
-            displayOptions = args.displayOptions,
+            boardDisplayOptions = args.boardDisplayOptions,
             lightStrategy = args.lightStrategy,
             darkStrategy = args.darkStrategy,
         ).run {

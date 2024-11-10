@@ -13,7 +13,7 @@ internal class GameHistoryRenderer : Renderer<GameHistoryModel, GameHistoryDepen
             historyItems = renderHistoryItems(),
             gameEnd = gameEnd,
             lastState = moveHistory.toPastGameState(),
-            isGrayscaleMode = gameSettings.displayOptions.isGrayscaleMode,
+            isGrayscaleMode = gameSettings.boardDisplayOptions.isGrayscaleMode,
         )
     }
 

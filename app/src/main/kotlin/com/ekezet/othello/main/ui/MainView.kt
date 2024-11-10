@@ -119,11 +119,16 @@ internal fun MainState.MainViewImpl(
         emit(OnBackPressed)
     }
 
-    ExitConfirmationSnackbar(hostState = snackbarHostState, settings = gameSettings)
+    ExitConfirmationSnackbar(hostState = snackbarHostState, confirmExit = gameSettings.confirmExit)
 
     Scaffold(
         topBar = {
-            MainTopAppBar(currentDestination, navController, gameSettings, gameHistory)
+            MainTopAppBar(
+                currentDestination = currentDestination,
+                navController = navController,
+                showPossibleMoves = gameSettings.boardDisplayOptions.showPossibleMoves,
+                gameHistorySize = gameHistory.history.size,
+            )
         },
         snackbarHost = {
             SnackbarHost(hostState = snackbarHostState)

@@ -17,7 +17,7 @@ internal class MainLoop internal constructor(
     dependency = dependency,
 ) {
     override fun MainModel.applyArgs(args: MainArgs) = copy(
-        displayOptions = args.gameSettings.displayOptions,
+        boardDisplayOptions = args.gameSettings.boardDisplayOptions,
         lightStrategy = args.gameSettings.lightStrategy,
         darkStrategy = args.gameSettings.darkStrategy,
         hasGameHistory = args.hasGameHistory,
