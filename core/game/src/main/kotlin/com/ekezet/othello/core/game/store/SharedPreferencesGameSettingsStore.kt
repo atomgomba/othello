@@ -4,7 +4,7 @@ import android.content.Context
 import com.ekezet.othello.core.game.data.GameSettings
 import com.ekezet.othello.core.game.data.IGameSettings
 import com.ekezet.othello.core.game.data.from
-import com.ekezet.othello.core.game.store.sharedprefs.load
+import com.ekezet.othello.core.game.store.sharedprefs.loadGameSettings
 import com.ekezet.othello.core.game.store.sharedprefs.persist
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,7 +15,7 @@ internal class SharedPreferencesGameSettingsStore(
 ) : GameSettingsStore {
     private val prefs = context.getSharedPreferences("game-settings", Context.MODE_PRIVATE)
 
-    private val _settings: MutableStateFlow<GameSettings> = MutableStateFlow(prefs.load())
+    private val _settings: MutableStateFlow<GameSettings> = MutableStateFlow(prefs.loadGameSettings())
     override val settings: StateFlow<GameSettings>
         get() = _settings.asStateFlow()
 

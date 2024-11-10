@@ -40,7 +40,7 @@ internal fun SharedPreferences.persist(data: IGameSettings) = with(edit()) {
     apply()
 }
 
-internal fun SharedPreferences.load(): GameSettings =
+internal fun SharedPreferences.loadGameSettings(): GameSettings =
     GameSettings(
         lightStrategy = getStrategy(KEY_LIGHT_NAME, KEY_LIGHT_PREFER_SIDES, DefaultLightStrategy),
         darkStrategy = getStrategy(KEY_DARK_NAME, KEY_DARK_PREFER_SIDES, DefaultDarkStrategy),

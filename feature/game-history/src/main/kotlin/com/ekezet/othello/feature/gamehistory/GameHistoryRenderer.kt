@@ -14,6 +14,7 @@ internal class GameHistoryRenderer : Renderer<GameHistoryModel, GameHistoryDepen
             gameEnd = gameEnd,
             lastState = moveHistory.toPastGameState(),
             isGrayscaleMode = gameSettings.boardDisplayOptions.isGrayscaleMode,
+            alwaysScrollToBottom = historySettings.historyDisplayOptions.alwaysScrollToBottom,
         )
     }
 

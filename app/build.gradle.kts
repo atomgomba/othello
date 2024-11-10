@@ -49,7 +49,7 @@ dependencies {
 
     implementation(project(":feature:game-board"))
     implementation(project(":feature:game-history"))
-    implementation(project(":feature:game-settings"))
+    implementation(project(":feature:settings"))
 
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.material.iconsExtended)

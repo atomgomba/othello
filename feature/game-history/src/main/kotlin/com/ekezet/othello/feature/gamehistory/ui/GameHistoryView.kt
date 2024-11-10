@@ -90,7 +90,11 @@ private fun GameHistoryState.GameHistoryViewImpl(
         }
     }
 
-    LaunchedEffect(historyItems) {
+    LaunchedEffect(historyItems.size) {
+        if (alwaysScrollToBottom) {
+            listState.scrollToItem(historyItems.lastIndex)
+        }
+
         snapshotFlow { listState.layoutInfo.visibleItemsInfo.size }.collect {
             notAllItemsVisible = listState.layoutInfo.visibleItemsInfo.size < historyItems.lastIndex
         }

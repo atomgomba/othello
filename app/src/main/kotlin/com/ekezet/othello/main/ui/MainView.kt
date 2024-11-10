@@ -27,13 +27,15 @@ import com.ekezet.hurok.compose.LocalActionEmitter
 import com.ekezet.hurok.compose.LoopWrapper
 import com.ekezet.othello.core.game.GameHistory
 import com.ekezet.othello.core.game.data.GameSettings
+import com.ekezet.othello.core.game.data.HistorySettings
 import com.ekezet.othello.core.game.store.GameHistoryStore
 import com.ekezet.othello.core.game.store.GameSettingsStore
+import com.ekezet.othello.core.game.store.HistorySettingsStore
 import com.ekezet.othello.core.ui.render.MovesRenderer
 import com.ekezet.othello.feature.gameboard.ui.GameBoardView
 import com.ekezet.othello.feature.gamehistory.GameHistoryArgs
 import com.ekezet.othello.feature.gamehistory.ui.GameHistoryView
-import com.ekezet.othello.feature.gamesettings.ui.GameSettingsView
+import com.ekezet.othello.feature.settings.ui.SettingsView
 import com.ekezet.othello.main.MainArgs
 import com.ekezet.othello.main.MainLoop
 import com.ekezet.othello.main.MainState
@@ -54,10 +56,12 @@ import org.koin.compose.koinInject
 internal fun MainView(
     parentScope: CoroutineScope = rememberCoroutineScope(),
     gameSettingsStore: GameSettingsStore = koinInject(),
+    historySettingsStore: HistorySettingsStore = koinInject(),
     gameHistoryStore: GameHistoryStore = koinInject(),
     historyRenderer: MovesRenderer = koinInject(),
 ) {
     val gameSettings: GameSettings by gameSettingsStore.settings.collectAsState()
+    val historySettings: HistorySettings by historySettingsStore.settings.collectAsState()
     val gameHistory: GameHistory by gameHistoryStore.history.collectAsState()
     val historyImages by historyRenderer.renderedImages.collectAsState()
 
@@ -71,6 +75,7 @@ internal fun MainView(
     ) {
         MainViewImpl(
             gameSettings = gameSettings,
+            historySettings = historySettings,
             gameHistory = gameHistory,
             historyImages = historyImages,
         )
@@ -81,6 +86,7 @@ internal fun MainView(
 @Composable
 internal fun MainState.MainViewImpl(
     gameSettings: GameSettings,
+    historySettings: HistorySettings,
     gameHistory: GameHistory,
     historyImages: Map<String, ImageBitmap>,
     startDestination: String = MainRoutes.Start,
@@ -173,6 +179,7 @@ internal fun MainState.MainViewImpl(
                             history = gameHistory,
                             historyImages = historyImages,
                             gameSettings = gameSettings,
+                            historySettings = historySettings,
                         ),
                         listState = historyListState,
                         modifier = destinationModifier,
@@ -183,7 +190,7 @@ internal fun MainState.MainViewImpl(
                     route = GameSettingsRoute.spec,
                     arguments = GameSettingsRoute.arguments,
                 ) { entry ->
-                    GameSettingsView(
+                    SettingsView(
                         args = gameSettings,
                         selectStrategyFor = GameSettingsRoute.findPickStrategy(entry),
                         modifier = destinationModifier,

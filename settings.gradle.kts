@@ -48,7 +48,7 @@ include(
     ":core:ui",
     ":feature:game-board",
     ":feature:game-history",
-    ":feature:game-settings",
+    ":feature:settings",
 )
 
 fun Properties.find(key: String): String? =

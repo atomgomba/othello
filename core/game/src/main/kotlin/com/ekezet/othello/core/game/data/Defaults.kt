@@ -52,3 +52,8 @@ val GameSettings.Companion.Default: GameSettings
         darkStrategy = DefaultDarkStrategy,
         confirmExit = DefaultConfirmExit,
     )
+
+val HistorySettings.Companion.Default: HistorySettings
+    inline get() = HistorySettings(
+        historyDisplayOptions = HistoryDisplayOptions.Default,
+    )
