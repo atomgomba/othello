@@ -32,6 +32,7 @@ import com.ekezet.othello.feature.gamehistory.GameHistoryLoop
 import com.ekezet.othello.feature.gamehistory.GameHistoryState
 import com.ekezet.othello.feature.gamehistory.ui.components.GameEndItemView
 import com.ekezet.othello.feature.gamehistory.ui.components.HistoryItemView
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
@@ -40,12 +41,16 @@ fun GameHistoryView(
     listState: LazyListState,
     modifier: Modifier = Modifier,
 ) {
+    val parentScope = rememberCoroutineScope()
+
     LoopWrapper(
         builder = GameHistoryLoop,
+        parentScope = parentScope,
         args = args,
     ) {
         GameHistoryViewImpl(
             listState = listState,
+            coroutineScope = parentScope,
             modifier = modifier,
         )
     }
@@ -54,6 +59,7 @@ fun GameHistoryView(
 @Composable
 private fun GameHistoryState.GameHistoryViewImpl(
     listState: LazyListState,
+    coroutineScope: CoroutineScope,
     modifier: Modifier,
 ) {
     var notAllItemsVisible by remember { mutableStateOf(false) }
@@ -92,7 +98,9 @@ private fun GameHistoryState.GameHistoryViewImpl(
 
     LaunchedEffect(historyItems.size) {
         if (alwaysScrollToBottom) {
-            listState.scrollToItem(historyItems.lastIndex)
+            coroutineScope.launch {
+                listState.animateScrollToItem(historyItems.lastIndex)
+            }
         }
 
         snapshotFlow { listState.layoutInfo.visibleItemsInfo.size }.collect {
