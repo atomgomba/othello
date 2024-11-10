@@ -16,6 +16,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -32,25 +34,21 @@ import com.ekezet.othello.feature.gamehistory.GameHistoryLoop
 import com.ekezet.othello.feature.gamehistory.GameHistoryState
 import com.ekezet.othello.feature.gamehistory.ui.components.GameEndItemView
 import com.ekezet.othello.feature.gamehistory.ui.components.HistoryItemView
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
 fun GameHistoryView(
+
     args: GameHistoryArgs,
     listState: LazyListState,
     modifier: Modifier = Modifier,
 ) {
-    val parentScope = rememberCoroutineScope()
-
     LoopWrapper(
         builder = GameHistoryLoop,
-        parentScope = parentScope,
         args = args,
     ) {
         GameHistoryViewImpl(
             listState = listState,
-            coroutineScope = parentScope,
             modifier = modifier,
         )
     }
@@ -59,10 +57,11 @@ fun GameHistoryView(
 @Composable
 private fun GameHistoryState.GameHistoryViewImpl(
     listState: LazyListState,
-    coroutineScope: CoroutineScope,
     modifier: Modifier,
 ) {
-    var notAllItemsVisible by remember { mutableStateOf(false) }
+    val notAllItemsVisible by remember {
+        derivedStateOf { listState.layoutInfo.visibleItemsInfo.size < historyItems.lastIndex }
+    }
 
     Scaffold(
         modifier = modifier.then(
@@ -96,15 +95,13 @@ private fun GameHistoryState.GameHistoryViewImpl(
         }
     }
 
-    LaunchedEffect(historyItems.size) {
+    val coroutineScope = rememberCoroutineScope()
+
+    SideEffect {
         if (alwaysScrollToBottom) {
             coroutineScope.launch {
                 listState.animateScrollToItem(historyItems.lastIndex)
             }
-        }
-
-        snapshotFlow { listState.layoutInfo.visibleItemsInfo.size }.collect {
-            notAllItemsVisible = listState.layoutInfo.visibleItemsInfo.size < historyItems.lastIndex
         }
     }
 }

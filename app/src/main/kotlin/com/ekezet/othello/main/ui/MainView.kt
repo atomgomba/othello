@@ -35,6 +35,7 @@ import com.ekezet.othello.core.ui.render.MovesRenderer
 import com.ekezet.othello.feature.gameboard.ui.GameBoardView
 import com.ekezet.othello.feature.gamehistory.GameHistoryArgs
 import com.ekezet.othello.feature.gamehistory.ui.GameHistoryView
+import com.ekezet.othello.feature.settings.SettingsArgs
 import com.ekezet.othello.feature.settings.ui.SettingsView
 import com.ekezet.othello.main.MainArgs
 import com.ekezet.othello.main.MainLoop
@@ -104,10 +105,9 @@ internal fun MainState.MainViewImpl(
             .setPopUpTo(
                 route = startDestination,
                 inclusive = false,
-                saveState = true,
             )
             .setLaunchSingleTop(true)
-            .setRestoreState(true)
+            .setRestoreState(false)
             .build()
     }
 
@@ -174,6 +174,7 @@ internal fun MainState.MainViewImpl(
                         navigateTo(MainRoutes.Start)
                         return@composable
                     }
+
                     GameHistoryView(
                         args = GameHistoryArgs(
                             history = gameHistory,
@@ -191,7 +192,10 @@ internal fun MainState.MainViewImpl(
                     arguments = GameSettingsRoute.arguments,
                 ) { entry ->
                     SettingsView(
-                        args = gameSettings,
+                        args = SettingsArgs(
+                            gameSettings = gameSettings,
+                            historySettings = historySettings,
+                        ),
                         selectStrategyFor = GameSettingsRoute.findPickStrategy(entry),
                         modifier = destinationModifier,
                         listState = settingsListState,

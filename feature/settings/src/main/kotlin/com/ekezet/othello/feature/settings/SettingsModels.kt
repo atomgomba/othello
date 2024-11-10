@@ -1,6 +1,7 @@
 package com.ekezet.othello.feature.settings
 
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.Stable
 import com.ekezet.hurok.ViewState
 import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.data.models.isLight
@@ -9,7 +10,9 @@ import com.ekezet.othello.core.game.data.Default
 import com.ekezet.othello.core.game.data.DefaultConfirmExit
 import com.ekezet.othello.core.game.data.DefaultDarkStrategy
 import com.ekezet.othello.core.game.data.DefaultLightStrategy
+import com.ekezet.othello.core.game.data.GameSettings
 import com.ekezet.othello.core.game.data.HistoryDisplayOptions
+import com.ekezet.othello.core.game.data.HistorySettings
 import com.ekezet.othello.core.game.data.IGameSettings
 import com.ekezet.othello.core.game.data.IHistorySettings
 import com.ekezet.othello.core.game.dependency.GameSettingsPublisher
@@ -90,6 +93,12 @@ internal data class SettingsState(
     private fun isStrategySelected(current: Strategy?, other: Strategy?) =
         current == other || (current is DecoratedStrategy && current.wrapped == other)
 }
+
+@Stable
+data class SettingsArgs(
+    val gameSettings: GameSettings,
+    val historySettings: HistorySettings,
+)
 
 internal class SettingsDependency(
     gameSettingsStore: GameSettingsStore? = null,

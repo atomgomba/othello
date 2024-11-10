@@ -18,13 +18,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.ekezet.hurok.compose.LoopWrapper
 import com.ekezet.othello.core.data.models.Disk
-import com.ekezet.othello.core.game.data.GameSettings
 import com.ekezet.othello.core.ui.R.string
 import com.ekezet.othello.feature.settings.OnAlwaysScrollToBottomClicked
 import com.ekezet.othello.feature.settings.OnConfirmExitClicked
 import com.ekezet.othello.feature.settings.OnGrayscaleModeClicked
 import com.ekezet.othello.feature.settings.OnShowBoardPositionsClicked
 import com.ekezet.othello.feature.settings.OnShowPossibleMovesClicked
+import com.ekezet.othello.feature.settings.SettingsArgs
 import com.ekezet.othello.feature.settings.SettingsLoop
 import com.ekezet.othello.feature.settings.SettingsState
 import com.ekezet.othello.feature.settings.ui.components.SelectedStrategy
@@ -34,7 +34,7 @@ import com.ekezet.othello.feature.settings.ui.components.SwitchRow
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsView(
-    args: GameSettings,
+    args: SettingsArgs,
     selectStrategyFor: Disk?,
     modifier: Modifier = Modifier,
     listState: LazyListState = rememberLazyListState(),
@@ -170,7 +170,6 @@ private fun SettingsHeader(text: String) {
         text = text,
         style = MaterialTheme.typography.titleSmall,
         color = MaterialTheme.colorScheme.primary,
-        modifier = Modifier
-            .padding(horizontal = 16.dp),
+        modifier = Modifier.padding(horizontal = 16.dp),
     )
 }
