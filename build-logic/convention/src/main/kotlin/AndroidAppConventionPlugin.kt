@@ -10,7 +10,7 @@ import org.gradle.kotlin.dsl.kotlin
 
 class AndroidAppConventionPlugin : Plugin<Project> {
     companion object {
-        const val compileSdkLevel = 34
+        const val compileSdkLevel = 35
         const val minSdkLevel = 24
     }
 
