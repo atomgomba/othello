@@ -13,6 +13,14 @@ import com.ekezet.othello.core.data.models.y
 import com.ekezet.othello.core.game.PastMove
 import com.ekezet.othello.core.ui.components.color
 
+private const val bitmapWidth = 640F
+private const val bitmapHeight = bitmapWidth
+private const val cellWidth = bitmapWidth / BoardWidth
+private const val cellHeight = bitmapHeight / BoardHeight
+private const val cellPadding = cellWidth * 0.1F
+private const val gamePieceSize = cellWidth - (2F * cellPadding)
+private const val diskRadius = gamePieceSize / 2F
+
 private val borderPaint by lazy {
     Paint().apply {
         style = PaintingStyle.Stroke
@@ -64,11 +72,3 @@ fun PastMove.renderToBitmap(drawBorder: Boolean = false): ImageBitmap {
     }
     return bitmap
 }
-
-private const val bitmapWidth = 640F
-private const val bitmapHeight = bitmapWidth
-private const val cellWidth = bitmapWidth / BoardWidth
-private const val cellHeight = bitmapHeight / BoardHeight
-private const val cellPadding = cellWidth * 0.1F
-private const val gamePieceSize = cellWidth - (2F * cellPadding)
-private const val diskRadius = gamePieceSize / 2F

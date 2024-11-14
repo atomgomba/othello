@@ -11,4 +11,4 @@ interface MovesRenderer {
     suspend fun updateJobs(moveHistory: MoveHistory): Any?
 }
 
-typealias OnRender = PastMove.() -> ImageBitmap
+internal typealias OnRenderCallback = PastMove.() -> ImageBitmap

@@ -9,6 +9,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart.LAZY
 import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -18,13 +19,13 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
 internal class DefaultMovesRenderer(
-    jobDispatcher: CoroutineDispatcher,
-    private val onRender: OnRender,
+    dispatcher: CoroutineDispatcher,
+    private val onRender: OnRenderCallback,
 ) : MovesRenderer {
 
     constructor(jobDispatcher: CoroutineDispatcher) : this(
-        jobDispatcher = jobDispatcher,
-        onRender = { renderToBitmap() },
+        dispatcher = jobDispatcher,
+        onRender = PastMove::renderToBitmap,
     )
 
     private val _renderedImages = MutableStateFlow<Map<String, ImageBitmap>>(emptyMap())
@@ -32,7 +33,7 @@ internal class DefaultMovesRenderer(
         get() = _renderedImages.asStateFlow()
 
     private val renderJobs: MutableMap<String, RenderJob> = mutableMapOf()
-    private val jobScope = CoroutineScope(jobDispatcher)
+    private val jobScope = CoroutineScope(SupervisorJob() + dispatcher)
     private val mutex = Mutex()
 
     override suspend fun updateJobs(moveHistory: MoveHistory) = jobScope.launch {
@@ -44,6 +45,15 @@ internal class DefaultMovesRenderer(
         for (pastMove in moveHistory) {
             addJob(pastMove)
         }
+    }
+
+    private suspend fun removeJob(jobId: String) {
+        mutex.withLock {
+            val runningJob = renderJobs[jobId] as? Running
+            runningJob?.deferred?.cancel()
+            renderJobs.remove(jobId)
+        }
+        publishRenderedImages()
     }
 
     private suspend fun addJob(pastMove: PastMove) {
@@ -69,20 +79,10 @@ internal class DefaultMovesRenderer(
         publishRenderedImages()
     }
 
-    private suspend fun removeJob(jobId: String) {
-        mutex.withLock {
-            val runningJob = renderJobs[jobId] as? Running
-            runningJob?.deferred?.cancel()
-            renderJobs.remove(jobId)
-        }
-        publishRenderedImages()
-    }
-
     private fun publishRenderedImages() {
-        val images = renderJobs.values
+        _renderedImages.value = renderJobs.values
             .filterIsInstance<Done>()
             .associate { it.jobId to it.bitmap }
-        _renderedImages.value = images
     }
 
     internal sealed interface RenderJob {
