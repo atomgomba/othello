@@ -18,14 +18,14 @@ internal fun Project.configureAndroidCompose(
         buildFeatures {
             compose = true
         }
+    }
 
-        dependencies {
-            val bom = libs.findLibrary("androidx-compose-bom").get()
-            add("implementation", platform(bom))
-            add("androidTestImplementation", platform(bom))
-            add("debugImplementation", libs.findLibrary("androidx.compose.ui.testManifest").get())
-            add("debugImplementation", libs.findLibrary("androidx.compose.ui.tooling").get())
-        }
+    dependencies {
+        val bom = libs.findLibrary("androidx-compose-bom").get()
+        add("implementation", platform(bom))
+        add("androidTestImplementation", platform(bom))
+        add("debugImplementation", libs.findLibrary("androidx.compose.ui.testManifest").get())
+        add("debugImplementation", libs.findLibrary("androidx.compose.ui.tooling").get())
     }
 
     configure<ComposeCompilerGradlePluginExtension> {

@@ -15,7 +15,7 @@ class AndroidLibraryComposeConventionPlugin : Plugin<Project> {
             }
             val extension = extensions.getByType<LibraryExtension>()
             configureAndroidCompose(extension)
-            configureAndroidKoinCompose(extension)
+            configureAndroidKoinCompose()
         }
     }
 }

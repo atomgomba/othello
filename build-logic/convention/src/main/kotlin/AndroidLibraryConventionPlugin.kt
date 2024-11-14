@@ -28,9 +28,10 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
                     }
 
                     configureKotlinAndroid(this)
-                    configureKoin(this)
                 }
             }
+
+            configureKoin()
 
             dependencies {
                 add("testImplementation", kotlin("test"))
