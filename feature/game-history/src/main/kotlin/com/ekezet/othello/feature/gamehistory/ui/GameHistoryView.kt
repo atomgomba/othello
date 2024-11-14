@@ -38,7 +38,6 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun GameHistoryView(
-
     args: GameHistoryArgs,
     listState: LazyListState,
     modifier: Modifier = Modifier,
