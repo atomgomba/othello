@@ -9,6 +9,8 @@ import com.ekezet.othello.core.data.models.absoluteValue
 import com.ekezet.othello.core.data.models.flip
 import com.ekezet.othello.core.data.models.x
 import com.ekezet.othello.core.data.models.y
+import com.ekezet.othello.core.data.removeFirstCompat
+import com.ekezet.othello.core.data.removeLastCompat
 import kotlin.math.absoluteValue
 import kotlin.math.sign
 
@@ -145,8 +147,8 @@ internal fun ValidSegment<Position>.parts(): Set<Position> {
         }
     }
     if (1 < result.size) {
-        result.removeFirst()
-        result.removeLast()
+        result.removeFirstCompat()
+        result.removeLastCompat()
     }
     return result.toSet()
 }
