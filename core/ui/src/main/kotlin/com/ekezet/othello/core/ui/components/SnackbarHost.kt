@@ -4,6 +4,6 @@ import androidx.compose.runtime.Composable
 import com.ekezet.othello.core.ui.viewModels.HasSnackbar
 
 @Composable
-fun SnackbarHost(data: HasSnackbar) {
+fun SnackbarHost(ignored: HasSnackbar) {
     // TODO
 }

@@ -3,7 +3,6 @@ package com.ekezet.othello.feature.gamehistory
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.graphics.ImageBitmap
-import com.ekezet.hurok.ActionEmitter
 import com.ekezet.hurok.ViewState
 import com.ekezet.othello.core.game.GameEnd
 import com.ekezet.othello.core.game.GameHistory
@@ -41,5 +40,3 @@ data class GameHistoryArgs(
 )
 
 internal object GameHistoryDependency
-
-internal typealias GameHistoryActionEmitter = ActionEmitter<GameHistoryModel, GameHistoryDependency>

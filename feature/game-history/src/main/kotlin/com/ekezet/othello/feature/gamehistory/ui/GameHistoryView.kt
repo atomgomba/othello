@@ -85,7 +85,7 @@ private fun GameHistoryState.GameHistoryViewImpl(
 
             if (gameEnd != null) {
                 item(key = "end-result") {
-                    GameEndItemView(gameEnd, lastState)
+                    GameEndItemView(gameEnd)
                 }
             }
 

@@ -64,14 +64,14 @@ internal data object OnGrayscaleModeClicked : GameSettingsAction {
     }
 }
 
-internal data object OnAlwaysScrollToBottomClicked: GameSettingsAction {
+internal data object OnAlwaysScrollToBottomClicked : GameSettingsAction {
     override fun SettingsModel.proceed(): Next<SettingsModel, SettingsDependency> {
         val updated = toggleAlwaysScrollToBottom()
         return outcome(updated, PublishHistorySettings(updated))
     }
 }
 
-internal data object OnConfirmExitClicked: GameSettingsAction {
+internal data object OnConfirmExitClicked : GameSettingsAction {
     override fun SettingsModel.proceed(): Next<SettingsModel, SettingsDependency> {
         val updated = toggleConfirmExit()
         return outcome(updated, PublishGameSettings(updated))

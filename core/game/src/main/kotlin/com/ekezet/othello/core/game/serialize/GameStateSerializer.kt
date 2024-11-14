@@ -31,7 +31,7 @@ object GameStateSerializer {
         appendLine(BoardSerializer.toString(pastMove.board))
     }
 
-    fun fromString(data: String): CurrentGameState {
+    fun fromString(ignored: String): CurrentGameState {
         TODO()
     }
 

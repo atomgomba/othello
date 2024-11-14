@@ -80,6 +80,7 @@ internal class SettingsEffectTest : EffectTest() {
 
         confirmAllVerified()
     }
+
     @Test
     fun `PublishHistorySettings works correctly`() {
         val settings = initHistorySettings.copy()
@@ -95,7 +96,6 @@ internal class SettingsEffectTest : EffectTest() {
 
         confirmAllVerified()
     }
-
 
     private fun confirmAllVerified() {
         confirmVerified(

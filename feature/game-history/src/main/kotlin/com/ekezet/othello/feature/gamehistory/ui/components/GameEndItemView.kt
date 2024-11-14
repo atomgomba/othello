@@ -15,12 +15,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.ekezet.othello.core.game.GameEnd
-import com.ekezet.othello.core.game.state.OthelloGameState
 import com.ekezet.othello.core.ui.R
 import com.ekezet.othello.core.ui.components.GamePieceWithBorder
 
 @Composable
-internal fun GameEndItemView(gameEnd: GameEnd, lastState: OthelloGameState) {
+internal fun GameEndItemView(gameEnd: GameEnd) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -29,7 +28,7 @@ internal fun GameEndItemView(gameEnd: GameEnd, lastState: OthelloGameState) {
     ) {
         when (gameEnd) {
             GameEnd.EndedTie -> EndedTieView()
-            is GameEnd.EndedWin -> EndedWinView(gameEnd, lastState)
+            is GameEnd.EndedWin -> EndedWinView(gameEnd)
         }
     }
 }
@@ -50,7 +49,7 @@ private fun EndedTieView() {
 }
 
 @Composable
-private fun EndedWinView(gameEnd: GameEnd.EndedWin, lastState: OthelloGameState) {
+private fun EndedWinView(gameEnd: GameEnd.EndedWin) {
     Row(
         modifier = Modifier
             .padding(start = 16.dp)

@@ -24,7 +24,7 @@ internal data object OnToggleIndicatorsClicked : MainAction {
 }
 
 internal data object OnBackPressed : MainAction {
-    override fun MainModel.proceed(): Next<MainModel, MainDependency>  {
+    override fun MainModel.proceed(): Next<MainModel, MainDependency> {
         val effects = buildSet<MainEffect> {
             if (isExitMessageVisible) {
                 add(FinishActivity)

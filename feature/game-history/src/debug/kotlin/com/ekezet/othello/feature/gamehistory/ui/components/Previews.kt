@@ -35,7 +35,7 @@ private fun HistoryItemViewPassPreview() {
 @Preview
 private fun GameEndItemViewTiePreview() {
     PreviewBase {
-        GameEndItemView(GameEnd.EndedTie, lastState)
+        GameEndItemView(GameEnd.EndedTie)
     }
 }
 
@@ -43,7 +43,7 @@ private fun GameEndItemViewTiePreview() {
 @Preview
 private fun GameEndItemViewWinPreview() {
     PreviewBase {
-        GameEndItemView(gameEndedWinItem, lastState)
+        GameEndItemView(gameEndedWinItem)
     }
 }
 
