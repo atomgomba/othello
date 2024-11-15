@@ -4,6 +4,7 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import com.ekezet.hurok.ViewState
 import com.ekezet.othello.core.data.models.Disk
+import com.ekezet.othello.core.data.models.isDark
 import com.ekezet.othello.core.data.models.isLight
 import com.ekezet.othello.core.game.data.BoardDisplayOptions
 import com.ekezet.othello.core.game.data.Default

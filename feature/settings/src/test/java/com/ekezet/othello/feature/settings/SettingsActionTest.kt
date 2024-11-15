@@ -4,6 +4,7 @@ import com.ekezet.hurok.renderState
 import com.ekezet.hurok.test.after
 import com.ekezet.hurok.test.matches
 import com.ekezet.othello.core.data.models.Disk
+import com.ekezet.othello.core.data.models.isDark
 import com.ekezet.othello.core.data.models.isLight
 import com.ekezet.othello.core.game.strategy.HumanPlayer
 import com.ekezet.othello.core.game.strategy.RandomStrategy

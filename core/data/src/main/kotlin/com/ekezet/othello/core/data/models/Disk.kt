@@ -1,33 +1,25 @@
 package com.ekezet.othello.core.data.models
 
-@JvmInline
-value class Disk private constructor(
-    val isDark: Boolean,
-) {
-    companion object {
-        @JvmStatic
-        val Light = Disk(false)
+import com.ekezet.othello.core.data.models.Disk.Dark
+import com.ekezet.othello.core.data.models.Disk.Light
 
-        @JvmStatic
-        val Dark = Disk(true)
-    }
+sealed interface Disk {
+    data object Dark : Disk
+    data object Light : Disk
 
-    override fun toString() = if (isDark) "Dark" else "Light"
+    companion object
 }
 
-fun Disk.flip() = if (isDark) Disk.Light else Disk.Dark
+fun Disk.flip() = if (isDark) Light else Dark
+
+val Disk.isDark: Boolean
+    inline get() = this is Dark
 
 val Disk.isLight: Boolean
-    inline get() = !isDark
+    inline get() = this is Light
 
 fun Disk.Companion.valueOf(value: String?): Disk? = when (value) {
     "$Dark" -> Dark
     "$Light" -> Light
     else -> null
-}
-
-fun Disk.Companion.valueOf(value: Boolean?): Disk? = when (value) {
-    false -> Dark
-    true -> Light
-    null -> null
 }

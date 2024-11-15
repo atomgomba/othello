@@ -3,6 +3,7 @@ package com.ekezet.othello.core.ui
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.ekezet.othello.core.data.models.Disk
+import com.ekezet.othello.core.data.models.isDark
 import com.ekezet.othello.core.game.strategy.Strategy
 import com.ekezet.othello.core.ui.R.string
 
