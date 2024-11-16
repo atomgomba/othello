@@ -10,44 +10,41 @@ import com.ekezet.othello.feature.settings.SettingsLoop
 import com.ekezet.othello.feature.settings.SettingsModel
 import com.ekezet.othello.feature.settings.SettingsRenderer
 
-internal val defaultModel = SettingsModel()
+private val defaultModel = SettingsModel()
 
-internal val showDarkStrategySelectorModel = defaultModel.showStrategySelectorFor(Disk.Dark)
+private val showDarkStrategySelectorModel = defaultModel.showStrategySelectorFor(Disk.Dark)
 
-internal val showLightStrategySelectorModel = defaultModel.showStrategySelectorFor(Disk.Light)
+private val showLightStrategySelectorModel = defaultModel.showStrategySelectorFor(Disk.Light)
 
 private fun SettingsModel.toPreviewState() =
     renderState(::SettingsLoop, this, SettingsRenderer())
 
 @OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun SettingsModel.Preview() = toPreviewState()
+    .GameSettingsViewImpl(selectStrategyFor = null)
+
+
 @Preview
 @Composable
 internal fun GameSettingsViewPreview_Default() {
     PreviewBase {
-        defaultModel
-            .toPreviewState()
-            .GameSettingsViewImpl(selectStrategyFor = null)
+        defaultModel.Preview()
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
 internal fun GameSettingsViewPreview_ShowDarkStrategySelector() {
     PreviewBase {
-        showDarkStrategySelectorModel
-            .toPreviewState()
-            .GameSettingsViewImpl(selectStrategyFor = null)
+        showDarkStrategySelectorModel.Preview()
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
 internal fun GameSettingsViewPreview_ShowLightStrategySelector() {
     PreviewBase {
-        showLightStrategySelectorModel
-            .toPreviewState()
-            .GameSettingsViewImpl(selectStrategyFor = null)
+        showLightStrategySelectorModel.Preview()
     }
 }

@@ -30,13 +30,14 @@ import com.ekezet.hurok.AnyActionEmitter
 import com.ekezet.hurok.compose.LoopWrapper
 import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.data.models.Position
+import com.ekezet.othello.core.data.models.isDark
 import com.ekezet.othello.core.data.models.isLight
 import com.ekezet.othello.core.data.models.numDark
 import com.ekezet.othello.core.data.models.numLight
 import com.ekezet.othello.core.game.GameEnd.EndedTie
 import com.ekezet.othello.core.game.GameEnd.EndedWin
 import com.ekezet.othello.core.game.data.GameSettings
-import com.ekezet.othello.core.ui.R.string
+import com.ekezet.othello.core.ui.R
 import com.ekezet.othello.core.ui.components.GameBoard
 import com.ekezet.othello.core.ui.components.GamePiece
 import com.ekezet.othello.core.ui.orHumanPlayer
@@ -77,7 +78,7 @@ fun GameBoardView(
 
 @ExperimentalLayoutApi
 @Composable
-private fun GameBoardState.GameBoardViewImpl(
+internal fun GameBoardState.GameBoardViewImpl(
     onStrategyClick: OnStrategyClick,
     modifier: Modifier,
 ) {
@@ -128,12 +129,7 @@ private fun GameBoardState.BoardHeader() {
     ) {
         DiskImage(disk = currentDisk)
 
-        Text(text = stringResource(id = string.game_board__header__turn, currentTurn))
-
-        if (passed) {
-            Spacer(Modifier.weight(1F))
-            Text(text = stringResource(id = string.game_board__header__passed))
-        }
+        Text(text = stringResource(id = R.string.game_board__header__turn, currentTurn))
     }
 }
 
@@ -156,14 +152,18 @@ private fun GameBoardState.BoardFooter(
                 color = if (isDarkWin) highlightColor else Color.Unspecified,
             )
 
+            if (passed && currentDisk == Disk.Dark) {
+                Text(text = stringResource(id = R.string.game_board__header__passed))
+            }
+
             Spacer(Modifier.weight(1F))
 
             if (ended != null) {
                 Text(
                     text = stringResource(
                         id = when (ended) {
-                            EndedTie -> string.game_board__footer__tie_game
-                            is EndedWin -> string.game_board__footer__winner
+                            EndedTie -> R.string.game_board__footer__tie_game
+                            is EndedWin -> R.string.game_board__footer__winner
                         },
                     ),
                     color = highlightColor,
@@ -171,6 +171,10 @@ private fun GameBoardState.BoardFooter(
                 )
 
                 Spacer(Modifier.weight(1F))
+            }
+
+            if (passed && currentDisk == Disk.Light) {
+                Text(text = stringResource(id = R.string.game_board__header__passed))
             }
 
             Text(

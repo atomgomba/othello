@@ -7,9 +7,7 @@ import com.ekezet.othello.core.data.models.Position
 import com.ekezet.othello.core.data.models.putAtAndClone
 import com.ekezet.othello.core.game.GameEnd
 import com.ekezet.othello.core.game.PastMove
-import com.ekezet.othello.core.game.data.Default
 import com.ekezet.othello.core.game.data.DefaultBoard
-import com.ekezet.othello.core.game.state.OthelloGameState
 import com.ekezet.othello.core.ui.components.PreviewBase
 import com.ekezet.othello.core.ui.render.renderToBitmap
 import com.ekezet.othello.core.ui.viewModels.toImmutableList
@@ -80,7 +78,5 @@ private val moveHistoryPassItem = HistoryItem(
     lightCount = 8,
     darkCount = 2,
 )
-
-private val lastState = OthelloGameState.Default
 
 private val gameEndedWinItem = GameEnd.EndedWin(winner = Disk.Dark)

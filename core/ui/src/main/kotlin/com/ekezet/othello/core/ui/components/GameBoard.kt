@@ -133,6 +133,7 @@ private fun GameBoardImpl(
                                         EndedTie -> LOSER_ALPHA
                                     },
                                 )
+
                                 GamePiece(
                                     disk = disk,
                                     modifier = Modifier.alpha(alpha),
