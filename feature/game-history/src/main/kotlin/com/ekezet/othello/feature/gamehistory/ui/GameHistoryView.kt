@@ -26,8 +26,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.ekezet.hurok.compose.LoopWrapper
+import com.ekezet.othello.core.ui.R
 import com.ekezet.othello.feature.gamehistory.GameHistoryArgs
 import com.ekezet.othello.feature.gamehistory.GameHistoryLoop
 import com.ekezet.othello.feature.gamehistory.GameHistoryState
@@ -143,7 +145,13 @@ private fun ListNavigationFab(
     ) {
         Icon(
             imageVector = Icons.Default.ArrowDownward,
-            contentDescription = null,
+            contentDescription = stringResource(
+                id = if (isScrollingUp) {
+                    R.string.game_history__list__scroll_to_top
+                } else {
+                    R.string.game_history__list__scroll_to_bottom
+                }
+            ),
             modifier = Modifier.rotate(rotationDeg.value),
         )
     }

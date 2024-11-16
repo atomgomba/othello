@@ -24,7 +24,6 @@ private fun SettingsModel.toPreviewState() =
 private fun SettingsModel.Preview() = toPreviewState()
     .GameSettingsViewImpl(selectStrategyFor = null)
 
-
 @Preview
 @Composable
 internal fun GameSettingsViewPreview_Default() {

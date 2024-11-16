@@ -119,7 +119,7 @@ private fun StrategyListItem(strategy: Strategy?, isSelected: Boolean, onClick: 
     ) {
         Icon(
             imageVector = Icons.Default.Check,
-            contentDescription = null,
+            contentDescription = strategy?.name,
             modifier = Modifier.alpha(if (isSelected) 1F else 0F),
         )
 

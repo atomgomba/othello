@@ -109,7 +109,7 @@ internal fun HistoryItemView(
                 ) {
                     Image(
                         bitmap = image,
-                        contentDescription = null,
+                        contentDescription = item.move?.asString(),
                         modifier = Modifier.size(100.dp),
                     )
                 }

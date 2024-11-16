@@ -52,7 +52,7 @@ internal fun MainState.MainTopAppBar(
                 IconButton(onClick = { navController.popBackStack() }) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = null,
+                        contentDescription = stringResource(id = R.string.common__back),
                     )
                 }
             }

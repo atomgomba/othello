@@ -14,6 +14,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
@@ -130,6 +135,22 @@ private fun GameBoardState.BoardHeader() {
         DiskImage(disk = currentDisk)
 
         Text(text = stringResource(id = R.string.game_board__header__turn, currentTurn))
+
+        Spacer(modifier = Modifier.weight(1F))
+
+        IconButton(onClick = { TODO() }) {
+            Icon(
+                imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                contentDescription = stringResource(id = R.string.game_board__header__previous_turn),
+            )
+        }
+
+        IconButton(onClick = { TODO() }) {
+            Icon(
+                imageVector = Icons.AutoMirrored.Default.ArrowForward,
+                contentDescription = stringResource(id = R.string.game_board__header__next_turn),
+            )
+        }
     }
 }
 
