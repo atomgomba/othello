@@ -4,17 +4,11 @@ import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.data.models.Position
 import com.ekezet.othello.core.data.serialize.asString
 
-sealed class InvalidMoveException : IllegalStateException()
+sealed class InvalidMoveException(message: String) : IllegalStateException(message)
 
 data class InvalidNewMoveException(
     val disk: Disk,
     val invalidPosition: Position,
-) : InvalidMoveException() {
-    override val message: String
-        get() = "Invalid move attempt by $disk at ${invalidPosition.asString()}"
-}
+) : InvalidMoveException("Invalid move attempt by $disk at ${invalidPosition.asString()}")
 
-class InvalidPastMoveException : InvalidMoveException() {
-    override val message: String
-        get() = "Past game state cannot be modified"
-}
+class InvalidPastMoveException : InvalidMoveException("Past game state cannot be modified")
