@@ -5,7 +5,7 @@ import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.data.models.Position
 import com.ekezet.othello.core.data.serialize.BoardSerializer
 import com.ekezet.othello.core.data.serialize.asString
-import com.ekezet.othello.core.game.data.DefaultBoard
+import com.ekezet.othello.core.game.data.StartBoard
 import com.ekezet.othello.core.game.state.CurrentGameState
 import com.ekezet.othello.core.game.state.PastGameState
 
@@ -44,14 +44,16 @@ data class PastMove(
 
 typealias MoveHistory = List<PastMove>
 
-fun MoveHistory.toPastGameState(fromIndex: Int = 0): PastGameState {
-    val pastMoves = subList(fromIndex, size)
-    val pastState = CurrentGameState(
-        currentBoard = pastMoves.lastOrNull()?.board ?: DefaultBoard,
+fun MoveHistory.toCurrentGameState(fromIndex: Int = 0, toIndex: Int = size): CurrentGameState {
+    val pastMoves = subList(fromIndex, toIndex)
+    return CurrentGameState(
+        board = pastMoves.lastOrNull()?.board ?: StartBoard,
         history = pastMoves,
     )
-    return PastGameState(pastState)
 }
+
+fun MoveHistory.toPastGameState(fromIndex: Int = 0, toIndex: Int = size): PastGameState =
+    PastGameState(toCurrentGameState(fromIndex, toIndex))
 
 sealed interface GameEnd {
     data class EndedWin(val winner: Disk) : GameEnd

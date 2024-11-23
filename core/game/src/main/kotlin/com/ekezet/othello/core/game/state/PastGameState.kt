@@ -13,6 +13,3 @@ data class PastGameState(
         throw InvalidPastMoveException()
     }
 }
-
-val OthelloGameState.isPastState: Boolean
-    inline get() = this is PastGameState

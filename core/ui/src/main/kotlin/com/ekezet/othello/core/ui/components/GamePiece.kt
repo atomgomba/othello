@@ -27,8 +27,7 @@ fun GamePiece(disk: Disk, modifier: Modifier = Modifier) {
         contentAlignment = Alignment.Center,
     ) {
         Surface(
-            modifier = Modifier
-                .fillMaxSize(.8F),
+            modifier = Modifier.fillMaxSize(.8F),
             shape = CircleShape,
             color = disk.color,
         ) {}

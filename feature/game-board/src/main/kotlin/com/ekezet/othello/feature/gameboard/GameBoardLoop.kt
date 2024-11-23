@@ -2,9 +2,7 @@ package com.ekezet.othello.feature.gameboard
 
 import com.ekezet.hurok.Loop
 import com.ekezet.hurok.LoopBuilder
-import com.ekezet.othello.core.game.data.Default
 import com.ekezet.othello.core.game.data.GameSettings
-import com.ekezet.othello.core.game.state.OthelloGameState
 import com.ekezet.othello.feature.gameboard.actions.GameBoardAction
 import com.ekezet.othello.feature.gameboard.actions.OnGameStarted
 
@@ -29,7 +27,7 @@ internal class GameBoardLoop internal constructor(
             darkStrategy = args.darkStrategy,
         ).run {
             if (strategyChanged) {
-                resetNextTurn(OthelloGameState.Default)
+                resetNextTurn()
             } else {
                 this
             }

@@ -23,7 +23,7 @@ internal class GameBoardRendererTest {
 
         val result = subject.renderState(initModel)
 
-        val expectedOverlay = initModel.gameState.currentBoard.newEmptyOverlay().apply {
+        val expectedOverlay = initModel.gameState.board.newEmptyOverlay().apply {
             putAt(3, 2, ValidMoveIndicatorOverlayItem(disk = initModel.gameState.currentDisk))
             putAt(4, 5, ValidMoveIndicatorOverlayItem(disk = initModel.gameState.currentDisk))
             putAt(2, 3, ValidMoveIndicatorOverlayItem(disk = initModel.gameState.currentDisk))
@@ -31,14 +31,14 @@ internal class GameBoardRendererTest {
         }
         val expectedState = with(initModel) {
             GameBoardState(
-                board = gameState.currentBoard.toImmutableList(),
+                board = gameState.board.toImmutableList(),
                 overlay = expectedOverlay.toImmutableList(),
                 currentDisk = gameState.currentDisk,
                 darkStrategyName = darkStrategy?.name,
                 lightStrategyName = lightStrategy?.name,
                 diskCount = gameState.diskCount,
                 opponentName = lightStrategy?.name,
-                currentTurn = gameState.turn + 1,
+                displayedTurn = gameState.turn + 1,
                 nextMovePosition = nextMovePosition,
                 displayOptions = boardDisplayOptions,
                 ended = ended,
@@ -63,14 +63,14 @@ internal class GameBoardRendererTest {
 
         val expectedState = with(initModel) {
             GameBoardState(
-                board = gameState.currentBoard.toImmutableList(),
-                overlay = gameState.currentBoard.newEmptyOverlay().toImmutableList(),
+                board = gameState.board.toImmutableList(),
+                overlay = gameState.board.newEmptyOverlay().toImmutableList(),
                 currentDisk = gameState.currentDisk,
                 darkStrategyName = darkStrategy?.name,
                 lightStrategyName = lightStrategy?.name,
                 diskCount = gameState.diskCount,
                 opponentName = lightStrategy?.name,
-                currentTurn = gameState.turn + 1,
+                displayedTurn = gameState.turn + 1,
                 nextMovePosition = nextMovePosition,
                 displayOptions = boardDisplayOptions,
                 ended = ended,
@@ -94,19 +94,19 @@ internal class GameBoardRendererTest {
 
         val result = subject.renderState(initModel)
 
-        val expectedOverlay = initModel.gameState.currentBoard.newEmptyOverlay().apply {
+        val expectedOverlay = initModel.gameState.board.newEmptyOverlay().apply {
             putAt(2, 3, NextMoveIndicatorOverlayItem(disk = initModel.gameState.currentDisk))
         }
         val expectedState = with(initModel) {
             GameBoardState(
-                board = gameState.currentBoard.toImmutableList(),
+                board = gameState.board.toImmutableList(),
                 overlay = expectedOverlay.toImmutableList(),
                 currentDisk = gameState.currentDisk,
                 darkStrategyName = darkStrategy?.name,
                 lightStrategyName = lightStrategy?.name,
                 diskCount = gameState.diskCount,
                 opponentName = lightStrategy?.name,
-                currentTurn = gameState.turn + 1,
+                displayedTurn = gameState.turn + 1,
                 nextMovePosition = nextMovePosition,
                 displayOptions = boardDisplayOptions,
                 ended = ended,
@@ -133,14 +133,14 @@ internal class GameBoardRendererTest {
 
         val expectedState = with(initModel) {
             GameBoardState(
-                board = gameState.currentBoard.toImmutableList(),
-                overlay = gameState.currentBoard.newEmptyOverlay().toImmutableList(),
+                board = gameState.board.toImmutableList(),
+                overlay = gameState.board.newEmptyOverlay().toImmutableList(),
                 currentDisk = gameState.currentDisk,
                 darkStrategyName = darkStrategy?.name,
                 lightStrategyName = lightStrategy?.name,
                 diskCount = gameState.diskCount,
                 opponentName = lightStrategy?.name,
-                currentTurn = gameState.turn + 1,
+                displayedTurn = gameState.turn + 1,
                 nextMovePosition = nextMovePosition,
                 displayOptions = boardDisplayOptions,
                 ended = ended,

@@ -64,3 +64,11 @@ internal data class OnTurnPassed(
 internal data class OnGameEnded(val result: GameEnd) : GameBoardAction {
     override fun GameBoardModel.proceed() = mutate(copy(ended = result))
 }
+
+internal data object OnPreviousTurnClicked : GameBoardAction {
+    override fun GameBoardModel.proceed() = mutate(stepToPreviousTurn())
+}
+
+internal data object OnNextTurnClicked : GameBoardAction {
+    override fun GameBoardModel.proceed() = mutate(stepToNextTurn())
+}

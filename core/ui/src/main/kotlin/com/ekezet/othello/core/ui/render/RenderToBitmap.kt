@@ -35,10 +35,12 @@ private val diskPaint by lazy {
     }
 }
 
+val moveHighlightColor = Color(255, 98, 0)
+
 private val movePaint by lazy {
     Paint().apply {
         style = PaintingStyle.Stroke
-        color = Color(255, 98, 0)
+        color = moveHighlightColor
         strokeWidth = gamePieceSize / 4
     }
 }

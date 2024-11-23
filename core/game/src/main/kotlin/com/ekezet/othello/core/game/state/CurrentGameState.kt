@@ -26,29 +26,28 @@ import com.ekezet.othello.core.game.throwable.InvalidNewMoveException
 import timber.log.Timber
 
 data class CurrentGameState(
-    override val currentBoard: Board,
+    override val board: Board,
     override val history: MoveHistory,
 ) : OthelloGameState {
-    override val turn: Int get() = history.size
+    override val turn: Int = history.size
 
-    override val currentDisk: Disk
-        get() = if ((turn % 2) == 0) {
-            Disk.Dark
-        } else {
-            Disk.Light
-        }
+    override val currentDisk: Disk = if ((turn % 2) == 0) {
+        Disk.Dark
+    } else {
+        Disk.Light
+    }
 
     override val validMoves: Set<ValidMove> by lazy {
-        currentBoard.findValidMoves(currentDisk)
+        board.findValidMoves(currentDisk)
     }
 
     override val diskCount: DiskCount by lazy {
-        currentBoard.diskCount
+        board.diskCount
     }
 
     override val lastState: CurrentGameState
         get() = history.last().run {
-            CurrentGameState(currentBoard = board, history = history.dropLast(1))
+            CurrentGameState(board = board, history = history.dropLast(1))
         }
 
     @Throws(InvalidMoveException::class)
@@ -57,7 +56,7 @@ data class CurrentGameState(
             throw InvalidNewMoveException(disk = currentDisk, invalidPosition = moveAt)
         }
         Timber.i("Move (turn: ${turn + 1}): $currentDisk @ ${moveAt.asString()}")
-        val nextBoard = currentBoard.putAtAndClone(moveAt, currentDisk)
+        val nextBoard = board.putAtAndClone(moveAt, currentDisk)
         val validSegments = validMoves
             .filter { it.position == moveAt }
             .map { it.segment }
@@ -67,7 +66,7 @@ data class CurrentGameState(
             }
         }
         val nextState = copy(
-            currentBoard = nextBoard,
+            board = nextBoard,
             history = history + PastMove(
                 board = nextBoard.deepClone(),
                 moveAt = moveAt,
@@ -124,14 +123,14 @@ data class CurrentGameState(
 
         other as CurrentGameState
 
-        if (!currentBoard.contentDeepEquals(other.currentBoard)) return false
+        if (!board.contentDeepEquals(other.board)) return false
         if (history != other.history) return false
 
         return true
     }
 
     override fun hashCode(): Int {
-        var result = currentBoard.contentDeepHashCode()
+        var result = board.contentDeepHashCode()
         result = 31 * result + history.hashCode()
         return result
     }
@@ -141,6 +140,6 @@ data class CurrentGameState(
 
 fun CurrentGameState.Companion.new(board: Board): OthelloGameState =
     CurrentGameState(
-        currentBoard = board,
+        board = board,
         history = emptyList(),
     )

@@ -10,7 +10,7 @@ import com.ekezet.othello.core.game.strategy.NaiveMaxStrategy
 import com.ekezet.othello.core.game.strategy.PreferSidesDecoratorStrategy.Companion.preferSides
 import com.ekezet.othello.core.game.strategy.Strategy
 
-val DefaultBoard: Board
+val StartBoard: Board
     inline get() = BoardSerializer.fromString(
         """
         --------
@@ -24,8 +24,8 @@ val DefaultBoard: Board
         """,
     )
 
-val OthelloGameState.Companion.Default: OthelloGameState
-    inline get() = CurrentGameState.new(DefaultBoard)
+val OthelloGameState.Companion.Start: OthelloGameState
+    inline get() = CurrentGameState.new(StartBoard)
 
 val BoardDisplayOptions.Companion.Default: BoardDisplayOptions
     inline get() = BoardDisplayOptions(

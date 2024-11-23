@@ -51,6 +51,8 @@ import com.ekezet.othello.feature.gameboard.GameBoardLoop
 import com.ekezet.othello.feature.gameboard.GameBoardState
 import com.ekezet.othello.feature.gameboard.actions.ContinueGame
 import com.ekezet.othello.feature.gameboard.actions.OnMoveMade
+import com.ekezet.othello.feature.gameboard.actions.OnNextTurnClicked
+import com.ekezet.othello.feature.gameboard.actions.OnPreviousTurnClicked
 import com.ekezet.othello.feature.gameboard.actions.OnStrategyClick
 import com.ekezet.othello.feature.gameboard.ui.viewModels.getAt
 import kotlinx.coroutines.delay
@@ -134,18 +136,24 @@ private fun GameBoardState.BoardHeader() {
     ) {
         DiskImage(disk = currentDisk)
 
-        Text(text = stringResource(id = R.string.game_board__header__turn, currentTurn))
+        Text(text = stringResource(id = R.string.game_board__header__turn, displayedTurn, displayedMaxTurnCount))
 
         Spacer(modifier = Modifier.weight(1F))
 
-        IconButton(onClick = { TODO() }) {
+        IconButton(
+            onClick = { emit(OnPreviousTurnClicked) },
+            enabled = hasPreviousTurn,
+        ) {
             Icon(
                 imageVector = Icons.AutoMirrored.Default.ArrowBack,
                 contentDescription = stringResource(id = R.string.game_board__header__previous_turn),
             )
         }
 
-        IconButton(onClick = { TODO() }) {
+        IconButton(
+            onClick = { emit(OnNextTurnClicked) },
+            enabled = hasNextTurn,
+        ) {
             Icon(
                 imageVector = Icons.AutoMirrored.Default.ArrowForward,
                 contentDescription = stringResource(id = R.string.game_board__header__next_turn),

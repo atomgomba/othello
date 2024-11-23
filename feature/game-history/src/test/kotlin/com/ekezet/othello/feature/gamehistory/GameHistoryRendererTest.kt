@@ -7,10 +7,10 @@ import com.ekezet.othello.core.game.GameEnd
 import com.ekezet.othello.core.game.PastMove
 import com.ekezet.othello.core.game.data.BoardDisplayOptions
 import com.ekezet.othello.core.game.data.Default
-import com.ekezet.othello.core.game.data.DefaultBoard
 import com.ekezet.othello.core.game.data.GameSettings
 import com.ekezet.othello.core.game.data.HistoryDisplayOptions
 import com.ekezet.othello.core.game.data.HistorySettings
+import com.ekezet.othello.core.game.data.StartBoard
 import com.ekezet.othello.core.game.toPastGameState
 import com.ekezet.othello.core.ui.viewModels.toImmutableList
 import com.ekezet.othello.feature.gamehistory.ui.viewModels.HistoryItem
@@ -24,7 +24,7 @@ internal class GameHistoryRendererTest {
     @Test
     fun `renderState works correctly`() {
         val pastMove = PastMove(
-            board = DefaultBoard,
+            board = StartBoard,
             moveAt = Position(2, 3),
             disk = Disk.Dark,
             turn = 1,

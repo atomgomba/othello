@@ -10,7 +10,7 @@ import com.ekezet.othello.core.game.ValidMove
 import com.ekezet.othello.core.game.throwable.InvalidMoveException
 
 interface OthelloGameState {
-    val currentBoard: Board
+    val board: Board
     val history: MoveHistory
     val turn: Int
     val currentDisk: Disk

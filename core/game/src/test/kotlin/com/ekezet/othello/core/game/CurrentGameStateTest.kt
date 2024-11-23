@@ -2,7 +2,7 @@ package com.ekezet.othello.core.game
 
 import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.data.serialize.BoardSerializer
-import com.ekezet.othello.core.game.data.Default
+import com.ekezet.othello.core.game.data.Start
 import com.ekezet.othello.core.game.state.CurrentGameState
 import com.ekezet.othello.core.game.state.OthelloGameState
 import com.ekezet.othello.core.game.state.new
@@ -15,7 +15,7 @@ import kotlin.test.assertIs
 internal class CurrentGameStateTest {
     @Test(expected = InvalidMoveException::class)
     fun testInvalidMove() {
-        val subject = OthelloGameState.Default
+        val subject = OthelloGameState.Start
 
         subject.proceed((7 to 7))
     }
@@ -23,7 +23,7 @@ internal class CurrentGameStateTest {
     @Test
     fun testTurn() {
         val subject = CurrentGameState(
-            currentBoard = BoardFactory.starter(),
+            board = BoardFactory.starter(),
             history = listOf(mockk(), mockk()),
         )
 
@@ -33,7 +33,7 @@ internal class CurrentGameStateTest {
     @Test
     fun testCurrentDisk() {
         val subject = CurrentGameState(
-            currentBoard = BoardFactory.starter(),
+            board = BoardFactory.starter(),
             history = listOf(mockk(), mockk()),
         )
 
