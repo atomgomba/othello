@@ -1,5 +1,6 @@
 package com.ekezet.othello.feature.settings.ui
 
+import androidx.annotation.VisibleForTesting
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
@@ -10,11 +11,14 @@ import com.ekezet.othello.feature.settings.SettingsLoop
 import com.ekezet.othello.feature.settings.SettingsModel
 import com.ekezet.othello.feature.settings.SettingsRenderer
 
-private val defaultModel = SettingsModel()
+@VisibleForTesting
+internal val defaultModel = SettingsModel()
 
-private val showDarkStrategySelectorModel = defaultModel.showStrategySelectorFor(Disk.Dark)
+@VisibleForTesting
+internal val showDarkStrategySelectorModel = defaultModel.showStrategySelectorFor(Disk.Dark)
 
-private val showLightStrategySelectorModel = defaultModel.showStrategySelectorFor(Disk.Light)
+@VisibleForTesting
+internal val showLightStrategySelectorModel = defaultModel.showStrategySelectorFor(Disk.Light)
 
 private fun SettingsModel.toPreviewState() =
     renderState(::SettingsLoop, this, SettingsRenderer())
