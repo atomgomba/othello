@@ -26,7 +26,7 @@ private val darkPassedModel = defaultModel.copy(
 
 private val lightPassedModel = defaultModel.copy(
     passed = true,
-    gameState = defaultModel.gameState.proceed(2 to 3).state,
+    gameState = defaultModel.currentGameState.proceed(2 to 3).state,
 )
 
 private val darkWinModel = defaultModel.copy(

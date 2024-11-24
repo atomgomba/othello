@@ -20,7 +20,7 @@ internal class SettingsLoop internal constructor(
             historyDisplayOptions = historySettings.historyDisplayOptions,
             lightStrategy = gameSettings.lightStrategy,
             darkStrategy = gameSettings.darkStrategy,
-            confirmExit = gameSettings.confirmExit,
+            confirmExit = appSettings.confirmExit,
         )
     }
 

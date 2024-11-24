@@ -9,6 +9,7 @@ import com.ekezet.othello.core.game.data.Default
 import com.ekezet.othello.core.game.data.DefaultConfirmExit
 import com.ekezet.othello.core.game.data.DefaultDarkStrategy
 import com.ekezet.othello.core.game.data.DefaultLightStrategy
+import com.ekezet.othello.core.game.data.IAppSettings
 import com.ekezet.othello.core.game.data.IGameSettings
 import com.ekezet.othello.core.game.dependency.GameSettingsPublisher
 import com.ekezet.othello.core.game.store.GameHistoryStore
@@ -27,7 +28,7 @@ internal data class MainModel(
     override val confirmExit: Boolean = DefaultConfirmExit,
     val hasGameHistory: Boolean = false,
     val backPressCount: Int = 0,
-) : IGameSettings {
+) : IGameSettings, IAppSettings {
     val isExitMessageVisible: Boolean
         inline get() = 0 < backPressCount
 }

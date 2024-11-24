@@ -59,7 +59,7 @@ fun GameBoard(
     ended: GameEnd? = null,
     overlayFactory: (colIndex: Int, rowIndex: Int) -> Sprite? = { _, _ -> null },
     isClickable: Boolean = true,
-    onCellClick: (x: Int, y: Int) -> Unit = { _, _ -> },
+    onCellClick: (position: Position) -> Unit = {},
 ) {
     Column(modifier = modifier) {
         Row {
@@ -89,7 +89,7 @@ private fun GameBoardImpl(
     ended: GameEnd?,
     overlayFactory: (colIndex: Int, rowIndex: Int) -> Sprite?,
     isClickable: Boolean,
-    onCellClick: (x: Int, y: Int) -> Unit,
+    onCellClick: (position: Position) -> Unit,
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(borderWidth),
@@ -120,7 +120,7 @@ private fun GameBoardImpl(
                                 .weight(CELL_WEIGHT)
                                 .aspectRatio(1F)
                                 .clickable(enabled = isClickable) {
-                                    onCellClick(colIndex, rowIndex)
+                                    onCellClick(colIndex to rowIndex)
                                 },
                             contentAlignment = Alignment.Center,
                         ) {
@@ -139,6 +139,7 @@ private fun GameBoardImpl(
                                     modifier = Modifier.alpha(alpha),
                                 )
                             }
+
                             overlayItem?.Composable()
                         }
                     }

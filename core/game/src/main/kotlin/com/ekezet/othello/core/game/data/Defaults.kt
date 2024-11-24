@@ -50,10 +50,14 @@ val GameSettings.Companion.Default: GameSettings
         boardDisplayOptions = BoardDisplayOptions.Default,
         lightStrategy = DefaultLightStrategy,
         darkStrategy = DefaultDarkStrategy,
-        confirmExit = DefaultConfirmExit,
     )
 
 val HistorySettings.Companion.Default: HistorySettings
     inline get() = HistorySettings(
         historyDisplayOptions = HistoryDisplayOptions.Default,
+    )
+
+val AppSettings.Companion.Default: AppSettings
+    inline get() = AppSettings(
+        confirmExit = DefaultConfirmExit,
     )

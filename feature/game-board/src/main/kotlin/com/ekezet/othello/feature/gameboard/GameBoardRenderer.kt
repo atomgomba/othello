@@ -21,22 +21,21 @@ internal class GameBoardRenderer : Renderer<GameBoardModel, GameBoardDependency,
             lightStrategyName = lightStrategy?.name,
             diskCount = currentGameState.diskCount,
             opponentName = lightStrategy?.name,
-            displayedTurn = currentTurn + 1,
-            displayedMaxTurnCount = maxTurnCount + 1,
-            hasNextTurn = currentTurn < maxTurnCount,
+            displayedTurn = selectedTurn + 1,
+            displayedMaxTurnCount = turnCount + 1,
+            hasNextTurn = selectedTurn < turnCount,
             nextMovePosition = nextMovePosition,
             displayOptions = boardDisplayOptions,
-            ended = ended,
+            ended = ended.takeIf { isCurrentTurn },
             passed = passed,
             celebrate = ended is EndedWin && ended.winner.isHumanPlayer,
             isHumanPlayer = currentGameState.currentDisk.isHumanPlayer,
+            isCurrentTurn = isCurrentTurn,
         )
     }
 
     private fun GameBoardModel.createOverlayItems(): BoardOverlayList {
         val items = currentGameState.board.newEmptyOverlay()
-        val isPastTurn = currentTurn != maxTurnCount
-
         if (boardDisplayOptions.showPossibleMoves) {
             val validMoves = currentGameState.validMoves
             if (validMoves.isNotEmpty()) {
@@ -45,12 +44,10 @@ internal class GameBoardRenderer : Renderer<GameBoardModel, GameBoardDependency,
                 }
             }
         }
-
         if (nextMovePosition != null) {
             items.putAt(nextMovePosition, NextMoveIndicatorOverlayItem(currentDisk))
         }
-
-        if (isPastTurn) {
+        if (!isCurrentTurn) {
             currentGameState.history.lastOrNull()?.let { pastMove ->
                 val moveAt = pastMove.moveAt
                 if (moveAt != null) {
@@ -58,7 +55,6 @@ internal class GameBoardRenderer : Renderer<GameBoardModel, GameBoardDependency,
                 }
             }
         }
-
         return items.toImmutableList()
     }
 }

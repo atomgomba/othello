@@ -21,11 +21,11 @@ import com.ekezet.othello.core.game.Win
 import com.ekezet.othello.core.game.findValidMoves
 import com.ekezet.othello.core.game.isInvalid
 import com.ekezet.othello.core.game.parts
-import com.ekezet.othello.core.game.throwable.InvalidMoveException
 import com.ekezet.othello.core.game.throwable.InvalidNewMoveException
 import timber.log.Timber
 
-data class CurrentGameState(
+@ConsistentCopyVisibility
+data class CurrentGameState internal constructor(
     override val board: Board,
     override val history: MoveHistory,
 ) : OthelloGameState {
@@ -45,12 +45,13 @@ data class CurrentGameState(
         board.diskCount
     }
 
-    override val lastState: CurrentGameState
-        get() = history.last().run {
+    override val lastState: CurrentGameState by lazy {
+        history.last().run {
             CurrentGameState(board = board, history = history.dropLast(1))
         }
+    }
 
-    @Throws(InvalidMoveException::class)
+    @Throws(InvalidNewMoveException::class)
     override fun proceed(moveAt: Position): MoveResult {
         if (validMoves.isInvalid(moveAt)) {
             throw InvalidNewMoveException(disk = currentDisk, invalidPosition = moveAt)

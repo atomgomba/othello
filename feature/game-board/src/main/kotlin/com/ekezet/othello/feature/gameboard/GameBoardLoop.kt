@@ -2,40 +2,42 @@ package com.ekezet.othello.feature.gameboard
 
 import com.ekezet.hurok.Loop
 import com.ekezet.hurok.LoopBuilder
-import com.ekezet.othello.core.game.data.GameSettings
 import com.ekezet.othello.feature.gameboard.actions.GameBoardAction
 import com.ekezet.othello.feature.gameboard.actions.OnGameStarted
 
 internal class GameBoardLoop internal constructor(
     model: GameBoardModel,
     renderer: GameBoardRenderer,
-    args: GameSettings?,
+    args: GameBoardArgs?,
     dependency: GameBoardDependency? = null,
     firstAction: GameBoardAction? = null,
-) : Loop<GameBoardState, GameBoardModel, GameSettings, GameBoardDependency, GameBoardAction>(
+) : Loop<GameBoardState, GameBoardModel, GameBoardArgs, GameBoardDependency, GameBoardAction>(
     model = model,
     renderer = renderer,
     args = args,
     dependency = dependency,
     firstAction = firstAction,
 ) {
-    override fun GameBoardModel.applyArgs(args: GameSettings): GameBoardModel =
-        copy(
+    override fun GameBoardModel.applyArgs(args: GameBoardArgs): GameBoardModel {
+        val strategyChanged = containsDifferentStrategy(args)
+        return copy(
+            selectedTurn = args.selectedTurn ?: currentGameState.turn,
             boardDisplayOptions = args.boardDisplayOptions,
-            lightStrategy = args.lightStrategy,
-            darkStrategy = args.darkStrategy,
+            lightStrategy = args.lightStrategy ?: lightStrategy,
+            darkStrategy = args.darkStrategy ?: darkStrategy,
         ).run {
-            if (this@applyArgs.containsDifferentStrategy(args)) {
+            if (strategyChanged) {
                 resetNewGame()
             } else {
-                this@run
+                this
             }
         }
+    }
 
     internal companion object Builder :
-        LoopBuilder<GameBoardState, GameBoardModel, GameSettings, GameBoardDependency, GameBoardAction> {
+        LoopBuilder<GameBoardState, GameBoardModel, GameBoardArgs, GameBoardDependency, GameBoardAction> {
         override fun build(
-            args: GameSettings?,
+            args: GameBoardArgs?,
         ) = GameBoardLoop(
             model = GameBoardModel(),
             renderer = GameBoardRenderer(),

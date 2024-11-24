@@ -75,6 +75,6 @@ internal data object OnAlwaysScrollToBottomClicked : GameSettingsAction {
 internal data object OnConfirmExitClicked : GameSettingsAction {
     override fun SettingsModel.proceed(): Next<SettingsModel, SettingsDependency> {
         val updated = toggleConfirmExit()
-        return outcome(updated, PublishGameSettings(updated))
+        return outcome(updated, PublishAppSettings(updated))
     }
 }

@@ -22,14 +22,14 @@ internal data object OnGameStarted : GameBoardAction {
     override fun GameBoardModel.proceed() = if (ended != null || darkStrategy == null) {
         skip
     } else {
-        val nextMove = darkStrategy.deriveNext(gameState)
+        val nextMove = darkStrategy.deriveNext(currentGameState)
             ?: error("Strategy couldn't find a valid starting move")
         trigger(WaitBeforeNextTurn(nextMove))
     }
 }
 
 internal data class OnMoveMade(val position: Position) : GameBoardAction {
-    override fun GameBoardModel.proceed() = if (gameState.validMoves.isValid(position)) {
+    override fun GameBoardModel.proceed() = if (currentGameState.validMoves.isValid(position)) {
         mutate(pickNextMoveAt(position))
     } else {
         skip
@@ -39,7 +39,7 @@ internal data class OnMoveMade(val position: Position) : GameBoardAction {
 internal data object ContinueGame : GameBoardAction {
     override fun GameBoardModel.proceed(): Next<GameBoardModel, GameBoardDependency> {
         val moveResult = try {
-            gameState.proceed(nextMovePosition ?: return skip)
+            currentGameState.proceed(nextMovePosition ?: return skip)
         } catch (e: InvalidMoveException) {
             Timber.w(e)
             return skip
@@ -70,5 +70,13 @@ internal data object OnPreviousTurnClicked : GameBoardAction {
 }
 
 internal data object OnNextTurnClicked : GameBoardAction {
-    override fun GameBoardModel.proceed() = mutate(stepToNextTurn())
+    override fun GameBoardModel.proceed(): Next<GameBoardModel, GameBoardDependency> {
+        val nextModel = stepToNextTurn()
+        val gameState = nextModel.currentGameState
+        return if (gameState is CurrentGameState && !nextModel.currentDisk.isHumanPlayer) {
+            nextTurn(gameState)
+        } else {
+            mutate(nextModel)
+        }
+    }
 }

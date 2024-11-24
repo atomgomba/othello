@@ -6,6 +6,7 @@ import com.ekezet.hurok.ViewState
 import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.data.models.isDark
 import com.ekezet.othello.core.data.models.isLight
+import com.ekezet.othello.core.game.data.AppSettings
 import com.ekezet.othello.core.game.data.BoardDisplayOptions
 import com.ekezet.othello.core.game.data.Default
 import com.ekezet.othello.core.game.data.DefaultConfirmExit
@@ -14,10 +15,13 @@ import com.ekezet.othello.core.game.data.DefaultLightStrategy
 import com.ekezet.othello.core.game.data.GameSettings
 import com.ekezet.othello.core.game.data.HistoryDisplayOptions
 import com.ekezet.othello.core.game.data.HistorySettings
+import com.ekezet.othello.core.game.data.IAppSettings
 import com.ekezet.othello.core.game.data.IGameSettings
 import com.ekezet.othello.core.game.data.IHistorySettings
+import com.ekezet.othello.core.game.dependency.AppSettingsPublisher
 import com.ekezet.othello.core.game.dependency.GameSettingsPublisher
 import com.ekezet.othello.core.game.dependency.HistorySettingsPublisher
+import com.ekezet.othello.core.game.store.AppSettingsStore
 import com.ekezet.othello.core.game.store.GameHistoryStore
 import com.ekezet.othello.core.game.store.GameSettingsStore
 import com.ekezet.othello.core.game.store.HistorySettingsStore
@@ -26,14 +30,14 @@ import com.ekezet.othello.core.game.strategy.Strategy
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 
-data class SettingsModel(
+internal data class SettingsModel(
     override val lightStrategy: Strategy? = DefaultLightStrategy,
     override val darkStrategy: Strategy? = DefaultDarkStrategy,
     override val boardDisplayOptions: BoardDisplayOptions = BoardDisplayOptions.Default,
     override val historyDisplayOptions: HistoryDisplayOptions = HistoryDisplayOptions.Default,
     override val confirmExit: Boolean = DefaultConfirmExit,
     internal val selectingStrategyFor: Disk? = null,
-) : IGameSettings, IHistorySettings {
+) : IGameSettings, IHistorySettings, IAppSettings {
     internal fun showStrategySelectorFor(player: Disk) = copy(selectingStrategyFor = player)
     internal fun dismissStrategySelector() = copy(selectingStrategyFor = null)
     internal fun setStrategyFor(player: Disk, strategy: Strategy?) =
@@ -112,14 +116,17 @@ internal data class SettingsState(
 data class SettingsArgs(
     val gameSettings: GameSettings,
     val historySettings: HistorySettings,
+    val appSettings: AppSettings,
 )
 
 internal class SettingsDependency(
     gameSettingsStore: GameSettingsStore? = null,
     historySettingsStore: HistorySettingsStore? = null,
+    appSettingsStore: AppSettingsStore? = null,
     gameHistoryStore: GameHistoryStore? = null,
-) : KoinComponent, GameSettingsPublisher, HistorySettingsPublisher {
+) : KoinComponent, GameSettingsPublisher, HistorySettingsPublisher, AppSettingsPublisher {
     override val gameSettingsStore: GameSettingsStore = gameSettingsStore ?: get()
     override val historySettingsStore: HistorySettingsStore = historySettingsStore ?: get()
+    override val appSettingsStore: AppSettingsStore = appSettingsStore ?: get()
     override val gameHistoryStore: GameHistoryStore = gameHistoryStore ?: get()
 }

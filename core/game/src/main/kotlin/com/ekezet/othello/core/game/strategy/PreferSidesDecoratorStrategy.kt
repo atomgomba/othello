@@ -7,7 +7,7 @@ import com.ekezet.othello.core.data.models.x
 import com.ekezet.othello.core.data.models.y
 import com.ekezet.othello.core.game.state.OthelloGameState
 
-class PreferSidesDecoratorStrategy(
+data class PreferSidesDecoratorStrategy(
     override val wrapped: Strategy,
 ) : DecoratedStrategy {
     override val name: String

@@ -34,19 +34,18 @@ import androidx.compose.ui.zIndex
 import com.ekezet.hurok.AnyActionEmitter
 import com.ekezet.hurok.compose.LoopWrapper
 import com.ekezet.othello.core.data.models.Disk
-import com.ekezet.othello.core.data.models.Position
 import com.ekezet.othello.core.data.models.isDark
 import com.ekezet.othello.core.data.models.isLight
 import com.ekezet.othello.core.data.models.numDark
 import com.ekezet.othello.core.data.models.numLight
 import com.ekezet.othello.core.game.GameEnd.EndedTie
 import com.ekezet.othello.core.game.GameEnd.EndedWin
-import com.ekezet.othello.core.game.data.GameSettings
 import com.ekezet.othello.core.ui.R
 import com.ekezet.othello.core.ui.components.GameBoard
 import com.ekezet.othello.core.ui.components.GamePiece
 import com.ekezet.othello.core.ui.orHumanPlayer
 import com.ekezet.othello.feature.gameboard.ACTION_DELAY_MILLIS
+import com.ekezet.othello.feature.gameboard.GameBoardArgs
 import com.ekezet.othello.feature.gameboard.GameBoardLoop
 import com.ekezet.othello.feature.gameboard.GameBoardState
 import com.ekezet.othello.feature.gameboard.actions.ContinueGame
@@ -67,7 +66,7 @@ private val highlightColor: Color
 @ExperimentalLayoutApi
 @Composable
 fun GameBoardView(
-    args: GameSettings,
+    args: GameBoardArgs,
     parentEmitter: AnyActionEmitter?,
     onStrategyClick: OnStrategyClick,
     modifier: Modifier = Modifier,
@@ -107,8 +106,8 @@ internal fun GameBoardState.GameBoardViewImpl(
                     nextMovePosition = nextMovePosition,
                     ended = ended,
                     overlayFactory = { colIndex, rowIndex -> overlay.getAt(colIndex, rowIndex) },
-                    isClickable = isHumanPlayer,
-                    onCellClick = { x, y -> emit(OnMoveMade(Position(x, y))) },
+                    isClickable = isBoardClickable,
+                    onCellClick = { xy -> emit(OnMoveMade(xy)) },
                 )
             }
 

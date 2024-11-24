@@ -2,12 +2,13 @@ package com.ekezet.othello.feature.gamehistory.ui
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDownward
 import androidx.compose.material3.FloatingActionButton
@@ -41,6 +42,7 @@ import kotlinx.coroutines.launch
 fun GameHistoryView(
     args: GameHistoryArgs,
     listState: LazyListState,
+    onTurnClick: (turn: Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LoopWrapper(
@@ -49,6 +51,7 @@ fun GameHistoryView(
     ) {
         GameHistoryViewImpl(
             listState = listState,
+            onTurnClick = onTurnClick,
             modifier = modifier,
         )
     }
@@ -57,6 +60,7 @@ fun GameHistoryView(
 @Composable
 private fun GameHistoryState.GameHistoryViewImpl(
     listState: LazyListState,
+    onTurnClick: (turn: Int) -> Unit,
     modifier: Modifier,
 ) {
     val notAllItemsVisible by remember {
@@ -75,8 +79,12 @@ private fun GameHistoryState.GameHistoryViewImpl(
             state = listState,
             modifier = Modifier.consumeWindowInsets(paddingValues),
         ) {
-            items(items = historyItems, key = { it.composeKey }) {
-                HistoryItemView(item = it, isGrayscaleMode = isGrayscaleMode)
+            itemsIndexed(items = historyItems, key = { _, item -> item.composeKey }) { index, item ->
+                HistoryItemView(
+                    item = item,
+                    modifier = Modifier.clickable { onTurnClick(index) },
+                    isGrayscaleMode = isGrayscaleMode,
+                )
             }
 
             if (gameEnd != null) {

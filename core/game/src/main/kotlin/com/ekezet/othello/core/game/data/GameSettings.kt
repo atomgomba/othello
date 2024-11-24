@@ -7,7 +7,6 @@ interface IGameSettings {
     val boardDisplayOptions: BoardDisplayOptions
     val lightStrategy: Strategy?
     val darkStrategy: Strategy?
-    val confirmExit: Boolean
 
     fun containsDifferentStrategy(other: IGameSettings) =
         other.darkStrategy != darkStrategy || other.lightStrategy != lightStrategy
@@ -17,7 +16,6 @@ data class GameSettings(
     override val boardDisplayOptions: BoardDisplayOptions,
     override val lightStrategy: Strategy?,
     override val darkStrategy: Strategy?,
-    override val confirmExit: Boolean,
 ) : IGameSettings {
     companion object
 }
@@ -28,6 +26,5 @@ infix fun GameSettings.Companion.from(other: IGameSettings) = with(other) {
         boardDisplayOptions = boardDisplayOptions,
         lightStrategy = lightStrategy,
         darkStrategy = darkStrategy,
-        confirmExit = confirmExit,
     )
 }

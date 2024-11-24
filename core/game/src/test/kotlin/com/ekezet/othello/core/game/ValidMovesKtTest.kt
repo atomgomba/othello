@@ -1,14 +1,13 @@
 package com.ekezet.othello.core.game
 
 import com.ekezet.othello.core.data.models.Disk
-import com.ekezet.othello.core.data.models.flip
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 internal class ValidMovesKtTest {
     private val subject = Disk.Dark
-    private val other = subject.flip()
+    private val other = !subject
 
     @Test
     fun `findValidIndices should return something`() {

@@ -11,9 +11,9 @@ abstract class Route {
     open val spec: String
         get() = id
 
-    open val arguments: List<NamedNavArgument>?
-        get() = null
+    open val arguments: List<NamedNavArgument>
+        get() = emptyList()
 
-    open fun make(params: Map<String, String?> = emptyMap()) =
+    open fun make(params: Map<String, Any?> = emptyMap()) =
         id
 }

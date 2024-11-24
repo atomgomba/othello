@@ -36,10 +36,11 @@ import com.ekezet.othello.feature.gamehistory.ui.viewModels.HistoryItem
 @Composable
 internal fun HistoryItemView(
     item: HistoryItem,
+    modifier: Modifier = Modifier,
     isGrayscaleMode: Boolean = false,
 ) = with(item) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 8.dp)
             .height(IntrinsicSize.Min),

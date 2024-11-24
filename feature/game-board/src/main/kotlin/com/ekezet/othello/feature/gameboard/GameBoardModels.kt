@@ -1,6 +1,5 @@
 package com.ekezet.othello.feature.gameboard
 
-import androidx.annotation.IntRange
 import androidx.compose.animation.core.AnimationConstants.DefaultDurationMillis
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
@@ -12,7 +11,6 @@ import com.ekezet.othello.core.data.models.Position
 import com.ekezet.othello.core.game.GameEnd
 import com.ekezet.othello.core.game.data.BoardDisplayOptions
 import com.ekezet.othello.core.game.data.Default
-import com.ekezet.othello.core.game.data.DefaultConfirmExit
 import com.ekezet.othello.core.game.data.DefaultDarkStrategy
 import com.ekezet.othello.core.game.data.DefaultLightStrategy
 import com.ekezet.othello.core.game.data.IGameSettings
@@ -37,26 +35,31 @@ internal const val ACTION_DELAY_MILLIS: Long = DefaultDurationMillis
     .times(1.5F)
     .toLong()
 
-data class GameBoardModel(
-    internal val gameState: OthelloGameState = OthelloGameState.Start,
-    @IntRange(from = 0) internal val currentTurn: Int = 0,
+@ConsistentCopyVisibility
+data class GameBoardModel internal constructor(
+    private val gameState: OthelloGameState = OthelloGameState.Start,
+    internal val selectedTurn: Int = 0,
     override val boardDisplayOptions: BoardDisplayOptions = BoardDisplayOptions.Default,
     override val lightStrategy: Strategy? = DefaultLightStrategy,
     override val darkStrategy: Strategy? = DefaultDarkStrategy,
-    override val confirmExit: Boolean = DefaultConfirmExit,
     internal val nextMovePosition: Position? = null,
     internal val passed: Boolean = false,
     internal val ended: GameEnd? = null,
 ) : IGameSettings {
-    internal val maxTurnCount: Int
+    internal val turnCount: Int
         inline get() = gameState.turn
 
-    internal val currentGameState: OthelloGameState
-        inline get() = if (currentTurn == maxTurnCount) {
+    internal val isCurrentTurn: Boolean
+        inline get() = selectedTurn == turnCount
+
+    internal val currentGameState: OthelloGameState by lazy {
+        if (isCurrentTurn) {
             gameState
         } else {
-            gameState.history.toPastGameState(0, currentTurn)
+            val toIndex = (selectedTurn + 1).coerceAtMost(turnCount)
+            gameState.history.toPastGameState(0, toIndex)
         }
+    }
 
     internal val currentDisk: Disk
         inline get() = currentGameState.currentDisk
@@ -65,32 +68,40 @@ data class GameBoardModel(
         inline get() = when (this) {
             Disk.Light -> lightStrategy == HumanPlayer
             Disk.Dark -> darkStrategy == HumanPlayer
-            else -> error("Expected Light or Dark, but was $this")
         }
 
+    internal fun resetNewGame(
+        state: OthelloGameState = OthelloGameState.Start,
+    ) = copy(
+        gameState = state,
+        selectedTurn = 0,
+        passed = false,
+        nextMovePosition = null,
+        ended = null,
+    )
+
     internal fun resetNextTurn(
-        nextState: OthelloGameState = OthelloGameState.Start,
+        nextState: OthelloGameState,
         passed: Boolean = false,
     ) = copy(
         gameState = if (passed) nextState.lastState else nextState,
-        currentTurn = if (nextState == OthelloGameState.Start) 0 else currentTurn + 1,
-        nextMovePosition = null,
-        ended = null,
+        selectedTurn = selectedTurn + 1,
         passed = passed,
+        nextMovePosition = null,
     )
 
     internal fun pickNextMoveAt(position: Position?) = copy(
         nextMovePosition = position,
     )
 
-    internal fun stepToPreviousTurn() = if (0 < currentTurn) {
-        copy(currentTurn = currentTurn - 1)
+    internal fun stepToPreviousTurn() = if (0 < selectedTurn) {
+        copy(selectedTurn = selectedTurn - 1)
     } else {
         this
     }
 
-    internal fun stepToNextTurn() = if (currentTurn < maxTurnCount) {
-        copy(currentTurn = currentTurn + 1)
+    internal fun stepToNextTurn() = if (selectedTurn < turnCount) {
+        copy(selectedTurn = selectedTurn + 1)
     } else {
         this
     }
@@ -100,7 +111,7 @@ data class GameBoardModel(
 internal data class GameBoardState(
     val board: BoardList,
     val overlay: BoardOverlayList,
-    @IntRange(from = 1) val displayedTurn: Int,
+    val displayedTurn: Int,
     val displayedMaxTurnCount: Int,
     val hasNextTurn: Boolean,
     val currentDisk: Disk,
@@ -114,6 +125,7 @@ internal data class GameBoardState(
     val celebrate: Boolean,
     val isHumanPlayer: Boolean,
     val passed: Boolean,
+    val isCurrentTurn: Boolean,
 ) : ViewState<GameBoardModel, GameBoardDependency>() {
     val hasPreviousTurn: Boolean
         inline get() = 1 < displayedTurn
@@ -124,14 +136,24 @@ internal data class GameBoardState(
         } else {
             BoardBackground
         }
+
+    val isBoardClickable: Boolean
+        inline get() = isHumanPlayer && isCurrentTurn
 }
+
+data class GameBoardArgs(
+    val selectedTurn: Int?,
+    override val boardDisplayOptions: BoardDisplayOptions,
+    override val lightStrategy: Strategy?,
+    override val darkStrategy: Strategy?,
+) : IGameSettings
 
 class GameBoardDependency(
     gameHistoryStore: GameHistoryStore? = null,
     movesRenderer: MovesRenderer? = null,
 ) : KoinComponent {
-    val gameHistoryStore: GameHistoryStore = gameHistoryStore ?: get()
-    val movesRenderer: MovesRenderer = movesRenderer ?: get()
+    internal val gameHistoryStore: GameHistoryStore = gameHistoryStore ?: get()
+    internal val movesRenderer: MovesRenderer = movesRenderer ?: get()
 }
 
 typealias GameBoardEmitter = ActionEmitter<GameBoardModel, GameBoardDependency>

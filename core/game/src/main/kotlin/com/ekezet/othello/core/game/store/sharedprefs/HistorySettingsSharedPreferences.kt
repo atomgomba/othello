@@ -14,11 +14,12 @@ internal fun SharedPreferences.persist(data: IHistorySettings) = with(edit()) {
     apply()
 }
 
-internal fun SharedPreferences.loadHistorySettings(): HistorySettings =
+internal fun SharedPreferences.loadHistorySettings(): HistorySettings = with(HistorySettings.Default) {
     HistorySettings(
-        historyDisplayOptions = with(HistoryDisplayOptions.Default) {
+        historyDisplayOptions = with(historyDisplayOptions) {
             HistoryDisplayOptions(
                 alwaysScrollToBottom = getBoolean(KEY_ALWAYS_SCROLL_TO_BOTTOM, alwaysScrollToBottom),
             )
         },
     )
+}

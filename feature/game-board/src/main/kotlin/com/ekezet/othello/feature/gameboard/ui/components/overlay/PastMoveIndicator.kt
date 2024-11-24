@@ -18,6 +18,6 @@ internal fun PastMoveIndicator(disk: Disk) {
         color = disk.color,
         modifier = Modifier
             .fillMaxSize(.8F)
-            .border(width = 2.dp, color = moveHighlightColor, CircleShape),
+            .border(width = 3.dp, color = moveHighlightColor, CircleShape),
     ) {}
 }

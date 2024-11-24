@@ -6,7 +6,6 @@ import com.ekezet.othello.core.data.models.BoardWidth
 import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.data.models.Position
 import com.ekezet.othello.core.data.models.absoluteValue
-import com.ekezet.othello.core.data.models.flip
 import com.ekezet.othello.core.data.models.x
 import com.ekezet.othello.core.data.models.y
 import com.ekezet.othello.core.data.removeFirstCompat
@@ -80,7 +79,7 @@ internal fun findValidIndices(disks: Array<out Disk?>, subject: Disk): Set<Valid
         return emptySet()
     }
 
-    val other = subject.flip()
+    val other = !subject
     val result = mutableSetOf<ValidSegment<Int>>()
     var startIndex: Int? = null
 

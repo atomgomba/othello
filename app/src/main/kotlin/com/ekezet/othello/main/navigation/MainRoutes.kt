@@ -32,6 +32,28 @@ sealed class MainRoutes : Route() {
         override val id: String = "game-board"
         override val icon: ImageVector = Icons.Default.PlayArrow
         override val labelRes: Int = R.string.main__nav__game_board
+
+        private const val ShowTurn = "showTurn"
+
+        override val spec: String
+            get() = "$id?$ShowTurn={$ShowTurn}"
+
+        override val arguments: List<NamedNavArgument>
+            get() = listOf(
+                navArgument(ShowTurn) {
+                    type = NavType.IntType
+                    defaultValue = -1
+                },
+            )
+
+        override fun make(params: Map<String, Any?>): String =
+            "$id?$ShowTurn=${params["turn"]}"
+
+        fun make(showTurn: Int): String =
+            make(mapOf("turn" to showTurn))
+
+        fun findShowTurn(entry: NavBackStackEntry): Int? =
+            entry.arguments?.getInt(ShowTurn)?.takeIf { -1 < it }
     }
 
     @ExcludeFromCoverage
@@ -61,7 +83,7 @@ sealed class MainRoutes : Route() {
                 },
             )
 
-        override fun make(params: Map<String, String?>): String =
+        override fun make(params: Map<String, Any?>): String =
             "$id?$PickStrategy=${params["disk"]}"
 
         fun make(pickStrategyFor: Disk): String =

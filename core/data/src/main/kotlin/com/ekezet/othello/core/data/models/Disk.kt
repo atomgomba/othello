@@ -7,10 +7,10 @@ sealed interface Disk {
     data object Dark : Disk
     data object Light : Disk
 
+    operator fun not(): Disk = if (isDark) Light else Dark
+
     companion object
 }
-
-fun Disk.flip() = if (isDark) Light else Dark
 
 val Disk.isDark: Boolean
     inline get() = this is Dark

@@ -18,7 +18,7 @@ fun Strategy.Factory.ofName(name: String): Strategy? =
     Strategies.firstOrNull { it?.name == name }
 
 val Strategy?.requiredName: String
-    get() = this?.name ?: "Human"
+    inline get() = this?.name ?: "Human"
 
 val Strategy?.wrappedName: String
     get() = if (this is DecoratedStrategy) {
@@ -28,7 +28,7 @@ val Strategy?.wrappedName: String
     }
 
 val Strategies
-    get() = buildSet {
+    inline get() = buildSet {
         add(HumanPlayer)
         add(NaiveMaxStrategy)
         add(RandomStrategy)

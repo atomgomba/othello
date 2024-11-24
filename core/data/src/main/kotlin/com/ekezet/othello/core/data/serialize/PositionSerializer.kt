@@ -17,3 +17,12 @@ fun Position?.asString() = if (this == null) {
 } else {
     "${PositionLetters[x]}${PositionNumbers[y]}"
 }
+
+fun String.toPosition() = if (length != 2) {
+    null
+} else {
+    val (first, second) = toCharArray()
+    val x = PositionLetters.indexOf(first)
+    val y = second.digitToInt() + 1
+    Position(x, y)
+}

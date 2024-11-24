@@ -26,12 +26,15 @@ import androidx.navigation.compose.rememberNavController
 import com.ekezet.hurok.compose.LocalActionEmitter
 import com.ekezet.hurok.compose.LoopWrapper
 import com.ekezet.othello.core.game.GameHistory
+import com.ekezet.othello.core.game.data.AppSettings
 import com.ekezet.othello.core.game.data.GameSettings
 import com.ekezet.othello.core.game.data.HistorySettings
+import com.ekezet.othello.core.game.store.AppSettingsStore
 import com.ekezet.othello.core.game.store.GameHistoryStore
 import com.ekezet.othello.core.game.store.GameSettingsStore
 import com.ekezet.othello.core.game.store.HistorySettingsStore
 import com.ekezet.othello.core.ui.render.MovesRenderer
+import com.ekezet.othello.feature.gameboard.GameBoardArgs
 import com.ekezet.othello.feature.gameboard.ui.GameBoardView
 import com.ekezet.othello.feature.gamehistory.GameHistoryArgs
 import com.ekezet.othello.feature.gamehistory.ui.GameHistoryView
@@ -58,11 +61,13 @@ internal fun MainView(
     parentScope: CoroutineScope = rememberCoroutineScope(),
     gameSettingsStore: GameSettingsStore = koinInject(),
     historySettingsStore: HistorySettingsStore = koinInject(),
+    appSettingsStore: AppSettingsStore = koinInject(),
     gameHistoryStore: GameHistoryStore = koinInject(),
     historyRenderer: MovesRenderer = koinInject(),
 ) {
     val gameSettings: GameSettings by gameSettingsStore.settings.collectAsState()
     val historySettings: HistorySettings by historySettingsStore.settings.collectAsState()
+    val appSettings: AppSettings by appSettingsStore.settings.collectAsState()
     val gameHistory: GameHistory by gameHistoryStore.history.collectAsState()
     val historyImages by historyRenderer.renderedImages.collectAsState()
 
@@ -77,6 +82,7 @@ internal fun MainView(
         MainViewImpl(
             gameSettings = gameSettings,
             historySettings = historySettings,
+            appSettings = appSettings,
             gameHistory = gameHistory,
             historyImages = historyImages,
         )
@@ -88,6 +94,7 @@ internal fun MainView(
 internal fun MainState.MainViewImpl(
     gameSettings: GameSettings,
     historySettings: HistorySettings,
+    appSettings: AppSettings,
     gameHistory: GameHistory,
     historyImages: Map<String, ImageBitmap>,
     startDestination: String = MainRoutes.Start,
@@ -125,7 +132,7 @@ internal fun MainState.MainViewImpl(
         emit(OnBackPressed)
     }
 
-    ExitConfirmationSnackbar(hostState = snackbarHostState, confirmExit = gameSettings.confirmExit)
+    ExitConfirmationSnackbar(hostState = snackbarHostState, confirmExit = appSettings.confirmExit)
 
     Scaffold(
         topBar = {
@@ -156,9 +163,15 @@ internal fun MainState.MainViewImpl(
             ) {
                 composable(
                     route = GameBoardRoute.spec,
-                ) {
+                    arguments = GameBoardRoute.arguments,
+                ) { entry ->
                     GameBoardView(
-                        args = gameSettings,
+                        args = GameBoardArgs(
+                            selectedTurn = GameBoardRoute.findShowTurn(entry),
+                            boardDisplayOptions = gameSettings.boardDisplayOptions,
+                            lightStrategy = gameSettings.lightStrategy,
+                            darkStrategy = gameSettings.darkStrategy,
+                        ),
                         parentEmitter = LocalActionEmitter.current,
                         onStrategyClick = { disk ->
                             navigateTo(GameSettingsRoute.make(pickStrategyFor = disk))
@@ -183,6 +196,7 @@ internal fun MainState.MainViewImpl(
                             historySettings = historySettings,
                         ),
                         listState = historyListState,
+                        onTurnClick = { turn -> navigateTo(GameBoardRoute.make(showTurn = turn)) },
                         modifier = destinationModifier,
                     )
                 }
@@ -195,6 +209,7 @@ internal fun MainState.MainViewImpl(
                         args = SettingsArgs(
                             gameSettings = gameSettings,
                             historySettings = historySettings,
+                            appSettings = appSettings,
                         ),
                         selectStrategyFor = GameSettingsRoute.findPickStrategy(entry),
                         modifier = destinationModifier,

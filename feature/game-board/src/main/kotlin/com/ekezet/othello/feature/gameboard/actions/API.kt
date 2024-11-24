@@ -19,6 +19,6 @@ data class OnUpdateGameState(
                 add(WaitBeforeNextTurn(nextMove))
             }
         }
-        return outcome(resetNextTurn(newState), effects = effects.toTypedArray())
+        return outcome(resetNewGame(newState), effects = effects.toTypedArray())
     }
 }
