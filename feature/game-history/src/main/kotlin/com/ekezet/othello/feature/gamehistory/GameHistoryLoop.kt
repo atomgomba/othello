@@ -6,14 +6,12 @@ import com.ekezet.hurok.LoopBuilder
 internal class GameHistoryLoop(
     model: GameHistoryModel,
     renderer: GameHistoryRenderer,
-    args: GameHistoryArgs? = null,
-    firstAction: GameHistoryAction? = null,
+    args: GameHistoryArgs?,
     dependency: GameHistoryDependency? = null,
 ) : Loop<GameHistoryState, GameHistoryModel, GameHistoryArgs, GameHistoryDependency, GameHistoryAction>(
     model = model,
     renderer = renderer,
     args = args,
-    firstAction = firstAction,
     dependency = dependency,
 ) {
     override fun GameHistoryModel.applyArgs(args: GameHistoryArgs) = with(args) {

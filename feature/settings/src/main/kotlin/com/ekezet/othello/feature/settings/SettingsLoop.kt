@@ -6,7 +6,7 @@ import com.ekezet.hurok.LoopBuilder
 internal class SettingsLoop internal constructor(
     model: SettingsModel,
     renderer: SettingsRenderer,
-    args: SettingsArgs? = null,
+    args: SettingsArgs?,
     dependency: SettingsDependency? = null,
 ) : Loop<SettingsState, SettingsModel, SettingsArgs, SettingsDependency, GameSettingsAction>(
     model = model,
@@ -16,11 +16,11 @@ internal class SettingsLoop internal constructor(
 ) {
     override fun SettingsModel.applyArgs(args: SettingsArgs) = with(args) {
         copy(
-            boardDisplayOptions = args.gameSettings.boardDisplayOptions,
-            historyDisplayOptions = args.historySettings.historyDisplayOptions,
-            lightStrategy = args.gameSettings.lightStrategy,
-            darkStrategy = args.gameSettings.darkStrategy,
-            confirmExit = args.gameSettings.confirmExit,
+            boardDisplayOptions = gameSettings.boardDisplayOptions,
+            historyDisplayOptions = historySettings.historyDisplayOptions,
+            lightStrategy = gameSettings.lightStrategy,
+            darkStrategy = gameSettings.darkStrategy,
+            confirmExit = gameSettings.confirmExit,
         )
     }
 

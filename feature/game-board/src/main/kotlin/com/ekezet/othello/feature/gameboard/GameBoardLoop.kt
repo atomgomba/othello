@@ -9,7 +9,7 @@ import com.ekezet.othello.feature.gameboard.actions.OnGameStarted
 internal class GameBoardLoop internal constructor(
     model: GameBoardModel,
     renderer: GameBoardRenderer,
-    args: GameSettings? = null,
+    args: GameSettings?,
     dependency: GameBoardDependency? = null,
     firstAction: GameBoardAction? = null,
 ) : Loop<GameBoardState, GameBoardModel, GameSettings, GameBoardDependency, GameBoardAction>(
@@ -19,20 +19,18 @@ internal class GameBoardLoop internal constructor(
     dependency = dependency,
     firstAction = firstAction,
 ) {
-    override fun GameBoardModel.applyArgs(args: GameSettings): GameBoardModel {
-        val strategyChanged = containsDifferentStrategy(args)
-        return copy(
+    override fun GameBoardModel.applyArgs(args: GameSettings): GameBoardModel =
+        copy(
             boardDisplayOptions = args.boardDisplayOptions,
             lightStrategy = args.lightStrategy,
             darkStrategy = args.darkStrategy,
         ).run {
-            if (strategyChanged) {
-                resetNextTurn()
+            if (this@applyArgs.containsDifferentStrategy(args)) {
+                resetNewGame()
             } else {
-                this
+                this@run
             }
         }
-    }
 
     internal companion object Builder :
         LoopBuilder<GameBoardState, GameBoardModel, GameSettings, GameBoardDependency, GameBoardAction> {
