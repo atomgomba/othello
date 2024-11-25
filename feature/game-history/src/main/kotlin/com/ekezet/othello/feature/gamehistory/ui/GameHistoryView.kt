@@ -3,9 +3,8 @@ package com.ekezet.othello.feature.gamehistory.ui
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
@@ -59,24 +58,20 @@ private fun GameHistoryState.GameHistoryViewImpl(
     modifier: Modifier,
 ) {
     val notAllItemsVisible by remember {
-        derivedStateOf { listState.layoutInfo.visibleItemsInfo.size < historyItems.lastIndex }
+        derivedStateOf { listState.layoutInfo.visibleItemsInfo.lastIndex < historyItems.lastIndex }
     }
 
     Scaffold(
-        modifier = modifier.then(
-            Modifier.fillMaxSize(),
-        ),
+        modifier = modifier,
         floatingActionButton = {
-            AnimatedVisibility(visible = historyItems.isNotEmpty() && notAllItemsVisible) {
+            AnimatedVisibility(visible = notAllItemsVisible) {
                 ListNavigationFab(listState, historyItems.lastIndex)
             }
         },
     ) { paddingValues ->
         LazyColumn(
             state = listState,
-            modifier = Modifier
-                .padding(paddingValues)
-                .fillMaxSize(),
+            modifier = Modifier.consumeWindowInsets(paddingValues),
         ) {
             items(items = historyItems, key = { it.composeKey }) {
                 HistoryItemView(item = it, isGrayscaleMode = isGrayscaleMode)

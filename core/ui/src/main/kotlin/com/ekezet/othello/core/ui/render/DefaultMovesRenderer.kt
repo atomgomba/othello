@@ -5,6 +5,9 @@ import com.ekezet.othello.core.game.MoveHistory
 import com.ekezet.othello.core.game.PastMove
 import com.ekezet.othello.core.ui.render.DefaultMovesRenderer.RenderJob.Done
 import com.ekezet.othello.core.ui.render.DefaultMovesRenderer.RenderJob.Running
+import kotlinx.collections.immutable.ImmutableMap
+import kotlinx.collections.immutable.persistentMapOf
+import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart.LAZY
@@ -28,8 +31,8 @@ internal class DefaultMovesRenderer(
         onRender = PastMove::renderToBitmap,
     )
 
-    private val _renderedImages = MutableStateFlow<Map<String, ImageBitmap>>(emptyMap())
-    override val renderedImages: StateFlow<Map<String, ImageBitmap>>
+    private val _renderedImages = MutableStateFlow<ImmutableMap<String, ImageBitmap>>(persistentMapOf())
+    override val renderedImages: StateFlow<ImmutableMap<String, ImageBitmap>>
         get() = _renderedImages.asStateFlow()
 
     private val renderJobs: MutableMap<String, RenderJob> = mutableMapOf()
@@ -83,6 +86,7 @@ internal class DefaultMovesRenderer(
         _renderedImages.value = renderJobs.values
             .filterIsInstance<Done>()
             .associate { it.jobId to it.bitmap }
+            .toImmutableMap()
     }
 
     internal sealed interface RenderJob {
