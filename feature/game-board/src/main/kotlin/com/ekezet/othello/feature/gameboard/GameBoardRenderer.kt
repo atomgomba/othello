@@ -28,7 +28,7 @@ internal class GameBoardRenderer : Renderer<GameBoardModel, GameBoardDependency,
             displayOptions = boardDisplayOptions,
             ended = ended.takeIf { isCurrentTurn },
             passed = passed,
-            celebrate = ended is EndedWin && ended.winner.isHumanPlayer,
+            celebrate = isCurrentTurn && ended is EndedWin && ended.winner.isHumanPlayer,
             isHumanPlayer = currentGameState.currentDisk.isHumanPlayer,
             isCurrentTurn = isCurrentTurn,
         )

@@ -47,7 +47,7 @@ data class CurrentGameState internal constructor(
 
     override val lastState: CurrentGameState by lazy {
         history.last().run {
-            CurrentGameState(board = board, history = history.dropLast(1))
+            copy(history = history.dropLast(1))
         }
     }
 

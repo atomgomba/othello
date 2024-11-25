@@ -86,7 +86,7 @@ fun GameBoardView(
 @Composable
 internal fun GameBoardState.GameBoardViewImpl(
     onStrategyClick: OnStrategyClick,
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
 ) {
     Box(
         modifier = modifier.then(Modifier.padding(16.dp)),
