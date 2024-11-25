@@ -67,7 +67,9 @@ fun GameBoardView(
     LoopWrapper(
         builder = GameBoardLoop,
         args = args,
-        parentEmitter = parentEmitter,
+        parentEmitter = checkNotNull(parentEmitter) {
+            "parentEmitter need to be set to emit GameBoard actions from the parent"
+        },
     ) {
         GameBoardViewImpl(onStrategyClick, modifier)
     }
