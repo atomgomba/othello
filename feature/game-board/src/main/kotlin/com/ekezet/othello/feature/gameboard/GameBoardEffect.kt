@@ -44,7 +44,7 @@ internal data class PublishPastMoves(
     private val gameEnd: GameEnd? = null,
 ) : GameBoardEffect {
     override suspend fun GameBoardEmitter.trigger(dependency: GameBoardDependency?) = dependency?.run {
-        gameHistoryStore.reset(newState.history, gameEnd)
-        movesRenderer.updateJobs(newState.history)
+        gameHistoryStore.reset(newState.pastMoves, gameEnd)
+        movesRenderer.updateJobs(newState.pastMoves)
     }
 }

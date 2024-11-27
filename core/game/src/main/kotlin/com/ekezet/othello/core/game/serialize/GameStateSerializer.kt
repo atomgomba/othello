@@ -12,10 +12,10 @@ import com.ekezet.othello.core.game.strategy.requiredName
 object GameStateSerializer {
     fun toString(gameState: CurrentGameState, gameSettings: IGameSettings) = buildString {
         appendLine(serializedHeader(gameSettings))
-        for (pastMove in gameState.history) {
+        for (pastMove in gameState.pastMoves) {
             appendLine(pastMoveToString(pastMove))
         }
-        val lastMove = gameState.history.lastOrNull() ?: return@buildString
+        val lastMove = gameState.pastMoves.lastOrNull() ?: return@buildString
         val (numDark, numLight) = lastMove.board.diskCount
         appendLine("Disks: Dark: $numDark; Light: $numLight")
     }

@@ -57,7 +57,7 @@ data class GameBoardModel internal constructor(
             gameState
         } else {
             val toIndex = (selectedTurn + 1).coerceAtMost(turnCount)
-            gameState.history.toPastGameState(0, toIndex)
+            gameState.pastMoves.toPastGameState(0, toIndex)
         }
     }
 

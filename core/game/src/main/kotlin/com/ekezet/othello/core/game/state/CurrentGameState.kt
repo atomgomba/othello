@@ -27,9 +27,9 @@ import timber.log.Timber
 @ConsistentCopyVisibility
 data class CurrentGameState internal constructor(
     override val board: Board,
-    override val history: MoveHistory,
+    override val pastMoves: MoveHistory,
 ) : OthelloGameState {
-    override val turn: Int = history.size
+    override val turn: Int = pastMoves.size
 
     override val currentDisk: Disk = if ((turn % 2) == 0) {
         Disk.Dark
@@ -46,8 +46,8 @@ data class CurrentGameState internal constructor(
     }
 
     override val lastState: CurrentGameState by lazy {
-        history.last().run {
-            copy(history = history.dropLast(1))
+        pastMoves.last().run {
+            copy(pastMoves = pastMoves.dropLast(1))
         }
     }
 
@@ -68,7 +68,7 @@ data class CurrentGameState internal constructor(
         }
         val nextState = copy(
             board = nextBoard,
-            history = history + PastMove(
+            pastMoves = pastMoves + PastMove(
                 board = nextBoard.deepClone(),
                 moveAt = moveAt,
                 disk = currentDisk,
@@ -96,7 +96,7 @@ data class CurrentGameState internal constructor(
             Timber.i("Player passed ($nextDisk)")
             PassTurn(
                 state = nextState.copy(
-                    history = nextState.history + PastMove(
+                    pastMoves = nextState.pastMoves + PastMove(
                         board = nextBoard.deepClone(),
                         moveAt = null,
                         disk = nextDisk,
@@ -125,14 +125,14 @@ data class CurrentGameState internal constructor(
         other as CurrentGameState
 
         if (!board.contentDeepEquals(other.board)) return false
-        if (history != other.history) return false
+        if (pastMoves != other.pastMoves) return false
 
         return true
     }
 
     override fun hashCode(): Int {
         var result = board.contentDeepHashCode()
-        result = 31 * result + history.hashCode()
+        result = 31 * result + pastMoves.hashCode()
         return result
     }
 
@@ -142,5 +142,5 @@ data class CurrentGameState internal constructor(
 fun CurrentGameState.Companion.new(board: Board): OthelloGameState =
     CurrentGameState(
         board = board,
-        history = emptyList(),
+        pastMoves = emptyList(),
     )

@@ -48,7 +48,7 @@ internal class GameBoardRenderer : Renderer<GameBoardModel, GameBoardDependency,
             items.putAt(nextMovePosition, NextMoveIndicatorOverlayItem(currentDisk))
         }
         if (!isCurrentTurn) {
-            currentGameState.history.lastOrNull()?.let { pastMove ->
+            currentGameState.pastMoves.lastOrNull()?.let { pastMove ->
                 val moveAt = pastMove.moveAt
                 if (moveAt != null) {
                     items.putAt(moveAt, PastMoveIndicatorOverlayItem(pastMove.disk))

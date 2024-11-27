@@ -24,7 +24,7 @@ internal class CurrentGameStateTest {
     fun testTurn() {
         val subject = CurrentGameState(
             board = BoardFactory.starter(),
-            history = listOf(mockk(), mockk()),
+            pastMoves = listOf(mockk(), mockk()),
         )
 
         assertEquals(2, subject.turn)
@@ -34,7 +34,7 @@ internal class CurrentGameStateTest {
     fun testCurrentDisk() {
         val subject = CurrentGameState(
             board = BoardFactory.starter(),
-            history = listOf(mockk(), mockk()),
+            pastMoves = listOf(mockk(), mockk()),
         )
 
         assertEquals(Disk.Dark, subject.currentDisk)

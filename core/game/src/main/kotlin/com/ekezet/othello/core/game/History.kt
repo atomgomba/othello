@@ -48,7 +48,7 @@ fun MoveHistory.toCurrentGameState(fromIndex: Int = 0, toIndex: Int = size): Cur
     val pastMoves = subList(fromIndex, toIndex)
     return CurrentGameState(
         board = pastMoves.lastOrNull()?.board ?: StartBoard,
-        history = pastMoves,
+        pastMoves = pastMoves,
     )
 }
 

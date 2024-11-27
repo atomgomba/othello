@@ -15,7 +15,7 @@ class PastGameState internal constructor(
 
     override val validMoves: Set<ValidMove> by lazy {
         // find valid moves for the previous board state
-        (history.dropLast(1).lastOrNull()?.board ?: StartBoard).findValidMoves(currentDisk)
+        (pastMoves.dropLast(1).lastOrNull()?.board ?: StartBoard).findValidMoves(currentDisk)
     }
 
     @Throws(InvalidPastMoveException::class)
