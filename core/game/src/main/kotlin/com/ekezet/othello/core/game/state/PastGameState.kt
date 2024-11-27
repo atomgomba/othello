@@ -8,8 +8,9 @@ import com.ekezet.othello.core.game.data.StartBoard
 import com.ekezet.othello.core.game.findValidMoves
 import com.ekezet.othello.core.game.throwable.InvalidPastMoveException
 
-class PastGameState internal constructor(
-    wrapped: CurrentGameState,
+@ConsistentCopyVisibility
+data class PastGameState internal constructor(
+    private val wrapped: CurrentGameState,
 ) : OthelloGameState by wrapped {
     override val currentDisk: Disk = !wrapped.currentDisk
 

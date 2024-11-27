@@ -3,7 +3,10 @@ package com.ekezet.othello.feature.gamehistory
 import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.data.models.Position
 import com.ekezet.othello.core.data.models.diskCount
+import com.ekezet.othello.core.data.models.numDark
+import com.ekezet.othello.core.data.models.numLight
 import com.ekezet.othello.core.game.GameEnd
+import com.ekezet.othello.core.game.MoveHistory
 import com.ekezet.othello.core.game.PastMove
 import com.ekezet.othello.core.game.data.BoardDisplayOptions
 import com.ekezet.othello.core.game.data.Default
@@ -29,10 +32,10 @@ internal class GameHistoryRendererTest {
             disk = Disk.Dark,
             turn = 1,
         )
-        val moveHistory = listOf(pastMove)
         val gameEnd = GameEnd.EndedTie
         val isGrayscaleMode = true
         val alwaysScrollToBottom = false
+        val moveHistory: MoveHistory = listOf(pastMove)
 
         val initModel = GameHistoryModel(
             moveHistory = moveHistory,
@@ -58,8 +61,8 @@ internal class GameHistoryRendererTest {
                     move = pastMove.moveAt,
                     disk = pastMove.disk,
                     board = pastMove.board.toImmutableList(),
-                    darkCount = pastMove.board.diskCount.first,
-                    lightCount = pastMove.board.diskCount.second,
+                    darkCount = pastMove.board.diskCount.numDark,
+                    lightCount = pastMove.board.diskCount.numLight,
                     image = null,
                 ),
             ),

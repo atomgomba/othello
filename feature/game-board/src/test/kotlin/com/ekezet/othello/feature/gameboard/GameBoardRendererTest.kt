@@ -23,28 +23,31 @@ internal class GameBoardRendererTest {
 
         val result = subject.renderState(initModel)
 
-        val expectedOverlay = initModel.gameState.board.newEmptyOverlay().apply {
-            putAt(3, 2, ValidMoveIndicatorOverlayItem(disk = initModel.gameState.currentDisk))
-            putAt(4, 5, ValidMoveIndicatorOverlayItem(disk = initModel.gameState.currentDisk))
-            putAt(2, 3, ValidMoveIndicatorOverlayItem(disk = initModel.gameState.currentDisk))
-            putAt(5, 4, ValidMoveIndicatorOverlayItem(disk = initModel.gameState.currentDisk))
+        val expectedOverlay = initModel.currentGameState.board.newEmptyOverlay().apply {
+            putAt(3, 2, ValidMoveIndicatorOverlayItem(disk = initModel.currentGameState.currentDisk))
+            putAt(4, 5, ValidMoveIndicatorOverlayItem(disk = initModel.currentGameState.currentDisk))
+            putAt(2, 3, ValidMoveIndicatorOverlayItem(disk = initModel.currentGameState.currentDisk))
+            putAt(5, 4, ValidMoveIndicatorOverlayItem(disk = initModel.currentGameState.currentDisk))
         }
         val expectedState = with(initModel) {
             GameBoardState(
-                board = gameState.board.toImmutableList(),
+                board = currentGameState.board.toImmutableList(),
                 overlay = expectedOverlay.toImmutableList(),
-                currentDisk = gameState.currentDisk,
+                currentDisk = currentGameState.currentDisk,
                 darkStrategyName = darkStrategy?.name,
                 lightStrategyName = lightStrategy?.name,
-                diskCount = gameState.diskCount,
+                diskCount = currentGameState.diskCount,
                 opponentName = lightStrategy?.name,
-                displayedTurn = gameState.turn + 1,
+                displayedTurn = currentGameState.turn + 1,
+                displayedMaxTurnCount = turnCount + 1,
+                hasNextTurn = false,
+                isCurrentTurn = true,
                 nextMovePosition = nextMovePosition,
                 displayOptions = boardDisplayOptions,
                 ended = ended,
                 passed = passed,
                 celebrate = false,
-                isHumanPlayer = gameState.currentDisk.isHumanPlayer,
+                isHumanPlayer = currentGameState.currentDisk.isHumanPlayer,
             )
         }
 
@@ -63,20 +66,23 @@ internal class GameBoardRendererTest {
 
         val expectedState = with(initModel) {
             GameBoardState(
-                board = gameState.board.toImmutableList(),
-                overlay = gameState.board.newEmptyOverlay().toImmutableList(),
-                currentDisk = gameState.currentDisk,
+                board = currentGameState.board.toImmutableList(),
+                overlay = currentGameState.board.newEmptyOverlay().toImmutableList(),
+                currentDisk = currentGameState.currentDisk,
                 darkStrategyName = darkStrategy?.name,
                 lightStrategyName = lightStrategy?.name,
-                diskCount = gameState.diskCount,
+                diskCount = currentGameState.diskCount,
                 opponentName = lightStrategy?.name,
-                displayedTurn = gameState.turn + 1,
+                displayedTurn = currentGameState.turn + 1,
+                displayedMaxTurnCount = turnCount + 1,
+                hasNextTurn = false,
+                isCurrentTurn = true,
                 nextMovePosition = nextMovePosition,
                 displayOptions = boardDisplayOptions,
                 ended = ended,
                 passed = passed,
                 celebrate = false,
-                isHumanPlayer = gameState.currentDisk.isHumanPlayer,
+                isHumanPlayer = currentGameState.currentDisk.isHumanPlayer,
             )
         }
 
@@ -94,25 +100,28 @@ internal class GameBoardRendererTest {
 
         val result = subject.renderState(initModel)
 
-        val expectedOverlay = initModel.gameState.board.newEmptyOverlay().apply {
-            putAt(2, 3, NextMoveIndicatorOverlayItem(disk = initModel.gameState.currentDisk))
+        val expectedOverlay = initModel.currentGameState.board.newEmptyOverlay().apply {
+            putAt(2, 3, NextMoveIndicatorOverlayItem(disk = initModel.currentGameState.currentDisk))
         }
         val expectedState = with(initModel) {
             GameBoardState(
-                board = gameState.board.toImmutableList(),
+                board = currentGameState.board.toImmutableList(),
                 overlay = expectedOverlay.toImmutableList(),
-                currentDisk = gameState.currentDisk,
+                currentDisk = currentGameState.currentDisk,
                 darkStrategyName = darkStrategy?.name,
                 lightStrategyName = lightStrategy?.name,
-                diskCount = gameState.diskCount,
+                diskCount = currentGameState.diskCount,
                 opponentName = lightStrategy?.name,
-                displayedTurn = gameState.turn + 1,
+                displayedTurn = currentGameState.turn + 1,
+                displayedMaxTurnCount = turnCount + 1,
+                hasNextTurn = false,
+                isCurrentTurn = true,
                 nextMovePosition = nextMovePosition,
                 displayOptions = boardDisplayOptions,
                 ended = ended,
                 passed = passed,
                 celebrate = false,
-                isHumanPlayer = gameState.currentDisk.isHumanPlayer,
+                isHumanPlayer = currentGameState.currentDisk.isHumanPlayer,
             )
         }
 
@@ -133,20 +142,61 @@ internal class GameBoardRendererTest {
 
         val expectedState = with(initModel) {
             GameBoardState(
-                board = gameState.board.toImmutableList(),
-                overlay = gameState.board.newEmptyOverlay().toImmutableList(),
-                currentDisk = gameState.currentDisk,
+                board = currentGameState.board.toImmutableList(),
+                overlay = currentGameState.board.newEmptyOverlay().toImmutableList(),
+                currentDisk = currentGameState.currentDisk,
                 darkStrategyName = darkStrategy?.name,
                 lightStrategyName = lightStrategy?.name,
-                diskCount = gameState.diskCount,
+                diskCount = currentGameState.diskCount,
                 opponentName = lightStrategy?.name,
-                displayedTurn = gameState.turn + 1,
+                displayedTurn = currentGameState.turn + 1,
+                displayedMaxTurnCount = turnCount + 1,
+                hasNextTurn = false,
+                isCurrentTurn = true,
                 nextMovePosition = nextMovePosition,
                 displayOptions = boardDisplayOptions,
                 ended = ended,
                 passed = passed,
                 celebrate = true,
-                isHumanPlayer = gameState.currentDisk.isHumanPlayer,
+                isHumanPlayer = currentGameState.currentDisk.isHumanPlayer,
+            )
+        }
+
+        assertEquals(expectedState, result)
+    }
+
+    @Test
+    fun `renderToState when ended is set and human wins and past turn`() {
+        val winner = Disk.Dark
+        val initModel = GameBoardModel(
+            selectedTurn = 42,
+            boardDisplayOptions = BoardDisplayOptions.Default.copy(
+                showPossibleMoves = false,
+            ),
+            ended = EndedWin(winner = winner),
+        )
+
+        val result = subject.renderState(initModel)
+
+        val expectedState = with(initModel) {
+            GameBoardState(
+                board = currentGameState.board.toImmutableList(),
+                overlay = currentGameState.board.newEmptyOverlay().toImmutableList(),
+                currentDisk = currentGameState.currentDisk,
+                darkStrategyName = darkStrategy?.name,
+                lightStrategyName = lightStrategy?.name,
+                diskCount = currentGameState.diskCount,
+                opponentName = lightStrategy?.name,
+                displayedTurn = 43,
+                displayedMaxTurnCount = turnCount + 1,
+                hasNextTurn = false,
+                isCurrentTurn = false,
+                nextMovePosition = nextMovePosition,
+                displayOptions = boardDisplayOptions,
+                ended = null,
+                passed = passed,
+                celebrate = false,
+                isHumanPlayer = currentGameState.currentDisk.isHumanPlayer,
             )
         }
 

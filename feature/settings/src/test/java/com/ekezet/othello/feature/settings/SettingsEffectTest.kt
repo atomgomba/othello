@@ -1,9 +1,11 @@
 package com.ekezet.othello.feature.settings
 
 import com.ekezet.hurok.test.EffectTest
+import com.ekezet.othello.core.game.data.AppSettings
 import com.ekezet.othello.core.game.data.Default
 import com.ekezet.othello.core.game.data.GameSettings
 import com.ekezet.othello.core.game.data.HistorySettings
+import com.ekezet.othello.core.game.store.AppSettingsStore
 import com.ekezet.othello.core.game.store.GameHistoryStore
 import com.ekezet.othello.core.game.store.GameSettingsStore
 import com.ekezet.othello.core.game.store.HistorySettingsStore
@@ -27,10 +29,14 @@ internal class SettingsEffectTest : EffectTest() {
     private lateinit var mockHistorySettingsStore: HistorySettingsStore
 
     @MockK
+    private lateinit var mockAppSettingsStore: AppSettingsStore
+
+    @MockK
     private lateinit var mockGameHistoryStore: GameHistoryStore
 
     private val initGameSettings = GameSettings.Default
     private val initHistorySettings = HistorySettings.Default
+    private val initAppSettings = AppSettings.Default
 
     private lateinit var dependency: SettingsDependency
 
@@ -41,6 +47,7 @@ internal class SettingsEffectTest : EffectTest() {
         dependency = SettingsDependency(
             gameSettingsStore = mockGameSettingsStore,
             historySettingsStore = mockHistorySettingsStore,
+            appSettingsStore = mockAppSettingsStore,
             gameHistoryStore = mockGameHistoryStore,
         )
     }
@@ -92,6 +99,22 @@ internal class SettingsEffectTest : EffectTest() {
 
         coVerify {
             mockHistorySettingsStore.update(settings)
+        }
+
+        confirmAllVerified()
+    }
+
+    @Test
+    fun `PublishAppSettings works correctly`() {
+        val settings = initAppSettings.copy()
+
+        coEvery { mockAppSettingsStore.update(settings) } just runs
+        coEvery { mockAppSettingsStore.settings } returns MutableStateFlow(initAppSettings)
+
+        dependency runWith PublishAppSettings(settings)
+
+        coVerify {
+            mockAppSettingsStore.update(settings)
         }
 
         confirmAllVerified()

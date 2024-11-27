@@ -4,7 +4,6 @@ import com.ekezet.hurok.test.after
 import com.ekezet.hurok.test.matches
 import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.data.models.Position
-import com.ekezet.othello.core.data.models.flip
 import com.ekezet.othello.core.data.models.isDark
 import com.ekezet.othello.core.data.models.isLight
 import com.ekezet.othello.core.game.GameEnd
@@ -12,10 +11,13 @@ import com.ekezet.othello.core.game.GameEnd.EndedTie
 import com.ekezet.othello.core.game.GameEnd.EndedWin
 import com.ekezet.othello.core.game.NextTurn
 import com.ekezet.othello.core.game.PassTurn
+import com.ekezet.othello.core.game.PastMove
 import com.ekezet.othello.core.game.Tie
 import com.ekezet.othello.core.game.ValidMove
 import com.ekezet.othello.core.game.Win
+import com.ekezet.othello.core.game.data.StartBoard
 import com.ekezet.othello.core.game.state.CurrentGameState
+import com.ekezet.othello.core.game.state.OthelloGameState
 import com.ekezet.othello.core.game.strategy.HumanPlayer
 import com.ekezet.othello.core.game.strategy.Strategy
 import com.ekezet.othello.core.game.throwable.InvalidNewMoveException
@@ -36,9 +38,11 @@ import kotlin.test.assertFailsWith
 
 @RunWith(JUnitParamsRunner::class)
 internal class GameBoardActionTest {
+    private val mockGameState: OthelloGameState = mockk()
     private val mockLightStrategy: Strategy = mockk()
 
     private val testModel = GameBoardModel(
+        gameState = mockGameState,
         lightStrategy = mockLightStrategy,
     )
 
@@ -66,14 +70,14 @@ internal class GameBoardActionTest {
     @Test
     fun `OnGameStarted works correctly if Dark is NPC`() {
         val nextMove = Position(42, 42)
-        val gameState: CurrentGameState = mockk()
         val darkStrategy: Strategy = mockk {
-            every { deriveNext(gameState) } returns nextMove
+            every { deriveNext(mockGameState) } returns nextMove
         }
+        every { mockGameState.turn } returns 0
 
         val initModel = testModel.copy(
             darkStrategy = darkStrategy,
-            gameState = gameState,
+            gameState = mockGameState,
         )
 
         initModel after OnGameStarted matches {
@@ -81,22 +85,23 @@ internal class GameBoardActionTest {
         }
 
         verify {
-            darkStrategy.deriveNext(gameState)
+            darkStrategy.deriveNext(mockGameState)
+            mockGameState.turn
         }
 
-        confirmVerified(gameState, darkStrategy)
+        confirmVerified(mockGameState, darkStrategy)
     }
 
     @Test
     fun `OnGameStarted works correctly if Dark is NPC and cannot move`() {
-        val gameState: CurrentGameState = mockk()
         val darkStrategy: Strategy = mockk {
-            every { deriveNext(gameState) } returns null
+            every { deriveNext(mockGameState) } returns null
         }
+        every { mockGameState.turn } returns 0
 
         val initModel = testModel.copy(
             darkStrategy = darkStrategy,
-            gameState = gameState,
+            gameState = mockGameState,
         )
 
         assertFailsWith(IllegalStateException::class) {
@@ -104,21 +109,21 @@ internal class GameBoardActionTest {
         }
 
         verify {
-            darkStrategy.deriveNext(gameState)
+            darkStrategy.deriveNext(mockGameState)
+            mockGameState.turn
         }
 
-        confirmVerified(gameState, darkStrategy)
+        confirmVerified(mockGameState, darkStrategy)
     }
 
     @Test
     fun `OnMoveMade works correctly if move is valid`() {
         val position = Position(1, 2)
-        val gameState: CurrentGameState = mockk {
-            every { validMoves } returns setOf(ValidMove(position, mockk()))
-        }
+        every { mockGameState.validMoves } returns setOf(ValidMove(position, mockk()))
+        every { mockGameState.turn } returns 0
 
         val initModel = testModel.copy(
-            gameState = gameState,
+            gameState = mockGameState,
         )
 
         val expectedModel = initModel.pickNextMoveAt(position)
@@ -129,36 +134,49 @@ internal class GameBoardActionTest {
         }
 
         verify {
-            gameState.validMoves
+            mockGameState.validMoves
+            mockGameState.turn
             @Suppress("UnusedEquals")
-            gameState.equals(gameState)
+            mockGameState.equals(mockGameState)
         }
 
-        confirmVerified(gameState)
+        confirmVerified(mockGameState)
     }
 
     @Test
     fun `OnMoveMade works correctly if move is invalid`() {
         val position = Position(42, 42)
+        every { mockGameState.turn } returns 0
+        every { mockGameState.validMoves } returns emptySet()
 
         val initModel = testModel
 
         initModel after OnMoveMade(position) matches {
             assertSkipped()
         }
+
+        verify {
+            mockGameState.turn
+            mockGameState.validMoves
+        }
+
+        confirmVerified(mockGameState)
     }
 
     @Test
     @Parameters(method = "paramsForDisk")
     fun `ContinueGame works correctly if move is invalid`(disk: Disk?) {
         val nextMovePosition = Position(2, 3)
-        val gameState: CurrentGameState = mockk {
-            every { proceed(any()) } throws InvalidNewMoveException(disk!!, nextMovePosition)
-            every { currentDisk } returns disk
+        every { mockGameState.proceed(any()) } throws InvalidNewMoveException(disk!!, nextMovePosition)
+        every { mockGameState.currentDisk } returns disk
+        every { mockGameState.turn } returns 1
+        val pastMove = mockk<PastMove> {
+            every { board } returns StartBoard
         }
+        every { mockGameState.pastMoves } returns listOf(pastMove)
 
         val initModel = testModel.copy(
-            gameState = gameState,
+            gameState = mockGameState,
             nextMovePosition = nextMovePosition,
         )
 
@@ -167,10 +185,11 @@ internal class GameBoardActionTest {
         }
 
         verify {
-            gameState.proceed(nextMovePosition)
+            mockGameState.turn
+            mockGameState.pastMoves
         }
 
-        confirmVerified(gameState)
+        confirmVerified(mockGameState)
     }
 
     @Test
@@ -178,18 +197,17 @@ internal class GameBoardActionTest {
     fun `ContinueGame works correctly if next turn`(disk: Disk?) {
         val nextMovePosition = Position(1, 1)
         val nextState: CurrentGameState = mockk {
-            every { currentDisk } returns disk!!.flip()
+            every { currentDisk } returns disk!!.not()
         }
         val currentMovePosition = Position(2, 3)
-        val gameState: CurrentGameState = mockk {
-            every { proceed(any()) } returns NextTurn(nextState)
-            every { currentDisk } returns disk!!
-        }
+        every { mockGameState.proceed(any()) } returns NextTurn(nextState)
+        every { mockGameState.currentDisk } returns disk!!
+        every { mockGameState.turn } returns 0
 
         every { mockLightStrategy.deriveNext(nextState) } returns nextMovePosition
 
         val initModel = testModel.copy(
-            gameState = gameState,
+            gameState = mockGameState,
             nextMovePosition = currentMovePosition,
         )
 
@@ -198,7 +216,7 @@ internal class GameBoardActionTest {
         initModel after ContinueGame matches {
             assertModel(expectedModel)
 
-            if (disk!!.isDark && expectedModel.darkStrategy == HumanPlayer) {
+            if (disk.isDark && expectedModel.darkStrategy == HumanPlayer) {
                 assertEffects(setOf(WaitBeforeNextTurn(nextMovePosition), PublishPastMoves(nextState)))
             } else {
                 assertEffects(setOf(PublishPastMoves(nextState)))
@@ -206,12 +224,13 @@ internal class GameBoardActionTest {
         }
 
         verify {
-            gameState.proceed(currentMovePosition)
+            mockGameState.turn
+            mockGameState.proceed(currentMovePosition)
             @Suppress("UnusedEquals")
             mockLightStrategy.equals(mockLightStrategy)
         }
 
-        if (disk!!.isDark) {
+        if (disk.isDark) {
             verify {
                 mockLightStrategy.deriveNext(nextState)
                 @Suppress("UnusedEquals")
@@ -219,7 +238,7 @@ internal class GameBoardActionTest {
             }
         }
 
-        confirmVerified(gameState, mockLightStrategy)
+        confirmVerified(mockGameState, mockLightStrategy)
     }
 
     @Test
@@ -227,18 +246,21 @@ internal class GameBoardActionTest {
     fun `ContinueGame works correctly if pass turn`(disk: Disk?) {
         val nextMovePosition = Position(1, 1)
         val nextState: CurrentGameState = mockk {
-            every { currentDisk } returns disk!!.flip()
+            every { currentDisk } returns disk!!.not()
             every { lastState } returns mockk()
         }
         val currentMovePosition = Position(2, 3)
-        val gameState: CurrentGameState = mockk {
-            every { proceed(any()) } returns PassTurn(nextState)
+        every { mockGameState.proceed(any()) } returns PassTurn(nextState)
+        every { mockGameState.turn } returns 0
+        val pastMove = mockk<PastMove> {
+            every { board } returns StartBoard
         }
+        every { mockGameState.pastMoves } returns listOf(pastMove)
 
         every { mockLightStrategy.deriveNext(nextState) } returns nextMovePosition
 
         val initModel = testModel.copy(
-            gameState = gameState,
+            gameState = mockGameState,
             nextMovePosition = currentMovePosition,
         )
 
@@ -258,9 +280,13 @@ internal class GameBoardActionTest {
         }
 
         verify {
-            gameState.proceed(currentMovePosition)
-            @Suppress("UnusedEquals")
-            mockLightStrategy.equals(mockLightStrategy)
+            mockGameState.turn
+            mockGameState.proceed(currentMovePosition)
+            mockLightStrategy == mockLightStrategy
+            nextState.lastState
+            nextState.currentDisk
+            nextState == nextState
+            nextState.hashCode()
         }
 
         if (disk!!.isDark) {
@@ -276,29 +302,32 @@ internal class GameBoardActionTest {
             }
         }
 
-        confirmVerified(gameState, mockLightStrategy)
+        confirmVerified(mockGameState, mockLightStrategy, nextState, pastMove)
     }
 
     @Test
     @Parameters(method = "paramsForDisk")
     fun `ContinueGame works correctly if player wins`(disk: Disk?) {
         val nextState: CurrentGameState = mockk {
-            every { currentDisk } returns disk!!.flip()
+            every { currentDisk } returns disk!!.not()
         }
         val currentMovePosition = Position(2, 3)
-        val gameState: CurrentGameState = mockk {
-            every { proceed(any()) } returns Win(nextState, disk!!)
-            every { currentDisk } returns disk
+        every { mockGameState.proceed(any()) } returns Win(nextState, disk!!)
+        every { mockGameState.currentDisk } returns disk
+        every { mockGameState.turn } returns 0
+        val pastMove = mockk<PastMove> {
+            every { board } returns StartBoard
         }
+        every { mockGameState.pastMoves } returns listOf(pastMove)
 
         val initModel = testModel.copy(
-            gameState = gameState,
+            gameState = mockGameState,
             nextMovePosition = currentMovePosition,
         )
 
         val expectedModel = initModel.resetNextTurn(nextState)
         val expectedEffects = buildSet {
-            add(WaitBeforeGameEnd(EndedWin(disk!!)))
+            add(WaitBeforeGameEnd(EndedWin(disk)))
             add(PublishPastMoves(newState = nextState, gameEnd = EndedWin(disk)))
         }
 
@@ -308,26 +337,30 @@ internal class GameBoardActionTest {
         }
 
         verify {
-            gameState.proceed(currentMovePosition)
+            mockGameState.turn
+            mockGameState.proceed(currentMovePosition)
+            nextState == nextState
+            nextState.hashCode()
+            mockLightStrategy == mockLightStrategy
         }
 
-        confirmVerified(gameState)
+        confirmVerified(mockGameState, nextState, mockLightStrategy, pastMove)
     }
 
     @Test
     @Parameters(method = "paramsForDisk")
     fun `ContinueGame works correctly if game is a tie`(disk: Disk?) {
         val nextState: CurrentGameState = mockk {
-            every { currentDisk } returns disk!!.flip()
+            every { currentDisk } returns disk!!.not()
         }
         val currentMovePosition = Position(2, 3)
-        val gameState: CurrentGameState = mockk {
-            every { proceed(any()) } returns Tie(nextState)
-            every { currentDisk } returns disk!!
-        }
+        every { mockGameState.proceed(any()) } returns Tie(nextState)
+        every { mockGameState.currentDisk } returns disk!!
+        every { mockGameState.turn } returns 0
+        every { mockGameState.pastMoves } returns emptyList()
 
         val initModel = testModel.copy(
-            gameState = gameState,
+            gameState = mockGameState,
             nextMovePosition = currentMovePosition,
         )
 
@@ -343,10 +376,14 @@ internal class GameBoardActionTest {
         }
 
         verify {
-            gameState.proceed(currentMovePosition)
+            mockGameState.turn
+            mockGameState.proceed(currentMovePosition)
+            nextState == nextState
+            nextState.hashCode()
+            mockLightStrategy == mockLightStrategy
         }
 
-        confirmVerified(gameState)
+        confirmVerified(mockGameState, nextState, mockLightStrategy)
     }
 
     @Test
@@ -383,6 +420,58 @@ internal class GameBoardActionTest {
 
         initModel after OnGameEnded(gameEnd) matches {
             assertModel(expectedModel)
+        }
+    }
+
+    @Test
+    fun `OnNextTurnClicked works correctly if has next turn`() {
+        every { mockGameState.turn } returns 1
+
+        val initModel = testModel
+
+        val expectedModel = initModel.copy(
+            selectedTurn = initModel.selectedTurn + 1
+        )
+
+        initModel after OnNextTurnClicked matches {
+            assertModel(expectedModel)
+        }
+    }
+
+    @Test
+    fun `OnNextTurnClicked works correctly if last turn`() {
+        every { mockGameState.turn } returns 1
+
+        val initModel = testModel.copy(
+            selectedTurn = 1,
+        )
+
+        initModel after OnNextTurnClicked matches {
+            assertModel(initModel)
+        }
+    }
+
+    @Test
+    fun `OnPreviousTurnClicked works correctly if has previous turn`() {
+        val initModel = testModel.copy(
+            selectedTurn = 1,
+        )
+
+        val expectedModel = initModel.copy(
+            selectedTurn = initModel.selectedTurn - 1
+        )
+
+        initModel after OnPreviousTurnClicked matches {
+            assertModel(expectedModel)
+        }
+    }
+
+    @Test
+    fun `OnPreviousTurnClicked works correctly if first turn`() {
+        val initModel = testModel
+
+        initModel after OnPreviousTurnClicked matches {
+            assertModel(initModel)
         }
     }
 
