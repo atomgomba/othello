@@ -95,7 +95,7 @@ internal fun HistoryItemView(
                 }
 
                 Text(
-                    text = "${item.darkCount} vs ${item.lightCount}",
+                    text = "$darkCount vs $lightCount",
                     style = MaterialTheme.typography.labelSmall,
                     modifier = Modifier.padding(start = 16.dp),
                 )
@@ -110,7 +110,7 @@ internal fun HistoryItemView(
                 ) {
                     Image(
                         bitmap = image,
-                        contentDescription = item.move?.asString(),
+                        contentDescription = move?.asString(),
                         modifier = Modifier.size(100.dp),
                     )
                 }
