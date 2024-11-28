@@ -9,9 +9,6 @@ import com.ekezet.othello.core.data.models.isLight
 import com.ekezet.othello.core.game.strategy.HumanPlayer
 import com.ekezet.othello.core.game.strategy.RandomStrategy
 import com.ekezet.othello.core.game.strategy.Strategy
-import com.ekezet.othello.feature.settings.ui.defaultModel
-import com.ekezet.othello.feature.settings.ui.showDarkStrategySelectorModel
-import com.ekezet.othello.feature.settings.ui.showLightStrategySelectorModel
 import junitparams.JUnitParamsRunner
 import junitparams.Parameters
 import org.junit.runner.RunWith
@@ -20,6 +17,10 @@ import kotlin.test.assertEquals
 
 @RunWith(JUnitParamsRunner::class)
 internal class SettingsActionTest {
+    private val defaultModel = SettingsModel()
+    private val showDarkStrategySelectorModel = defaultModel.showStrategySelectorFor(Disk.Dark)
+    private val showLightStrategySelectorModel = defaultModel.showStrategySelectorFor(Disk.Light)
+
     private val renderer = SettingsRenderer()
 
     @Test

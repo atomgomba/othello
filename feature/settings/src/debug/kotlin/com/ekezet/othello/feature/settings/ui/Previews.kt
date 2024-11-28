@@ -11,14 +11,9 @@ import com.ekezet.othello.feature.settings.SettingsLoop
 import com.ekezet.othello.feature.settings.SettingsModel
 import com.ekezet.othello.feature.settings.SettingsRenderer
 
-@VisibleForTesting
-internal val defaultModel = SettingsModel()
-
-@VisibleForTesting
-internal val showDarkStrategySelectorModel = defaultModel.showStrategySelectorFor(Disk.Dark)
-
-@VisibleForTesting
-internal val showLightStrategySelectorModel = defaultModel.showStrategySelectorFor(Disk.Light)
+private val defaultModel = SettingsModel()
+private val showDarkStrategySelectorModel = defaultModel.showStrategySelectorFor(Disk.Dark)
+private val showLightStrategySelectorModel = defaultModel.showStrategySelectorFor(Disk.Light)
 
 private fun SettingsModel.toPreviewState() =
     renderState(::SettingsLoop, this, SettingsRenderer())
