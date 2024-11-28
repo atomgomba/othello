@@ -19,9 +19,12 @@ import com.ekezet.othello.core.ui.R
 import com.ekezet.othello.core.ui.components.GamePieceWithBorder
 
 @Composable
-internal fun GameEndItemView(gameEnd: GameEnd) {
+internal fun GameEndItemView(
+    gameEnd: GameEnd,
+    modifier: Modifier = Modifier,
+) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(vertical = 24.dp, horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically,

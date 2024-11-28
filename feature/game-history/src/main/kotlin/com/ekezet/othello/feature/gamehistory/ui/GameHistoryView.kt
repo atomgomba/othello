@@ -43,6 +43,7 @@ fun GameHistoryView(
     args: GameHistoryArgs,
     listState: LazyListState,
     onTurnClick: (turn: Int) -> Unit,
+    onCurrentTurnClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LoopWrapper(
@@ -52,6 +53,7 @@ fun GameHistoryView(
         GameHistoryViewImpl(
             listState = listState,
             onTurnClick = onTurnClick,
+            onCurrentTurnClick = onCurrentTurnClick,
             modifier = modifier,
         )
     }
@@ -61,6 +63,7 @@ fun GameHistoryView(
 private fun GameHistoryState.GameHistoryViewImpl(
     listState: LazyListState,
     onTurnClick: (turn: Int) -> Unit,
+    onCurrentTurnClick: () -> Unit,
     modifier: Modifier,
 ) {
     val notAllItemsVisible by remember {
@@ -89,7 +92,10 @@ private fun GameHistoryState.GameHistoryViewImpl(
 
             if (gameEnd != null) {
                 item(key = "end-result") {
-                    GameEndItemView(gameEnd)
+                    GameEndItemView(
+                        gameEnd = gameEnd,
+                        modifier = Modifier.clickable(onClick = onCurrentTurnClick),
+                    )
                 }
             }
 

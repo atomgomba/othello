@@ -197,6 +197,9 @@ internal fun MainState.MainViewImpl(
                         ),
                         listState = historyListState,
                         onTurnClick = { turn -> navigateTo(GameBoardRoute.make(showTurn = turn)) },
+                        onCurrentTurnClick = {
+                            navigateTo(GameBoardRoute.make(showTurn = gameHistory.history.size))
+                        },
                         modifier = destinationModifier,
                     )
                 }
