@@ -5,11 +5,9 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.ReportDrawn
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
-import androidx.compose.ui.Modifier
 import com.ekezet.othello.core.ui.navigation.Finishable
 import com.ekezet.othello.core.ui.theme.OthelloTheme
 import com.ekezet.othello.main.di.FinishableMainActivity
@@ -18,8 +16,9 @@ import org.koin.java.KoinJavaComponent.getKoin
 @ExperimentalMaterial3WindowSizeClassApi
 class MainActivity : ComponentActivity(), Finishable {
     override fun onCreate(savedInstanceState: Bundle?) {
-        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
+
+        enableEdgeToEdge()
 
         getKoin().declare<Finishable>(
             instance = this,
@@ -29,7 +28,6 @@ class MainActivity : ComponentActivity(), Finishable {
         setContent {
             OthelloTheme {
                 Surface(
-                    modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background,
                 ) {
                     MainView()

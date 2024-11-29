@@ -2,6 +2,7 @@ package com.ekezet.othello.main.ui
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -145,7 +146,7 @@ internal fun MainState.MainViewImpl(
         },
         snackbarHost = {
             SnackbarHost(hostState = snackbarHostState)
-        }
+        },
     ) { innerPadding ->
         NavigationSuiteScaffold(
             navigationSuiteItems = {
@@ -155,11 +156,12 @@ internal fun MainState.MainViewImpl(
                     hasGameHistory = hasGameHistory,
                 )
             },
-            modifier = Modifier.padding(innerPadding),
+            modifier = Modifier.consumeWindowInsets(innerPadding),
         ) {
             NavHost(
                 navController = navController,
                 startDestination = startDestination,
+                modifier = Modifier.padding(top = innerPadding.calculateTopPadding())
             ) {
                 composable(
                     route = GameBoardRoute.spec,

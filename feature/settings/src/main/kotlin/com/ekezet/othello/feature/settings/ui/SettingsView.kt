@@ -1,8 +1,7 @@
 package com.ekezet.othello.feature.settings.ui
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -43,7 +42,7 @@ fun SettingsView(
         builder = SettingsLoop,
         args = args,
     ) {
-        GameSettingsViewImpl(
+        SettingsViewImpl(
             selectStrategyFor = selectStrategyFor,
             modifier = modifier,
             listState = listState,
@@ -53,7 +52,7 @@ fun SettingsView(
 
 @ExperimentalMaterial3Api
 @Composable
-internal fun SettingsState.GameSettingsViewImpl(
+internal fun SettingsState.SettingsViewImpl(
     selectStrategyFor: Disk?,
     modifier: Modifier = Modifier,
     listState: LazyListState = rememberLazyListState(),
@@ -61,11 +60,10 @@ internal fun SettingsState.GameSettingsViewImpl(
     val sheetState = rememberModalBottomSheetState()
 
     LazyColumn(
-        modifier = Modifier
-            .padding(top = 16.dp)
-            .then(modifier),
+        modifier = modifier,
         state = listState,
         verticalArrangement = Arrangement.spacedBy(24.dp),
+        contentPadding = PaddingValues(top = 16.dp, bottom = 96.dp),
     ) {
         item {
             SettingsHeader(
@@ -90,8 +88,6 @@ internal fun SettingsState.GameSettingsViewImpl(
                 preferSides = isLightPreferSides,
             )
         }
-
-        item { Spacer(Modifier.height(4.dp)) }
 
         item {
             SettingsHeader(
@@ -123,8 +119,6 @@ internal fun SettingsState.GameSettingsViewImpl(
             )
         }
 
-        item { Spacer(Modifier.height(4.dp)) }
-
         item {
             SettingsHeader(
                 text = stringResource(id = string.game_settings__header__history),
@@ -139,8 +133,6 @@ internal fun SettingsState.GameSettingsViewImpl(
             )
         }
 
-        item { Spacer(Modifier.height(4.dp)) }
-
         item {
             SettingsHeader(
                 text = stringResource(id = string.game_settings__header__app),
@@ -154,8 +146,6 @@ internal fun SettingsState.GameSettingsViewImpl(
                 onCheckedChange = { emit(OnConfirmExitClicked) },
             )
         }
-
-        item { Spacer(Modifier.height(16.dp)) }
     }
 
     StrategySelector(
@@ -170,6 +160,8 @@ private fun SettingsHeader(text: String) {
         text = text,
         style = MaterialTheme.typography.titleSmall,
         color = MaterialTheme.colorScheme.primary,
-        modifier = Modifier.padding(horizontal = 16.dp),
+        modifier = Modifier
+            .padding(top = 4.dp)
+            .padding(horizontal = 16.dp),
     )
 }

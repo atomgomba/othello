@@ -1,6 +1,5 @@
 package com.ekezet.othello.feature.settings.ui
 
-import androidx.annotation.VisibleForTesting
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
@@ -21,7 +20,7 @@ private fun SettingsModel.toPreviewState() =
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SettingsModel.Preview() = toPreviewState()
-    .GameSettingsViewImpl(selectStrategyFor = null)
+    .SettingsViewImpl(selectStrategyFor = null)
 
 @Preview
 @Composable
