@@ -14,6 +14,16 @@ You can grab a ready-built APK from [GitHub Actions](https://github.com/atomgomb
 
 ## Changes
 
+### v6
+
+* Ability to step between past turns
+* History improvements
+  * Automatic scrolling (can be toggled in settings)
+  * Jump to past board state on click
+* Exit confirmation with option
+* Small UI improvements
+* Bug fixes
+
 ### v5
 
 * Maintenance release
@@ -26,7 +36,7 @@ You can grab a ready-built APK from [GitHub Actions](https://github.com/atomgomb
 
 * Game history
 
-### v2  
+### v2
 
 * Adaptive navigation
 
