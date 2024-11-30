@@ -21,4 +21,12 @@ internal class PositionSerializerKtTest {
     fun asString_Error() {
         Position(8, 8).asString()
     }
+
+    @Test
+    fun toPosition() {
+        val position = Position(7, 7)
+        val str = position.asString()
+        val expected = str.toPosition()
+        assertEquals(expected, position)
+    }
 }

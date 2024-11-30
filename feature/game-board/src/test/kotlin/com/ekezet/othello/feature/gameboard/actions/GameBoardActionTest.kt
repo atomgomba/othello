@@ -50,7 +50,7 @@ internal class GameBoardActionTest {
     fun `OnGameStarted works correctly if Dark is HumanPlayer`() {
         val initModel = testModel
 
-        initModel after OnGameStarted matches {
+        initModel after OnLoopStarted matches {
             assertSkipped()
         }
     }
@@ -62,7 +62,7 @@ internal class GameBoardActionTest {
             ended = ended!!,
         )
 
-        initModel after OnGameStarted matches {
+        initModel after OnLoopStarted matches {
             assertSkipped()
         }
     }
@@ -80,7 +80,7 @@ internal class GameBoardActionTest {
             gameState = mockGameState,
         )
 
-        initModel after OnGameStarted matches {
+        initModel after OnLoopStarted matches {
             assertEffects(setOf(WaitBeforeNextTurn(nextMove)))
         }
 
@@ -105,7 +105,7 @@ internal class GameBoardActionTest {
         )
 
         assertFailsWith(IllegalStateException::class) {
-            initModel after OnGameStarted
+            initModel after OnLoopStarted
         }
 
         verify {

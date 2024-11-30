@@ -2,11 +2,15 @@ package com.ekezet.othello.feature.gameboard
 
 import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.data.models.Position
+import com.ekezet.othello.core.data.serialize.toPosition
 import com.ekezet.othello.core.game.GameEnd.EndedWin
 import com.ekezet.othello.core.game.data.BoardDisplayOptions
 import com.ekezet.othello.core.game.data.Default
+import com.ekezet.othello.core.game.data.Start
+import com.ekezet.othello.core.game.state.OthelloGameState
 import com.ekezet.othello.core.ui.viewModels.toImmutableList
 import com.ekezet.othello.feature.gameboard.ui.viewModels.OverlayItem.NextMoveIndicatorOverlayItem
+import com.ekezet.othello.feature.gameboard.ui.viewModels.OverlayItem.PastMoveIndicatorOverlayItem
 import com.ekezet.othello.feature.gameboard.ui.viewModels.OverlayItem.ValidMoveIndicatorOverlayItem
 import com.ekezet.othello.feature.gameboard.ui.viewModels.newEmptyOverlay
 import com.ekezet.othello.feature.gameboard.ui.viewModels.putAt
@@ -168,8 +172,10 @@ internal class GameBoardRendererTest {
     @Test
     fun `renderToState when ended is set and human wins and past turn`() {
         val winner = Disk.Dark
+        val moveAt = checkNotNull("D3".toPosition())
         val initModel = GameBoardModel(
-            selectedTurn = 42,
+            gameState = OthelloGameState.Start.proceed(moveAt).state,
+            selectedTurn = 0,
             boardDisplayOptions = BoardDisplayOptions.Default.copy(
                 showPossibleMoves = false,
             ),
@@ -178,18 +184,21 @@ internal class GameBoardRendererTest {
 
         val result = subject.renderState(initModel)
 
+        val expectedOverlay = initModel.currentGameState.board.newEmptyOverlay().apply {
+            putAt(moveAt, PastMoveIndicatorOverlayItem(disk = winner))
+        }
         val expectedState = with(initModel) {
             GameBoardState(
                 board = currentGameState.board.toImmutableList(),
-                overlay = currentGameState.board.newEmptyOverlay().toImmutableList(),
+                overlay = expectedOverlay.toImmutableList(),
                 currentDisk = currentGameState.currentDisk,
                 darkStrategyName = darkStrategy?.name,
                 lightStrategyName = lightStrategy?.name,
                 diskCount = currentGameState.diskCount,
                 opponentName = lightStrategy?.name,
-                displayedTurn = 43,
+                displayedTurn = selectedTurn + 1,
                 displayedMaxTurnCount = turnCount + 1,
-                hasNextTurn = false,
+                hasNextTurn = true,
                 isCurrentTurn = false,
                 nextMovePosition = nextMovePosition,
                 displayOptions = boardDisplayOptions,

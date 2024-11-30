@@ -23,6 +23,6 @@ fun String.toPosition() = if (length != 2) {
 } else {
     val (first, second) = toCharArray()
     val x = PositionLetters.indexOf(first)
-    val y = second.digitToInt() + 1
+    val y = second.digitToInt() - 1
     Position(x, y)
 }
