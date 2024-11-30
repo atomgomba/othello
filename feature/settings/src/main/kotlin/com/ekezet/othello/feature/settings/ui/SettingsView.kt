@@ -67,7 +67,7 @@ internal fun SettingsState.SettingsViewImpl(
     ) {
         item {
             SettingsHeader(
-                text = stringResource(id = string.game_settings__header__players),
+                text = stringResource(id = string.settings__header__players),
             )
         }
 
@@ -91,13 +91,13 @@ internal fun SettingsState.SettingsViewImpl(
 
         item {
             SettingsHeader(
-                text = stringResource(id = string.game_settings__header__board),
+                text = stringResource(id = string.settings__header__board),
             )
         }
 
         item {
             SwitchRow(
-                label = stringResource(id = string.game_settings__switch__show_possible_moves),
+                label = stringResource(id = string.settings__switch__show_possible_moves),
                 checked = boardDisplayOptions.showPossibleMoves,
                 onCheckedChange = { emit(OnShowPossibleMovesClicked) },
             )
@@ -105,7 +105,7 @@ internal fun SettingsState.SettingsViewImpl(
 
         item {
             SwitchRow(
-                label = stringResource(id = string.game_settings__switch__show_positions),
+                label = stringResource(id = string.settings__switch__show_positions),
                 checked = boardDisplayOptions.showBoardPositions,
                 onCheckedChange = { emit(OnShowBoardPositionsClicked) },
             )
@@ -113,7 +113,8 @@ internal fun SettingsState.SettingsViewImpl(
 
         item {
             SwitchRow(
-                label = stringResource(id = string.game_settings__switch__grayscale_mode),
+                label = stringResource(id = string.settings__switch__grayscale_mode),
+                description = stringResource(id = string.settings__switch__grayscale_mode_description),
                 checked = boardDisplayOptions.isGrayscaleMode,
                 onCheckedChange = { emit(OnGrayscaleModeClicked) },
             )
@@ -121,13 +122,13 @@ internal fun SettingsState.SettingsViewImpl(
 
         item {
             SettingsHeader(
-                text = stringResource(id = string.game_settings__header__history),
+                text = stringResource(id = string.settings__header__history),
             )
         }
 
         item {
             SwitchRow(
-                label = stringResource(id = string.game_settings__switch__always_scroll_to_bottom),
+                label = stringResource(id = string.settings__switch__always_scroll_to_bottom),
                 checked = historyDisplayOptions.alwaysScrollToBottom,
                 onCheckedChange = { emit(OnAlwaysScrollToBottomClicked) },
             )
@@ -135,13 +136,13 @@ internal fun SettingsState.SettingsViewImpl(
 
         item {
             SettingsHeader(
-                text = stringResource(id = string.game_settings__header__app),
+                text = stringResource(id = string.settings__header__app),
             )
         }
 
         item {
             SwitchRow(
-                label = stringResource(id = string.game_settings__switch__confirm_exit),
+                label = stringResource(id = string.settings__switch__confirm_exit),
                 checked = confirmExit,
                 onCheckedChange = { emit(OnConfirmExitClicked) },
             )

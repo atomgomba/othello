@@ -44,7 +44,7 @@ internal fun SettingsState.SelectedStrategy(
             Column {
                 Text(
                     text = stringResource(
-                        id = string.game_settings__title__strategy,
+                        id = string.settings__title__strategy,
                         disk.stringResource,
                     ),
                 )
@@ -68,7 +68,7 @@ internal fun SettingsState.SelectedStrategy(
 
         if (disk.isNotHuman) {
             SwitchRow(
-                label = stringResource(id = string.game_settings__switch__prefer_sides),
+                label = stringResource(id = string.settings__switch__prefer_sides),
                 checked = preferSides,
                 onCheckedChange = { checked ->
                     emit(OnPreferSidesToggled(disk, checked))

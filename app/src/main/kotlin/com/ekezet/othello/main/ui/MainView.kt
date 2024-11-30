@@ -48,7 +48,7 @@ import com.ekezet.othello.main.OnBackPressed
 import com.ekezet.othello.main.navigation.MainRoutes
 import com.ekezet.othello.main.navigation.MainRoutes.GameBoardRoute
 import com.ekezet.othello.main.navigation.MainRoutes.GameHistoryRoute
-import com.ekezet.othello.main.navigation.MainRoutes.GameSettingsRoute
+import com.ekezet.othello.main.navigation.MainRoutes.SettingsRoute
 import com.ekezet.othello.main.navigation.stripRoute
 import com.ekezet.othello.main.ui.components.ExitConfirmationSnackbar
 import com.ekezet.othello.main.ui.components.MainTopAppBar
@@ -176,7 +176,7 @@ internal fun MainState.MainViewImpl(
                         ),
                         parentEmitter = LocalActionEmitter.current,
                         onStrategyClick = { disk ->
-                            navigateTo(GameSettingsRoute.make(pickStrategyFor = disk))
+                            navigateTo(SettingsRoute.make(pickStrategyFor = disk))
                         },
                         modifier = destinationModifier,
                     )
@@ -207,8 +207,8 @@ internal fun MainState.MainViewImpl(
                 }
 
                 composable(
-                    route = GameSettingsRoute.spec,
-                    arguments = GameSettingsRoute.arguments,
+                    route = SettingsRoute.spec,
+                    arguments = SettingsRoute.arguments,
                 ) { entry ->
                     SettingsView(
                         args = SettingsArgs(
@@ -216,7 +216,7 @@ internal fun MainState.MainViewImpl(
                             historySettings = historySettings,
                             appSettings = appSettings,
                         ),
-                        selectStrategyFor = GameSettingsRoute.findPickStrategy(entry),
+                        selectStrategyFor = SettingsRoute.findPickStrategy(entry),
                         modifier = destinationModifier,
                         listState = settingsListState,
                     )

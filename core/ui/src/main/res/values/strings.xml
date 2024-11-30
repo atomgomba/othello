@@ -8,7 +8,7 @@
     <string name="main__nav__confirm_exit">Press back again to exit</string>
     <string name="main__nav__game_board">Play</string>
     <string name="main__nav__game_history">History</string>
-    <string name="main__nav__game_settings">Settings</string>
+    <string name="main__nav__settings">Settings</string>
 
     <string name="common__back">Go back</string>
     <string name="common__cancel">Cancel</string>
@@ -33,15 +33,16 @@
     <string name="game_history__list__scroll_to_top">Scroll to top</string>
     <string name="game_history__title__num_of_moves">History (moves: %d)</string>
 
-    <string name="game_settings__header__app">App</string>
-    <string name="game_settings__header__board">Board</string>
-    <string name="game_settings__header__players">Players</string>
-    <string name="game_settings__header__history">History</string>
-    <string name="game_settings__switch__grayscale_mode">Grayscale mode</string>
-    <string name="game_settings__switch__prefer_sides">Prefer sides</string>
-    <string name="game_settings__switch__show_positions">Show positions</string>
-    <string name="game_settings__switch__show_possible_moves">Show possible moves</string>
-    <string name="game_settings__title__strategy">%s strategy</string>
-    <string name="game_settings__switch__always_scroll_to_bottom">Always scroll to bottom</string>
-    <string name="game_settings__switch__confirm_exit">Confirm exit</string>
+    <string name="settings__header__app">App</string>
+    <string name="settings__header__board">Board</string>
+    <string name="settings__header__players">Players</string>
+    <string name="settings__header__history">History</string>
+    <string name="settings__switch__grayscale_mode">Grayscale mode</string>
+    <string name="settings__switch__grayscale_mode_description">Better for e-paper displays</string>
+    <string name="settings__switch__prefer_sides">Prefer sides</string>
+    <string name="settings__switch__show_positions">Show positions</string>
+    <string name="settings__switch__show_possible_moves">Show possible moves</string>
+    <string name="settings__title__strategy">%s strategy</string>
+    <string name="settings__switch__always_scroll_to_bottom">Always scroll to bottom</string>
+    <string name="settings__switch__confirm_exit">Confirm exit</string>
 </resources>

@@ -23,7 +23,7 @@ sealed class MainRoutes : Route() {
         val All = listOf(
             GameBoardRoute,
             GameHistoryRoute,
-            GameSettingsRoute,
+            SettingsRoute,
         )
     }
 
@@ -64,10 +64,10 @@ sealed class MainRoutes : Route() {
     }
 
     @ExcludeFromCoverage
-    data object GameSettingsRoute : MainRoutes() {
-        override val id: String = "game-settings"
+    data object SettingsRoute : MainRoutes() {
+        override val id: String = "settings"
         override val icon: ImageVector = Icons.Default.Settings
-        override val labelRes: Int = R.string.main__nav__game_settings
+        override val labelRes: Int = R.string.main__nav__settings
 
         private const val PickStrategy = "pickStrategy"
 

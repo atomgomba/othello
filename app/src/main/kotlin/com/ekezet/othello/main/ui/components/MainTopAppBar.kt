@@ -18,7 +18,7 @@ import com.ekezet.othello.main.MainState
 import com.ekezet.othello.main.navigation.MainRoutes
 import com.ekezet.othello.main.navigation.MainRoutes.GameBoardRoute
 import com.ekezet.othello.main.navigation.MainRoutes.GameHistoryRoute
-import com.ekezet.othello.main.navigation.MainRoutes.GameSettingsRoute
+import com.ekezet.othello.main.navigation.MainRoutes.SettingsRoute
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
@@ -32,8 +32,8 @@ internal fun MainState.MainTopAppBar(
         GameHistoryRoute.id ->
             stringResource(R.string.game_history__title__num_of_moves, gameHistorySize)
 
-        GameSettingsRoute.id ->
-            stringResource(R.string.main__nav__game_settings)
+        SettingsRoute.id ->
+            stringResource(R.string.main__nav__settings)
 
         else ->
             stringResource(R.string.app_name)
