@@ -8,6 +8,7 @@ import com.ekezet.hurok.ViewState
 import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.data.models.DiskCount
 import com.ekezet.othello.core.data.models.Position
+import com.ekezet.othello.core.data.models.isLight
 import com.ekezet.othello.core.game.GameEnd
 import com.ekezet.othello.core.game.data.BoardDisplayOptions
 import com.ekezet.othello.core.game.data.Default
@@ -62,6 +63,9 @@ data class GameBoardModel internal constructor(
 
     internal val currentDisk: Disk
         inline get() = currentGameState.currentDisk
+
+    internal val currentStrategy: Strategy?
+        inline get() = if (gameState.currentDisk.isLight) lightStrategy else darkStrategy
 
     internal val Disk.isHumanPlayer: Boolean
         inline get() = when (this) {

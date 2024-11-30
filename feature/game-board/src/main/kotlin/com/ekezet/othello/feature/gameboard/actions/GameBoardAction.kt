@@ -3,7 +3,6 @@ package com.ekezet.othello.feature.gameboard.actions
 import com.ekezet.hurok.Action
 import com.ekezet.hurok.Action.Next
 import com.ekezet.othello.core.data.models.Position
-import com.ekezet.othello.core.data.models.isLight
 import com.ekezet.othello.core.game.GameEnd
 import com.ekezet.othello.core.game.NextTurn
 import com.ekezet.othello.core.game.PassTurn
@@ -21,10 +20,10 @@ import timber.log.Timber
 internal sealed interface GameBoardAction : Action<GameBoardModel, GameBoardDependency>
 
 internal data object OnLoopStarted : GameBoardAction {
-    override fun GameBoardModel.proceed() = if (ended != null || darkStrategy == null || !isCurrentTurn) {
+    override fun GameBoardModel.proceed() = if (ended != null || currentStrategy == HumanPlayer || !isCurrentTurn) {
         skip
     } else {
-        val nextMove = darkStrategy.deriveNext(currentGameState)
+        val nextMove = currentStrategy?.deriveNext(currentGameState)
             ?: error("Strategy couldn't find a valid starting move")
         trigger(WaitBeforeNextTurn(nextMove))
     }
@@ -91,10 +90,9 @@ internal data object OnCurrentTurnClicked : GameBoardAction {
     override fun GameBoardModel.proceed(): Next<GameBoardModel, GameBoardDependency> {
         val nextModel = stepToCurrentTurn()
         val gameState = nextModel.currentGameState
-        val strategy = if (gameState.currentDisk.isLight) lightStrategy else darkStrategy
-        val nextMove = strategy?.deriveNext(gameState)
+        val nextMove = currentStrategy?.deriveNext(gameState)
         val effects = buildList {
-            if (strategy != HumanPlayer && nextMove != null) {
+            if (currentStrategy != HumanPlayer && nextMove != null) {
                 // only wait if next player is not human
                 add(WaitBeforeNextTurn(nextMove))
             }

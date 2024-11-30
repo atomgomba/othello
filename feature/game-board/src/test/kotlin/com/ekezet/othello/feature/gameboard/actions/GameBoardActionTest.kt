@@ -48,6 +48,8 @@ internal class GameBoardActionTest {
 
     @Test
     fun `OnGameStarted works correctly if Dark is HumanPlayer`() {
+        every { mockGameState.currentDisk } returns Disk.Dark
+
         val initModel = testModel
 
         initModel after OnLoopStarted matches {
@@ -74,6 +76,7 @@ internal class GameBoardActionTest {
             every { deriveNext(mockGameState) } returns nextMove
         }
         every { mockGameState.turn } returns 0
+        every { mockGameState.currentDisk } returns Disk.Dark
 
         val initModel = testModel.copy(
             darkStrategy = darkStrategy,
@@ -86,7 +89,9 @@ internal class GameBoardActionTest {
 
         verify {
             darkStrategy.deriveNext(mockGameState)
+            darkStrategy.equals(HumanPlayer)
             mockGameState.turn
+            mockGameState.currentDisk
         }
 
         confirmVerified(mockGameState, darkStrategy)
@@ -98,6 +103,7 @@ internal class GameBoardActionTest {
             every { deriveNext(mockGameState) } returns null
         }
         every { mockGameState.turn } returns 0
+        every { mockGameState.currentDisk } returns Disk.Dark
 
         val initModel = testModel.copy(
             darkStrategy = darkStrategy,
@@ -110,7 +116,10 @@ internal class GameBoardActionTest {
 
         verify {
             darkStrategy.deriveNext(mockGameState)
+            darkStrategy.equals(null)
+            testModel.lightStrategy == null
             mockGameState.turn
+            mockGameState.currentDisk
         }
 
         confirmVerified(mockGameState, darkStrategy)
