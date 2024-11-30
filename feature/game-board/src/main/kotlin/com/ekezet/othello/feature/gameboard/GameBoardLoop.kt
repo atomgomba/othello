@@ -3,7 +3,7 @@ package com.ekezet.othello.feature.gameboard
 import com.ekezet.hurok.Loop
 import com.ekezet.hurok.LoopBuilder
 import com.ekezet.othello.feature.gameboard.actions.GameBoardAction
-import com.ekezet.othello.feature.gameboard.actions.OnGameStarted
+import com.ekezet.othello.feature.gameboard.actions.OnLoopStarted
 
 internal class GameBoardLoop internal constructor(
     model: GameBoardModel,
@@ -43,7 +43,7 @@ internal class GameBoardLoop internal constructor(
             renderer = GameBoardRenderer(),
             args = requireNotNull(args) { "Arguments must be set" },
             dependency = GameBoardDependency(),
-            firstAction = OnGameStarted,
+            firstAction = OnLoopStarted,
         )
     }
 }

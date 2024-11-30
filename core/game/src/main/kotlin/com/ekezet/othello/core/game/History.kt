@@ -44,16 +44,14 @@ data class PastMove(
 
 typealias MoveHistory = List<PastMove>
 
-fun MoveHistory.toCurrentGameState(fromIndex: Int = 0, toIndex: Int = size): CurrentGameState {
+fun MoveHistory.toPastGameState(fromIndex: Int = 0, toIndex: Int = size): PastGameState {
     val pastMoves = subList(fromIndex, toIndex)
-    return CurrentGameState(
+    val currentState = CurrentGameState(
         board = pastMoves.lastOrNull()?.board ?: StartBoard,
         pastMoves = pastMoves,
     )
+    return PastGameState(currentState)
 }
-
-fun MoveHistory.toPastGameState(fromIndex: Int = 0, toIndex: Int = size): PastGameState =
-    PastGameState(toCurrentGameState(fromIndex, toIndex))
 
 sealed interface GameEnd {
     data class EndedWin(val winner: Disk) : GameEnd

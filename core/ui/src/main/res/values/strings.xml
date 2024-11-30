@@ -18,9 +18,11 @@
 
     <string name="game_board__footer__tie_game">Tie Game!</string>
     <string name="game_board__footer__winner">Winner!</string>
+    <string name="game_board__header__first_turn">First turn</string>
     <string name="game_board__header__next_turn">Next turn</string>
     <string name="game_board__header__passed">Passed Turn</string>
     <string name="game_board__header__previous_turn">Previous turn</string>
+    <string name="game_board__header__current_turn">Current turn</string>
     <string name="game_board__header__turn">Turn: %d/%d</string>
 
     <string name="game_history__list__ended_tie">Tie game!</string>

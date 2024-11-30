@@ -15,8 +15,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -27,6 +28,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -49,6 +51,8 @@ import com.ekezet.othello.feature.gameboard.GameBoardArgs
 import com.ekezet.othello.feature.gameboard.GameBoardLoop
 import com.ekezet.othello.feature.gameboard.GameBoardState
 import com.ekezet.othello.feature.gameboard.actions.ContinueGame
+import com.ekezet.othello.feature.gameboard.actions.OnCurrentTurnClicked
+import com.ekezet.othello.feature.gameboard.actions.OnFirstTurnClicked
 import com.ekezet.othello.feature.gameboard.actions.OnMoveMade
 import com.ekezet.othello.feature.gameboard.actions.OnNextTurnClicked
 import com.ekezet.othello.feature.gameboard.actions.OnPreviousTurnClicked
@@ -59,6 +63,7 @@ import nl.dionsegijn.konfetti.compose.KonfettiView
 import nl.dionsegijn.konfetti.core.Party
 import nl.dionsegijn.konfetti.core.emitter.Emitter
 import java.util.concurrent.TimeUnit.SECONDS
+import com.ekezet.othello.feature.gameboard.R as GameboardR
 
 private val highlightColor: Color
     @Composable get() = MaterialTheme.colorScheme.tertiary
@@ -140,11 +145,21 @@ private fun GameBoardState.BoardHeader() {
         Spacer(modifier = Modifier.weight(1F))
 
         IconButton(
+            onClick = { emit(OnFirstTurnClicked) },
+            enabled = hasPreviousTurn,
+        ) {
+            Icon(
+                painter = painterResource(id = GameboardR.drawable.baseline_first_page_24),
+                contentDescription = stringResource(id = R.string.game_board__header__first_turn),
+            )
+        }
+
+        IconButton(
             onClick = { emit(OnPreviousTurnClicked) },
             enabled = hasPreviousTurn,
         ) {
             Icon(
-                imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                imageVector = Icons.AutoMirrored.Default.KeyboardArrowLeft,
                 contentDescription = stringResource(id = R.string.game_board__header__previous_turn),
             )
         }
@@ -154,8 +169,18 @@ private fun GameBoardState.BoardHeader() {
             enabled = hasNextTurn,
         ) {
             Icon(
-                imageVector = Icons.AutoMirrored.Default.ArrowForward,
+                imageVector = Icons.AutoMirrored.Default.KeyboardArrowRight,
                 contentDescription = stringResource(id = R.string.game_board__header__next_turn),
+            )
+        }
+
+        IconButton(
+            onClick = { emit(OnCurrentTurnClicked) },
+            enabled = hasNextTurn,
+        ) {
+            Icon(
+                imageVector = Icons.Default.PlayArrow,
+                contentDescription = stringResource(id = R.string.game_board__header__current_turn),
             )
         }
     }

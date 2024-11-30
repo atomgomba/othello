@@ -3,6 +3,7 @@ package com.ekezet.othello.feature.gameboard.actions
 import com.ekezet.hurok.Action
 import com.ekezet.hurok.Action.Next
 import com.ekezet.othello.core.data.models.Position
+import com.ekezet.othello.core.data.models.isLight
 import com.ekezet.othello.core.game.GameEnd
 import com.ekezet.othello.core.game.NextTurn
 import com.ekezet.othello.core.game.PassTurn
@@ -10,6 +11,7 @@ import com.ekezet.othello.core.game.Tie
 import com.ekezet.othello.core.game.Win
 import com.ekezet.othello.core.game.isValid
 import com.ekezet.othello.core.game.state.CurrentGameState
+import com.ekezet.othello.core.game.strategy.HumanPlayer
 import com.ekezet.othello.core.game.throwable.InvalidMoveException
 import com.ekezet.othello.feature.gameboard.GameBoardDependency
 import com.ekezet.othello.feature.gameboard.GameBoardModel
@@ -18,8 +20,8 @@ import timber.log.Timber
 
 internal sealed interface GameBoardAction : Action<GameBoardModel, GameBoardDependency>
 
-internal data object OnGameStarted : GameBoardAction {
-    override fun GameBoardModel.proceed() = if (ended != null || darkStrategy == null) {
+internal data object OnLoopStarted : GameBoardAction {
+    override fun GameBoardModel.proceed() = if (ended != null || darkStrategy == null || !isCurrentTurn) {
         skip
     } else {
         val nextMove = darkStrategy.deriveNext(currentGameState)
@@ -65,6 +67,10 @@ internal data class OnGameEnded(val result: GameEnd) : GameBoardAction {
     override fun GameBoardModel.proceed() = mutate(copy(ended = result))
 }
 
+internal data object OnFirstTurnClicked : GameBoardAction {
+    override fun GameBoardModel.proceed() = mutate(stepToFirstTurn())
+}
+
 internal data object OnPreviousTurnClicked : GameBoardAction {
     override fun GameBoardModel.proceed() = mutate(stepToPreviousTurn())
 }
@@ -78,5 +84,21 @@ internal data object OnNextTurnClicked : GameBoardAction {
         } else {
             mutate(nextModel)
         }
+    }
+}
+
+internal data object OnCurrentTurnClicked : GameBoardAction {
+    override fun GameBoardModel.proceed(): Next<GameBoardModel, GameBoardDependency> {
+        val nextModel = stepToCurrentTurn()
+        val gameState = nextModel.currentGameState
+        val strategy = if (gameState.currentDisk.isLight) lightStrategy else darkStrategy
+        val nextMove = strategy?.deriveNext(gameState)
+        val effects = buildList {
+            if (strategy != HumanPlayer && nextMove != null) {
+                // only wait if next player is not human
+                add(WaitBeforeNextTurn(nextMove))
+            }
+        }
+        return outcome(nextModel, effects = effects.toTypedArray())
     }
 }

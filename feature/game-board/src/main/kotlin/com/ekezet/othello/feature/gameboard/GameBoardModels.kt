@@ -50,14 +50,13 @@ data class GameBoardModel internal constructor(
         inline get() = gameState.turn
 
     internal val isCurrentTurn: Boolean
-        inline get() = selectedTurn == turnCount
+        inline get() = turnCount == selectedTurn
 
     internal val currentGameState: OthelloGameState by lazy {
         if (isCurrentTurn) {
             gameState
         } else {
-            val toIndex = (selectedTurn + 1).coerceAtMost(turnCount)
-            gameState.pastMoves.toPastGameState(0, toIndex)
+            gameState.pastMoves.toPastGameState(0, selectedTurn + 1)
         }
     }
 
@@ -90,21 +89,23 @@ data class GameBoardModel internal constructor(
         nextMovePosition = null,
     )
 
-    internal fun pickNextMoveAt(position: Position?) = copy(
-        nextMovePosition = position,
-    )
+    internal fun pickNextMoveAt(position: Position?) = copy(nextMovePosition = position)
+
+    internal fun stepToFirstTurn() = copy(selectedTurn = 0, nextMovePosition = null)
 
     internal fun stepToPreviousTurn() = if (0 < selectedTurn) {
-        copy(selectedTurn = selectedTurn - 1)
+        copy(selectedTurn = selectedTurn - 1, nextMovePosition = null)
     } else {
         this
     }
 
     internal fun stepToNextTurn() = if (selectedTurn < turnCount) {
-        copy(selectedTurn = selectedTurn + 1)
+        copy(selectedTurn = selectedTurn + 1, nextMovePosition = null)
     } else {
         this
     }
+
+    internal fun stepToCurrentTurn() = copy(selectedTurn = turnCount, nextMovePosition = null)
 }
 
 @Immutable
