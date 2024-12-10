@@ -15,7 +15,6 @@ dependencies {
     implementation(project(":core:ui"))
 
     implementation(libs.kotlinx.immutable)
-
     implementation(libs.konfetti)
 
     testImplementation(libs.junit4)

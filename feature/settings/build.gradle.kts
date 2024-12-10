@@ -11,8 +11,8 @@ android {
 dependencies {
     implementation(project(":core:data"))
     implementation(project(":core:game"))
-    implementation(project(":core:ui"))
     implementation(project(":core:logging"))
+    implementation(project(":core:ui"))
 
     testImplementation(libs.junit4)
     testImplementation(libs.junitParams)
