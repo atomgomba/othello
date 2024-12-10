@@ -10,8 +10,7 @@ import com.ekezet.othello.core.game.state.OthelloGameState
 data class PreferSidesDecoratorStrategy(
     override val wrapped: Strategy,
 ) : DecoratedStrategy {
-    override val name: String
-        get() = "${wrapped.name} (Prefer sides)"
+    override val name: String = "${wrapped.name} (Prefer sides)"
 
     private val sidesX = setOf(0, BoardWidth - 1)
     private val sidesY = setOf(0, BoardHeight - 1)
