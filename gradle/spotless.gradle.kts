@@ -1,10 +1,8 @@
 import com.diffplug.gradle.spotless.SpotlessPlugin
 import com.diffplug.gradle.spotless.SpotlessExtension
 
-val ktlintVersion = "0.48.1"
-
 initscript {
-    val spotlessVersion = "6.13.0"
+    val spotlessVersion = "6.25.0"
 
     repositories {
         mavenCentral()
@@ -22,7 +20,7 @@ rootProject {
             kotlin {
                 target("**/*.kt")
                 targetExclude("**/build/**/*.kt")
-                ktlint(ktlintVersion).userData(mapOf("android" to "true"))
+                ktlint()
             }
             format("kts") {
                 target("**/*.kts")
