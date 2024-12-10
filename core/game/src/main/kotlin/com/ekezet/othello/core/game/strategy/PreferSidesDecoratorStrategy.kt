@@ -16,8 +16,14 @@ data class PreferSidesDecoratorStrategy(
     private val sidesY = setOf(0, BoardHeight - 1)
 
     override fun deriveNext(state: OthelloGameState): Position? = with(state) {
-        validMoves.shuffled().firstOrNull { it.position.x in sidesX || it.position.y in sidesY }?.position
-            ?: wrapped.deriveNext(state)
+        val shuffledMoves = validMoves.shuffled()
+        val corner = shuffledMoves.firstOrNull {
+            (it.position.x in sidesX || it.position.y in sidesY) && it.position.x == it.position.y
+        }?.position
+        val side = shuffledMoves.firstOrNull {
+            it.position.x in sidesX || it.position.y in sidesY
+        }?.position
+        corner ?: side ?: wrapped.deriveNext(state)
     }
 
     companion object {
