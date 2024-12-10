@@ -161,7 +161,7 @@ internal fun MainState.MainViewImpl(
             NavHost(
                 navController = navController,
                 startDestination = startDestination,
-                modifier = Modifier.padding(top = innerPadding.calculateTopPadding())
+                modifier = Modifier.padding(top = innerPadding.calculateTopPadding()),
             ) {
                 composable(
                     route = GameBoardRoute.spec,

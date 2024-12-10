@@ -16,8 +16,8 @@ private val defaultModel = GameBoardModel()
 
 private val showPositionsModel = defaultModel.copy(
     boardDisplayOptions = defaultModel.boardDisplayOptions.copy(
-        showBoardPositions = true
-    )
+        showBoardPositions = true,
+    ),
 )
 
 private val darkPassedModel = defaultModel.copy(

@@ -439,7 +439,7 @@ internal class GameBoardActionTest {
         val initModel = testModel
 
         val expectedModel = initModel.copy(
-            selectedTurn = initModel.selectedTurn + 1
+            selectedTurn = initModel.selectedTurn + 1,
         )
 
         initModel after OnNextTurnClicked matches {
@@ -467,7 +467,7 @@ internal class GameBoardActionTest {
         )
 
         val expectedModel = initModel.copy(
-            selectedTurn = initModel.selectedTurn - 1
+            selectedTurn = initModel.selectedTurn - 1,
         )
 
         initModel after OnPreviousTurnClicked matches {

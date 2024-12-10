@@ -140,7 +140,7 @@ private fun ListNavigationFab(
                     R.string.game_history__list__scroll_to_top
                 } else {
                     R.string.game_history__list__scroll_to_bottom
-                }
+                },
             ),
             modifier = Modifier.rotate(rotationDeg.value),
         )

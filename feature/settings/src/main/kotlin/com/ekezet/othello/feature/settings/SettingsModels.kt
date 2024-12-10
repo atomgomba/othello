@@ -51,25 +51,25 @@ internal data class SettingsModel(
     internal fun toggleShowBoardPositions() = copy(
         boardDisplayOptions = boardDisplayOptions.copy(
             showBoardPositions = !boardDisplayOptions.showBoardPositions,
-        )
+        ),
     )
 
     internal fun toggleShowPossibleMoves() = copy(
         boardDisplayOptions = boardDisplayOptions.copy(
             showPossibleMoves = !boardDisplayOptions.showPossibleMoves,
-        )
+        ),
     )
 
     internal fun toggleGrayScaleMode() = copy(
         boardDisplayOptions = boardDisplayOptions.copy(
             isGrayscaleMode = !boardDisplayOptions.isGrayscaleMode,
-        )
+        ),
     )
 
     internal fun toggleAlwaysScrollToBottom() = copy(
         historyDisplayOptions = historyDisplayOptions.copy(
             alwaysScrollToBottom = !historyDisplayOptions.alwaysScrollToBottom,
-        )
+        ),
     )
 
     internal fun toggleConfirmExit() = copy(confirmExit = !confirmExit)

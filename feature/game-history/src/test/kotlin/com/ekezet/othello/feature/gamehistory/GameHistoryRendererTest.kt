@@ -48,8 +48,8 @@ internal class GameHistoryRendererTest {
             historySettings = HistorySettings.Default.copy(
                 historyDisplayOptions = HistoryDisplayOptions.Default.copy(
                     alwaysScrollToBottom = alwaysScrollToBottom,
-                )
-            )
+                ),
+            ),
         )
 
         val result = subject.renderState(initModel)
