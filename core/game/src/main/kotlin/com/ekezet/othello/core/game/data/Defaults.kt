@@ -29,7 +29,7 @@ val OthelloGameState.Companion.Start: OthelloGameState
 
 val BoardDisplayOptions.Companion.Default: BoardDisplayOptions
     inline get() = BoardDisplayOptions(
-        showPossibleMoves = true,
+        showPossibleMoves = false,
         showBoardPositions = false,
         isGrayscaleMode = false,
     )
