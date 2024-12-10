@@ -32,6 +32,7 @@ val Strategies
         add(HumanPlayer)
         add(NaiveMaxStrategy)
         add(RandomStrategy)
+        add(SchizophrenicStrategy)
     }
 
 val HumanPlayer: Strategy? = null
