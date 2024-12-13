@@ -21,6 +21,12 @@ rootProject {
                 target("**/*.kt")
                 targetExclude("**/build/**/*.kt")
                 ktlint()
+                    .editorConfigOverride(
+                        mapOf(
+                            "ktlint_standard_property-naming" to "disabled",
+                            "ktlint_function_naming_ignore_when_annotated_with" to "Composable",
+                        )
+                    )
             }
             format("kts") {
                 target("**/*.kts")
