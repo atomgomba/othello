@@ -23,7 +23,11 @@ internal class GameBoardRendererTest {
 
     @Test
     fun `renderToState works correctly`() {
-        val initModel = GameBoardModel()
+        val initModel = GameBoardModel(
+            boardDisplayOptions = BoardDisplayOptions.Default.copy(
+                showPossibleMoves = true,
+            ),
+        )
 
         val result = subject.renderState(initModel)
 
