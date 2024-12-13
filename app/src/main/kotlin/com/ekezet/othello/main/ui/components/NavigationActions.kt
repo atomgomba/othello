@@ -1,10 +1,8 @@
 package com.ekezet.othello.main.ui.components
 
-import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScope
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.ekezet.othello.main.navigation.MainRoutes
 
@@ -27,6 +25,5 @@ internal fun NavigationSuiteScope.navigationActions(
             MainRoutes.GameHistoryRoute.id -> hasGameHistory
             else -> true
         },
-        modifier = Modifier.safeContentPadding(),
     )
 }
