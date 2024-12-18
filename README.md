@@ -14,6 +14,11 @@ You can grab a ready-built APK from [GitHub Actions](https://github.com/atomgomb
 
 ## Changes
 
+### v7
+
+* Disable "show possible moves" by default
+* Fix layout for larger screens
+
 ### v6
 
 * Ability to step between past turns
