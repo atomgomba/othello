@@ -16,6 +16,8 @@ You can grab a ready-built APK from [GitHub Actions](https://github.com/atomgomb
 
 ### v7
 
+* Improve "Prefer sides" strategy (prefer corners more than sides)
+* Add Schizophrenic strategy (combines all the other strategies)
 * Disable "show possible moves" by default
 * Fix layout for larger screens
 
