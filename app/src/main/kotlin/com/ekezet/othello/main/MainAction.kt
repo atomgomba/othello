@@ -2,6 +2,9 @@ package com.ekezet.othello.main
 
 import com.ekezet.hurok.Action
 import com.ekezet.hurok.Action.Next
+import com.ekezet.hurok.mutate
+import com.ekezet.hurok.outcome
+import com.ekezet.hurok.trigger
 import com.ekezet.othello.core.game.data.Start
 import com.ekezet.othello.core.game.state.OthelloGameState
 

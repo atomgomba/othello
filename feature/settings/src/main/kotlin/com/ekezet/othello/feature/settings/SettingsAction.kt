@@ -2,6 +2,8 @@ package com.ekezet.othello.feature.settings
 
 import com.ekezet.hurok.Action
 import com.ekezet.hurok.Action.Next
+import com.ekezet.hurok.mutate
+import com.ekezet.hurok.outcome
 import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.data.models.isDark
 import com.ekezet.othello.core.game.strategy.DecoratedStrategy

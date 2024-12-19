@@ -1,6 +1,7 @@
 package com.ekezet.othello.feature.gameboard.actions
 
 import com.ekezet.hurok.Action.Next
+import com.ekezet.hurok.outcome
 import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.data.models.isLight
 import com.ekezet.othello.core.game.GameEnd.EndedTie
