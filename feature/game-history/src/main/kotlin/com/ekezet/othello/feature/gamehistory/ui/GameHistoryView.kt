@@ -4,7 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -74,7 +74,7 @@ private fun GameHistoryState.GameHistoryViewImpl(
     ) { paddingValues ->
         LazyColumn(
             state = listState,
-            modifier = Modifier.padding(paddingValues),
+            modifier = Modifier.consumeWindowInsets(paddingValues),
             contentPadding = PaddingValues(top = 16.dp, bottom = 96.dp),
         ) {
             itemsIndexed(items = historyItems, key = { _, item -> item.composeKey }) { index, item ->
