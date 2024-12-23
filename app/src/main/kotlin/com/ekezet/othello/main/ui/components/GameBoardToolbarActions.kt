@@ -23,7 +23,7 @@ internal fun MainState.GameBoardToolbarActions(
         IconButton(onClick = { emit(OnNewGameClicked) }) {
             Icon(
                 imageVector = Icons.Default.Refresh,
-                contentDescription = stringResource(string.main__menu__new_game),
+                contentDescription = stringResource(string.game_board__menu__new_game),
             )
         }
 
@@ -35,7 +35,7 @@ internal fun MainState.GameBoardToolbarActions(
                 painter = painterResource(
                     id = if (showPossibleMoves) drawable.ic_visibility else drawable.ic_visibility_off,
                 ),
-                contentDescription = stringResource(string.main__menu__toggle_indicators),
+                contentDescription = stringResource(string.game_board__menu__toggle_indicators),
             )
         }
     }

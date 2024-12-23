@@ -55,6 +55,7 @@ val GameSettings.Companion.Default: GameSettings
 val HistorySettings.Companion.Default: HistorySettings
     inline get() = HistorySettings(
         historyDisplayOptions = HistoryDisplayOptions.Default,
+        showHistoryAsText = false,
     )
 
 val AppSettings.Companion.Default: AppSettings

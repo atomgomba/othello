@@ -4,6 +4,7 @@ import com.ekezet.hurok.AnyActionEmitter
 import com.ekezet.hurok.Loop
 import com.ekezet.hurok.LoopBuilder
 import com.ekezet.othello.feature.gameboard.GameBoardEmitter
+import com.ekezet.othello.feature.gamehistory.GameHistoryEmitter
 
 internal class MainLoop internal constructor(
     model: MainModel,
@@ -26,6 +27,7 @@ internal class MainLoop internal constructor(
     @Suppress("UNCHECKED_CAST")
     override fun MainDependency.onAddChildEmitter(child: AnyActionEmitter) {
         gameBoardEmitter = (child as? GameBoardEmitter) ?: gameBoardEmitter
+        gameHistoryEmitter = (child as? GameHistoryEmitter) ?: gameHistoryEmitter
     }
 
     internal companion object Builder :

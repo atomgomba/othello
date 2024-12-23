@@ -140,7 +140,7 @@ internal fun MainState.MainViewImpl(
                 currentDestination = currentDestination,
                 navController = navController,
                 showPossibleMoves = gameSettings.boardDisplayOptions.showPossibleMoves,
-                gameHistorySize = gameHistory.history.size,
+                showTextHistory = historySettings.showHistoryAsText,
             )
         },
         snackbarHost = {
@@ -195,6 +195,7 @@ internal fun MainState.MainViewImpl(
                             gameSettings = gameSettings,
                             historySettings = historySettings,
                         ),
+                        parentEmitter = LocalActionEmitter.current,
                         listState = historyListState,
                         onTurnClick = { turn -> navigateTo(GameBoardRoute.make(showTurn = turn)) },
                         onCurrentTurnClick = {

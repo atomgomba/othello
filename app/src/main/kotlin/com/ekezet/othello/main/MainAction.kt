@@ -43,3 +43,21 @@ internal data object OnBackPressed : MainAction {
 internal data object OnCancelExitClicked : MainAction {
     override fun MainModel.proceed() = mutate(copy(backPressCount = 0))
 }
+
+internal data object OnShowTextHistoryClicked : MainAction {
+    override fun MainModel.proceed(): Next<MainModel, MainDependency> =
+        copy(showHistoryAsText = true).let { outcome(it, PublishHistorySettings(it)) }
+}
+
+internal data object OnShowHistoryThumbnailsClicked : MainAction {
+    override fun MainModel.proceed(): Next<MainModel, MainDependency> =
+        copy(showHistoryAsText = false).let { outcome(it, PublishHistorySettings(it)) }
+}
+
+internal data object OnCopyHistoryClicked : MainAction {
+    override fun MainModel.proceed() = TODO()
+}
+
+internal data object OnPasteHistoryClicked : MainAction {
+    override fun MainModel.proceed() = TODO()
+}

@@ -2,7 +2,9 @@ package com.ekezet.othello.main
 
 import com.ekezet.hurok.Effect
 import com.ekezet.othello.core.game.data.IGameSettings
+import com.ekezet.othello.core.game.data.IHistorySettings
 import com.ekezet.othello.core.game.effect.PublishGameSettings
+import com.ekezet.othello.core.game.effect.PublishHistorySettings
 import com.ekezet.othello.core.game.state.OthelloGameState
 import com.ekezet.othello.feature.gameboard.actions.OnUpdateGameState
 
@@ -11,6 +13,10 @@ internal sealed interface MainEffect : Effect<MainModel, MainDependency>
 internal data class PublishGameSettings(
     override val settings: IGameSettings,
 ) : MainEffect, PublishGameSettings<MainModel, MainDependency>()
+
+internal data class PublishHistorySettings(
+    override val settings: IHistorySettings,
+) : MainEffect, PublishHistorySettings<MainModel, MainDependency>()
 
 internal data class UpdateGameBoardGameState(
     private val newState: OthelloGameState,

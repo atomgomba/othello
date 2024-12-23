@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.ekezet.hurok.AnyActionEmitter
 import com.ekezet.hurok.compose.LoopView
 import com.ekezet.othello.core.ui.R
 import com.ekezet.othello.feature.gamehistory.GameHistoryArgs
@@ -35,6 +36,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun GameHistoryView(
     args: GameHistoryArgs,
+    parentEmitter: AnyActionEmitter?,
     listState: LazyListState,
     onTurnClick: (turn: Int) -> Unit,
     onCurrentTurnClick: () -> Unit,
@@ -43,6 +45,9 @@ fun GameHistoryView(
     LoopView(
         builder = GameHistoryLoop,
         args = args,
+        parentEmitter = checkNotNull(parentEmitter) {
+            "parentEmitter need to be set to emit GameHistory actions from the parent"
+        },
     ) {
         GameHistoryViewImpl(
             listState = listState,

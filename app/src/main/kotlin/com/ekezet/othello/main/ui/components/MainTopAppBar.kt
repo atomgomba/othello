@@ -26,11 +26,11 @@ internal fun MainState.MainTopAppBar(
     currentDestination: String,
     navController: NavHostController,
     showPossibleMoves: Boolean,
-    gameHistorySize: Int,
+    showTextHistory: Boolean,
 ) {
     val titleString = when (currentDestination) {
         GameHistoryRoute.id ->
-            stringResource(R.string.game_history__title__num_of_moves, gameHistorySize)
+            stringResource(R.string.game_history__title)
 
         SettingsRoute.id ->
             stringResource(R.string.main__nav__settings)
@@ -62,6 +62,12 @@ internal fun MainState.MainTopAppBar(
                 visible = currentDestination == GameBoardRoute.id,
             ) {
                 GameBoardToolbarActions(showPossibleMoves)
+            }
+
+            AnimatedVisibility(
+                visible = currentDestination == GameHistoryRoute.id,
+            ) {
+                GameHistoryToolbarActions(showTextHistory)
             }
         },
     )

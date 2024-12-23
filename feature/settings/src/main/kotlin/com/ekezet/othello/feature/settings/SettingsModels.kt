@@ -36,6 +36,7 @@ internal data class SettingsModel(
     override val boardDisplayOptions: BoardDisplayOptions = BoardDisplayOptions.Default,
     override val historyDisplayOptions: HistoryDisplayOptions = HistoryDisplayOptions.Default,
     override val confirmExit: Boolean = DefaultConfirmExit,
+    override val showHistoryAsText: Boolean = HistorySettings.Default.showHistoryAsText,
     internal val selectingStrategyFor: Disk? = null,
 ) : IGameSettings, IHistorySettings, IAppSettings {
     internal fun showStrategySelectorFor(player: Disk) = copy(selectingStrategyFor = player)
@@ -73,6 +74,8 @@ internal data class SettingsModel(
     )
 
     internal fun toggleConfirmExit() = copy(confirmExit = !confirmExit)
+
+    internal fun toggleShowHistoryAsText() = copy(showHistoryAsText = !showHistoryAsText)
 }
 
 @Immutable

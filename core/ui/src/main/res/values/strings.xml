@@ -2,9 +2,6 @@
 <resources>
     <string name="app_name">Othello</string>
 
-    <string name="main__menu__new_game">Reset game</string>
-    <string name="main__menu__share_board">Share board</string>
-    <string name="main__menu__toggle_indicators">Toggle indicators</string>
     <string name="main__nav__confirm_exit">Press back again to exit</string>
     <string name="main__nav__game_board">Play</string>
     <string name="main__nav__game_history">History</string>
@@ -18,12 +15,14 @@
 
     <string name="game_board__footer__tie_game">Tie Game!</string>
     <string name="game_board__footer__winner">Winner!</string>
+    <string name="game_board__header__current_turn">Current turn</string>
     <string name="game_board__header__first_turn">First turn</string>
     <string name="game_board__header__next_turn">Next turn</string>
     <string name="game_board__header__passed">Passed Turn</string>
     <string name="game_board__header__previous_turn">Previous turn</string>
-    <string name="game_board__header__current_turn">Current turn</string>
     <string name="game_board__header__turn">Turn: %d/%d</string>
+    <string name="game_board__menu__new_game">Reset game</string>
+    <string name="game_board__menu__toggle_indicators">Toggle indicators</string>
 
     <string name="game_history__list__ended_tie">Tie game!</string>
     <string name="game_history__list__ended_win">Winner!</string>
@@ -31,7 +30,11 @@
     <string name="game_history__list__pass">Passed</string>
     <string name="game_history__list__scroll_to_bottom">Scroll to bottom</string>
     <string name="game_history__list__scroll_to_top">Scroll to top</string>
-    <string name="game_history__title__num_of_moves">History (moves: %d)</string>
+    <string name="game_history__menu__copy_moves">Copy moves</string>
+    <string name="game_history__menu__paste_moves">Paste moves</string>
+    <string name="game_history__menu__text_view">View as text</string>
+    <string name="game_history__menu__thumbnail_view">View as thumbnails</string>
+    <string name="game_history__title">History</string>
 
     <string name="settings__header__app">App</string>
     <string name="settings__header__board">Board</string>
