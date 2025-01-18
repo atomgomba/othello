@@ -34,7 +34,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.ekezet.hurok.AnyActionEmitter
-import com.ekezet.hurok.compose.LoopWrapper
+import com.ekezet.hurok.compose.LoopView
 import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.data.models.isDark
 import com.ekezet.othello.core.data.models.isLight
@@ -76,7 +76,7 @@ fun GameBoardView(
     onStrategyClick: OnStrategyClick,
     modifier: Modifier = Modifier,
 ) {
-    LoopWrapper(
+    LoopView(
         builder = GameBoardLoop,
         args = args,
         parentEmitter = checkNotNull(parentEmitter) {

@@ -24,7 +24,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.ekezet.hurok.compose.LocalActionEmitter
-import com.ekezet.hurok.compose.LoopWrapper
+import com.ekezet.hurok.compose.LoopView
 import com.ekezet.othello.core.game.GameHistory
 import com.ekezet.othello.core.game.data.AppSettings
 import com.ekezet.othello.core.game.data.GameSettings
@@ -71,7 +71,7 @@ internal fun MainView(
     val gameHistory: GameHistory by gameHistoryStore.history.collectAsState()
     val historyImages by historyRenderer.renderedImages.collectAsState()
 
-    LoopWrapper(
+    LoopView(
         builder = MainLoop,
         args = MainArgs(
             gameSettings = gameSettings,

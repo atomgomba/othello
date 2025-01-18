@@ -15,7 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.ekezet.hurok.compose.LoopWrapper
+import com.ekezet.hurok.compose.LoopView
 import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.ui.R.string
 import com.ekezet.othello.feature.settings.OnAlwaysScrollToBottomClicked
@@ -38,7 +38,7 @@ fun SettingsView(
     modifier: Modifier = Modifier,
     listState: LazyListState = rememberLazyListState(),
 ) {
-    LoopWrapper(
+    LoopView(
         builder = SettingsLoop,
         args = args,
     ) {

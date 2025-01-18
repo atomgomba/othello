@@ -23,7 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.ekezet.hurok.compose.LoopWrapper
+import com.ekezet.hurok.compose.LoopView
 import com.ekezet.othello.core.ui.R
 import com.ekezet.othello.feature.gamehistory.GameHistoryArgs
 import com.ekezet.othello.feature.gamehistory.GameHistoryLoop
@@ -40,7 +40,7 @@ fun GameHistoryView(
     onCurrentTurnClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    LoopWrapper(
+    LoopView(
         builder = GameHistoryLoop,
         args = args,
     ) {
