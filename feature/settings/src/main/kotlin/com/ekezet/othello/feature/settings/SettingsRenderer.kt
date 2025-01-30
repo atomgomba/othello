@@ -3,7 +3,7 @@ package com.ekezet.othello.feature.settings
 import com.ekezet.hurok.Renderer
 import com.ekezet.othello.core.game.strategy.PreferSidesDecoratorStrategy
 
-internal class SettingsRenderer : Renderer<SettingsModel, SettingsDependency, SettingsState> {
+internal class SettingsRenderer : Renderer<SettingsModel, SettingsState> {
     override fun renderState(model: SettingsModel) = with(model) {
         SettingsState(
             darkStrategy = darkStrategy,

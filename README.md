@@ -8,10 +8,6 @@ For a good example of how *hurok* is used, please have a look at the code for th
 
 You can grab a ready-built APK from [GitHub Actions](https://github.com/atomgomba/othello/actions).
 
-## Building locally
-
-*hurok* is published using the GitHub Packages Maven registry. GPR requires authentication, so to build the app locally, you have to first create a classic access token in your GitHub [profile settings](https://github.com/settings/tokens). Once having a token, please set the `GPR_USERNAME` and `GPR_TOKEN` environment variables in the shell you are using to run the Gradle build.
-
 ## Changes
 
 ### v7

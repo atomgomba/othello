@@ -17,23 +17,6 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-
-        maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/atomgomba/hurok")
-            credentials {
-                Properties().apply {
-                    runCatching {
-                        load(file("local.properties").inputStream())
-                    }.onFailure {
-                        logger.warn("local.properties could not be loaded")
-                    }
-
-                    username = find("GPR_USERNAME")
-                    password = find("GPR_TOKEN")
-                }
-            }
-        }
     }
 }
 

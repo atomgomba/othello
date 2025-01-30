@@ -58,7 +58,7 @@ import org.koin.compose.koinInject
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 internal fun MainView(
-    parentScope: CoroutineScope = rememberCoroutineScope(),
+    scope: CoroutineScope = rememberCoroutineScope(),
     gameSettingsStore: GameSettingsStore = koinInject(),
     historySettingsStore: HistorySettingsStore = koinInject(),
     appSettingsStore: AppSettingsStore = koinInject(),
@@ -77,7 +77,7 @@ internal fun MainView(
             gameSettings = gameSettings,
             hasGameHistory = gameHistory.history.isNotEmpty(),
         ),
-        parentScope = parentScope,
+        scope = scope,
     ) {
         MainViewImpl(
             gameSettings = gameSettings,
