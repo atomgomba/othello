@@ -21,6 +21,7 @@ internal class SettingsRendererTest {
             historyDisplayOptions = initModel.historyDisplayOptions,
             selectingStrategyFor = initModel.selectingStrategyFor,
             confirmExit = initModel.confirmExit,
+            showConfirmResetSettingsDialog = initModel.showConfirmResetSettingsDialog,
         )
 
         assertEquals(expectedState, result)

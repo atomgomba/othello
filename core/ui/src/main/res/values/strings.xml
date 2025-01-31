@@ -15,14 +15,15 @@
     <string name="common__dark">Dark</string>
     <string name="common__human_player">Human Player</string>
     <string name="common__light">Light</string>
+    <string name="common__okay">Okay</string>
 
     <string name="game_board__footer__tie_game">Tie Game!</string>
     <string name="game_board__footer__winner">Winner!</string>
+    <string name="game_board__header__current_turn">Current turn</string>
     <string name="game_board__header__first_turn">First turn</string>
     <string name="game_board__header__next_turn">Next turn</string>
     <string name="game_board__header__passed">Passed Turn</string>
     <string name="game_board__header__previous_turn">Previous turn</string>
-    <string name="game_board__header__current_turn">Current turn</string>
     <string name="game_board__header__turn">Turn: %d/%d</string>
 
     <string name="game_history__list__ended_tie">Tie game!</string>
@@ -33,16 +34,18 @@
     <string name="game_history__list__scroll_to_top">Scroll to top</string>
     <string name="game_history__title__num_of_moves">History (moves: %d)</string>
 
+    <string name="settings__confirm__reset_settings">Proceeding will reset all custom settings.</string>
     <string name="settings__header__app">App</string>
     <string name="settings__header__board">Board</string>
-    <string name="settings__header__players">Players</string>
     <string name="settings__header__history">History</string>
+    <string name="settings__header__players">Players</string>
+    <string name="settings__switch__always_scroll_to_bottom">Always scroll to bottom</string>
+    <string name="settings__switch__confirm_exit">Confirm exit</string>
     <string name="settings__switch__grayscale_mode">Grayscale mode</string>
     <string name="settings__switch__grayscale_mode_description">Better for e-paper displays</string>
     <string name="settings__switch__prefer_sides">Prefer sides</string>
     <string name="settings__switch__show_positions">Show positions</string>
     <string name="settings__switch__show_possible_moves">Show possible moves</string>
+    <string name="settings__title__reset_settings">Reset settings…</string>
     <string name="settings__title__strategy">%s strategy</string>
-    <string name="settings__switch__always_scroll_to_bottom">Always scroll to bottom</string>
-    <string name="settings__switch__confirm_exit">Confirm exit</string>
 </resources>

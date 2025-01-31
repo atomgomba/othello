@@ -14,6 +14,7 @@ internal class SettingsRenderer : Renderer<SettingsModel, SettingsState> {
             selectingStrategyFor = selectingStrategyFor,
             historyDisplayOptions = historyDisplayOptions,
             confirmExit = confirmExit,
+            showConfirmResetSettingsDialog = showConfirmResetSettingsDialog,
         )
     }
 }

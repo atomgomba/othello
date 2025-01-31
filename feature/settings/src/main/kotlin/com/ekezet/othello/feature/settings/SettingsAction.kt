@@ -80,3 +80,19 @@ internal data object OnConfirmExitClicked : GameSettingsAction {
         return outcome(updated, PublishAppSettings(updated))
     }
 }
+
+internal data object OnResetSettingsClicked : GameSettingsAction {
+    override fun SettingsModel.proceed(): Next<SettingsModel, SettingsDependency> =
+        mutate(copy(showConfirmResetSettingsDialog = true))
+}
+
+internal data class OnResetSettingsDialogClicked(val isConfirmed: Boolean) : GameSettingsAction {
+    override fun SettingsModel.proceed(): Next<SettingsModel, SettingsDependency> {
+        val effects = buildList {
+            if (isConfirmed) {
+                add(ResetAppSettings)
+            }
+        }
+        return outcome(copy(showConfirmResetSettingsDialog = false), effects = effects.toTypedArray())
+    }
+}
