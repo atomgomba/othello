@@ -6,10 +6,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -21,11 +23,14 @@ import com.ekezet.othello.core.ui.R.string
 import com.ekezet.othello.feature.settings.OnAlwaysScrollToBottomClicked
 import com.ekezet.othello.feature.settings.OnConfirmExitClicked
 import com.ekezet.othello.feature.settings.OnGrayscaleModeClicked
+import com.ekezet.othello.feature.settings.OnResetSettingsClicked
+import com.ekezet.othello.feature.settings.OnResetSettingsDialogClicked
 import com.ekezet.othello.feature.settings.OnShowBoardPositionsClicked
 import com.ekezet.othello.feature.settings.OnShowPossibleMovesClicked
 import com.ekezet.othello.feature.settings.SettingsArgs
 import com.ekezet.othello.feature.settings.SettingsLoop
 import com.ekezet.othello.feature.settings.SettingsState
+import com.ekezet.othello.feature.settings.ui.components.ButtonRow
 import com.ekezet.othello.feature.settings.ui.components.SelectedStrategy
 import com.ekezet.othello.feature.settings.ui.components.StrategySelector
 import com.ekezet.othello.feature.settings.ui.components.SwitchRow
@@ -62,7 +67,7 @@ internal fun SettingsState.SettingsViewImpl(
     LazyColumn(
         modifier = modifier,
         state = listState,
-        verticalArrangement = Arrangement.spacedBy(24.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
         contentPadding = PaddingValues(top = 16.dp, bottom = 96.dp),
     ) {
         item {
@@ -79,7 +84,7 @@ internal fun SettingsState.SettingsViewImpl(
             )
         }
 
-        item { HorizontalDivider(modifier = Modifier.padding(horizontal = 32.dp)) }
+        item { HorizontalDivider(modifier = Modifier.padding(horizontal = 32.dp, vertical = 8.dp)) }
 
         item {
             SelectedStrategy(
@@ -147,12 +152,37 @@ internal fun SettingsState.SettingsViewImpl(
                 onCheckedChange = { emit(OnConfirmExitClicked) },
             )
         }
+
+        item {
+            ButtonRow(
+                label = stringResource(id = string.settings__title__reset_settings),
+                onClick = { emit(OnResetSettingsClicked) },
+            )
+        }
     }
 
     StrategySelector(
         selectStrategyFor = selectStrategyFor,
         sheetState = sheetState,
     )
+
+    if (showConfirmResetSettingsDialog) {
+        AlertDialog(
+            title = { Text(text = stringResource(id = string.settings__title__reset_settings)) },
+            text = { Text(text = stringResource(id = string.settings__confirm__reset_settings)) },
+            onDismissRequest = { emit(OnResetSettingsDialogClicked(isConfirmed = false)) },
+            confirmButton = {
+                TextButton(onClick = { emit(OnResetSettingsDialogClicked(isConfirmed = true)) }) {
+                    Text(text = stringResource(id = string.common__okay))
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { emit(OnResetSettingsDialogClicked(isConfirmed = false)) }) {
+                    Text(text = stringResource(id = string.common__cancel))
+                }
+            },
+        )
+    }
 }
 
 @Composable

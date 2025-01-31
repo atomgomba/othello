@@ -2,6 +2,7 @@ package com.ekezet.othello.feature.settings
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
+import com.ekezet.hurok.ActionEmitter
 import com.ekezet.hurok.ViewState
 import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.data.models.isDark
@@ -37,6 +38,7 @@ internal data class SettingsModel(
     override val historyDisplayOptions: HistoryDisplayOptions = HistoryDisplayOptions.Default,
     override val confirmExit: Boolean = DefaultConfirmExit,
     internal val selectingStrategyFor: Disk? = null,
+    internal val showConfirmResetSettingsDialog: Boolean = false,
 ) : IGameSettings, IHistorySettings, IAppSettings {
     internal fun showStrategySelectorFor(player: Disk) = copy(selectingStrategyFor = player)
     internal fun dismissStrategySelector() = copy(selectingStrategyFor = null)
@@ -85,6 +87,7 @@ internal data class SettingsState(
     val darkStrategy: Strategy?,
     val selectingStrategyFor: Disk?,
     val confirmExit: Boolean,
+    val showConfirmResetSettingsDialog: Boolean,
 ) : ViewState<SettingsModel, SettingsDependency>() {
     internal val Disk.isNotHuman: Boolean
         inline get() = if (isLight) {
@@ -130,3 +133,5 @@ internal class SettingsDependency(
     override val appSettingsStore: AppSettingsStore = appSettingsStore ?: get()
     override val gameHistoryStore: GameHistoryStore = gameHistoryStore ?: get()
 }
+
+internal typealias SettingsEmitter = ActionEmitter<SettingsModel, SettingsDependency>

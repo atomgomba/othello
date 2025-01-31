@@ -1,9 +1,9 @@
 package com.ekezet.othello.feature.settings.ui.components
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material3.MaterialTheme
@@ -24,20 +24,22 @@ internal fun SwitchRow(
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier
+            .fillMaxWidth()
             .toggleable(
                 value = checked,
                 role = Role.Switch,
                 onValueChange = onCheckedChange,
             )
-            .padding(horizontal = 16.dp, vertical = 4.dp),
+            .padding(horizontal = 16.dp, vertical = 12.dp),
     ) {
-        Column {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(4.dp),
+        ) {
             Text(label)
 
             if (description != null) {
-                Spacer(Modifier.height(4.dp))
-
                 Text(
                     text = description,
                     style = MaterialTheme.typography.labelMedium,
@@ -45,7 +47,7 @@ internal fun SwitchRow(
                 )
             }
         }
-        Spacer(Modifier.weight(1F))
+
         Switch(checked = checked, onCheckedChange = null)
     }
 }
