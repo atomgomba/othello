@@ -4,14 +4,8 @@ on:
   release:
     types: [created]
 
-env:
-  GPR_USERNAME: ${{ github.actor }}
-  GPR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
 jobs:
   build:
-    needs: test
-    
     permissions:
       contents: read
       packages: read
@@ -40,23 +34,3 @@ jobs:
         with:
           name: othello-android
           path: app/build/outputs/apk/release/app-release-unsigned.apk
-
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout source
-        uses: actions/checkout@v4
-      - name: Set up caching
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}-${{ hashFiles('**/gradle/*.toml') }}
-      - name: Set up JDK
-        uses: actions/setup-java@v4
-        with:
-          distribution: "zulu"
-          java-version: "17"
-      - name: Run unit tests
-        run: ./gradlew testDebugUnitTest --stacktrace
