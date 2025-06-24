@@ -7,7 +7,7 @@ sealed interface Disk {
     data object Dark : Disk
     data object Light : Disk
 
-    operator fun not(): Disk = if (isDark) Light else Dark
+    operator fun not(): Disk = if (this is Dark) Light else Dark
 
     companion object
 }
