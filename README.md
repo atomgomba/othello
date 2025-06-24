@@ -11,6 +11,10 @@ You can grab a ready-built APK from [GitHub Actions](https://github.com/atomgomb
 
 ## Changes
 
+### v9
+
+* Maintenance release
+
 ### v8
 
 * Add option to reset settings to defaults
