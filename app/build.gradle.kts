@@ -3,6 +3,7 @@ plugins {
     id("othello.android.app.versioning")
     id("othello.android.app.compose")
     id("othello.android.app.hurok")
+
     alias(libs.plugins.android.application)
     alias(libs.plugins.baselineprofile)
 }
@@ -42,14 +43,14 @@ android {
 }
 
 dependencies {
-    implementation(project(":core:data"))
-    implementation(project(":core:game"))
-    implementation(project(":core:logging"))
-    implementation(project(":core:ui"))
+    implementation(projects.core.data)
+    implementation(projects.core.game)
+    implementation(projects.core.logging)
+    implementation(projects.core.ui)
 
-    implementation(project(":feature:game-board"))
-    implementation(project(":feature:game-history"))
-    implementation(project(":feature:settings"))
+    implementation(projects.feature.gameBoard)
+    implementation(projects.feature.gameHistory)
+    implementation(projects.feature.settings)
 
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.material.iconsExtended)
@@ -62,5 +63,5 @@ dependencies {
     testImplementation(libs.junit4)
     testImplementation(libs.mockk)
 
-    "baselineProfile"(project(":app:baselineprofile"))
+    "baselineProfile"(projects.app.baselineprofile)
 }

@@ -9,10 +9,10 @@ android {
 }
 
 dependencies {
-    implementation(project(":core:data"))
-    implementation(project(":core:game"))
-    implementation(project(":core:logging"))
-    implementation(project(":core:ui"))
+    implementation(projects.core.data)
+    implementation(projects.core.game)
+    implementation(projects.core.logging)
+    implementation(projects.core.ui)
 
     implementation(libs.androidx.compose.material.iconsExtended)
     implementation(libs.kotlinx.immutable)

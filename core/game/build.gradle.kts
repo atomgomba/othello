@@ -8,8 +8,8 @@ android {
 }
 
 dependencies {
-    implementation(project(":core:data"))
-    implementation(project(":core:logging"))
+    implementation(projects.core.data)
+    implementation(projects.core.logging)
 
     implementation(libs.kotlinx.coroutines.android)
 

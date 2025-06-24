@@ -1,5 +1,7 @@
 import java.util.Properties
 
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
 pluginManagement {
     includeBuild("build-logic")
 
