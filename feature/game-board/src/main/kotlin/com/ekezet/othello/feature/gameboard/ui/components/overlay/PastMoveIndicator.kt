@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.ekezet.othello.core.data.models.Disk
-import com.ekezet.othello.core.ui.components.color
+import com.ekezet.othello.core.ui.color
 import com.ekezet.othello.core.ui.render.moveHighlightColor
 
 @Composable

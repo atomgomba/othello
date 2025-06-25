@@ -11,7 +11,7 @@ import com.ekezet.othello.core.data.models.BoardWidth
 import com.ekezet.othello.core.data.models.x
 import com.ekezet.othello.core.data.models.y
 import com.ekezet.othello.core.game.PastMove
-import com.ekezet.othello.core.ui.components.color
+import com.ekezet.othello.core.ui.color
 
 private const val bitmapWidth = 640F
 private const val bitmapHeight = bitmapWidth

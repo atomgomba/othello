@@ -10,13 +10,9 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.ekezet.othello.core.data.models.Disk
-import com.ekezet.othello.core.data.models.isDark
-
-internal val DarkColor = Color.Black
-internal val LightColor = Color.White
+import com.ekezet.othello.core.ui.color
 
 @Composable
 fun GamePiece(disk: Disk, modifier: Modifier = Modifier) {
@@ -44,6 +40,3 @@ fun GamePieceWithBorder(disk: Disk, modifier: Modifier = Modifier) {
 
     GamePiece(disk = disk, modifier = bordered)
 }
-
-val Disk.color: Color
-    get() = if (isDark) DarkColor else LightColor

@@ -1,6 +1,7 @@
 package com.ekezet.othello.core.ui
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.data.models.isDark
@@ -15,6 +16,9 @@ val Disk.stringResource: String
             string.common__light
         },
     )
+
+val Disk.color: Color
+    get() = if (isDark) Color.Companion.Black else Color.Companion.White
 
 val Strategy?.nameOrHumanPlayer: String
     @Composable inline get() =

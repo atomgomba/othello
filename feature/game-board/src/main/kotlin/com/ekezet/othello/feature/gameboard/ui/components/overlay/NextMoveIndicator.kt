@@ -11,7 +11,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import com.ekezet.othello.core.data.models.Disk
-import com.ekezet.othello.core.ui.components.color
+import com.ekezet.othello.core.ui.color
 import kotlinx.coroutines.launch
 
 @Composable
