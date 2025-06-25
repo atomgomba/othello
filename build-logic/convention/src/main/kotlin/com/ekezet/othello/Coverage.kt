@@ -1,18 +1,13 @@
 package com.ekezet.othello
 
-import com.android.build.api.dsl.CommonExtension
 import kotlinx.kover.gradle.plugin.dsl.KoverProjectExtension
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 
-internal fun Project.configureCoverage(
-    commonExtension: CommonExtension<*, *, *, *, *, *>,
-) {
-    commonExtension.apply {
-        with(pluginManager) {
-            apply(libs.findPlugin("kotlinx-kover").get().get().pluginId)
-        }
+internal fun Project.configureCoverage() {
+    with(pluginManager) {
+        apply(libs.findPlugin("kotlinx-kover").get().get().pluginId)
     }
 
     dependencies {

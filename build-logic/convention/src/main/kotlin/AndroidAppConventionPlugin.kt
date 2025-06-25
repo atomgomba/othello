@@ -1,7 +1,7 @@
 
 import com.android.build.api.dsl.ApplicationExtension
-import com.ekezet.othello.configureKoin
 import com.ekezet.othello.configureKotlinAndroid
+import com.ekezet.othello.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
@@ -17,8 +17,7 @@ class AndroidAppConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             with(pluginManager) {
-                apply("com.android.application")
-                apply("org.jetbrains.kotlin.android")
+                apply(libs.findPlugin("android-application").get().get().pluginId)
             }
 
             with(extensions) {
@@ -37,8 +36,6 @@ class AndroidAppConventionPlugin : Plugin<Project> {
                     configureKotlinAndroid(this)
                 }
             }
-
-            configureKoin()
 
             dependencies {
                 add("testImplementation", kotlin("test"))

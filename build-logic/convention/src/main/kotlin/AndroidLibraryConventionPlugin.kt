@@ -2,7 +2,6 @@
 import AndroidAppConventionPlugin.Companion.compileSdkLevel
 import AndroidAppConventionPlugin.Companion.minSdkLevel
 import com.android.build.api.dsl.LibraryExtension
-import com.ekezet.othello.configureKoin
 import com.ekezet.othello.configureKotlinAndroid
 import com.ekezet.othello.libs
 import org.gradle.api.Plugin
@@ -16,7 +15,6 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
         with(target) {
             with(pluginManager) {
                 apply(libs.findPlugin("android-library").get().get().pluginId)
-                apply(libs.findPlugin("kotlin-android").get().get().pluginId)
             }
 
             with(extensions) {
@@ -30,8 +28,6 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
                     configureKotlinAndroid(this)
                 }
             }
-
-            configureKoin()
 
             dependencies {
                 add("testImplementation", kotlin("test"))

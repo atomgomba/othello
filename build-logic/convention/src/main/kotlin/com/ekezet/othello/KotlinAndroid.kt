@@ -18,6 +18,10 @@ private val javaVersion = JavaVersion.VERSION_17
 internal fun Project.configureKotlinAndroid(
     commonExtension: CommonExtension<*, *, *, *, *, *>,
 ) {
+    with(pluginManager) {
+        apply(libs.findPlugin("kotlin-android").get().get().pluginId)
+    }
+
     commonExtension.apply {
         compileSdk = AndroidAppConventionPlugin.compileSdkLevel
 
@@ -33,8 +37,9 @@ internal fun Project.configureKotlinAndroid(
     }
 
     configureKotlin()
-    configureCoverage(commonExtension)
-    configureDetekt(commonExtension)
+    configureCoverage()
+    configureKoin()
+    configureDetekt()
 
     dependencies {
         add("coreLibraryDesugaring", libs.findLibrary("android.desugarJdkLibs").get())

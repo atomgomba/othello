@@ -10,11 +10,11 @@ import org.jetbrains.kotlin.compose.compiler.gradle.ComposeCompilerGradlePluginE
 internal fun Project.configureAndroidCompose(
     commonExtension: CommonExtension<*, *, *, *, *, *>,
 ) {
-    with(commonExtension) {
-        with(pluginManager) {
-            apply(libs.findPlugin("compose-compiler").get().get().pluginId)
-        }
+    with(pluginManager) {
+        apply(libs.findPlugin("compose-compiler").get().get().pluginId)
+    }
 
+    with(commonExtension) {
         buildFeatures {
             compose = true
         }

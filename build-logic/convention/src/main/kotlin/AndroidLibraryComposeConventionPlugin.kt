@@ -13,6 +13,7 @@ class AndroidLibraryComposeConventionPlugin : Plugin<Project> {
             with(pluginManager) {
                 apply(libs.findPlugin("android-library").get().get().pluginId)
             }
+
             val extension = extensions.getByType<LibraryExtension>()
             configureAndroidCompose(extension)
             configureAndroidKoinCompose()

@@ -13,6 +13,7 @@ class AndroidAppComposeConventionPlugin : Plugin<Project> {
             with(pluginManager) {
                 apply(libs.findPlugin("android-application").get().get().pluginId)
             }
+
             val extension = extensions.getByType<ApplicationExtension>()
             configureAndroidCompose(extension)
             configureAndroidKoinCompose()
