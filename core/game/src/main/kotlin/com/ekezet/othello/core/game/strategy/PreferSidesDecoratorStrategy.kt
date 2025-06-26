@@ -27,10 +27,7 @@ data class PreferSidesDecoratorStrategy(
     }
 
     companion object {
-        fun Strategy.preferSides() = if (this is PreferSidesDecoratorStrategy) {
-            this
-        } else {
-            PreferSidesDecoratorStrategy(this)
-        }
+        fun Strategy.preferSides() =
+            this as? PreferSidesDecoratorStrategy ?: PreferSidesDecoratorStrategy(this)
     }
 }

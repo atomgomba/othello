@@ -16,14 +16,14 @@ import org.koin.java.KoinJavaComponent.getKoin
 @ExperimentalMaterial3WindowSizeClassApi
 class MainActivity : ComponentActivity(), Finishable {
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        enableEdgeToEdge()
-
         getKoin().declare<Finishable>(
             instance = this,
             qualifier = FinishableMainActivity,
         )
+
+        super.onCreate(savedInstanceState)
+
+        enableEdgeToEdge()
 
         setContent {
             OthelloTheme {
