@@ -43,11 +43,12 @@ fun GamePiece(disk: Disk, modifier: Modifier = Modifier) {
 
 @Composable
 fun GamePieceWithBorder(disk: Disk, modifier: Modifier = Modifier) {
-    val bordered = modifier.border(
-        width = 1.dp,
-        color = MaterialTheme.colorScheme.outline,
-        shape = CircleShape,
+    GamePiece(
+        disk = disk,
+        modifier = modifier.border(
+            width = 1.dp,
+            color = MaterialTheme.colorScheme.outline,
+            shape = CircleShape,
+        ),
     )
-
-    GamePiece(disk = disk, modifier = bordered)
 }
