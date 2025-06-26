@@ -1,12 +1,17 @@
 package com.ekezet.othello.core.ui.components
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,11 +27,17 @@ fun GamePiece(disk: Disk, modifier: Modifier = Modifier) {
         ),
         contentAlignment = Alignment.Center,
     ) {
-        Surface(
-            modifier = Modifier.fillMaxSize(.8F),
-            shape = CircleShape,
-            color = disk.color,
-        ) {}
+        AnimatedContent(
+            targetState = disk,
+            transitionSpec = {
+                scaleIn(animationSpec = spring()) togetherWith scaleOut(animationSpec = spring())
+            },
+            contentAlignment = Alignment.Center,
+        ) { state ->
+            Canvas(modifier = Modifier.fillMaxSize(.8F)) {
+                drawCircle(color = state.color, radius = size.minDimension / 2)
+            }
+        }
     }
 }
 

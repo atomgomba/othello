@@ -112,7 +112,7 @@ private fun GameBoardImpl(
                         VerticalPosition(number = rowIndex + 1, nextMovePosition = nextMovePosition)
                     }
 
-                    key(colIndex, rowIndex, disk, overlayItem?.composeKey, ended) {
+                    key(colIndex, rowIndex, disk != null, overlayItem?.composeKey, ended) {
                         Box(
                             modifier = Modifier
                                 .roundedCell(colIndex, rowIndex, boardCornerRadius)
@@ -190,14 +190,10 @@ private fun VerticalPosition(
     }
 }
 
-private fun Modifier.roundedCell(x: Int, y: Int, radius: Dp) = if (x == 0 && y == 0) {
-    clip(shape = RoundedCornerShape(topStart = radius))
-} else if (x == 7 && y == 0) {
-    clip(shape = RoundedCornerShape(topEnd = radius))
-} else if (x == 0 && y == 7) {
-    clip(shape = RoundedCornerShape(bottomStart = radius))
-} else if (x == 7 && y == 7) {
-    clip(shape = RoundedCornerShape(bottomEnd = radius))
-} else {
-    this
+private fun Modifier.roundedCell(x: Int, y: Int, radius: Dp) = when {
+    x == 0 && y == 0 -> clip(shape = RoundedCornerShape(topStart = radius))
+    x == 7 && y == 0 -> clip(shape = RoundedCornerShape(topEnd = radius))
+    x == 0 && y == 7 -> clip(shape = RoundedCornerShape(bottomStart = radius))
+    x == 7 && y == 7 -> clip(shape = RoundedCornerShape(bottomEnd = radius))
+    else -> this
 }
