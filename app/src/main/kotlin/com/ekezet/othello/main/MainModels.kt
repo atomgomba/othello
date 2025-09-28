@@ -3,6 +3,7 @@ package com.ekezet.othello.main
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import com.ekezet.hurok.ActionEmitter
+import com.ekezet.hurok.DependencyContainer
 import com.ekezet.hurok.ViewState
 import com.ekezet.othello.core.game.data.BoardDisplayOptions
 import com.ekezet.othello.core.game.data.Default
@@ -49,12 +50,17 @@ internal class MainDependency(
     gameSettingsStore: GameSettingsStore? = null,
     gameHistoryStore: GameHistoryStore? = null,
     activity: Finishable? = null,
-) : KoinComponent, GameSettingsPublisher {
+) : DependencyContainer, KoinComponent, GameSettingsPublisher {
     override val gameSettingsStore: GameSettingsStore = gameSettingsStore ?: get()
     override val gameHistoryStore: GameHistoryStore = gameHistoryStore ?: get()
     val activity: Finishable = activity ?: get(FinishableMainActivity)
 
     var gameBoardEmitter: GameBoardEmitter? = null
+        private set
+
+    override fun plus(dependency: Any) {
+        gameBoardEmitter = dependency as? GameBoardEmitter ?: gameBoardEmitter
+    }
 }
 
 internal typealias MainActionEmitter = ActionEmitter<MainModel, MainDependency>
