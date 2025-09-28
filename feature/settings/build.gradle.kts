@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.ekezet.othello.feature.gamesettings"
+    namespace = "com.ekezet.othello.feature.settings"
 }
 
 dependencies {
