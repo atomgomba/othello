@@ -14,8 +14,9 @@ dependencies {
     implementation(projects.core.logging)
     implementation(projects.core.ui)
 
-    implementation(libs.kotlinx.immutable)
+    implementation(libs.androidx.compose.material.iconsCore)
     implementation(libs.konfetti)
+    implementation(libs.kotlinx.immutable)
 
     testImplementation(libs.junit4)
     testImplementation(libs.junitParams)
