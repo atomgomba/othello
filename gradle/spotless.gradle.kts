@@ -1,8 +1,8 @@
-import com.diffplug.gradle.spotless.SpotlessPlugin
 import com.diffplug.gradle.spotless.SpotlessExtension
+import com.diffplug.gradle.spotless.SpotlessPlugin
 
 initscript {
-    val spotlessVersion = "6.25.0"
+    val spotlessVersion = "8.0.0"
 
     repositories {
         mavenCentral()
