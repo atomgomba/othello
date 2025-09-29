@@ -8,7 +8,7 @@ import org.koin.dsl.module
 fun uiCoreModule() = module {
     single<MovesRenderer> {
         DefaultMovesRenderer(
-            jobDispatcher = Dispatchers.IO,
+            coroutineContext = Dispatchers.IO,
         )
     }
 }

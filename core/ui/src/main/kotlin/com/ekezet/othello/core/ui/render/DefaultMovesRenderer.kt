@@ -8,7 +8,6 @@ import com.ekezet.othello.core.ui.render.DefaultMovesRenderer.RenderJob.Running
 import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toImmutableMap
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart.LAZY
 import kotlinx.coroutines.Deferred
@@ -20,14 +19,15 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlin.coroutines.CoroutineContext
 
 internal class DefaultMovesRenderer(
-    dispatcher: CoroutineDispatcher,
+    coroutineContext: CoroutineContext,
     private val onRender: OnRenderCallback,
 ) : MovesRenderer {
 
-    constructor(jobDispatcher: CoroutineDispatcher) : this(
-        dispatcher = jobDispatcher,
+    constructor(coroutineContext: CoroutineContext) : this(
+        coroutineContext = coroutineContext,
         onRender = PastMove::renderToBitmap,
     )
 
@@ -36,12 +36,13 @@ internal class DefaultMovesRenderer(
         get() = _renderedImages.asStateFlow()
 
     private val renderJobs: MutableMap<String, RenderJob> = mutableMapOf()
-    private val jobScope = CoroutineScope(SupervisorJob() + dispatcher)
+    private val jobScope = CoroutineScope(SupervisorJob() + coroutineContext)
     private val mutex = Mutex()
 
     override suspend fun updateJobs(moveHistory: MoveHistory) = jobScope.launch {
         val newJobIds = moveHistory.map { move -> move.uuid }.toSet()
-        val oldJobIds = mutex.withLock { renderJobs.keys subtract newJobIds }
+        val oldJobIds = mutex.withLock { renderJobs.keys - newJobIds }
+
         for (oldId in oldJobIds) {
             removeJob(oldId)
         }
@@ -76,17 +77,26 @@ internal class DefaultMovesRenderer(
     }
 
     private suspend fun finishJob(jobId: String, result: ImageBitmap) {
+        var shouldPublish = false
         mutex.withLock {
-            renderJobs[jobId] = Done(jobId = jobId, bitmap = result)
+            if (renderJobs[jobId] is Running) {
+                renderJobs[jobId] = Done(jobId = jobId, bitmap = result)
+                shouldPublish = true
+            }
         }
-        publishRenderedImages()
+        if (shouldPublish) {
+            publishRenderedImages()
+        }
     }
 
-    private fun publishRenderedImages() {
-        _renderedImages.value = renderJobs.values
-            .filterIsInstance<Done>()
-            .associate { it.jobId to it.bitmap }
-            .toImmutableMap()
+    private suspend fun publishRenderedImages() {
+        val imagesToPublish = mutex.withLock {
+            renderJobs.values
+                .filterIsInstance<Done>()
+                .associate { it.jobId to it.bitmap }
+                .toImmutableMap()
+        }
+        _renderedImages.value = imagesToPublish
     }
 
     internal sealed interface RenderJob {
