@@ -26,6 +26,7 @@ import com.ekezet.othello.core.ui.theme.BoardBackground
 import com.ekezet.othello.core.ui.theme.BoardBackgroundGrayscale
 import com.ekezet.othello.core.ui.viewModels.BoardList
 import com.ekezet.othello.feature.gameboard.ui.viewModels.BoardOverlayList
+import kotlinx.coroutines.Job
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 
@@ -159,6 +160,8 @@ class GameBoardDependency(
 ) : KoinComponent {
     internal val gameHistoryStore: GameHistoryStore = gameHistoryStore ?: get()
     internal val movesRenderer: MovesRenderer = movesRenderer ?: get()
+
+    internal var renderJob: Job? = null
 }
 
 typealias GameBoardEmitter = ActionEmitter<GameBoardModel, GameBoardDependency>
