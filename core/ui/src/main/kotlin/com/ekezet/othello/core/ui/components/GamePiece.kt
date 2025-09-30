@@ -22,9 +22,7 @@ import com.ekezet.othello.core.ui.color
 @Composable
 fun GamePiece(disk: Disk, modifier: Modifier = Modifier) {
     Box(
-        modifier = modifier.then(
-            Modifier.aspectRatio(1F),
-        ),
+        modifier = modifier then Modifier.aspectRatio(1F),
         contentAlignment = Alignment.Center,
     ) {
         AnimatedContent(

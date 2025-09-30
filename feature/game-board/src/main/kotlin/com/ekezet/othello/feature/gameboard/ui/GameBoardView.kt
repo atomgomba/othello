@@ -94,7 +94,7 @@ internal fun GameBoardState.GameBoardViewImpl(
     modifier: Modifier = Modifier,
 ) {
     Box(
-        modifier = modifier.then(Modifier.padding(16.dp)),
+        modifier = modifier then Modifier.padding(16.dp),
         contentAlignment = Alignment.Center,
     ) {
         LazyColumn(
