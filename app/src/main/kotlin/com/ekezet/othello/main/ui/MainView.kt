@@ -155,7 +155,7 @@ internal fun MainState.MainViewImpl(
                     hasGameHistory = hasGameHistory,
                 )
             },
-            modifier = Modifier.padding(top = innerPadding.calculateTopPadding()),
+            modifier = Modifier.padding(innerPadding),
         ) {
             NavHost(
                 navController = navController,
