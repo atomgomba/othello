@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -30,6 +31,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.ekezet.othello.core.data.models.BoardHeight
 import com.ekezet.othello.core.data.models.BoardWidth
+import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.data.models.Position
 import com.ekezet.othello.core.data.models.x
 import com.ekezet.othello.core.data.models.y
@@ -61,20 +63,18 @@ fun GameBoard(
     isClickable: Boolean = true,
     onCellClick: (position: Position) -> Unit = {},
 ) {
-    Column(modifier = modifier) {
-        Row {
-            GameBoardImpl(
-                board = board,
-                background = background,
-                boardCornerRadius = boardCornerRadius,
-                showPositions = showPositions,
-                nextMovePosition = nextMovePosition,
-                ended = ended,
-                overlayFactory = overlayFactory,
-                isClickable = isClickable,
-                onCellClick = onCellClick,
-            )
-        }
+    Box(modifier = modifier) {
+        GameBoardImpl(
+            board = board,
+            background = background,
+            boardCornerRadius = boardCornerRadius,
+            showPositions = showPositions,
+            nextMovePosition = nextMovePosition,
+            ended = ended,
+            overlayFactory = overlayFactory,
+            isClickable = isClickable,
+            onCellClick = onCellClick,
+        )
     }
 }
 
@@ -93,6 +93,7 @@ private fun GameBoardImpl(
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(borderWidth),
+        modifier = Modifier.padding(borderWidth),
     ) {
         for (rowIndex in 0 until BoardHeight) {
             if (showPositions && rowIndex == 0) {
@@ -113,39 +114,64 @@ private fun GameBoardImpl(
                     }
 
                     key(colIndex, rowIndex, disk != null, overlayItem?.composeKey, ended) {
-                        Box(
-                            modifier = Modifier
-                                .roundedCell(colIndex, rowIndex, boardCornerRadius)
-                                .background(color = background)
-                                .weight(CELL_WEIGHT)
-                                .aspectRatio(1F)
-                                .clickable(enabled = isClickable) {
-                                    onCellClick(colIndex to rowIndex)
-                                },
-                            contentAlignment = Alignment.Center,
-                        ) {
-                            if (disk != null) {
-                                val alpha: Float by animateFloatAsState(
-                                    label = "board-disk-alpha",
-                                    targetValue = when (ended) {
-                                        null -> 1F
-                                        is EndedWin -> if (ended.winner == disk) 1F else LOSER_ALPHA
-                                        EndedTie -> LOSER_ALPHA
-                                    },
-                                )
-
-                                GamePiece(
-                                    disk = disk,
-                                    modifier = Modifier.alpha(alpha),
-                                )
-                            }
-
-                            overlayItem?.Composable()
-                        }
+                        BoardCell(
+                            disk = disk,
+                            overlayItem = overlayItem,
+                            colIndex = colIndex,
+                            rowIndex = rowIndex,
+                            background = background,
+                            boardCornerRadius = boardCornerRadius,
+                            ended = ended,
+                            isClickable = isClickable,
+                            onCellClick = onCellClick,
+                        )
                     }
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun RowScope.BoardCell(
+    disk: Disk?,
+    overlayItem: Sprite?,
+    colIndex: Int,
+    rowIndex: Int,
+    background: Color,
+    boardCornerRadius: Dp,
+    ended: GameEnd?,
+    isClickable: Boolean,
+    onCellClick: (position: Position) -> Unit,
+) {
+    Box(
+        modifier = Modifier
+            .roundedCell(colIndex, rowIndex, boardCornerRadius)
+            .background(color = background)
+            .weight(CELL_WEIGHT)
+            .aspectRatio(1F)
+            .clickable(enabled = isClickable) {
+                onCellClick(colIndex to rowIndex)
+            },
+        contentAlignment = Alignment.Center,
+    ) {
+        if (disk != null) {
+            val alpha: Float by animateFloatAsState(
+                label = "board-disk-alpha",
+                targetValue = when (ended) {
+                    null -> 1F
+                    is EndedWin -> if (ended.winner == disk) 1F else LOSER_ALPHA
+                    EndedTie -> LOSER_ALPHA
+                },
+            )
+
+            GamePiece(
+                disk = disk,
+                modifier = Modifier.alpha(alpha),
+            )
+        }
+
+        overlayItem?.Composable()
     }
 }
 

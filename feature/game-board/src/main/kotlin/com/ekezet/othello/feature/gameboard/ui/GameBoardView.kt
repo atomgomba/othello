@@ -8,12 +8,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
@@ -100,26 +98,24 @@ internal fun GameBoardState.GameBoardViewImpl(
             .navigationBarsPadding(),
         contentAlignment = Alignment.Center,
     ) {
-        LazyColumn(
+        Column(
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            item { BoardHeader() }
+            BoardHeader()
 
-            item {
-                GameBoard(
-                    board = board,
-                    modifier = Modifier.fillMaxSize(),
-                    background = boardBackground,
-                    showPositions = displayOptions.showBoardPositions,
-                    nextMovePosition = nextMovePosition,
-                    ended = ended,
-                    overlayFactory = { colIndex, rowIndex -> overlay.getAt(colIndex, rowIndex) },
-                    isClickable = isBoardClickable,
-                    onCellClick = { xy -> emit(OnMoveMade(xy)) },
-                )
-            }
+            GameBoard(
+                board = board,
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+                background = boardBackground,
+                showPositions = displayOptions.showBoardPositions,
+                nextMovePosition = nextMovePosition,
+                ended = ended,
+                overlayFactory = overlay::getAt,
+                isClickable = isBoardClickable,
+                onCellClick = { xy -> emit(OnMoveMade(xy)) },
+            )
 
-            item { BoardFooter(onStrategyClick) }
+            BoardFooter(onStrategyClick)
         }
 
         if (celebrate) {
