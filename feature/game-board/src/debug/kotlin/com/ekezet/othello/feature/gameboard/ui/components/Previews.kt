@@ -2,6 +2,7 @@ package com.ekezet.othello.feature.gameboard.ui.components
 
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.tooling.preview.Devices.TABLET
 import androidx.compose.ui.tooling.preview.Preview
 import com.ekezet.hurok.renderState
 import com.ekezet.othello.core.data.models.Disk
@@ -13,6 +14,12 @@ import com.ekezet.othello.feature.gameboard.GameBoardRenderer
 import com.ekezet.othello.feature.gameboard.ui.GameBoardViewImpl
 
 private val defaultModel = GameBoardModel()
+
+private val grayscaleModel = defaultModel.copy(
+    boardDisplayOptions = defaultModel.boardDisplayOptions.copy(
+        isGrayscaleMode = true,
+    )
+)
 
 private val showPositionsModel = defaultModel.copy(
     boardDisplayOptions = defaultModel.boardDisplayOptions.copy(
@@ -98,5 +105,23 @@ private fun GameBoardPreview_DarkWin() {
 private fun GameBoardPreview_TieGame() {
     PreviewBase {
         tieGameModel.Preview()
+    }
+}
+
+@ExperimentalLayoutApi
+@Preview
+@Composable
+private fun GameBoardPreview_Grayscale() {
+    PreviewBase {
+        grayscaleModel.Preview()
+    }
+}
+
+@ExperimentalLayoutApi
+@Preview(device = TABLET)
+@Composable
+private fun GameBoardPreview_Default_Tablet() {
+    PreviewBase {
+        defaultModel.Preview()
     }
 }
