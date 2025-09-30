@@ -44,6 +44,7 @@ import com.ekezet.othello.core.game.GameEnd.EndedWin
 import com.ekezet.othello.core.ui.R
 import com.ekezet.othello.core.ui.components.GameBoard
 import com.ekezet.othello.core.ui.components.GamePiece
+import com.ekezet.othello.core.ui.fitIntoParent
 import com.ekezet.othello.core.ui.orHumanPlayer
 import com.ekezet.othello.feature.gameboard.ACTION_DELAY_MILLIS
 import com.ekezet.othello.feature.gameboard.GameBoardArgs
@@ -105,7 +106,9 @@ internal fun GameBoardState.GameBoardViewImpl(
 
             GameBoard(
                 board = board,
-                modifier = Modifier.align(Alignment.CenterHorizontally),
+                modifier = Modifier
+                    .fitIntoParent()
+                    .align(Alignment.CenterHorizontally),
                 background = boardBackground,
                 showPositions = displayOptions.showBoardPositions,
                 nextMovePosition = nextMovePosition,

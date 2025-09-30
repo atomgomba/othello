@@ -3,18 +3,18 @@ package com.ekezet.othello.core.ui.components
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -44,7 +44,6 @@ import com.ekezet.othello.core.ui.viewModels.BoardList
 import com.ekezet.othello.core.ui.viewModels.Sprite
 import com.ekezet.othello.core.ui.viewModels.getAt
 
-private val borderWidth = 1.dp
 private const val LOSER_ALPHA = 1 / 3F
 private const val CELL_WEIGHT = 1F / BoardWidth
 private val positionSize = 24.dp
@@ -91,19 +90,14 @@ private fun GameBoardImpl(
     isClickable: Boolean,
     onCellClick: (position: Position) -> Unit,
 ) {
-    Column(
-        verticalArrangement = Arrangement.spacedBy(borderWidth),
-        modifier = Modifier.padding(borderWidth),
-    ) {
+    Column {
         for (rowIndex in 0 until BoardHeight) {
             if (showPositions && rowIndex == 0) {
                 HorizontalPositions(nextMovePosition = nextMovePosition)
             }
 
             Row(
-                modifier = Modifier.wrapContentSize(),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(borderWidth),
             ) {
                 for (colIndex in 0 until BoardWidth) {
                     val disk = board.getAt(colIndex, rowIndex)
@@ -126,8 +120,12 @@ private fun GameBoardImpl(
                             onCellClick = onCellClick,
                         )
                     }
+
+                    Spacer(modifier = Modifier.size(1.dp))
                 }
             }
+
+            Spacer(modifier = Modifier.size(1.dp))
         }
     }
 }
