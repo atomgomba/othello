@@ -66,7 +66,15 @@ private class FitIntoParentNode(
     }
 
     private fun Constraints.findSize(): IntSize {
-        val size = (min(maxWidth, maxHeight) * fraction).fastRoundToInt()
-        return IntSize(size, size)
+        val minSize = min(maxWidth, maxHeight)
+        val (width, height) = if (minSize == maxWidth) {
+            minSize to minSize * (maxHeight / maxWidth)
+        } else {
+            minSize * (maxWidth / maxHeight) to minSize
+        }
+        return IntSize(
+            width = (width * fraction).fastRoundToInt(),
+            height = (height * fraction).fastRoundToInt(),
+        )
     }
 }
