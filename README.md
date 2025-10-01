@@ -9,6 +9,18 @@ For a good example of how *hurok* is used, please have a look at the code for th
 
 You can grab a ready-built APK from [GitHub Actions](https://github.com/atomgomba/othello/actions).
 
+##  Computer strategies (aka. opponents)
+
+The game includes some very basic strategy implementations for a single human player to play against. These are:
+
+* *Max Flip*: Picks the valid move which results in the highest number of opponent disks flipped.
+* *Random Pick*: Randomly picks one from the set of valid moves.
+* *Schizophrenic*: Alternates randomly between the rest of the strategies in each turn.
+
+Additionally, each strategy can be forced to prefer picking a position on the side of the board which often means an advantage in Othello.
+
+To see how these strategies are implemented and how to implement your own, please see the [`strategy`](core/game/src/main/kotlin/com/ekezet/othello/core/game/strategy) package in the `:core:game` module.
+
 ## Changes
 
 ### v9
