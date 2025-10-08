@@ -3,7 +3,7 @@ package com.ekezet.othello.feature.gamehistory
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.graphics.ImageBitmap
-import com.ekezet.hurok.ViewState
+import com.ekezet.hurok.ArgsApplyer
 import com.ekezet.othello.core.game.GameEnd
 import com.ekezet.othello.core.game.GameHistory
 import com.ekezet.othello.core.game.MoveHistory
@@ -29,7 +29,7 @@ internal data class GameHistoryState(
     val lastState: PastGameState,
     val isGrayscaleMode: Boolean,
     val alwaysScrollToBottom: Boolean,
-) : ViewState<GameHistoryModel, GameHistoryDependency>()
+)
 
 @Stable
 data class GameHistoryArgs(
@@ -40,3 +40,5 @@ data class GameHistoryArgs(
 )
 
 internal object GameHistoryDependency
+
+internal typealias GameHistoryArgsApplyer = ArgsApplyer<GameHistoryModel, GameHistoryArgs>

@@ -3,8 +3,9 @@ package com.ekezet.othello.main
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import com.ekezet.hurok.ActionEmitter
-import com.ekezet.hurok.DependencyContainer
-import com.ekezet.hurok.ViewState
+import com.ekezet.hurok.AnyActionEmitter
+import com.ekezet.hurok.ArgsApplyer
+import com.ekezet.hurok.HasActionEmitter
 import com.ekezet.othello.core.game.data.BoardDisplayOptions
 import com.ekezet.othello.core.game.data.Default
 import com.ekezet.othello.core.game.data.DefaultConfirmExit
@@ -38,7 +39,7 @@ internal data class MainModel(
 internal data class MainState(
     val hasGameHistory: Boolean,
     val isExitMessageVisible: Boolean,
-) : ViewState<MainModel, MainDependency>()
+)
 
 @Stable
 internal data class MainArgs(
@@ -50,7 +51,7 @@ internal class MainDependency(
     gameSettingsStore: GameSettingsStore? = null,
     gameHistoryStore: GameHistoryStore? = null,
     activity: Finishable? = null,
-) : DependencyContainer, KoinComponent, GameSettingsPublisher {
+) : HasActionEmitter, KoinComponent, GameSettingsPublisher {
     override val gameSettingsStore: GameSettingsStore = gameSettingsStore ?: get()
     override val gameHistoryStore: GameHistoryStore = gameHistoryStore ?: get()
     val activity: Finishable = activity ?: get(FinishableMainActivity)
@@ -58,9 +59,12 @@ internal class MainDependency(
     var gameBoardEmitter: GameBoardEmitter? = null
         private set
 
-    override fun plus(dependency: Any) {
-        gameBoardEmitter = dependency as? GameBoardEmitter ?: gameBoardEmitter
+    @Suppress("UNCHECKED_CAST")
+    override fun plus(other: AnyActionEmitter) {
+        gameBoardEmitter = other as? GameBoardEmitter ?: gameBoardEmitter
     }
 }
 
 internal typealias MainActionEmitter = ActionEmitter<MainModel, MainDependency>
+
+internal typealias MainArgsApplyer = ArgsApplyer<MainModel, MainArgs>

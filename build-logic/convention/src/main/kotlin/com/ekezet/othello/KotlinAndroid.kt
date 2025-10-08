@@ -10,7 +10,7 @@ import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-private val javaVersion = JavaVersion.VERSION_17
+private val javaVersion = JavaVersion.VERSION_21
 
 /**
  * Configure base Kotlin with Android options

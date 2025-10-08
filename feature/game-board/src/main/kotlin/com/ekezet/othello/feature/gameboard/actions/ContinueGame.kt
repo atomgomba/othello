@@ -1,7 +1,7 @@
 package com.ekezet.othello.feature.gameboard.actions
 
 import com.ekezet.hurok.Action.Next
-import com.ekezet.hurok.outcome
+import com.ekezet.hurok.next
 import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.data.models.isLight
 import com.ekezet.othello.core.game.GameEnd.EndedTie
@@ -25,7 +25,7 @@ internal fun GameBoardModel.nextTurn(newState: CurrentGameState): Next<GameBoard
             add(WaitBeforeNextTurn(nextMove))
         }
     }
-    return ContinueGame.outcome(
+    return ContinueGame.next(
         model = resetNextTurn(newState),
         effects = effects.toTypedArray(),
     )
@@ -34,7 +34,7 @@ internal fun GameBoardModel.nextTurn(newState: CurrentGameState): Next<GameBoard
 internal fun GameBoardModel.passTurn(newState: CurrentGameState): Next<GameBoardModel, GameBoardDependency> {
     val nextStrategy = if (newState.currentDisk.isLight) lightStrategy else darkStrategy
     val nextMove = nextStrategy?.deriveNext(newState)
-    return ContinueGame.outcome(
+    return ContinueGame.next(
         model = resetNextTurn(newState, passed = true),
         PublishPastMoves(newState),
         WaitBeforePassTurn(nextMove, newState),
@@ -43,7 +43,7 @@ internal fun GameBoardModel.passTurn(newState: CurrentGameState): Next<GameBoard
 
 internal fun GameBoardModel.finishGame(newState: CurrentGameState, winner: Disk?): Next<GameBoardModel, GameBoardDependency> {
     val gameEnd = winner?.let { EndedWin(it) } ?: EndedTie
-    return ContinueGame.outcome(
+    return ContinueGame.next(
         model = resetNextTurn(newState),
         PublishPastMoves(newState, gameEnd),
         WaitBeforeGameEnd(gameEnd),

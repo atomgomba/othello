@@ -2,8 +2,7 @@ package com.ekezet.othello.feature.gameboard.actions
 
 import com.ekezet.hurok.Action
 import com.ekezet.hurok.Action.Next
-import com.ekezet.hurok.mutate
-import com.ekezet.hurok.outcome
+import com.ekezet.hurok.next
 import com.ekezet.hurok.skip
 import com.ekezet.hurok.trigger
 import com.ekezet.othello.core.data.models.Position
@@ -35,7 +34,7 @@ internal data object OnLoopStarted : GameBoardAction {
 
 internal data class OnMoveMade(val position: Position) : GameBoardAction {
     override fun GameBoardModel.proceed() = if (currentGameState.validMoves.isValid(position)) {
-        mutate(pickNextMoveAt(position))
+        next(pickNextMoveAt(position))
     } else {
         skip
     }
@@ -63,19 +62,19 @@ internal data class OnTurnPassed(
     val newState: CurrentGameState,
 ) : GameBoardAction {
     override fun GameBoardModel.proceed() =
-        mutate(resetNextTurn(newState).pickNextMoveAt(nextPosition))
+        next(resetNextTurn(newState).pickNextMoveAt(nextPosition))
 }
 
 internal data class OnGameEnded(val result: GameEnd) : GameBoardAction {
-    override fun GameBoardModel.proceed() = mutate(copy(ended = result))
+    override fun GameBoardModel.proceed() = next(copy(ended = result))
 }
 
 internal data object OnFirstTurnClicked : GameBoardAction {
-    override fun GameBoardModel.proceed() = mutate(stepToFirstTurn())
+    override fun GameBoardModel.proceed() = next(stepToFirstTurn())
 }
 
 internal data object OnPreviousTurnClicked : GameBoardAction {
-    override fun GameBoardModel.proceed() = mutate(stepToPreviousTurn())
+    override fun GameBoardModel.proceed() = next(stepToPreviousTurn())
 }
 
 internal data object OnNextTurnClicked : GameBoardAction {
@@ -85,7 +84,7 @@ internal data object OnNextTurnClicked : GameBoardAction {
         return if (gameState is CurrentGameState && !nextModel.currentDisk.isHumanPlayer) {
             nextTurn(gameState)
         } else {
-            mutate(nextModel)
+            next(nextModel)
         }
     }
 }
@@ -101,6 +100,6 @@ internal data object OnCurrentTurnClicked : GameBoardAction {
                 add(WaitBeforeNextTurn(nextMove))
             }
         }
-        return outcome(nextModel, effects = effects.toTypedArray())
+        return next(nextModel, effects = effects.toTypedArray())
     }
 }

@@ -9,41 +9,43 @@ internal class GameBoardLoop internal constructor(
     model: GameBoardModel,
     renderer: GameBoardRenderer,
     args: GameBoardArgs?,
+    argsApplyer: GameBoardArgsApplyer?,
+    onStart: GameBoardEmitter.() -> Unit = {},
     dependency: GameBoardDependency? = null,
-    firstAction: GameBoardAction? = null,
 ) : Loop<GameBoardState, GameBoardModel, GameBoardArgs, GameBoardDependency, GameBoardAction>(
     model = model,
     renderer = renderer,
     args = args,
+    argsApplyer = argsApplyer,
+    onStart = onStart,
     dependency = dependency,
-    firstAction = firstAction,
 ) {
-    override fun GameBoardModel.applyArgs(args: GameBoardArgs): GameBoardModel {
-        val strategyChanged = containsDifferentStrategy(args)
-        return copy(
-            selectedTurn = args.selectedTurn ?: selectedTurn,
-            boardDisplayOptions = args.boardDisplayOptions,
-            lightStrategy = args.lightStrategy,
-            darkStrategy = args.darkStrategy,
-        ).run {
-            if (strategyChanged) {
-                resetNewGame()
-            } else {
-                this
-            }
-        }
-    }
-
     internal companion object Builder :
         LoopBuilder<GameBoardState, GameBoardModel, GameBoardArgs, GameBoardDependency, GameBoardAction> {
-        override fun build(
-            args: GameBoardArgs?,
-        ) = GameBoardLoop(
+        private val argsApplyer: GameBoardArgsApplyer
+            get() = GameBoardArgsApplyer { args ->
+                val strategyChanged = containsDifferentStrategy(args)
+                copy(
+                    selectedTurn = args.selectedTurn ?: selectedTurn,
+                    boardDisplayOptions = args.boardDisplayOptions,
+                    lightStrategy = args.lightStrategy,
+                    darkStrategy = args.darkStrategy,
+                ).run {
+                    if (strategyChanged) {
+                        resetNewGame()
+                    } else {
+                        this
+                    }
+                }
+            }
+
+        override fun build(args: GameBoardArgs?) = GameBoardLoop(
             model = GameBoardModel(),
             renderer = GameBoardRenderer(),
             args = requireNotNull(args) { "Arguments must be set" },
+            argsApplyer = argsApplyer,
             dependency = GameBoardDependency(),
-            firstAction = OnLoopStarted,
+            onStart = { emit(OnLoopStarted) },
         )
     }
 }

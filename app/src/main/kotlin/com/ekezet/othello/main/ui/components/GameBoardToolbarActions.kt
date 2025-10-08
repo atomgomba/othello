@@ -11,16 +11,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.ekezet.othello.core.ui.R.drawable
 import com.ekezet.othello.core.ui.R.string
-import com.ekezet.othello.main.MainState
-import com.ekezet.othello.main.OnNewGameClicked
-import com.ekezet.othello.main.OnToggleIndicatorsClicked
 
 @Composable
-internal fun MainState.GameBoardToolbarActions(
+internal fun GameBoardToolbarActions(
+    onRefreshClick: () -> Unit,
+    onShowPossibleMovesClick: (Boolean) -> Unit,
     showPossibleMoves: Boolean,
 ) {
     Row {
-        IconButton(onClick = { emit(OnNewGameClicked) }) {
+        IconButton(onClick = onRefreshClick) {
             Icon(
                 imageVector = Icons.Default.Refresh,
                 contentDescription = stringResource(string.main__menu__new_game),
@@ -29,7 +28,7 @@ internal fun MainState.GameBoardToolbarActions(
 
         IconToggleButton(
             checked = showPossibleMoves,
-            onCheckedChange = { emit(OnToggleIndicatorsClicked) },
+            onCheckedChange = onShowPossibleMovesClick,
         ) {
             Icon(
                 painter = painterResource(

@@ -7,7 +7,7 @@ import com.ekezet.othello.core.ui.viewModels.toImmutableList
 import com.ekezet.othello.feature.gamehistory.ui.viewModels.HistoryItem
 import kotlinx.collections.immutable.toImmutableList
 
-internal class GameHistoryRenderer : Renderer<GameHistoryModel, GameHistoryState> {
+internal class GameHistoryRenderer : Renderer<GameHistoryState, GameHistoryModel> {
     override fun renderState(model: GameHistoryModel) = with(model) {
         GameHistoryState(
             historyItems = renderHistoryItems(),

@@ -1,7 +1,7 @@
 package com.ekezet.othello.feature.gameboard.actions
 
 import com.ekezet.hurok.Action.Next
-import com.ekezet.hurok.outcome
+import com.ekezet.hurok.next
 import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.game.state.OthelloGameState
 import com.ekezet.othello.feature.gameboard.GameBoardDependency
@@ -20,6 +20,6 @@ data class OnUpdateGameState(
                 add(WaitBeforeNextTurn(nextMove))
             }
         }
-        return outcome(resetNewGame(newState), effects = effects.toTypedArray())
+        return next(resetNewGame(newState), effects = effects.toTypedArray())
     }
 }

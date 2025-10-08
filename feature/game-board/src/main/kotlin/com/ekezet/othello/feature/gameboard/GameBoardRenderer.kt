@@ -12,7 +12,7 @@ import com.ekezet.othello.feature.gameboard.ui.viewModels.newEmptyOverlay
 import com.ekezet.othello.feature.gameboard.ui.viewModels.putAt
 import com.ekezet.othello.feature.gameboard.ui.viewModels.toImmutableList
 
-internal class GameBoardRenderer : Renderer<GameBoardModel, GameBoardState> {
+internal class GameBoardRenderer : Renderer<GameBoardState, GameBoardModel> {
     private val GameBoardModel.historicalMove: PastMove?
         inline get() = if (isCurrentTurn) null else currentGameState.pastMoves.lastOrNull()
 

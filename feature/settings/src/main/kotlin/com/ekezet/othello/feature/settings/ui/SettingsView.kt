@@ -27,6 +27,7 @@ import com.ekezet.othello.feature.settings.OnResetSettingsClicked
 import com.ekezet.othello.feature.settings.OnResetSettingsDialogClicked
 import com.ekezet.othello.feature.settings.OnShowBoardPositionsClicked
 import com.ekezet.othello.feature.settings.OnShowPossibleMovesClicked
+import com.ekezet.othello.feature.settings.SettingsAction
 import com.ekezet.othello.feature.settings.SettingsArgs
 import com.ekezet.othello.feature.settings.SettingsLoop
 import com.ekezet.othello.feature.settings.SettingsState
@@ -46,8 +47,9 @@ fun SettingsView(
     LoopView(
         builder = SettingsLoop,
         args = args,
-    ) {
+    ) { emit ->
         SettingsViewImpl(
+            emit = emit,
             selectStrategyFor = selectStrategyFor,
             modifier = modifier,
             listState = listState,
@@ -58,6 +60,7 @@ fun SettingsView(
 @ExperimentalMaterial3Api
 @Composable
 internal fun SettingsState.SettingsViewImpl(
+    emit: (action: SettingsAction) -> Unit,
     selectStrategyFor: Disk?,
     modifier: Modifier = Modifier,
     listState: LazyListState = rememberLazyListState(),
@@ -78,6 +81,7 @@ internal fun SettingsState.SettingsViewImpl(
 
         item {
             SelectedStrategy(
+                emit = emit,
                 disk = Disk.Dark,
                 name = darkName,
                 preferSides = isDarkPreferSides,
@@ -88,6 +92,7 @@ internal fun SettingsState.SettingsViewImpl(
 
         item {
             SelectedStrategy(
+                emit = emit,
                 disk = Disk.Light,
                 name = lightName,
                 preferSides = isLightPreferSides,
@@ -162,6 +167,7 @@ internal fun SettingsState.SettingsViewImpl(
     }
 
     StrategySelector(
+        emit = emit,
         selectStrategyFor = selectStrategyFor,
         sheetState = sheetState,
     )

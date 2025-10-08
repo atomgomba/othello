@@ -3,7 +3,7 @@ package com.ekezet.othello.feature.settings
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import com.ekezet.hurok.ActionEmitter
-import com.ekezet.hurok.ViewState
+import com.ekezet.hurok.ArgsApplyer
 import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.data.models.isDark
 import com.ekezet.othello.core.data.models.isLight
@@ -88,7 +88,7 @@ internal data class SettingsState(
     val selectingStrategyFor: Disk?,
     val confirmExit: Boolean,
     val showConfirmResetSettingsDialog: Boolean,
-) : ViewState<SettingsModel, SettingsDependency>() {
+) {
     internal val Disk.isNotHuman: Boolean
         inline get() = if (isLight) {
             lightName != null
@@ -135,3 +135,5 @@ internal class SettingsDependency(
 }
 
 internal typealias SettingsEmitter = ActionEmitter<SettingsModel, SettingsDependency>
+
+internal typealias SettingsArgsApplyer = ArgsApplyer<SettingsModel, SettingsArgs>

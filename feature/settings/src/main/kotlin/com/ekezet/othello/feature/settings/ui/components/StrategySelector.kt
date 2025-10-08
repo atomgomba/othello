@@ -37,12 +37,14 @@ import com.ekezet.othello.core.ui.stringResource
 import com.ekezet.othello.feature.settings.OnStrategySelected
 import com.ekezet.othello.feature.settings.OnStrategySelectorClicked
 import com.ekezet.othello.feature.settings.OnStrategySelectorDismissed
+import com.ekezet.othello.feature.settings.SettingsAction
 import com.ekezet.othello.feature.settings.SettingsState
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun SettingsState.StrategySelector(
+    emit: (action: SettingsAction) -> Unit,
     selectStrategyFor: Disk?,
     sheetState: SheetState,
 ) {
@@ -51,7 +53,7 @@ internal fun SettingsState.StrategySelector(
 
     if (selectingStrategyFor != null) {
         // open normal selection
-        StrategySelectorImpl(selectingStrategyFor, sheetState)
+        StrategySelectorImpl(emit, selectingStrategyFor, sheetState)
     }
 
     LaunchedEffect(key1 = selectingStrategyFor) {
@@ -68,6 +70,9 @@ internal fun SettingsState.StrategySelector(
                 emit(OnStrategySelectorClicked(selectStrategyFor))
             }
         }
+        // FIXME: Suppressed false positive, will be fixed in Kotlin 2.3.0
+        // see: https://youtrack.jetbrains.com/projects/KT/issues/KT-78881/K2-False-positive-Assigned-value-is-never-read-in-composable-function
+        @Suppress("AssignedValueIsNeverRead")
         isFirstTimePicker = false
     }
 }
@@ -75,6 +80,7 @@ internal fun SettingsState.StrategySelector(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SettingsState.StrategySelectorImpl(
+    emit: (action: SettingsAction) -> Unit,
     disk: Disk,
     sheetState: SheetState,
 ) {

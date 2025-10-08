@@ -4,7 +4,7 @@ import androidx.compose.animation.core.AnimationConstants.DefaultDurationMillis
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
 import com.ekezet.hurok.ActionEmitter
-import com.ekezet.hurok.ViewState
+import com.ekezet.hurok.ArgsApplyer
 import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.data.models.DiskCount
 import com.ekezet.othello.core.data.models.Position
@@ -132,7 +132,7 @@ internal data class GameBoardState(
     val isHumanPlayer: Boolean,
     val passed: Boolean,
     val isCurrentTurn: Boolean,
-) : ViewState<GameBoardModel, GameBoardDependency>() {
+) {
     val hasPreviousTurn: Boolean
         inline get() = 1 < displayedTurn
 
@@ -165,3 +165,5 @@ class GameBoardDependency(
 }
 
 typealias GameBoardEmitter = ActionEmitter<GameBoardModel, GameBoardDependency>
+
+internal typealias GameBoardArgsApplyer = ArgsApplyer<GameBoardModel, GameBoardArgs>

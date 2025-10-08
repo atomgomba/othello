@@ -23,10 +23,12 @@ import com.ekezet.othello.core.ui.orHumanPlayer
 import com.ekezet.othello.core.ui.stringResource
 import com.ekezet.othello.feature.settings.OnPreferSidesToggled
 import com.ekezet.othello.feature.settings.OnStrategySelectorClicked
+import com.ekezet.othello.feature.settings.SettingsAction
 import com.ekezet.othello.feature.settings.SettingsState
 
 @Composable
 internal fun SettingsState.SelectedStrategy(
+    emit: (action: SettingsAction) -> Unit,
     disk: Disk,
     name: String?,
     preferSides: Boolean,
