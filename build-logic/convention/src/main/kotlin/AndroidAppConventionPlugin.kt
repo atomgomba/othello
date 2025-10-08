@@ -11,7 +11,7 @@ import org.gradle.kotlin.dsl.kotlin
 class AndroidAppConventionPlugin : Plugin<Project> {
     companion object {
         const val compileSdkLevel = 36
-        const val minSdkLevel = 24
+        const val minSdkLevel = 26
     }
 
     override fun apply(target: Project) {

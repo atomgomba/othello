@@ -13,7 +13,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import com.ekezet.othello.core.ui.R
-import com.ekezet.othello.main.MainState
 import com.ekezet.othello.main.navigation.MainRoutes
 import com.ekezet.othello.main.navigation.MainRoutes.GameBoardRoute
 import com.ekezet.othello.main.navigation.MainRoutes.GameHistoryRoute
@@ -21,7 +20,9 @@ import com.ekezet.othello.main.navigation.MainRoutes.SettingsRoute
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-internal fun MainState.MainTopAppBar(
+internal fun MainTopAppBar(
+    onRefreshClick: () -> Unit,
+    onShowPossibleMovesClick: (Boolean) -> Unit,
     currentDestination: String,
     navController: NavHostController,
     showPossibleMoves: Boolean,
@@ -57,7 +58,11 @@ internal fun MainState.MainTopAppBar(
             AnimatedVisibility(
                 visible = currentDestination == GameBoardRoute.id,
             ) {
-                GameBoardToolbarActions(showPossibleMoves)
+                GameBoardToolbarActions(
+                    onRefreshClick = onRefreshClick,
+                    onShowPossibleMovesClick = onShowPossibleMovesClick,
+                    showPossibleMoves = showPossibleMoves,
+                )
             }
         },
     )

@@ -40,10 +40,13 @@ import com.ekezet.othello.feature.gamehistory.GameHistoryArgs
 import com.ekezet.othello.feature.gamehistory.ui.GameHistoryView
 import com.ekezet.othello.feature.settings.SettingsArgs
 import com.ekezet.othello.feature.settings.ui.SettingsView
+import com.ekezet.othello.main.MainAction
 import com.ekezet.othello.main.MainArgs
 import com.ekezet.othello.main.MainLoop
 import com.ekezet.othello.main.MainState
 import com.ekezet.othello.main.OnBackPressed
+import com.ekezet.othello.main.OnNewGameClicked
+import com.ekezet.othello.main.OnToggleIndicatorsClicked
 import com.ekezet.othello.main.navigation.MainRoutes
 import com.ekezet.othello.main.navigation.MainRoutes.GameBoardRoute
 import com.ekezet.othello.main.navigation.MainRoutes.GameHistoryRoute
@@ -78,8 +81,9 @@ internal fun MainView(
             hasGameHistory = gameHistory.history.isNotEmpty(),
         ),
         scope = scope,
-    ) {
+    ) { emit ->
         MainViewImpl(
+            emit = emit,
             gameSettings = gameSettings,
             historySettings = historySettings,
             appSettings = appSettings,
@@ -92,6 +96,7 @@ internal fun MainView(
 @ExperimentalLayoutApi
 @Composable
 internal fun MainState.MainViewImpl(
+    emit: (action: MainAction) -> Unit,
     gameSettings: GameSettings,
     historySettings: HistorySettings,
     appSettings: AppSettings,
@@ -132,11 +137,17 @@ internal fun MainState.MainViewImpl(
         emit(OnBackPressed)
     }
 
-    ExitConfirmationSnackbar(hostState = snackbarHostState, confirmExit = appSettings.confirmExit)
+    ExitConfirmationSnackbar(
+        emit = emit,
+        hostState = snackbarHostState,
+        confirmExit = appSettings.confirmExit,
+    )
 
     Scaffold(
         topBar = {
             MainTopAppBar(
+                onRefreshClick = { emit(OnNewGameClicked) },
+                onShowPossibleMovesClick = { emit(OnToggleIndicatorsClicked) },
                 currentDestination = currentDestination,
                 navController = navController,
                 showPossibleMoves = gameSettings.boardDisplayOptions.showPossibleMoves,
