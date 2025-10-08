@@ -4,7 +4,7 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Devices.TABLET
 import androidx.compose.ui.tooling.preview.Preview
-import com.ekezet.hurok.renderState
+import com.ekezet.hurok.utils.renderState
 import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.game.GameEnd
 import com.ekezet.othello.core.ui.components.PreviewBase
@@ -51,6 +51,7 @@ private fun GameBoardModel.toPreviewState() =
 @Composable
 private fun GameBoardModel.Preview() = toPreviewState()
     .GameBoardViewImpl(
+        emit = {},
         onStrategyClick = {},
     )
 

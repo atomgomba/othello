@@ -1,5 +1,3 @@
-import java.util.Properties
-
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {
@@ -35,6 +33,3 @@ include(
     ":feature:game-history",
     ":feature:settings",
 )
-
-fun Properties.find(key: String): String? =
-    getProperty(key) ?: System.getenv(key)

@@ -51,6 +51,7 @@ import com.ekezet.othello.feature.gameboard.GameBoardArgs
 import com.ekezet.othello.feature.gameboard.GameBoardLoop
 import com.ekezet.othello.feature.gameboard.GameBoardState
 import com.ekezet.othello.feature.gameboard.actions.ContinueGame
+import com.ekezet.othello.feature.gameboard.actions.GameBoardAction
 import com.ekezet.othello.feature.gameboard.actions.OnCurrentTurnClicked
 import com.ekezet.othello.feature.gameboard.actions.OnFirstTurnClicked
 import com.ekezet.othello.feature.gameboard.actions.OnMoveMade
@@ -76,20 +77,27 @@ fun GameBoardView(
     onStrategyClick: OnStrategyClick,
     modifier: Modifier = Modifier,
 ) {
+    requireNotNull(parentEmitter) {
+        "parentEmitter needs to be set to emit GameBoard actions from the parent"
+    }
+
     LoopView(
         builder = GameBoardLoop,
         args = args,
-        parentEmitter = requireNotNull(parentEmitter) {
-            "parentEmitter needs to be set to emit GameBoard actions from the parent"
-        },
-    ) {
-        GameBoardViewImpl(onStrategyClick, modifier)
+        childOf = setOf(parentEmitter),
+    ) { emit ->
+        GameBoardViewImpl(
+            emit = emit,
+            onStrategyClick = onStrategyClick,
+            modifier = modifier,
+        )
     }
 }
 
 @ExperimentalLayoutApi
 @Composable
 internal fun GameBoardState.GameBoardViewImpl(
+    emit: (action: GameBoardAction) -> Unit,
     onStrategyClick: OnStrategyClick,
     modifier: Modifier = Modifier,
 ) {
@@ -102,7 +110,7 @@ internal fun GameBoardState.GameBoardViewImpl(
         Column(
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            BoardHeader()
+            BoardHeader(emit = emit)
 
             GameBoard(
                 board = board,
@@ -135,7 +143,9 @@ internal fun GameBoardState.GameBoardViewImpl(
 }
 
 @Composable
-private fun GameBoardState.BoardHeader() {
+private fun GameBoardState.BoardHeader(
+    emit: (action: GameBoardAction) -> Unit,
+) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp),

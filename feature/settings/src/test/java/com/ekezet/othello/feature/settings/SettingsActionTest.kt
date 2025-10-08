@@ -1,8 +1,8 @@
 package com.ekezet.othello.feature.settings
 
-import com.ekezet.hurok.renderState
 import com.ekezet.hurok.test.after
 import com.ekezet.hurok.test.matches
+import com.ekezet.hurok.utils.renderState
 import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.data.models.isDark
 import com.ekezet.othello.core.data.models.isLight
