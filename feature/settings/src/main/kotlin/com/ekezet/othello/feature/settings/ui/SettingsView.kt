@@ -9,7 +9,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -23,16 +22,19 @@ import com.ekezet.othello.core.ui.R.string
 import com.ekezet.othello.feature.settings.OnAlwaysScrollToBottomClicked
 import com.ekezet.othello.feature.settings.OnConfirmExitClicked
 import com.ekezet.othello.feature.settings.OnGrayscaleModeClicked
+import com.ekezet.othello.feature.settings.OnPreferSidesToggled
 import com.ekezet.othello.feature.settings.OnResetSettingsClicked
 import com.ekezet.othello.feature.settings.OnResetSettingsDialogClicked
 import com.ekezet.othello.feature.settings.OnShowBoardPositionsClicked
 import com.ekezet.othello.feature.settings.OnShowPossibleMovesClicked
+import com.ekezet.othello.feature.settings.OnStrategySelectorClicked
 import com.ekezet.othello.feature.settings.SettingsAction
 import com.ekezet.othello.feature.settings.SettingsArgs
 import com.ekezet.othello.feature.settings.SettingsLoop
 import com.ekezet.othello.feature.settings.SettingsState
 import com.ekezet.othello.feature.settings.ui.components.ButtonRow
 import com.ekezet.othello.feature.settings.ui.components.SelectedStrategy
+import com.ekezet.othello.feature.settings.ui.components.SettingsHeader
 import com.ekezet.othello.feature.settings.ui.components.StrategySelector
 import com.ekezet.othello.feature.settings.ui.components.SwitchRow
 
@@ -70,7 +72,7 @@ internal fun SettingsState.SettingsViewImpl(
     LazyColumn(
         modifier = modifier,
         state = listState,
-        verticalArrangement = Arrangement.spacedBy(8.dp),
+        verticalArrangement = Arrangement.spacedBy(4.dp),
         contentPadding = PaddingValues(top = 16.dp, bottom = 96.dp),
     ) {
         item {
@@ -81,10 +83,11 @@ internal fun SettingsState.SettingsViewImpl(
 
         item {
             SelectedStrategy(
-                emit = emit,
                 disk = Disk.Dark,
+                onStrategySelectorClick = { emit(OnStrategySelectorClicked(Disk.Dark)) },
+                onPreferSidesToggle = { checked -> emit(OnPreferSidesToggled(Disk.Dark, checked)) },
                 name = darkName,
-                preferSides = isDarkPreferSides,
+                preferSides = isLightPreferSides.takeIf { Disk.Dark.isNotHuman },
             )
         }
 
@@ -92,10 +95,11 @@ internal fun SettingsState.SettingsViewImpl(
 
         item {
             SelectedStrategy(
-                emit = emit,
                 disk = Disk.Light,
+                onStrategySelectorClick = { emit(OnStrategySelectorClicked(Disk.Light)) },
+                onPreferSidesToggle = { checked -> emit(OnPreferSidesToggled(Disk.Light, checked)) },
                 name = lightName,
-                preferSides = isLightPreferSides,
+                preferSides = isLightPreferSides.takeIf { Disk.Light.isNotHuman },
             )
         }
 
@@ -189,16 +193,4 @@ internal fun SettingsState.SettingsViewImpl(
             },
         )
     }
-}
-
-@Composable
-private fun SettingsHeader(text: String) {
-    Text(
-        text = text,
-        style = MaterialTheme.typography.titleSmall,
-        color = MaterialTheme.colorScheme.primary,
-        modifier = Modifier
-            .padding(top = 4.dp)
-            .padding(horizontal = 16.dp),
-    )
 }

@@ -36,9 +36,9 @@
 
     <string name="settings__confirm__reset_settings">Proceeding will reset all custom settings.</string>
     <string name="settings__header__app">App</string>
-    <string name="settings__header__board">Board</string>
-    <string name="settings__header__history">History</string>
-    <string name="settings__header__players">Players</string>
+    <string name="settings__header__board">Board display</string>
+    <string name="settings__header__history">Move history</string>
+    <string name="settings__header__players">Players and strategies</string>
     <string name="settings__switch__always_scroll_to_bottom">Always scroll to bottom</string>
     <string name="settings__switch__confirm_exit">Confirm exit</string>
     <string name="settings__switch__grayscale_mode">Grayscale mode</string>

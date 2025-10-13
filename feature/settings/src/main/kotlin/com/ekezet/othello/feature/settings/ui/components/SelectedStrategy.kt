@@ -21,26 +21,23 @@ import com.ekezet.othello.core.ui.R.string
 import com.ekezet.othello.core.ui.components.GamePieceWithBorder
 import com.ekezet.othello.core.ui.orHumanPlayer
 import com.ekezet.othello.core.ui.stringResource
-import com.ekezet.othello.feature.settings.OnPreferSidesToggled
-import com.ekezet.othello.feature.settings.OnStrategySelectorClicked
-import com.ekezet.othello.feature.settings.SettingsAction
-import com.ekezet.othello.feature.settings.SettingsState
 
 @Composable
-internal fun SettingsState.SelectedStrategy(
-    emit: (action: SettingsAction) -> Unit,
+internal fun SelectedStrategy(
+    onStrategySelectorClick: () -> Unit,
+    onPreferSidesToggle: (checked: Boolean) -> Unit,
     disk: Disk,
     name: String?,
-    preferSides: Boolean,
+    preferSides: Boolean?,
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(8.dp),
-        modifier = Modifier.clickable { emit(OnStrategySelectorClicked(disk)) },
+        modifier = Modifier.clickable(onClick = onStrategySelectorClick)
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .padding(horizontal = 16.dp, vertical = 8.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Column {
@@ -68,13 +65,11 @@ internal fun SettingsState.SelectedStrategy(
             )
         }
 
-        if (disk.isNotHuman) {
+        if (preferSides != null) {
             SwitchRow(
                 label = stringResource(id = string.settings__switch__prefer_sides),
                 checked = preferSides,
-                onCheckedChange = { checked ->
-                    emit(OnPreferSidesToggled(disk, checked))
-                },
+                onCheckedChange = onPreferSidesToggle,
             )
         }
     }
