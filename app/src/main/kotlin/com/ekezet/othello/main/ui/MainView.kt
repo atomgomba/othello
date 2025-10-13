@@ -166,11 +166,11 @@ internal fun MainState.MainViewImpl(
                     hasGameHistory = hasGameHistory,
                 )
             },
-            modifier = Modifier.padding(innerPadding),
         ) {
             NavHost(
                 navController = navController,
                 startDestination = startDestination,
+                modifier = Modifier.padding(innerPadding),
             ) {
                 composable(
                     route = GameBoardRoute.spec,
