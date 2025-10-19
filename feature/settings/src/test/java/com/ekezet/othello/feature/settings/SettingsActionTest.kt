@@ -7,8 +7,8 @@ import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.data.models.isDark
 import com.ekezet.othello.core.data.models.isLight
 import com.ekezet.othello.core.game.strategy.HumanPlayer
-import com.ekezet.othello.core.game.strategy.RandomStrategy
 import com.ekezet.othello.core.game.strategy.Strategy
+import io.mockk.mockk
 import junitparams.JUnitParamsRunner
 import junitparams.Parameters
 import org.junit.runner.RunWith
@@ -89,9 +89,9 @@ internal class SettingsActionTest {
 
     @Suppress("unused")
     private fun paramsForDiskAndStrategy() = arrayOf(
-        arrayOf(Disk.Dark, RandomStrategy),
+        arrayOf(Disk.Dark, mockk<Strategy>(relaxed = true)),
         arrayOf(Disk.Dark, HumanPlayer),
-        arrayOf(Disk.Light, RandomStrategy),
+        arrayOf(Disk.Light, mockk<Strategy>(relaxed = true)),
         arrayOf(Disk.Light, HumanPlayer),
     )
 }

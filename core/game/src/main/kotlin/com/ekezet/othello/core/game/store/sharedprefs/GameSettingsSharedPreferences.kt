@@ -5,10 +5,10 @@ import com.ekezet.othello.core.game.data.BoardDisplayOptions
 import com.ekezet.othello.core.game.data.Default
 import com.ekezet.othello.core.game.data.GameSettings
 import com.ekezet.othello.core.game.data.IGameSettings
-import com.ekezet.othello.core.game.strategy.PreferSidesDecoratorStrategy
-import com.ekezet.othello.core.game.strategy.PreferSidesDecoratorStrategy.Companion.preferSides
 import com.ekezet.othello.core.game.strategy.Strategy
+import com.ekezet.othello.core.game.strategy.internal.PreferSidesDecoratorStrategy
 import com.ekezet.othello.core.game.strategy.ofName
+import com.ekezet.othello.core.game.strategy.preferSides
 import com.ekezet.othello.core.game.strategy.wrappedName
 
 private const val KEY_LIGHT_NAME = "lightName"

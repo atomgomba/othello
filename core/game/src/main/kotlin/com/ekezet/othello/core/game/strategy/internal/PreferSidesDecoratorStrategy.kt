@@ -1,4 +1,4 @@
-package com.ekezet.othello.core.game.strategy
+package com.ekezet.othello.core.game.strategy.internal
 
 import com.ekezet.othello.core.data.models.BoardHeight
 import com.ekezet.othello.core.data.models.BoardWidth
@@ -6,8 +6,10 @@ import com.ekezet.othello.core.data.models.Position
 import com.ekezet.othello.core.data.models.x
 import com.ekezet.othello.core.data.models.y
 import com.ekezet.othello.core.game.state.OthelloGameState
+import com.ekezet.othello.core.game.strategy.DecoratedStrategy
+import com.ekezet.othello.core.game.strategy.Strategy
 
-data class PreferSidesDecoratorStrategy(
+internal data class PreferSidesDecoratorStrategy(
     override val wrapped: Strategy,
 ) : DecoratedStrategy {
     override val name: String = "${wrapped.name} (Prefer sides)"
@@ -24,10 +26,5 @@ data class PreferSidesDecoratorStrategy(
             it.position.x in sidesX || it.position.y in sidesY
         }?.position
         corner ?: side ?: wrapped.deriveNext(state)
-    }
-
-    companion object {
-        fun Strategy.preferSides() =
-            this as? PreferSidesDecoratorStrategy ?: PreferSidesDecoratorStrategy(this)
     }
 }

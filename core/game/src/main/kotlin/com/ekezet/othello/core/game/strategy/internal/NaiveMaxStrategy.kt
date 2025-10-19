@@ -1,13 +1,14 @@
-package com.ekezet.othello.core.game.strategy
+package com.ekezet.othello.core.game.strategy.internal
 
 import com.ekezet.othello.core.data.models.Position
 import com.ekezet.othello.core.game.parts
 import com.ekezet.othello.core.game.state.OthelloGameState
+import com.ekezet.othello.core.game.strategy.Strategy
 
 /**
  * Simply takes the move which results in the highest number of disks flipped.
  */
-data object NaiveMaxStrategy : Strategy {
+internal data object NaiveMaxStrategy : Strategy {
     override val name: String = "Max Flip"
 
     override fun deriveNext(state: OthelloGameState): Position? =

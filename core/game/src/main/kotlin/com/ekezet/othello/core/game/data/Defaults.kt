@@ -6,9 +6,9 @@ import com.ekezet.othello.core.game.state.CurrentGameState
 import com.ekezet.othello.core.game.state.OthelloGameState
 import com.ekezet.othello.core.game.state.new
 import com.ekezet.othello.core.game.strategy.HumanPlayer
-import com.ekezet.othello.core.game.strategy.NaiveMaxStrategy
-import com.ekezet.othello.core.game.strategy.PreferSidesDecoratorStrategy.Companion.preferSides
 import com.ekezet.othello.core.game.strategy.Strategy
+import com.ekezet.othello.core.game.strategy.internal.NaiveMaxStrategy
+import com.ekezet.othello.core.game.strategy.preferSides
 
 val StartBoard: Board
     inline get() = BoardSerializer.fromString(

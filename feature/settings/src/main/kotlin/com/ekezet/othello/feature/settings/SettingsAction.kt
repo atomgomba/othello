@@ -6,8 +6,8 @@ import com.ekezet.hurok.next
 import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.data.models.isDark
 import com.ekezet.othello.core.game.strategy.DecoratedStrategy
-import com.ekezet.othello.core.game.strategy.PreferSidesDecoratorStrategy.Companion.preferSides
 import com.ekezet.othello.core.game.strategy.Strategy
+import com.ekezet.othello.core.game.strategy.preferSides
 
 internal sealed interface SettingsAction : Action<SettingsModel, SettingsDependency>
 
