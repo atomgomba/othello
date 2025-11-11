@@ -35,7 +35,7 @@ data class PastMove(
 
     override fun hashCode(): Int {
         var result = board.contentDeepHashCode()
-        result = 31 * result + (moveAt?.hashCode() ?: 0)
+        result = 31 * result + moveAt.hashCode()
         result = 31 * result + turn
         result = 31 * result + disk.hashCode()
         return result
