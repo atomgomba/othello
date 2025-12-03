@@ -112,6 +112,7 @@ internal fun GameBoardState.GameBoardViewImpl(
                 board = board,
                 modifier = Modifier
                     .fitIntoParent()
+                    .weight(1F)
                     .align(Alignment.CenterHorizontally),
                 background = boardBackground,
                 showPositions = displayOptions.showBoardPositions,
