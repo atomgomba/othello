@@ -73,14 +73,10 @@ private val highlightColor: Color
 @Composable
 fun GameBoardView(
     args: GameBoardArgs,
-    parentEmitter: AnyActionEmitter?,
+    parentEmitter: AnyActionEmitter,
     onStrategyClick: OnStrategyClick,
     modifier: Modifier = Modifier,
 ) {
-    requireNotNull(parentEmitter) {
-        "parentEmitter needs to be set to emit GameBoard actions from the parent"
-    }
-
     LoopView(
         builder = GameBoardLoop,
         args = args,

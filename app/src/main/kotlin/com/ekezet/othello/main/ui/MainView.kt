@@ -183,7 +183,9 @@ internal fun MainState.MainViewImpl(
                             lightStrategy = gameSettings.lightStrategy,
                             darkStrategy = gameSettings.darkStrategy,
                         ),
-                        parentEmitter = LocalActionEmitter.current,
+                        parentEmitter = checkNotNull(LocalActionEmitter.current) {
+                            "parentEmitter needs to be set to emit GameBoard actions from the parent"
+                        },
                         onStrategyClick = { disk ->
                             navigateTo(SettingsRoute.make(pickStrategyFor = disk))
                         },
