@@ -13,7 +13,7 @@ import com.ekezet.othello.core.data.removeLastCompat
 import kotlin.math.absoluteValue
 import kotlin.math.sign
 
-data class ValidSegment<out T : Any>(
+data class FlippableSegment<out T : Any>(
     val start: T,
     val end: T,
     val isStartValid: Boolean,
@@ -21,7 +21,7 @@ data class ValidSegment<out T : Any>(
 
 data class ValidMove(
     val position: Position,
-    val segment: ValidSegment<Position>,
+    val segment: FlippableSegment<Position>,
 )
 
 fun Set<ValidMove>.isValid(position: Position): Boolean =
@@ -30,14 +30,11 @@ fun Set<ValidMove>.isValid(position: Position): Boolean =
 fun Set<ValidMove>.isInvalid(position: Position) =
     !isValid(position)
 
-internal val <T : Any> ValidSegment<T>.validPosition: T
+internal val <T : Any> FlippableSegment<T>.validPosition: T
     get() = if (isStartValid) start else end
 
-internal val <T : Any> ValidSegment<T>.invalidPosition: T
-    get() = if (isStartValid) end else start
-
 internal fun Board.findValidMoves(subject: Disk): Set<ValidMove> {
-    val result = mutableSetOf<ValidSegment<Position>>()
+    val result = mutableSetOf<FlippableSegment<Position>>()
     val maxY = BoardHeight - 1
     for (y in 0 until BoardHeight) {
         val row = get(y)
@@ -60,8 +57,7 @@ internal fun Board.findValidMoves(subject: Disk): Set<ValidMove> {
             if (y == maxY || x == 0) {
                 val rightDiagonal = getRightDiagonal(x, y)
                 val right = findValidIndices(rightDiagonal, subject)
-                val transposed = right.transposeLeft(x, y)
-                result.addAll(transposed)
+                result.addAll(right.transposeLeft(x, y))
             }
         }
     }
@@ -73,14 +69,14 @@ internal fun Board.findValidMoves(subject: Disk): Set<ValidMove> {
     }.toSet()
 }
 
-internal fun findValidIndices(disks: Array<out Disk?>, subject: Disk): Set<ValidSegment<Int>> {
+internal fun findValidIndices(disks: Array<out Disk?>, subject: Disk): Set<FlippableSegment<Int>> {
     if (disks.toSet().size != 3) {
         // for a possible valid move, data must contain both one of each kind of disks and an empty slot
         return emptySet()
     }
 
     val other = !subject
-    val result = mutableSetOf<ValidSegment<Int>>()
+    val result = mutableSetOf<FlippableSegment<Int>>()
     var startIndex: Int? = null
 
     for ((i, disk) in disks.withIndex()) {
@@ -90,9 +86,9 @@ internal fun findValidIndices(disks: Array<out Disk?>, subject: Disk): Set<Valid
         }
         if (startIndex != null && disk != other) {
             if (disks[startIndex] == subject && disks[i] == null) {
-                result.add(ValidSegment(start = startIndex, end = i, isStartValid = false))
+                result.add(FlippableSegment(start = startIndex, end = i, isStartValid = false))
             } else if (disks[startIndex] == null && disks[i] == subject) {
-                result.add(ValidSegment(start = startIndex, end = i, isStartValid = true))
+                result.add(FlippableSegment(start = startIndex, end = i, isStartValid = true))
             }
             startIndex = null
         }
@@ -101,48 +97,54 @@ internal fun findValidIndices(disks: Array<out Disk?>, subject: Disk): Set<Valid
     return result
 }
 
-internal fun Set<ValidSegment<Int>>.mapToY(y: Int): Set<ValidSegment<Position>> = map {
-    ValidSegment(
+internal fun Set<FlippableSegment<Int>>.mapToY(y: Int): Set<FlippableSegment<Position>> = map {
+    FlippableSegment(
         start = it.start to y,
         end = it.end to y,
         isStartValid = it.isStartValid,
     )
 }.toSet()
 
-internal fun Set<ValidSegment<Int>>.mapToX(x: Int): Set<ValidSegment<Position>> = map {
-    ValidSegment(
+internal fun Set<FlippableSegment<Int>>.mapToX(x: Int): Set<FlippableSegment<Position>> = map {
+    FlippableSegment(
         start = x to it.start,
         end = x to it.end,
         isStartValid = it.isStartValid,
     )
 }.toSet()
 
-internal fun ValidSegment<Position>.parts(): Set<Position> {
+internal fun FlippableSegment<Position>.parts(): Set<Position> {
     val result = mutableListOf<Position>()
-    if (start.y == end.y) {
-        val range = if (start.x < end.x) {
-            start.x..end.x
-        } else {
-            start.x downTo end.x
+    when {
+        start.y == end.y -> {
+            val range = if (start.x < end.x) {
+                start.x..end.x
+            } else {
+                start.x downTo end.x
+            }
+            for (x in range) {
+                result.add(Position(x, start.y))
+            }
         }
-        for (x in range) {
-            result.add(Position(x, start.y))
+
+        start.x == end.x -> {
+            val range = if (start.y < end.y) {
+                start.y..end.y
+            } else {
+                start.y downTo end.y
+            }
+            for (y in range) {
+                result.add(Position(start.x, y))
+            }
         }
-    } else if (start.x == end.x) {
-        val range = if (start.y < end.y) {
-            start.y..end.y
-        } else {
-            start.y downTo end.y
-        }
-        for (y in range) {
-            result.add(Position(start.x, y))
-        }
-    } else {
-        val distance = end.y - start.y
-        val dirY = distance.sign
-        val dirX = (end.x - start.x).sign
-        for (n in 0..distance.absoluteValue) {
-            result.add(Position(start.x + n * dirX, start.y + n * dirY).absoluteValue)
+
+        else -> {
+            val distance = end.y - start.y
+            val dirY = distance.sign
+            val dirX = (end.x - start.x).sign
+            for (n in 0..distance.absoluteValue) {
+                result.add(Position(start.x + n * dirX, start.y + n * dirY).absoluteValue)
+            }
         }
     }
     if (1 < result.size) {

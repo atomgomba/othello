@@ -47,19 +47,19 @@ internal class CurrentGameStateTest {
         val expected = setOf(
             ValidMove(
                 position = (3 to 2),
-                segment = ValidSegment(start = (3 to 2), end = (3 to 4), isStartValid = true),
+                segment = FlippableSegment(start = (3 to 2), end = (3 to 4), isStartValid = true),
             ),
             ValidMove(
                 position = (4 to 5),
-                segment = ValidSegment(start = (4 to 3), end = (4 to 5), isStartValid = false),
+                segment = FlippableSegment(start = (4 to 3), end = (4 to 5), isStartValid = false),
             ),
             ValidMove(
                 position = (2 to 3),
-                segment = ValidSegment(start = (2 to 3), end = (4 to 3), isStartValid = true),
+                segment = FlippableSegment(start = (2 to 3), end = (4 to 3), isStartValid = true),
             ),
             ValidMove(
                 position = (5 to 4),
-                segment = ValidSegment(start = (3 to 4), end = (5 to 4), isStartValid = false),
+                segment = FlippableSegment(start = (3 to 4), end = (5 to 4), isStartValid = false),
             ),
         )
 

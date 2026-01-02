@@ -20,9 +20,9 @@ internal class DiagonalMovesKtTest {
 
     @Test
     fun transposeRight() {
-        val input: Set<ValidSegment<Int>> = setOf(
-            ValidSegment(0, 2, true),
-            ValidSegment(2, 4, false),
+        val input: Set<FlippableSegment<Int>> = setOf(
+            FlippableSegment(0, 2, true),
+            FlippableSegment(2, 4, false),
         )
         val result = input.transposeRight(2, 1).toList().sortedBy { it.start.x }
 
@@ -37,6 +37,9 @@ internal class DiagonalMovesKtTest {
 
         assertContentEquals(expected, result)
     }
+
+    private val <T : Any> FlippableSegment<T>.invalidPosition: T
+        get() = if (isStartValid) end else start
 
     private val board: Board = BoardSerializer.fromLines(
         "--------",

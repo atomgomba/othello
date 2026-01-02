@@ -25,18 +25,18 @@ private fun Board.getDiagonal(fromX: Int, rangeY: IntProgression): Array<Disk?> 
     return result
 }
 
-internal fun Set<ValidSegment<Int>>.transposeRight(x: Int, y: Int): Set<ValidSegment<Position>> =
+internal fun Set<FlippableSegment<Int>>.transposeRight(x: Int, y: Int): Set<FlippableSegment<Position>> =
     map {
-        ValidSegment(
+        FlippableSegment(
             start = Position(x + it.start, y + it.start),
             end = Position(x + it.end, y + it.end),
             isStartValid = it.isStartValid,
         )
     }.toSet()
 
-internal fun Set<ValidSegment<Int>>.transposeLeft(x: Int, y: Int): Set<ValidSegment<Position>> =
+internal fun Set<FlippableSegment<Int>>.transposeLeft(x: Int, y: Int): Set<FlippableSegment<Position>> =
     map {
-        ValidSegment(
+        FlippableSegment(
             start = Position(x + it.start, y - it.start),
             end = Position(x + it.end, y - it.end),
             isStartValid = it.isStartValid,
