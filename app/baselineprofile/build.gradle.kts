@@ -1,16 +1,19 @@
 plugins {
     alias(libs.plugins.android.test)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.baselineprofile)
 }
 
 android {
     namespace = "com.ekezet.othello.baselineprofile"
-    compileSdk = 36
+    compileSdk {
+        version = release(36) {
+            minorApiLevel = 1
+        }
+    }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
 
     defaultConfig {
