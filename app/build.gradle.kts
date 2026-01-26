@@ -37,9 +37,9 @@ android {
         }
     }
 
-    baselineProfile {
-        dexLayoutOptimization = true
-    }
+//    baselineProfile {
+//        dexLayoutOptimization = true
+//    }
 }
 
 dependencies {
@@ -64,5 +64,5 @@ dependencies {
     testImplementation(libs.junit4)
     testImplementation(libs.mockk)
 
-    "baselineProfile"(projects.app.baselineprofile)
+    //"baselineProfile"(projects.app.baselineprofile)
 }

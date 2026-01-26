@@ -24,7 +24,7 @@ rootProject.name = "othello"
 
 include(
     ":app",
-    ":app:baselineprofile",
+    //":app:baselineprofile",
     ":core:data",
     ":core:game",
     ":core:logging",

@@ -16,20 +16,16 @@ private val javaVersion = JavaVersion.VERSION_21
  * Configure base Kotlin with Android options
  */
 internal fun Project.configureKotlinAndroid(
-    commonExtension: CommonExtension<*, *, *, *, *, *>,
+    commonExtension: CommonExtension,
 ) {
-    with(pluginManager) {
-        apply(libs.findPlugin("kotlin-android").get().get().pluginId)
-    }
-
     commonExtension.apply {
         compileSdk = AndroidAppConventionPlugin.compileSdkLevel
 
-        defaultConfig {
+        defaultConfig.apply {
             minSdk = AndroidAppConventionPlugin.minSdkLevel
         }
 
-        compileOptions {
+        compileOptions.apply {
             sourceCompatibility = javaVersion
             targetCompatibility = javaVersion
             isCoreLibraryDesugaringEnabled = true

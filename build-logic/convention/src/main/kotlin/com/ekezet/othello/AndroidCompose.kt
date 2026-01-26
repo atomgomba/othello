@@ -2,20 +2,19 @@ package com.ekezet.othello
 
 import com.android.build.api.dsl.CommonExtension
 import org.gradle.api.Project
-import org.gradle.kotlin.dsl.assign
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 import org.jetbrains.kotlin.compose.compiler.gradle.ComposeCompilerGradlePluginExtension
 
 internal fun Project.configureAndroidCompose(
-    commonExtension: CommonExtension<*, *, *, *, *, *>,
+    commonExtension: CommonExtension,
 ) {
     with(pluginManager) {
         apply(libs.findPlugin("compose-compiler").get().get().pluginId)
     }
 
     with(commonExtension) {
-        buildFeatures {
+        buildFeatures.apply {
             compose = true
         }
     }
@@ -29,6 +28,6 @@ internal fun Project.configureAndroidCompose(
     }
 
     configure<ComposeCompilerGradlePluginExtension> {
-        includeSourceInformation = true
+        includeSourceInformation.set(true)
     }
 }

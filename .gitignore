@@ -1,7 +1,7 @@
 *.iml
 .gradle
 /local.properties
-/.idea
+/**/.idea
 .DS_Store
 /**/build
 /captures
@@ -11,3 +11,4 @@ local.properties
 .kotlin
 venv
 /**/.attach_pid*
+/**/.kotlin
