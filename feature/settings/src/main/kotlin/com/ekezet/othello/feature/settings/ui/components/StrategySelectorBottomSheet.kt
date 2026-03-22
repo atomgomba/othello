@@ -16,13 +16,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -35,57 +31,28 @@ import com.ekezet.othello.core.ui.R.string
 import com.ekezet.othello.core.ui.nameOrHumanPlayer
 import com.ekezet.othello.core.ui.stringResource
 import com.ekezet.othello.feature.settings.OnStrategySelected
-import com.ekezet.othello.feature.settings.OnStrategySelectorClicked
 import com.ekezet.othello.feature.settings.OnStrategySelectorDismissed
 import com.ekezet.othello.feature.settings.SettingsAction
 import com.ekezet.othello.feature.settings.SettingsState
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun SettingsState.StrategySelector(
-    emit: (action: SettingsAction) -> Unit,
-    selectStrategyFor: Disk?,
-    sheetState: SheetState,
-) {
-    val scope = rememberCoroutineScope()
-    var isFirstTimePicker by rememberSaveable { mutableStateOf(true) }
-
-    if (selectingStrategyFor != null) {
-        // open normal selection
-        StrategySelectorImpl(emit, selectingStrategyFor, sheetState)
-    }
-
-    LaunchedEffect(key1 = selectingStrategyFor) {
-        // if picker is dismissed, need to update bottom sheet state too
-        if (selectingStrategyFor == null && sheetState.isVisible) {
-            scope.launch { sheetState.hide() }
-        }
-    }
-
-    if (isFirstTimePicker && selectStrategyFor != null) {
-        LaunchedEffect(key1 = selectStrategyFor) {
-            if (!sheetState.isVisible && selectingStrategyFor == null) {
-                // picker isn't already open, open it now
-                emit(OnStrategySelectorClicked(selectStrategyFor))
-            }
-        }
-        // FIXME: Suppressed false positive, will be fixed in Kotlin 2.3.0
-        // see: https://youtrack.jetbrains.com/projects/KT/issues/KT-78881/K2-False-positive-Assigned-value-is-never-read-in-composable-function
-        @Suppress("AssignedValueIsNeverRead")
-        isFirstTimePicker = false
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun SettingsState.StrategySelectorImpl(
+internal fun SettingsState.StrategySelectorBottomSheet(
     emit: (action: SettingsAction) -> Unit,
     disk: Disk,
-    sheetState: SheetState,
+    sheetState: SheetState = rememberModalBottomSheetState(),
+    coroutineScope: CoroutineScope = rememberCoroutineScope(),
 ) {
     ModalBottomSheet(
-        onDismissRequest = { emit(OnStrategySelectorDismissed) },
+        onDismissRequest = {
+            coroutineScope.launch {
+                sheetState.hide()
+            }.invokeOnCompletion {
+                emit(OnStrategySelectorDismissed)
+            }
+        },
         sheetState = sheetState,
     ) {
         Column {

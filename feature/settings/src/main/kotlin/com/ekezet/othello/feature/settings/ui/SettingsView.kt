@@ -11,7 +11,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -35,14 +34,13 @@ import com.ekezet.othello.feature.settings.SettingsState
 import com.ekezet.othello.feature.settings.ui.components.ButtonRow
 import com.ekezet.othello.feature.settings.ui.components.SelectedStrategy
 import com.ekezet.othello.feature.settings.ui.components.SettingsHeader
-import com.ekezet.othello.feature.settings.ui.components.StrategySelector
+import com.ekezet.othello.feature.settings.ui.components.StrategySelectorBottomSheet
 import com.ekezet.othello.feature.settings.ui.components.SwitchRow
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsView(
     args: SettingsArgs,
-    selectStrategyFor: Disk?,
     modifier: Modifier = Modifier,
     listState: LazyListState = rememberLazyListState(),
 ) {
@@ -52,7 +50,7 @@ fun SettingsView(
     ) { emit ->
         SettingsViewImpl(
             emit = emit,
-            selectStrategyFor = selectStrategyFor,
+            selectStrategyFor = selectingStrategyFor,
             modifier = modifier,
             listState = listState,
         )
@@ -67,8 +65,6 @@ internal fun SettingsState.SettingsViewImpl(
     modifier: Modifier = Modifier,
     listState: LazyListState = rememberLazyListState(),
 ) {
-    val sheetState = rememberModalBottomSheetState()
-
     LazyColumn(
         modifier = modifier,
         state = listState,
@@ -170,11 +166,9 @@ internal fun SettingsState.SettingsViewImpl(
         }
     }
 
-    StrategySelector(
-        emit = emit,
-        selectStrategyFor = selectStrategyFor,
-        sheetState = sheetState,
-    )
+    if (selectStrategyFor != null) {
+        StrategySelectorBottomSheet(emit = emit, disk = selectStrategyFor)
+    }
 
     if (showConfirmResetSettingsDialog) {
         AlertDialog(

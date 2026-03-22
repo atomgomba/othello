@@ -38,10 +38,11 @@ internal data class SettingsModel(
     override val historyDisplayOptions: HistoryDisplayOptions = HistoryDisplayOptions.Default,
     override val confirmExit: Boolean = DefaultConfirmExit,
     internal val selectingStrategyFor: Disk? = null,
+    internal val strategySelectorDismissed: Boolean = false,
     internal val showConfirmResetSettingsDialog: Boolean = false,
 ) : IGameSettings, IHistorySettings, IAppSettings {
-    internal fun showStrategySelectorFor(player: Disk) = copy(selectingStrategyFor = player)
-    internal fun dismissStrategySelector() = copy(selectingStrategyFor = null)
+    internal fun showStrategySelectorFor(player: Disk) = copy(selectingStrategyFor = player, strategySelectorDismissed = false)
+    internal fun dismissStrategySelector() = copy(selectingStrategyFor = null, strategySelectorDismissed = true)
     internal fun setStrategyFor(player: Disk, strategy: Strategy?) =
         if (player.isDark) {
             copy(darkStrategy = strategy)
@@ -120,6 +121,7 @@ data class SettingsArgs(
     val gameSettings: GameSettings,
     val historySettings: HistorySettings,
     val appSettings: AppSettings,
+    val selectingStrategyFor: Disk?,
 )
 
 internal class SettingsDependency(

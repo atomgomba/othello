@@ -226,8 +226,8 @@ internal fun MainState.MainViewImpl(
                             gameSettings = gameSettings,
                             historySettings = historySettings,
                             appSettings = appSettings,
+                            selectingStrategyFor = SettingsRoute.findPickStrategy(entry),
                         ),
-                        selectStrategyFor = SettingsRoute.findPickStrategy(entry),
                         modifier = destinationModifier,
                         listState = settingsListState,
                     )
