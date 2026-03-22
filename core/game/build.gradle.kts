@@ -1,6 +1,6 @@
 plugins {
     id("othello.android.library")
-    id("othello.android.library.hurok")
+    id("othello.hurok")
 }
 
 android {

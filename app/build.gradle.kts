@@ -2,7 +2,7 @@ plugins {
     id("othello.android.app")
     id("othello.android.app.versioning")
     id("othello.android.app.compose")
-    id("othello.android.app.hurok")
+    id("othello.hurok")
 
     alias(libs.plugins.android.application)
     alias(libs.plugins.baselineprofile)

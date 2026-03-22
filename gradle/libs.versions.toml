@@ -1,6 +1,6 @@
 [versions]
 androidDesugarJdkLibs = "2.1.5"
-androidGradlePlugin = "9.1.0-alpha05"
+androidGradlePlugin = "9.1.0"
 androidxActivity = "1.12.2"
 androidxAppCompat = "1.7.1"
 androidxComposeBom = "2026.01.00"
@@ -14,7 +14,7 @@ baselineprofile = "1.5.0-alpha01"
 benchmarkMacroJunit4 = "1.4.1"
 detekt = "1.23.8"
 espressoCore = "3.7.0"
-hurok = "3.0.0"
+hurok = "3.1.0"
 junit4 = "4.13.2"
 junitParams = "1.1.1"
 koinBom = "4.1.1"
@@ -58,9 +58,9 @@ androidx-navigation-compose = { group = "androidx.navigation", name = "navigatio
 androidx-profileinstaller = { group = "androidx.profileinstaller", name = "profileinstaller", version.ref = "profileinstaller" }
 androidx-uiautomator = { group = "androidx.test.uiautomator", name = "uiautomator", version.ref = "uiautomator" }
 detekt-formatting = { group = "io.gitlab.arturbosch.detekt", name = "detekt-formatting", version.ref = "detekt" }
-hurokBase = { group = "com.ekezet.hurok", name = "base", version.ref = "hurok" }
-hurokCompose = { group = "com.ekezet.hurok", name = "compose", version.ref = "hurok" }
-hurokTest = { group = "com.ekezet.hurok", name = "test", version.ref = "hurok" }
+hurok-base = { group = "com.ekezet.hurok", name = "hurok-base", version.ref = "hurok" }
+hurok-compose = { group = "com.ekezet.hurok", name = "hurok-compose", version.ref = "hurok" }
+hurok-test = { group = "com.ekezet.hurok", name = "hurok-test-jvm", version.ref = "hurok" }
 junit4 = { group = "junit", name = "junit", version.ref = "junit4" }
 junitParams = { group = "pl.pragmatists", name = "JUnitParams", version.ref = "junitParams" }
 koin-android = { group = "io.insert-koin", name = "koin-android"}

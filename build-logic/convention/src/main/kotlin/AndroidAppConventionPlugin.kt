@@ -36,10 +36,6 @@ class AndroidAppConventionPlugin : Plugin<Project> {
                     configureKotlinAndroid(this)
                 }
             }
-
-            dependencies {
-                add("testImplementation", kotlin("test"))
-            }
         }
     }
 }
