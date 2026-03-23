@@ -20,7 +20,7 @@ private fun SettingsModel.toPreviewState() =
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SettingsModel.Preview() = toPreviewState()
-    .SettingsViewImpl(emit = {}, selectStrategyFor = null)
+    .SettingsViewImpl(emit = {}, selectStrategyFor = null, afterStrategySelected = null)
 
 @Preview
 @Composable

@@ -48,7 +48,7 @@ internal class SettingsActionTest {
     fun `OnStrategySelectorDismissed works correctly`(player: Disk?) {
         val initModel = SettingsModel().showStrategySelectorFor(player!!)
 
-        val expectedModel = SettingsModel()
+        val expectedModel = SettingsModel(isStrategySelectorDismissed = true)
 
         initModel after OnStrategySelectorDismissed matches {
             assertModel(expectedModel)

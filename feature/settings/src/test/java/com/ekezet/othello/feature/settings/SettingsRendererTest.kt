@@ -22,6 +22,7 @@ internal class SettingsRendererTest {
             selectingStrategyFor = initModel.selectingStrategyFor,
             confirmExit = initModel.confirmExit,
             showConfirmResetSettingsDialog = initModel.showConfirmResetSettingsDialog,
+            isStrategySelectorDismissed = false,
         )
 
         assertEquals(expectedState, result)

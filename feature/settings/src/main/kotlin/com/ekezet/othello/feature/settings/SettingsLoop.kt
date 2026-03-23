@@ -27,7 +27,7 @@ internal class SettingsLoop internal constructor(
                         lightStrategy = gameSettings.lightStrategy,
                         darkStrategy = gameSettings.darkStrategy,
                         confirmExit = appSettings.confirmExit,
-                        selectingStrategyFor = selectingStrategyFor.takeUnless { strategySelectorDismissed },
+                        selectingStrategyFor = selectingStrategyFor.takeUnless { isStrategySelectorDismissed },
                     )
                 }
             }

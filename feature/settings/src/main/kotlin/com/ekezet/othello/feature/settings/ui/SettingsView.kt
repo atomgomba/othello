@@ -12,6 +12,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -41,6 +42,7 @@ import com.ekezet.othello.feature.settings.ui.components.SwitchRow
 @Composable
 fun SettingsView(
     args: SettingsArgs,
+    afterStrategySelected: (() -> Unit)?,
     modifier: Modifier = Modifier,
     listState: LazyListState = rememberLazyListState(),
 ) {
@@ -51,6 +53,7 @@ fun SettingsView(
         SettingsViewImpl(
             emit = emit,
             selectStrategyFor = selectingStrategyFor,
+            afterStrategySelected = afterStrategySelected,
             modifier = modifier,
             listState = listState,
         )
@@ -62,6 +65,7 @@ fun SettingsView(
 internal fun SettingsState.SettingsViewImpl(
     emit: (action: SettingsAction) -> Unit,
     selectStrategyFor: Disk?,
+    afterStrategySelected: (() -> Unit)?,
     modifier: Modifier = Modifier,
     listState: LazyListState = rememberLazyListState(),
 ) {
@@ -170,6 +174,12 @@ internal fun SettingsState.SettingsViewImpl(
         StrategySelectorBottomSheet(emit = emit, disk = selectStrategyFor)
     }
 
+    LaunchedEffect(isStrategySelectorDismissed) {
+        if (isStrategySelectorDismissed && afterStrategySelected != null) {
+            afterStrategySelected()
+        }
+    }
+
     if (showConfirmResetSettingsDialog) {
         AlertDialog(
             title = { Text(text = stringResource(id = string.settings__title__reset_settings)) },
@@ -187,4 +197,9 @@ internal fun SettingsState.SettingsViewImpl(
             },
         )
     }
+}
+
+@Composable
+private fun SettingsState.StrategySelector() {
+
 }

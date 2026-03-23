@@ -15,6 +15,7 @@ internal class SettingsRenderer : Renderer<SettingsState, SettingsModel> {
             historyDisplayOptions = historyDisplayOptions,
             confirmExit = confirmExit,
             showConfirmResetSettingsDialog = showConfirmResetSettingsDialog,
+            isStrategySelectorDismissed = isStrategySelectorDismissed,
         )
     }
 }

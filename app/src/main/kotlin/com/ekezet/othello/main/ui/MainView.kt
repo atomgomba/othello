@@ -221,15 +221,20 @@ internal fun MainState.MainViewImpl(
                     route = SettingsRoute.spec,
                     arguments = SettingsRoute.arguments,
                 ) { entry ->
+                    val pickStrategy = SettingsRoute.findPickStrategy(entry)
+
                     SettingsView(
                         args = SettingsArgs(
                             gameSettings = gameSettings,
                             historySettings = historySettings,
                             appSettings = appSettings,
-                            selectingStrategyFor = SettingsRoute.findPickStrategy(entry),
+                            selectingStrategyFor = pickStrategy,
                         ),
                         modifier = destinationModifier,
                         listState = settingsListState,
+                        afterStrategySelected = pickStrategy?.let {
+                            { navigateTo(GameBoardRoute.make()) }
+                        },
                     )
                 }
             }
