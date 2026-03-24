@@ -7,6 +7,7 @@ import com.ekezet.othello.core.ui.theme.OthelloTheme
 import org.koin.android.ext.koin.androidContext
 import org.koin.compose.KoinApplication
 import org.koin.core.module.Module
+import org.koin.dsl.KoinConfiguration
 
 @Composable
 fun PreviewBase(
@@ -17,7 +18,7 @@ fun PreviewBase(
         PreviewBaseInner(content)
     } else {
         val context = LocalContext.current
-        KoinApplication(application = {
+        KoinApplication(configuration = KoinConfiguration {
             androidContext(context)
             modules(moduleList)
         }) {
