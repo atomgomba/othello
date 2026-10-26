@@ -19,6 +19,10 @@ private val javaVersion = JavaVersion.VERSION_21
 internal fun Project.configureKotlinAndroid(
     commonExtension: CommonExtension,
 ) {
+    with(pluginManager) {
+        apply(libs.findPlugin("metro").get().get().pluginId)
+    }
+
     commonExtension.apply {
         compileSdk = AndroidAppConventionPlugin.compileSdkLevel
 
@@ -35,10 +39,10 @@ internal fun Project.configureKotlinAndroid(
 
     configureKotlin()
     configureCoverage()
-    configureKoin()
     configureDetekt()
 
     dependencies {
+        add("implementation", libs.findLibrary("androidx-appcompat").get())
         add("coreLibraryDesugaring", libs.findLibrary("android.desugarJdkLibs").get())
         add("testImplementation", kotlin("test-junit"))
         add("testImplementation", libs.findLibrary("kotlinx-coroutines-test").get())

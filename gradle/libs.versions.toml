@@ -17,13 +17,13 @@ espressoCore = "3.7.0"
 hurok = "3.1.0"
 junit4 = "4.13.2"
 junitParams = "1.1.1"
-koinBom = "4.2.0"
 konfetti = "2.0.5"
 kotlin = "2.3.20"
 kotlinxCoroutines = "1.10.2"
 kotlinxImmutable = "0.4.0"
 kotlinxKover = "0.9.7"
 ksp = "2.3.6"
+metro = "1.4.5"
 mockk = "1.14.9"
 profileinstaller = "1.4.1"
 timber = "5.0.1"
@@ -63,11 +63,6 @@ hurok-compose = { group = "com.ekezet.hurok", name = "hurok-compose", version.re
 hurok-test = { group = "com.ekezet.hurok", name = "hurok-test-jvm", version.ref = "hurok" }
 junit4 = { group = "junit", name = "junit", version.ref = "junit4" }
 junitParams = { group = "pl.pragmatists", name = "JUnitParams", version.ref = "junitParams" }
-koin-android = { group = "io.insert-koin", name = "koin-android"}
-koin-androidx-compose = { group = "io.insert-koin", name = "koin-androidx-compose"}
-koin-bom = { group = "io.insert-koin", name = "koin-bom", version.ref = "koinBom"}
-koin-core = { group = "io.insert-koin", name = "koin-core"}
-koin-test = { group ="io.insert-koin", name = "koin-test" }
 konfetti = { group = "nl.dionsegijn", name = "konfetti-compose", version.ref = "konfetti" }
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinxCoroutines" }
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
@@ -93,3 +88,4 @@ compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 google-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 kotlinx-kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kotlinxKover" }
+metro = { id = "dev.zacsweers.metro", version.ref = "metro" }

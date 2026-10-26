@@ -6,12 +6,15 @@ import androidx.compose.runtime.ExperimentalComposeRuntimeApi
 import androidx.compose.runtime.tooling.ComposeStackTraceMode
 import com.ekezet.othello.core.data.ExcludeFromCoverage
 import com.ekezet.othello.core.logging.AppLogging
-import com.ekezet.othello.main.di.mainModule
-import org.koin.android.ext.koin.androidContext
-import org.koin.core.context.startKoin
+import com.ekezet.othello.main.di.MainGraph
+import dev.zacsweers.metro.createGraphFactory
 
 @ExcludeFromCoverage
 class App : Application() {
+    val mainGraph: MainGraph by lazy {
+        createGraphFactory<MainGraph.Factory>().create(applicationContext)
+    }
+
     override fun onCreate() {
         super.onCreate()
 
@@ -25,11 +28,5 @@ class App : Application() {
         )
 
         AppLogging.init(isDebug = BuildConfig.DEBUG)
-
-        startKoin {
-            androidContext(baseContext)
-
-            modules(mainModule())
-        }
     }
 }

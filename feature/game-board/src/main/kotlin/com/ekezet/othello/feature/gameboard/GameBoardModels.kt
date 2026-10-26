@@ -27,8 +27,6 @@ import com.ekezet.othello.core.ui.theme.BoardBackgroundGrayscale
 import com.ekezet.othello.core.ui.viewModels.BoardList
 import com.ekezet.othello.feature.gameboard.ui.viewModels.BoardOverlayList
 import kotlinx.coroutines.Job
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.get
 
 /**
  * Give a little time for humans to follow changes on the board
@@ -155,12 +153,9 @@ data class GameBoardArgs(
 ) : IGameSettings
 
 class GameBoardDependency(
-    gameHistoryStore: GameHistoryStore? = null,
-    movesRenderer: MovesRenderer? = null,
-) : KoinComponent {
-    internal val gameHistoryStore: GameHistoryStore = gameHistoryStore ?: get()
-    internal val movesRenderer: MovesRenderer = movesRenderer ?: get()
-
+    internal val gameHistoryStore: GameHistoryStore,
+    internal val movesRenderer: MovesRenderer,
+) {
     internal var renderJob: Job? = null
 }
 

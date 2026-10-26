@@ -8,19 +8,20 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.runtime.CompositionLocalProvider
+import com.ekezet.othello.App
 import com.ekezet.othello.core.ui.navigation.Finishable
 import com.ekezet.othello.core.ui.theme.OthelloTheme
-import com.ekezet.othello.main.di.FinishableMainActivity
-import org.koin.java.KoinJavaComponent.getKoin
+import com.ekezet.othello.main.di.LocalGraph
+import com.ekezet.othello.main.di.MainGraph
 
 @ExperimentalMaterial3WindowSizeClassApi
 class MainActivity : ComponentActivity(), Finishable {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        getKoin().declare<Finishable>(
-            instance = this,
-            qualifier = FinishableMainActivity,
-        )
+    private val mainGraph: MainGraph by lazy {
+        (applicationContext as App).mainGraph
+    }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         enableEdgeToEdge()
@@ -30,7 +31,9 @@ class MainActivity : ComponentActivity(), Finishable {
                 Surface(
                     color = MaterialTheme.colorScheme.background,
                 ) {
-                    MainView()
+                    CompositionLocalProvider(LocalGraph provides mainGraph) {
+                        MainView()
+                    }
                 }
             }
 

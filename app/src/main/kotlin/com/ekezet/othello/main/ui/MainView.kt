@@ -17,6 +17,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.NavHost
@@ -29,24 +30,25 @@ import com.ekezet.othello.core.game.GameHistory
 import com.ekezet.othello.core.game.data.AppSettings
 import com.ekezet.othello.core.game.data.GameSettings
 import com.ekezet.othello.core.game.data.HistorySettings
-import com.ekezet.othello.core.game.store.AppSettingsStore
-import com.ekezet.othello.core.game.store.GameHistoryStore
-import com.ekezet.othello.core.game.store.GameSettingsStore
-import com.ekezet.othello.core.game.store.HistorySettingsStore
-import com.ekezet.othello.core.ui.render.MovesRenderer
+import com.ekezet.othello.core.ui.navigation.Finishable
 import com.ekezet.othello.feature.gameboard.GameBoardArgs
+import com.ekezet.othello.feature.gameboard.GameBoardDependency
 import com.ekezet.othello.feature.gameboard.ui.GameBoardView
 import com.ekezet.othello.feature.gamehistory.GameHistoryArgs
 import com.ekezet.othello.feature.gamehistory.ui.GameHistoryView
 import com.ekezet.othello.feature.settings.SettingsArgs
+import com.ekezet.othello.feature.settings.SettingsDependency
 import com.ekezet.othello.feature.settings.ui.SettingsView
 import com.ekezet.othello.main.MainAction
 import com.ekezet.othello.main.MainArgs
+import com.ekezet.othello.main.MainDependency
 import com.ekezet.othello.main.MainLoop
 import com.ekezet.othello.main.MainState
 import com.ekezet.othello.main.OnBackPressed
 import com.ekezet.othello.main.OnNewGameClicked
 import com.ekezet.othello.main.OnToggleIndicatorsClicked
+import com.ekezet.othello.main.di.MainGraph
+import com.ekezet.othello.main.di.requireMainGraph
 import com.ekezet.othello.main.navigation.MainRoutes
 import com.ekezet.othello.main.navigation.MainRoutes.GameBoardRoute
 import com.ekezet.othello.main.navigation.MainRoutes.GameHistoryRoute
@@ -56,26 +58,27 @@ import com.ekezet.othello.main.ui.components.ExitConfirmationSnackbar
 import com.ekezet.othello.main.ui.components.MainTopAppBar
 import com.ekezet.othello.main.ui.components.navigationActions
 import kotlinx.coroutines.CoroutineScope
-import org.koin.compose.koinInject
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 internal fun MainView(
+    mainGraph: MainGraph = requireMainGraph(),
     scope: CoroutineScope = rememberCoroutineScope(),
-    gameSettingsStore: GameSettingsStore = koinInject(),
-    historySettingsStore: HistorySettingsStore = koinInject(),
-    appSettingsStore: AppSettingsStore = koinInject(),
-    gameHistoryStore: GameHistoryStore = koinInject(),
-    historyRenderer: MovesRenderer = koinInject(),
 ) {
-    val gameSettings: GameSettings by gameSettingsStore.settings.collectAsState()
-    val historySettings: HistorySettings by historySettingsStore.settings.collectAsState()
-    val appSettings: AppSettings by appSettingsStore.settings.collectAsState()
-    val gameHistory: GameHistory by gameHistoryStore.history.collectAsState()
-    val historyImages by historyRenderer.renderedImages.collectAsState()
+    val gameSettings: GameSettings by mainGraph.gameSettingsStore.settings.collectAsState()
+    val historySettings: HistorySettings by mainGraph.historySettingsStore.settings.collectAsState()
+    val appSettings: AppSettings by mainGraph.appSettingsStore.settings.collectAsState()
+    val gameHistory: GameHistory by mainGraph.gameHistoryStore.history.collectAsState()
+    val historyImages by mainGraph.movesRenderer.renderedImages.collectAsState()
 
     LoopView(
-        builder = MainLoop,
+        builder = MainLoop(
+            dependency = MainDependency(
+                gameSettingsStore = mainGraph.gameSettingsStore,
+                gameHistoryStore = mainGraph.gameHistoryStore,
+                activity = LocalContext.current as Finishable,
+            ),
+        ),
         args = MainArgs(
             gameSettings = gameSettings,
             hasGameHistory = gameHistory.history.isNotEmpty(),
@@ -89,6 +92,16 @@ internal fun MainView(
             appSettings = appSettings,
             gameHistory = gameHistory,
             historyImages = historyImages,
+            gameBoardDependency = GameBoardDependency(
+                gameHistoryStore = mainGraph.gameHistoryStore,
+                movesRenderer = mainGraph.movesRenderer,
+            ),
+            settingsDependency = SettingsDependency(
+                gameSettingsStore = mainGraph.gameSettingsStore,
+                historySettingsStore = mainGraph.historySettingsStore,
+                appSettingsStore = mainGraph.appSettingsStore,
+                gameHistoryStore = mainGraph.gameHistoryStore,
+            ),
         )
     }
 }
@@ -102,6 +115,8 @@ internal fun MainState.MainViewImpl(
     appSettings: AppSettings,
     gameHistory: GameHistory,
     historyImages: Map<String, ImageBitmap>,
+    gameBoardDependency: GameBoardDependency,
+    settingsDependency: SettingsDependency,
     startDestination: String = MainRoutes.Start,
 ) {
     val navController: NavHostController = rememberNavController()
@@ -183,6 +198,7 @@ internal fun MainState.MainViewImpl(
                             lightStrategy = gameSettings.lightStrategy,
                             darkStrategy = gameSettings.darkStrategy,
                         ),
+                        dependency = gameBoardDependency,
                         parentEmitter = checkNotNull(LocalActionEmitter.current) {
                             "parentEmitter needs to be set to emit GameBoard actions from the parent"
                         },
@@ -230,6 +246,7 @@ internal fun MainState.MainViewImpl(
                             appSettings = appSettings,
                             selectingStrategyFor = pickStrategy,
                         ),
+                        dependency = settingsDependency,
                         modifier = destinationModifier,
                         listState = settingsListState,
                         afterStrategySelected = pickStrategy?.let {

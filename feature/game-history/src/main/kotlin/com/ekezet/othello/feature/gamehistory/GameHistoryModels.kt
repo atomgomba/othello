@@ -39,6 +39,6 @@ data class GameHistoryArgs(
     val historySettings: HistorySettings,
 )
 
-internal object GameHistoryDependency
+object GameHistoryDependency
 
 internal typealias GameHistoryArgsApplyer = ArgsApplyer<GameHistoryModel, GameHistoryArgs>

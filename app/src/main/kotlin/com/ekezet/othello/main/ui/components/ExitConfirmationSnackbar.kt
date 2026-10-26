@@ -4,18 +4,18 @@ import android.content.Context
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.platform.LocalContext
 import com.ekezet.othello.core.ui.R
 import com.ekezet.othello.main.MainAction
 import com.ekezet.othello.main.MainState
 import com.ekezet.othello.main.OnCancelExitClicked
-import org.koin.compose.koinInject
 
 @Composable
 internal fun MainState.ExitConfirmationSnackbar(
     emit: (action: MainAction) -> Unit,
     hostState: SnackbarHostState,
     confirmExit: Boolean,
-    context: Context = koinInject(),
+    context: Context = LocalContext.current,
 ) {
     LaunchedEffect(isExitMessageVisible, confirmExit) {
         if (!(isExitMessageVisible && confirmExit)) {

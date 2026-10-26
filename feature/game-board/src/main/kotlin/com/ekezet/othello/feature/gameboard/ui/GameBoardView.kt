@@ -48,6 +48,7 @@ import com.ekezet.othello.core.ui.fitIntoParent
 import com.ekezet.othello.core.ui.orHumanPlayer
 import com.ekezet.othello.feature.gameboard.ACTION_DELAY_MILLIS
 import com.ekezet.othello.feature.gameboard.GameBoardArgs
+import com.ekezet.othello.feature.gameboard.GameBoardDependency
 import com.ekezet.othello.feature.gameboard.GameBoardLoop
 import com.ekezet.othello.feature.gameboard.GameBoardState
 import com.ekezet.othello.feature.gameboard.actions.ContinueGame
@@ -73,12 +74,13 @@ private val highlightColor: Color
 @Composable
 fun GameBoardView(
     args: GameBoardArgs,
+    dependency: GameBoardDependency,
     parentEmitter: AnyActionEmitter,
     onStrategyClick: OnStrategyClick,
     modifier: Modifier = Modifier,
 ) {
     LoopView(
-        builder = GameBoardLoop,
+        builder = GameBoardLoop(dependency),
         args = args,
         childOf = setOf(parentEmitter),
     ) { emit ->

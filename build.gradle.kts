@@ -7,4 +7,5 @@ plugins {
     alias(libs.plugins.detekt) apply false
     alias(libs.plugins.google.ksp) apply false
     alias(libs.plugins.kotlinx.kover) apply false
+    alias(libs.plugins.metro) apply false
 }

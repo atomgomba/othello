@@ -41,7 +41,7 @@ fun GameHistoryView(
     modifier: Modifier = Modifier,
 ) {
     LoopView(
-        builder = GameHistoryLoop,
+        builder = GameHistoryLoop(),
         args = args,
     ) {
         GameHistoryViewImpl(

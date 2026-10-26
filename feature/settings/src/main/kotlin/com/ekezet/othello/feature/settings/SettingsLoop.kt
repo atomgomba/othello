@@ -16,28 +16,30 @@ internal class SettingsLoop internal constructor(
     argsApplyer = argsApplyer,
     dependency = dependency,
 ) {
-    internal companion object Builder :
-        LoopBuilder<SettingsState, SettingsModel, SettingsArgs, SettingsDependency, SettingsAction> {
-        private val argsApplyer: SettingsArgsApplyer
-            get() = SettingsArgsApplyer { args ->
-                with(args) {
-                    copy(
-                        boardDisplayOptions = gameSettings.boardDisplayOptions,
-                        historyDisplayOptions = historySettings.historyDisplayOptions,
-                        lightStrategy = gameSettings.lightStrategy,
-                        darkStrategy = gameSettings.darkStrategy,
-                        confirmExit = appSettings.confirmExit,
-                        selectingStrategyFor = selectingStrategyFor.takeUnless { isStrategySelectorDismissed },
-                    )
+    internal companion object {
+        operator fun invoke(dependency: SettingsDependency) = object :
+            LoopBuilder<SettingsState, SettingsModel, SettingsArgs, SettingsDependency, SettingsAction> {
+            private val argsApplyer: SettingsArgsApplyer
+                get() = SettingsArgsApplyer { args ->
+                    with(args) {
+                        copy(
+                            boardDisplayOptions = gameSettings.boardDisplayOptions,
+                            historyDisplayOptions = historySettings.historyDisplayOptions,
+                            lightStrategy = gameSettings.lightStrategy,
+                            darkStrategy = gameSettings.darkStrategy,
+                            confirmExit = appSettings.confirmExit,
+                            selectingStrategyFor = selectingStrategyFor.takeUnless { isStrategySelectorDismissed },
+                        )
+                    }
                 }
-            }
 
-        override fun build(args: SettingsArgs?) = SettingsLoop(
-            model = SettingsModel(),
-            renderer = SettingsRenderer(),
-            args = requireNotNull(args) { "Arguments must be set" },
-            argsApplyer = argsApplyer,
-            dependency = SettingsDependency(),
-        )
+            override fun build(args: SettingsArgs?) = SettingsLoop(
+                model = SettingsModel(),
+                renderer = SettingsRenderer(),
+                args = requireNotNull(args) { "Arguments must be set" },
+                argsApplyer = argsApplyer,
+                dependency = dependency,
+            )
+        }
     }
 }

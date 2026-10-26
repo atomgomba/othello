@@ -28,8 +28,6 @@ import com.ekezet.othello.core.game.store.GameSettingsStore
 import com.ekezet.othello.core.game.store.HistorySettingsStore
 import com.ekezet.othello.core.game.strategy.DecoratedStrategy
 import com.ekezet.othello.core.game.strategy.Strategy
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.get
 
 internal data class SettingsModel(
     override val lightStrategy: Strategy? = DefaultLightStrategy,
@@ -125,17 +123,12 @@ data class SettingsArgs(
     val selectingStrategyFor: Disk?,
 )
 
-internal class SettingsDependency(
-    gameSettingsStore: GameSettingsStore? = null,
-    historySettingsStore: HistorySettingsStore? = null,
-    appSettingsStore: AppSettingsStore? = null,
-    gameHistoryStore: GameHistoryStore? = null,
-) : KoinComponent, GameSettingsPublisher, HistorySettingsPublisher, AppSettingsPublisher {
-    override val gameSettingsStore: GameSettingsStore = gameSettingsStore ?: get()
-    override val historySettingsStore: HistorySettingsStore = historySettingsStore ?: get()
-    override val appSettingsStore: AppSettingsStore = appSettingsStore ?: get()
-    override val gameHistoryStore: GameHistoryStore = gameHistoryStore ?: get()
-}
+class SettingsDependency(
+    override val gameSettingsStore: GameSettingsStore,
+    override val historySettingsStore: HistorySettingsStore,
+    override val appSettingsStore: AppSettingsStore,
+    override val gameHistoryStore: GameHistoryStore,
+) : GameSettingsPublisher, HistorySettingsPublisher, AppSettingsPublisher
 
 internal typealias SettingsEmitter = ActionEmitter<SettingsModel, SettingsDependency>
 

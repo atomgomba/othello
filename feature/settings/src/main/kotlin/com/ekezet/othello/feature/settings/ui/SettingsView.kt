@@ -30,6 +30,7 @@ import com.ekezet.othello.feature.settings.OnShowPossibleMovesClicked
 import com.ekezet.othello.feature.settings.OnStrategySelectorClicked
 import com.ekezet.othello.feature.settings.SettingsAction
 import com.ekezet.othello.feature.settings.SettingsArgs
+import com.ekezet.othello.feature.settings.SettingsDependency
 import com.ekezet.othello.feature.settings.SettingsLoop
 import com.ekezet.othello.feature.settings.SettingsState
 import com.ekezet.othello.feature.settings.ui.components.ButtonRow
@@ -42,12 +43,13 @@ import com.ekezet.othello.feature.settings.ui.components.SwitchRow
 @Composable
 fun SettingsView(
     args: SettingsArgs,
+    dependency: SettingsDependency,
     afterStrategySelected: (() -> Unit)?,
     modifier: Modifier = Modifier,
     listState: LazyListState = rememberLazyListState(),
 ) {
     LoopView(
-        builder = SettingsLoop,
+        builder = SettingsLoop(dependency),
         args = args,
     ) { emit ->
         SettingsViewImpl(

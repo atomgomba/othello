@@ -16,27 +16,29 @@ internal class GameHistoryLoop(
     argsApplyer = argsApplyer,
     dependency = dependency,
 ) {
-    internal companion object Builder :
-        LoopBuilder<GameHistoryState, GameHistoryModel, GameHistoryArgs, GameHistoryDependency, GameHistoryAction> {
-        private val argsApplyer: GameHistoryArgsApplyer
-            get() = GameHistoryArgsApplyer { args ->
-                with(args) {
-                    copy(
-                        moveHistory = history.history,
-                        gameEnd = history.gameEnd,
-                        historyImages = historyImages,
-                        gameSettings = gameSettings,
-                        historySettings = historySettings,
-                    )
-                }
-            }
+    internal companion object {
+        operator fun invoke() =
+            object : LoopBuilder<GameHistoryState, GameHistoryModel, GameHistoryArgs, GameHistoryDependency, GameHistoryAction> {
+                private val argsApplyer: GameHistoryArgsApplyer
+                    get() = GameHistoryArgsApplyer { args ->
+                        with(args) {
+                            copy(
+                                moveHistory = history.history,
+                                gameEnd = history.gameEnd,
+                                historyImages = historyImages,
+                                gameSettings = gameSettings,
+                                historySettings = historySettings,
+                            )
+                        }
+                    }
 
-        override fun build(args: GameHistoryArgs?) = GameHistoryLoop(
-            model = GameHistoryModel(),
-            renderer = GameHistoryRenderer(),
-            args = requireNotNull(args) { "Args must be set" },
-            argsApplyer = argsApplyer,
-            dependency = GameHistoryDependency,
-        )
+                override fun build(args: GameHistoryArgs?) = GameHistoryLoop(
+                    model = GameHistoryModel(),
+                    renderer = GameHistoryRenderer(),
+                    args = requireNotNull(args) { "Args must be set" },
+                    argsApplyer = argsApplyer,
+                    dependency = GameHistoryDependency,
+                )
+            }
     }
 }

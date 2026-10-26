@@ -16,24 +16,25 @@ internal class MainLoop internal constructor(
     argsApplyer = argsApplyer,
     dependency = dependency,
 ) {
-    internal companion object Builder :
-        LoopBuilder<MainState, MainModel, MainArgs, MainDependency, MainAction> {
-        private val argsApplyer: MainArgsApplyer
-            get() = MainArgsApplyer { args ->
-                copy(
-                    boardDisplayOptions = args.gameSettings.boardDisplayOptions,
-                    lightStrategy = args.gameSettings.lightStrategy,
-                    darkStrategy = args.gameSettings.darkStrategy,
-                    hasGameHistory = args.hasGameHistory,
-                )
-            }
+    internal companion object {
+        operator fun invoke(dependency: MainDependency) = object : LoopBuilder<MainState, MainModel, MainArgs, MainDependency, MainAction> {
+            private val argsApplyer: MainArgsApplyer
+                get() = MainArgsApplyer { args ->
+                    copy(
+                        boardDisplayOptions = args.gameSettings.boardDisplayOptions,
+                        lightStrategy = args.gameSettings.lightStrategy,
+                        darkStrategy = args.gameSettings.darkStrategy,
+                        hasGameHistory = args.hasGameHistory,
+                    )
+                }
 
-        override fun build(args: MainArgs?) = MainLoop(
-            model = MainModel(),
-            renderer = MainRenderer(),
-            args = requireNotNull(args) { "Args must be set" },
-            argsApplyer = argsApplyer,
-            dependency = MainDependency(),
-        )
+            override fun build(args: MainArgs?) = MainLoop(
+                model = MainModel(),
+                renderer = MainRenderer(),
+                args = requireNotNull(args) { "Args must be set" },
+                argsApplyer = argsApplyer,
+                dependency = dependency,
+            )
+        }
     }
 }

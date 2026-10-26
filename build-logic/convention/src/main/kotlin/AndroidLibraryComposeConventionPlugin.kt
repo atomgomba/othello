@@ -1,7 +1,6 @@
 
 import com.android.build.api.dsl.LibraryExtension
 import com.ekezet.othello.configureAndroidCompose
-import com.ekezet.othello.configureAndroidKoinCompose
 import com.ekezet.othello.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -16,7 +15,6 @@ class AndroidLibraryComposeConventionPlugin : Plugin<Project> {
 
             val extension = extensions.getByType<LibraryExtension>()
             configureAndroidCompose(extension)
-            configureAndroidKoinCompose()
         }
     }
 }
