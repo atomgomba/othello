@@ -8,7 +8,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
@@ -40,7 +39,6 @@ internal fun MainTopAppBar(
     }
 
     TopAppBar(
-        colors = TopAppBarDefaults.topAppBarColors(),
         title = { Text(titleString) },
         navigationIcon = {
             AnimatedVisibility(
