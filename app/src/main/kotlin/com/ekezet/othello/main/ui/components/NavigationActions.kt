@@ -4,13 +4,14 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScope
 import androidx.compose.ui.res.stringResource
-import com.ekezet.othello.main.navigation.MainRoutes
+import com.ekezet.othello.main.navigation.Screen
+import kotlin.reflect.KClass
 
 internal fun NavigationSuiteScope.navigationActions(
-    currentDestination: String,
-    onClick: (String) -> Unit,
+    currentDestinationClass: KClass<out Screen>,
+    onClick: (Screen) -> Unit,
     hasGameHistory: Boolean,
-) = MainRoutes.All.forEach { destination ->
+) = Screen.All.forEach { destination ->
     item(
         icon = {
             Icon(
@@ -19,10 +20,10 @@ internal fun NavigationSuiteScope.navigationActions(
             )
         },
         label = { Text(text = stringResource(id = destination.labelRes)) },
-        selected = currentDestination == destination.id,
-        onClick = { onClick(destination.id) },
-        enabled = when (destination.id) {
-            MainRoutes.GameHistoryRoute.id -> hasGameHistory
+        selected = currentDestinationClass == destination::class,
+        onClick = { onClick(destination) },
+        enabled = when (destination) {
+            Screen.GameHistory -> hasGameHistory
             else -> true
         },
     )

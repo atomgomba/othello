@@ -22,6 +22,7 @@ kotlin = "2.4.21"
 kotlinxCoroutines = "1.11.0"
 kotlinxImmutable = "0.5.2"
 kotlinxKover = "0.9.11"
+kotlinxSerializationJson = "1.12.0"
 ksp = "2.3.6"
 metro = "1.5.1"
 mockk = "1.14.11"
@@ -67,6 +68,7 @@ konfetti = { group = "nl.dionsegijn", name = "konfetti-compose", version.ref = "
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinxCoroutines" }
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
 kotlinx-immutable = { group = "org.jetbrains.kotlinx", name = "kotlinx-collections-immutable", version.ref = "kotlinxImmutable" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
 turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine" }
@@ -87,5 +89,6 @@ baselineprofile = { id = "androidx.baselineprofile", version.ref = "baselineprof
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 google-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 kotlinx-kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kotlinxKover" }
 metro = { id = "dev.zacsweers.metro", version.ref = "metro" }

@@ -24,6 +24,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import com.ekezet.hurok.compose.LocalActionEmitter
 import com.ekezet.hurok.compose.LoopView
 import com.ekezet.othello.core.game.GameHistory
@@ -49,15 +50,12 @@ import com.ekezet.othello.main.OnNewGameClicked
 import com.ekezet.othello.main.OnToggleIndicatorsClicked
 import com.ekezet.othello.main.di.MainGraph
 import com.ekezet.othello.main.di.requireMainGraph
-import com.ekezet.othello.main.navigation.MainRoutes
-import com.ekezet.othello.main.navigation.MainRoutes.GameBoardRoute
-import com.ekezet.othello.main.navigation.MainRoutes.GameHistoryRoute
-import com.ekezet.othello.main.navigation.MainRoutes.SettingsRoute
-import com.ekezet.othello.main.navigation.stripRoute
+import com.ekezet.othello.main.navigation.Screen
 import com.ekezet.othello.main.ui.components.ExitConfirmationSnackbar
 import com.ekezet.othello.main.ui.components.MainTopAppBar
 import com.ekezet.othello.main.ui.components.navigationActions
 import kotlinx.coroutines.CoroutineScope
+import kotlin.reflect.KClass
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -117,13 +115,13 @@ internal fun MainState.MainViewImpl(
     historyImages: Map<String, ImageBitmap>,
     gameBoardDependency: GameBoardDependency,
     settingsDependency: SettingsDependency,
-    startDestination: String = MainRoutes.Start,
+    startDestination: Screen = Screen.Start,
 ) {
     val navController: NavHostController = rememberNavController()
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentDestination by remember {
+    val currentDestinationClass: KClass<out Screen> by remember(startDestination) {
         derivedStateOf {
-            currentBackStackEntry?.destination?.route?.stripRoute() ?: startDestination
+            Screen.classOf(currentBackStackEntry?.destination?.route) ?: startDestination::class
         }
     }
     val navOptions = remember {
@@ -138,8 +136,8 @@ internal fun MainState.MainViewImpl(
             .build()
     }
 
-    fun navigateTo(route: String) {
-        navController.navigate(route = route, navOptions = navOptions)
+    fun navigateTo(screen: Screen) {
+        navController.navigate(route = screen, navOptions = navOptions)
     }
 
     val destinationModifier = Modifier.fillMaxSize()
@@ -163,7 +161,7 @@ internal fun MainState.MainViewImpl(
             MainTopAppBar(
                 onRefreshClick = { emit(OnNewGameClicked) },
                 onShowPossibleMovesClick = { emit(OnToggleIndicatorsClicked) },
-                currentDestination = currentDestination,
+                currentDestinationClass = currentDestinationClass,
                 navController = navController,
                 showPossibleMoves = gameSettings.boardDisplayOptions.showPossibleMoves,
                 gameHistorySize = gameHistory.history.size,
@@ -176,7 +174,7 @@ internal fun MainState.MainViewImpl(
         NavigationSuiteScaffold(
             navigationSuiteItems = {
                 navigationActions(
-                    currentDestination = currentDestination,
+                    currentDestinationClass = currentDestinationClass,
                     onClick = ::navigateTo,
                     hasGameHistory = hasGameHistory,
                 )
@@ -187,13 +185,12 @@ internal fun MainState.MainViewImpl(
                 startDestination = startDestination,
                 modifier = Modifier.padding(innerPadding),
             ) {
-                composable(
-                    route = GameBoardRoute.spec,
-                    arguments = GameBoardRoute.arguments,
-                ) { entry ->
+                composable<Screen.GameBoard> { entry ->
+                    val route: Screen.GameBoard = entry.toRoute()
+
                     GameBoardView(
                         args = GameBoardArgs(
-                            selectedTurn = GameBoardRoute.findShowTurn(entry),
+                            selectedTurn = route.showTurn,
                             boardDisplayOptions = gameSettings.boardDisplayOptions,
                             lightStrategy = gameSettings.lightStrategy,
                             darkStrategy = gameSettings.darkStrategy,
@@ -203,17 +200,15 @@ internal fun MainState.MainViewImpl(
                             "parentEmitter needs to be set to emit GameBoard actions from the parent"
                         },
                         onStrategyClick = { disk ->
-                            navigateTo(SettingsRoute.make(pickStrategyFor = disk))
+                            navigateTo(Screen.Settings(pickStrategyFor = "$disk"))
                         },
                         modifier = destinationModifier,
                     )
                 }
 
-                composable(
-                    route = GameHistoryRoute.spec,
-                ) {
+                composable<Screen.GameHistory> {
                     if (!hasGameHistory) {
-                        navigateTo(MainRoutes.Start)
+                        navController.popBackStack()
                         return@composable
                     }
 
@@ -225,32 +220,29 @@ internal fun MainState.MainViewImpl(
                             historySettings = historySettings,
                         ),
                         listState = historyListState,
-                        onTurnClick = { turn -> navigateTo(GameBoardRoute.make(showTurn = turn)) },
+                        onTurnClick = { turn -> navigateTo(Screen.GameBoard(showTurn = turn)) },
                         onCurrentTurnClick = {
-                            navigateTo(GameBoardRoute.make(showTurn = gameHistory.history.size))
+                            navigateTo(Screen.GameBoard(showTurn = gameHistory.history.size))
                         },
                         modifier = destinationModifier,
                     )
                 }
 
-                composable(
-                    route = SettingsRoute.spec,
-                    arguments = SettingsRoute.arguments,
-                ) { entry ->
-                    val pickStrategy = SettingsRoute.findPickStrategy(entry)
+                composable<Screen.Settings> { entry ->
+                    val route: Screen.Settings = entry.toRoute()
 
                     SettingsView(
                         args = SettingsArgs(
                             gameSettings = gameSettings,
                             historySettings = historySettings,
                             appSettings = appSettings,
-                            selectingStrategyFor = pickStrategy,
+                            selectingStrategyFor = route.pickStrategyForDisk,
                         ),
                         dependency = settingsDependency,
                         modifier = destinationModifier,
                         listState = settingsListState,
-                        afterStrategySelected = pickStrategy?.let {
-                            { navigateTo(GameBoardRoute.make()) }
+                        afterStrategySelected = route.pickStrategyFor?.let {
+                            { navigateTo(Screen.GameBoard()) }
                         },
                     )
                 }

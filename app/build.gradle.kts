@@ -6,6 +6,7 @@ plugins {
 
     alias(libs.plugins.android.application)
     alias(libs.plugins.baselineprofile)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {

@@ -12,26 +12,24 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import com.ekezet.othello.core.ui.R
-import com.ekezet.othello.main.navigation.MainRoutes
-import com.ekezet.othello.main.navigation.MainRoutes.GameBoardRoute
-import com.ekezet.othello.main.navigation.MainRoutes.GameHistoryRoute
-import com.ekezet.othello.main.navigation.MainRoutes.SettingsRoute
+import com.ekezet.othello.main.navigation.Screen
+import kotlin.reflect.KClass
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 internal fun MainTopAppBar(
     onRefreshClick: () -> Unit,
     onShowPossibleMovesClick: (Boolean) -> Unit,
-    currentDestination: String,
+    currentDestinationClass: KClass<out Screen>,
     navController: NavHostController,
     showPossibleMoves: Boolean,
     gameHistorySize: Int,
 ) {
-    val titleString = when (currentDestination) {
-        GameHistoryRoute.id ->
+    val titleString = when (currentDestinationClass) {
+        Screen.GameHistory::class ->
             stringResource(R.string.game_history__title__num_of_moves, gameHistorySize)
 
-        SettingsRoute.id ->
+        Screen.Settings::class ->
             stringResource(R.string.main__nav__settings)
 
         else ->
@@ -42,7 +40,7 @@ internal fun MainTopAppBar(
         title = { Text(titleString) },
         navigationIcon = {
             AnimatedVisibility(
-                visible = currentDestination != MainRoutes.Start,
+                visible = currentDestinationClass != Screen.GameBoard::class,
             ) {
                 IconButton(onClick = navController::popBackStack) {
                     Icon(
@@ -54,7 +52,7 @@ internal fun MainTopAppBar(
         },
         actions = {
             AnimatedVisibility(
-                visible = currentDestination == GameBoardRoute.id,
+                visible = currentDestinationClass == Screen.GameBoard::class,
             ) {
                 GameBoardToolbarActions(
                     onRefreshClick = onRefreshClick,
