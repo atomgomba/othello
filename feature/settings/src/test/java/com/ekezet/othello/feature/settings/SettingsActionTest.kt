@@ -2,7 +2,6 @@ package com.ekezet.othello.feature.settings
 
 import com.ekezet.hurok.test.after
 import com.ekezet.hurok.test.matches
-import com.ekezet.hurok.utils.renderState
 import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.data.models.isDark
 import com.ekezet.othello.core.data.models.isLight
@@ -39,7 +38,7 @@ internal class SettingsActionTest {
             assertNoEffects()
         }
 
-        val expectedState = renderState(::SettingsLoop, expectedModel, renderer)
+        val expectedState = renderer.renderState(expectedModel)
         assertEquals(expectedModel.selectingStrategyFor, expectedState.selectingStrategyFor)
     }
 
@@ -55,7 +54,7 @@ internal class SettingsActionTest {
             assertNoEffects()
         }
 
-        val expectedState = renderState(::SettingsLoop, expectedModel, renderer)
+        val expectedState = renderer.renderState(expectedModel)
         assertEquals(expectedModel.selectingStrategyFor, expectedState.selectingStrategyFor)
     }
 
@@ -73,7 +72,7 @@ internal class SettingsActionTest {
             assertEffects(expectedEffects)
         }
 
-        val expectedState = renderState(::SettingsLoop, expectedModel, renderer)
+        val expectedState = renderer.renderState(expectedModel)
         if (disk.isDark) {
             assertEquals(expectedModel.darkStrategy, expectedState.darkStrategy)
         } else if (disk.isLight) {

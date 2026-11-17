@@ -12,27 +12,27 @@ import com.ekezet.othello.core.game.strategy.preferSides
 internal sealed interface SettingsAction : Action<SettingsModel, SettingsDependency>
 
 internal data class OnStrategySelectorClicked(val player: Disk) : SettingsAction {
-    override fun SettingsModel.proceed() = next(showStrategySelectorFor(player))
+    override fun proceed(model: SettingsModel) = next(model.showStrategySelectorFor(player))
 }
 
 internal data object OnStrategySelectorDismissed : SettingsAction {
-    override fun SettingsModel.proceed() = next(dismissStrategySelector())
+    override fun proceed(model: SettingsModel) = next(model.dismissStrategySelector())
 }
 
 internal data class OnStrategySelected(
     val disk: Disk,
     val strategy: Strategy?,
 ) : SettingsAction {
-    override fun SettingsModel.proceed(): Next<SettingsModel, SettingsDependency> {
+    override fun proceed(model: SettingsModel) = with(model) {
         val updated = setStrategyFor(disk, strategy)
-        return next(updated, PublishGameSettings(updated))
+        next(updated, PublishGameSettings(updated))
     }
 }
 
 internal data class OnPreferSidesToggled(val disk: Disk, val prefer: Boolean) : SettingsAction {
-    override fun SettingsModel.proceed(): Next<SettingsModel, SettingsDependency> {
+    override fun proceed(model: SettingsModel) = with(model) {
         val updated = setStrategyFor(disk, setPreferSides(disk, prefer))
-        return next(updated, PublishGameSettings(updated))
+        next(updated, PublishGameSettings(updated))
     }
 
     private fun SettingsModel.setPreferSides(disk: Disk, prefer: Boolean): Strategy? {
@@ -46,52 +46,52 @@ internal data class OnPreferSidesToggled(val disk: Disk, val prefer: Boolean) : 
 }
 
 internal data object OnShowPossibleMovesClicked : SettingsAction {
-    override fun SettingsModel.proceed(): Next<SettingsModel, SettingsDependency> {
-        val updated = toggleShowPossibleMoves()
+    override fun proceed(model: SettingsModel): Next<SettingsModel, SettingsDependency> {
+        val updated = model.toggleShowPossibleMoves()
         return next(updated, PublishGameSettings(updated))
     }
 }
 
 internal data object OnShowBoardPositionsClicked : SettingsAction {
-    override fun SettingsModel.proceed(): Next<SettingsModel, SettingsDependency> {
-        val updated = toggleShowBoardPositions()
+    override fun proceed(model: SettingsModel): Next<SettingsModel, SettingsDependency> {
+        val updated = model.toggleShowBoardPositions()
         return next(updated, PublishGameSettings(updated))
     }
 }
 
 internal data object OnGrayscaleModeClicked : SettingsAction {
-    override fun SettingsModel.proceed(): Next<SettingsModel, SettingsDependency> {
-        val updated = toggleGrayScaleMode()
+    override fun proceed(model: SettingsModel): Next<SettingsModel, SettingsDependency> {
+        val updated = model.toggleGrayScaleMode()
         return next(updated, PublishGameSettings(updated))
     }
 }
 
 internal data object OnAlwaysScrollToBottomClicked : SettingsAction {
-    override fun SettingsModel.proceed(): Next<SettingsModel, SettingsDependency> {
-        val updated = toggleAlwaysScrollToBottom()
+    override fun proceed(model: SettingsModel): Next<SettingsModel, SettingsDependency> {
+        val updated = model.toggleAlwaysScrollToBottom()
         return next(updated, PublishHistorySettings(updated))
     }
 }
 
 internal data object OnConfirmExitClicked : SettingsAction {
-    override fun SettingsModel.proceed(): Next<SettingsModel, SettingsDependency> {
-        val updated = toggleConfirmExit()
+    override fun proceed(model: SettingsModel): Next<SettingsModel, SettingsDependency> {
+        val updated = model.toggleConfirmExit()
         return next(updated, PublishAppSettings(updated))
     }
 }
 
 internal data object OnResetSettingsClicked : SettingsAction {
-    override fun SettingsModel.proceed(): Next<SettingsModel, SettingsDependency> =
-        next(copy(showConfirmResetSettingsDialog = true))
+    override fun proceed(model: SettingsModel) =
+        next(model.copy(showConfirmResetSettingsDialog = true))
 }
 
 internal data class OnResetSettingsDialogClicked(val isConfirmed: Boolean) : SettingsAction {
-    override fun SettingsModel.proceed(): Next<SettingsModel, SettingsDependency> {
+    override fun proceed(model: SettingsModel) = with(model) {
         val effects = buildList {
             if (isConfirmed) {
                 add(ResetAppSettings)
             }
         }
-        return next(copy(showConfirmResetSettingsDialog = false), effects = effects.toTypedArray())
+        next(copy(showConfirmResetSettingsDialog = false), effects = effects.toTypedArray())
     }
 }

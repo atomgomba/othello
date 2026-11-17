@@ -4,11 +4,9 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Devices.TABLET
 import androidx.compose.ui.tooling.preview.Preview
-import com.ekezet.hurok.utils.renderState
 import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.game.GameEnd
 import com.ekezet.othello.core.ui.components.PreviewBase
-import com.ekezet.othello.feature.gameboard.GameBoardLoop
 import com.ekezet.othello.feature.gameboard.GameBoardModel
 import com.ekezet.othello.feature.gameboard.GameBoardRenderer
 import com.ekezet.othello.feature.gameboard.ui.GameBoardViewImpl
@@ -45,7 +43,7 @@ private val tieGameModel = defaultModel.copy(
 )
 
 private fun GameBoardModel.toPreviewState() =
-    renderState(::GameBoardLoop, this, GameBoardRenderer())
+    GameBoardRenderer().renderState(this)
 
 @ExperimentalLayoutApi
 @Composable
