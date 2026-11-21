@@ -32,11 +32,11 @@ import com.ekezet.othello.core.game.data.AppSettings
 import com.ekezet.othello.core.game.data.GameSettings
 import com.ekezet.othello.core.game.data.HistorySettings
 import com.ekezet.othello.core.ui.navigation.Finishable
-import com.ekezet.othello.feature.gameboard.GameBoardArgs
-import com.ekezet.othello.feature.gameboard.GameBoardDependency
-import com.ekezet.othello.feature.gameboard.ui.GameBoardView
-import com.ekezet.othello.feature.gamehistory.GameHistoryArgs
-import com.ekezet.othello.feature.gamehistory.ui.GameHistoryView
+import com.ekezet.othello.feature.gameBoard.GameBoardArgs
+import com.ekezet.othello.feature.gameBoard.GameBoardDependency
+import com.ekezet.othello.feature.gameBoard.ui.GameBoardView
+import com.ekezet.othello.feature.gameHistory.GameHistoryArgs
+import com.ekezet.othello.feature.gameHistory.ui.GameHistoryView
 import com.ekezet.othello.feature.settings.SettingsArgs
 import com.ekezet.othello.feature.settings.SettingsDependency
 import com.ekezet.othello.feature.settings.ui.SettingsView

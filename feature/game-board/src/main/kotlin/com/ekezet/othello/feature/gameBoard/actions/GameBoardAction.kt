@@ -1,0 +1,108 @@
+package com.ekezet.othello.feature.gameBoard.actions
+
+import com.ekezet.hurok.Action
+import com.ekezet.hurok.next
+import com.ekezet.hurok.skip
+import com.ekezet.hurok.trigger
+import com.ekezet.othello.core.data.models.Position
+import com.ekezet.othello.core.game.GameEnd
+import com.ekezet.othello.core.game.NextTurn
+import com.ekezet.othello.core.game.PassTurn
+import com.ekezet.othello.core.game.Tie
+import com.ekezet.othello.core.game.Win
+import com.ekezet.othello.core.game.isValid
+import com.ekezet.othello.core.game.state.CurrentGameState
+import com.ekezet.othello.core.game.strategy.HumanPlayer
+import com.ekezet.othello.core.game.throwable.InvalidMoveException
+import com.ekezet.othello.feature.gameBoard.GameBoardDependency
+import com.ekezet.othello.feature.gameBoard.GameBoardModel
+import com.ekezet.othello.feature.gameBoard.WaitBeforeNextTurn
+import timber.log.Timber
+
+internal sealed interface GameBoardAction : Action<GameBoardModel, GameBoardDependency>
+
+internal data object OnLoopStarted : GameBoardAction {
+    override fun proceed(model: GameBoardModel) = with(model) {
+        if (ended != null || currentStrategy == HumanPlayer || !isCurrentTurn) {
+            skip
+        } else {
+            val nextMove = currentStrategy?.deriveNext(currentGameState)
+                ?: error("Strategy couldn't find a valid starting move")
+            trigger(WaitBeforeNextTurn(nextMove))
+        }
+    }
+}
+
+internal data class OnMoveMade(val position: Position) : GameBoardAction {
+    override fun proceed(model: GameBoardModel) = with(model) {
+        if (currentGameState.validMoves.isValid(position)) {
+            next(pickNextMoveAt(position))
+        } else {
+            skip
+        }
+    }
+}
+
+internal data object ContinueGame : GameBoardAction {
+    override fun proceed(model: GameBoardModel) = with(model) {
+        val moveResult = try {
+            currentGameState.proceed(nextMovePosition ?: return@with skip)
+        } catch (e: InvalidMoveException) {
+            Timber.w(e)
+            return@with skip
+        }
+        when (moveResult) {
+            is NextTurn -> nextTurn(moveResult.state)
+            is PassTurn -> passTurn(moveResult.state)
+            is Win -> finishGame(moveResult.state, moveResult.winner)
+            is Tie -> finishGame(moveResult.state, null)
+        }
+    }
+}
+
+internal data class OnTurnPassed(
+    val nextPosition: Position?,
+    val newState: CurrentGameState,
+) : GameBoardAction {
+    override fun proceed(model: GameBoardModel) =
+        next(model.resetNextTurn(newState).pickNextMoveAt(nextPosition))
+}
+
+internal data class OnGameEnded(val result: GameEnd) : GameBoardAction {
+    override fun proceed(model: GameBoardModel) = next(model.copy(ended = result))
+}
+
+internal data object OnFirstTurnClicked : GameBoardAction {
+    override fun proceed(model: GameBoardModel) = next(model.stepToFirstTurn())
+}
+
+internal data object OnPreviousTurnClicked : GameBoardAction {
+    override fun proceed(model: GameBoardModel) = next(model.stepToPreviousTurn())
+}
+
+internal data object OnNextTurnClicked : GameBoardAction {
+    override fun proceed(model: GameBoardModel) = with(model) {
+        val nextModel = stepToNextTurn()
+        val gameState = nextModel.currentGameState
+        if (gameState is CurrentGameState && !nextModel.currentDisk.isHumanPlayer) {
+            nextTurn(gameState)
+        } else {
+            next(nextModel)
+        }
+    }
+}
+
+internal data object OnCurrentTurnClicked : GameBoardAction {
+    override fun proceed(model: GameBoardModel) = with(model) {
+        val nextModel = stepToCurrentTurn()
+        val gameState = nextModel.currentGameState
+        val nextMove = currentStrategy?.deriveNext(gameState)
+        val effects = buildList {
+            if (currentStrategy != HumanPlayer && nextMove != null) {
+                // only wait if next player is not human
+                add(WaitBeforeNextTurn(nextMove))
+            }
+        }
+        next(nextModel, effects = effects.toTypedArray())
+    }
+}

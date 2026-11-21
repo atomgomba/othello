@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.ekezet.othello.feature.gamehistory"
+    namespace = "com.ekezet.othello.feature.gameHistory"
 }
 
 dependencies {

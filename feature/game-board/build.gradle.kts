@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.ekezet.othello.feature.gameboard"
+    namespace = "com.ekezet.othello.feature.gameBoard"
 }
 
 dependencies {

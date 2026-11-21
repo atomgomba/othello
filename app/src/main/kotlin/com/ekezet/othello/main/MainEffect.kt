@@ -4,7 +4,7 @@ import com.ekezet.hurok.Effect
 import com.ekezet.othello.core.game.data.IGameSettings
 import com.ekezet.othello.core.game.effect.PublishGameSettings
 import com.ekezet.othello.core.game.state.OthelloGameState
-import com.ekezet.othello.feature.gameboard.actions.OnUpdateGameState
+import com.ekezet.othello.feature.gameBoard.actions.OnUpdateGameState
 
 internal sealed interface MainEffect : Effect<MainModel, MainDependency>
 

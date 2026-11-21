@@ -18,7 +18,7 @@ import com.ekezet.othello.core.game.store.GameHistoryStore
 import com.ekezet.othello.core.game.store.GameSettingsStore
 import com.ekezet.othello.core.game.strategy.Strategy
 import com.ekezet.othello.core.ui.navigation.Finishable
-import com.ekezet.othello.feature.gameboard.GameBoardEmitter
+import com.ekezet.othello.feature.gameBoard.GameBoardEmitter
 
 internal data class MainModel(
     override val darkStrategy: Strategy? = DefaultDarkStrategy,
