@@ -4,7 +4,9 @@ import androidx.compose.animation.core.AnimationConstants.DefaultDurationMillis
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
 import com.ekezet.hurok.ActionEmitter
+import com.ekezet.hurok.AnyActionEmitter
 import com.ekezet.hurok.ArgsApplyer
+import com.ekezet.hurok.HasActionEmitter
 import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.data.models.DiskCount
 import com.ekezet.othello.core.data.models.Position
@@ -26,6 +28,7 @@ import com.ekezet.othello.core.ui.theme.BoardBackground
 import com.ekezet.othello.core.ui.theme.BoardBackgroundGrayscale
 import com.ekezet.othello.core.ui.viewModels.BoardList
 import com.ekezet.othello.feature.gameBoard.ui.viewModels.BoardOverlayList
+import com.ekezet.othello.feature.settings.feature.strategyPicker.StrategyPickerLoop
 import kotlinx.coroutines.Job
 
 /**
@@ -155,8 +158,15 @@ data class GameBoardArgs(
 class GameBoardDependency(
     internal val gameHistoryStore: GameHistoryStore,
     internal val movesRenderer: MovesRenderer,
-) {
+) : HasActionEmitter {
     internal var renderJob: Job? = null
+    internal lateinit var strategyPickerLoop: StrategyPickerLoop
+
+    override fun plus(other: AnyActionEmitter) {
+        if (other is StrategyPickerLoop) {
+            strategyPickerLoop = other
+        }
+    }
 }
 
 typealias GameBoardEmitter = ActionEmitter<GameBoardModel, GameBoardDependency>

@@ -4,7 +4,9 @@ import com.ekezet.hurok.Action
 import com.ekezet.hurok.next
 import com.ekezet.hurok.skip
 import com.ekezet.hurok.trigger
+import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.data.models.Position
+import com.ekezet.othello.core.data.models.isDark
 import com.ekezet.othello.core.game.GameEnd
 import com.ekezet.othello.core.game.NextTurn
 import com.ekezet.othello.core.game.PassTurn
@@ -13,9 +15,11 @@ import com.ekezet.othello.core.game.Win
 import com.ekezet.othello.core.game.isValid
 import com.ekezet.othello.core.game.state.CurrentGameState
 import com.ekezet.othello.core.game.strategy.HumanPlayer
+import com.ekezet.othello.core.game.strategy.Strategy
 import com.ekezet.othello.core.game.throwable.InvalidMoveException
 import com.ekezet.othello.feature.gameBoard.GameBoardDependency
 import com.ekezet.othello.feature.gameBoard.GameBoardModel
+import com.ekezet.othello.feature.gameBoard.ShowStrategyPicker
 import com.ekezet.othello.feature.gameBoard.WaitBeforeNextTurn
 import timber.log.Timber
 
@@ -104,5 +108,23 @@ internal data object OnCurrentTurnClicked : GameBoardAction {
             }
         }
         next(nextModel, effects = effects.toTypedArray())
+    }
+}
+
+internal data class OnStrategyClicked(val disk: Disk) : GameBoardAction {
+    override fun proceed(model: GameBoardModel) =
+        trigger(
+            ShowStrategyPicker(
+                player = disk,
+                current = if (disk.isDark) model.darkStrategy else model.lightStrategy
+            ),
+        )
+}
+
+internal data class OnStrategySelected(val disk: Disk, val strategy: Strategy?) : GameBoardAction {
+    override fun proceed(model: GameBoardModel) = with(model) {
+        next(
+            if (disk.isDark) copy(darkStrategy = strategy) else copy(lightStrategy = strategy)
+        )
     }
 }

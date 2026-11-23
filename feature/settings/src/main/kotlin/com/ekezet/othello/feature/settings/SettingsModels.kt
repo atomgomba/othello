@@ -3,7 +3,9 @@ package com.ekezet.othello.feature.settings
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import com.ekezet.hurok.ActionEmitter
+import com.ekezet.hurok.AnyActionEmitter
 import com.ekezet.hurok.ArgsApplyer
+import com.ekezet.hurok.HasActionEmitter
 import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.data.models.isDark
 import com.ekezet.othello.core.data.models.isLight
@@ -26,8 +28,8 @@ import com.ekezet.othello.core.game.store.AppSettingsStore
 import com.ekezet.othello.core.game.store.GameHistoryStore
 import com.ekezet.othello.core.game.store.GameSettingsStore
 import com.ekezet.othello.core.game.store.HistorySettingsStore
-import com.ekezet.othello.core.game.strategy.DecoratedStrategy
 import com.ekezet.othello.core.game.strategy.Strategy
+import com.ekezet.othello.feature.settings.feature.strategyPicker.StrategyPickerLoop
 
 internal data class SettingsModel(
     override val lightStrategy: Strategy? = DefaultLightStrategy,
@@ -35,19 +37,14 @@ internal data class SettingsModel(
     override val boardDisplayOptions: BoardDisplayOptions = BoardDisplayOptions.Default,
     override val historyDisplayOptions: HistoryDisplayOptions = HistoryDisplayOptions.Default,
     override val confirmExit: Boolean = DefaultConfirmExit,
-    internal val selectingStrategyFor: Disk? = null,
-    internal val isStrategySelectorDismissed: Boolean = false,
     internal val showConfirmResetSettingsDialog: Boolean = false,
 ) : IGameSettings, IHistorySettings, IAppSettings {
-    internal fun showStrategySelectorFor(player: Disk) = copy(selectingStrategyFor = player, isStrategySelectorDismissed = false)
-    internal fun dismissStrategySelector() = copy(selectingStrategyFor = null, isStrategySelectorDismissed = true)
     internal fun setStrategyFor(player: Disk, strategy: Strategy?) =
         if (player.isDark) {
             copy(darkStrategy = strategy)
         } else {
             copy(lightStrategy = strategy)
         }
-            .dismissStrategySelector()
 
     internal fun toggleShowBoardPositions() = copy(
         boardDisplayOptions = boardDisplayOptions.copy(
@@ -84,10 +81,8 @@ internal data class SettingsState(
     val historyDisplayOptions: HistoryDisplayOptions,
     val lightStrategy: Strategy?,
     val darkStrategy: Strategy?,
-    val selectingStrategyFor: Disk?,
     val confirmExit: Boolean,
     val showConfirmResetSettingsDialog: Boolean,
-    val isStrategySelectorDismissed: Boolean,
 ) {
     internal val Disk.isNotHuman: Boolean
         inline get() = if (isLight) {
@@ -101,18 +96,6 @@ internal data class SettingsState(
 
     internal val darkName: String?
         inline get() = darkStrategy?.name
-
-    internal fun Disk.isStrategySelected(strategy: Strategy?) = isStrategySelected(
-        if (isLight) {
-            lightStrategy
-        } else {
-            darkStrategy
-        },
-        strategy,
-    )
-
-    private fun isStrategySelected(current: Strategy?, other: Strategy?) =
-        current == other || (current is DecoratedStrategy && current.wrapped == other)
 }
 
 @Stable
@@ -120,7 +103,6 @@ data class SettingsArgs(
     val gameSettings: GameSettings,
     val historySettings: HistorySettings,
     val appSettings: AppSettings,
-    val selectingStrategyFor: Disk?,
 )
 
 class SettingsDependency(
@@ -128,7 +110,15 @@ class SettingsDependency(
     override val historySettingsStore: HistorySettingsStore,
     override val appSettingsStore: AppSettingsStore,
     override val gameHistoryStore: GameHistoryStore,
-) : GameSettingsPublisher, HistorySettingsPublisher, AppSettingsPublisher
+) : GameSettingsPublisher, HistorySettingsPublisher, AppSettingsPublisher, HasActionEmitter {
+    internal lateinit var strategyPickerLoop: StrategyPickerLoop
+
+    override fun plus(other: AnyActionEmitter) {
+        if (other is StrategyPickerLoop) {
+            strategyPickerLoop = other
+        }
+    }
+}
 
 internal typealias SettingsEmitter = ActionEmitter<SettingsModel, SettingsDependency>
 

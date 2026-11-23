@@ -65,7 +65,7 @@ internal class SettingsActionTest {
 
         val expectedModel = defaultModel.setStrategyFor(disk!!, strategy)
 
-        val expectedEffects = setOf(PublishGameSettings(expectedModel))
+        val expectedEffects = setOf(PublishSettings(expectedModel))
 
         initModel after OnStrategySelected(disk, strategy) matches {
             assertModel(expectedModel)

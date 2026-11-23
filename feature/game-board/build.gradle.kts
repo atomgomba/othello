@@ -9,6 +9,8 @@ android {
 }
 
 dependencies {
+    implementation(projects.feature.settings)
+    
     implementation(projects.core.data)
     implementation(projects.core.game)
     implementation(projects.core.logging)

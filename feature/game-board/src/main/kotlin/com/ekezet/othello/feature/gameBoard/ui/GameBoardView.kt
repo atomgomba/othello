@@ -33,6 +33,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.ekezet.hurok.AnyActionEmitter
+import com.ekezet.hurok.compose.LocalActionEmitter
 import com.ekezet.hurok.compose.LoopView
 import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.data.models.isDark
@@ -59,7 +60,11 @@ import com.ekezet.othello.feature.gameBoard.actions.OnMoveMade
 import com.ekezet.othello.feature.gameBoard.actions.OnNextTurnClicked
 import com.ekezet.othello.feature.gameBoard.actions.OnPreviousTurnClicked
 import com.ekezet.othello.feature.gameBoard.actions.OnStrategyClick
+import com.ekezet.othello.feature.gameBoard.actions.OnStrategyClicked
+import com.ekezet.othello.feature.gameBoard.actions.OnStrategySelected
 import com.ekezet.othello.feature.gameBoard.ui.viewModels.getAt
+import com.ekezet.othello.feature.settings.feature.strategyPicker.StrategyPickerDependency
+import com.ekezet.othello.feature.settings.feature.strategyPicker.ui.StrategyPickerView
 import kotlinx.coroutines.delay
 import nl.dionsegijn.konfetti.compose.KonfettiView
 import nl.dionsegijn.konfetti.core.Party
@@ -75,8 +80,8 @@ private val highlightColor: Color
 fun GameBoardView(
     args: GameBoardArgs,
     dependency: GameBoardDependency,
+    strategyPickerDependency: StrategyPickerDependency,
     parentEmitter: AnyActionEmitter,
-    onStrategyClick: OnStrategyClick,
     modifier: Modifier = Modifier,
 ) {
     LoopView(
@@ -86,8 +91,15 @@ fun GameBoardView(
     ) { emit ->
         GameBoardViewImpl(
             emit = emit,
-            onStrategyClick = onStrategyClick,
             modifier = modifier,
+        )
+
+        StrategyPickerView(
+            parentEmitter = checkNotNull(LocalActionEmitter.current) {
+                "parentEmitter needs to be set to emit GameBoard actions from the parent"
+            },
+            onSelect = { player, selected -> emit(OnStrategySelected(player, selected)) },
+            dependency = strategyPickerDependency,
         )
     }
 }
@@ -96,7 +108,6 @@ fun GameBoardView(
 @Composable
 internal fun GameBoardState.GameBoardViewImpl(
     emit: (action: GameBoardAction) -> Unit,
-    onStrategyClick: OnStrategyClick,
     modifier: Modifier = Modifier,
 ) {
     Box(
@@ -125,7 +136,7 @@ internal fun GameBoardState.GameBoardViewImpl(
                 onCellClick = { xy -> emit(OnMoveMade(xy)) },
             )
 
-            BoardFooter(onStrategyClick)
+            BoardFooter(onStrategyClick = { disk -> emit(OnStrategyClicked(disk)) })
         }
 
         if (celebrate) {

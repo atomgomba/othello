@@ -46,3 +46,6 @@ val Strategies: Set<Strategy?>
     }
 
 val HumanPlayer: Strategy? = null
+
+fun String?.nameEqualsTo(other: Strategy?) =
+    this == other?.name || (other is DecoratedStrategy && other.wrapped.name == this)

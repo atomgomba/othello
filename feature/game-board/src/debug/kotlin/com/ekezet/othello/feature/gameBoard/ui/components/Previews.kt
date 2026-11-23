@@ -48,10 +48,7 @@ private fun GameBoardModel.toPreviewState() =
 @ExperimentalLayoutApi
 @Composable
 private fun GameBoardModel.Preview() = toPreviewState()
-    .GameBoardViewImpl(
-        emit = {},
-        onStrategyClick = {},
-    )
+    .GameBoardViewImpl(emit = {})
 
 @ExperimentalLayoutApi
 @Preview

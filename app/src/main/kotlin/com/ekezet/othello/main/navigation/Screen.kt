@@ -6,8 +6,6 @@ import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.ekezet.othello.core.data.ExcludeFromCoverage
-import com.ekezet.othello.core.data.models.Disk
-import com.ekezet.othello.core.data.models.valueOf
 import com.ekezet.othello.core.ui.R
 import kotlinx.serialization.Serializable
 import kotlin.reflect.KClass
@@ -24,7 +22,7 @@ sealed class Screen {
         val All = listOf(
             GameBoard(),
             GameHistory,
-            Settings(),
+            Settings,
         )
 
         fun classOf(route: String?): KClass<out Screen>? =
@@ -53,10 +51,8 @@ sealed class Screen {
 
     @ExcludeFromCoverage
     @Serializable
-    data class Settings(val pickStrategyFor: String? = null) : Screen() {
+    data object Settings : Screen() {
         override val icon: ImageVector get() = Icons.Default.Settings
         override val labelRes: Int = R.string.main__nav__settings
-        val pickStrategyForDisk: Disk?
-            get() = Disk.valueOf(pickStrategyFor)
     }
 }

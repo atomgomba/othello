@@ -59,7 +59,7 @@ internal class SettingsEffectTest : EffectTest() {
         coEvery { mockGameSettingsStore.update(settings) } just runs
         coEvery { mockGameSettingsStore.settings } returns MutableStateFlow(initGameSettings)
 
-        dependency runWith PublishGameSettings(settings)
+        dependency runWith PublishSettings(settings)
 
         coVerify {
             mockGameSettingsStore.update(settings)
@@ -77,7 +77,7 @@ internal class SettingsEffectTest : EffectTest() {
         coEvery { mockGameSettingsStore.settings } returns MutableStateFlow(initGameSettings)
         coEvery { mockGameHistoryStore.reset(any(), any()) } just runs
 
-        dependency runWith PublishGameSettings(settings)
+        dependency runWith PublishSettings(settings)
 
         coVerify {
             mockGameSettingsStore.update(settings)

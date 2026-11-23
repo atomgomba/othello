@@ -39,6 +39,7 @@ import com.ekezet.othello.feature.gameHistory.GameHistoryArgs
 import com.ekezet.othello.feature.gameHistory.ui.GameHistoryView
 import com.ekezet.othello.feature.settings.SettingsArgs
 import com.ekezet.othello.feature.settings.SettingsDependency
+import com.ekezet.othello.feature.settings.feature.strategyPicker.StrategyPickerDependency
 import com.ekezet.othello.feature.settings.ui.SettingsView
 import com.ekezet.othello.main.MainAction
 import com.ekezet.othello.main.MainArgs
@@ -100,6 +101,9 @@ internal fun MainView(
                 appSettingsStore = mainGraph.appSettingsStore,
                 gameHistoryStore = mainGraph.gameHistoryStore,
             ),
+            strategyPickerDependency = StrategyPickerDependency(
+                gameSettingsStore = mainGraph.gameSettingsStore,
+            ),
         )
     }
 }
@@ -115,6 +119,7 @@ internal fun MainState.MainViewImpl(
     historyImages: Map<String, ImageBitmap>,
     gameBoardDependency: GameBoardDependency,
     settingsDependency: SettingsDependency,
+    strategyPickerDependency: StrategyPickerDependency,
     startDestination: Screen = Screen.Start,
 ) {
     val navController: NavHostController = rememberNavController()
@@ -196,11 +201,9 @@ internal fun MainState.MainViewImpl(
                             darkStrategy = gameSettings.darkStrategy,
                         ),
                         dependency = gameBoardDependency,
+                        strategyPickerDependency = strategyPickerDependency,
                         parentEmitter = checkNotNull(LocalActionEmitter.current) {
                             "parentEmitter needs to be set to emit GameBoard actions from the parent"
-                        },
-                        onStrategyClick = { disk ->
-                            navigateTo(Screen.Settings(pickStrategyFor = "$disk"))
                         },
                         modifier = destinationModifier,
                     )
@@ -228,22 +231,17 @@ internal fun MainState.MainViewImpl(
                     )
                 }
 
-                composable<Screen.Settings> { entry ->
-                    val route: Screen.Settings = entry.toRoute()
-
+                composable<Screen.Settings> {
                     SettingsView(
                         args = SettingsArgs(
                             gameSettings = gameSettings,
                             historySettings = historySettings,
                             appSettings = appSettings,
-                            selectingStrategyFor = route.pickStrategyForDisk,
                         ),
                         dependency = settingsDependency,
+                        strategyPickerDependency = strategyPickerDependency,
                         modifier = destinationModifier,
                         listState = settingsListState,
-                        afterStrategySelected = route.pickStrategyFor?.let {
-                            { navigateTo(Screen.GameBoard()) }
-                        },
                     )
                 }
             }

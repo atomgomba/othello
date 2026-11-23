@@ -12,10 +12,10 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.ekezet.hurok.compose.LocalActionEmitter
 import com.ekezet.hurok.compose.LoopView
 import com.ekezet.othello.core.data.models.Disk
 import com.ekezet.othello.core.ui.R.string
@@ -27,16 +27,18 @@ import com.ekezet.othello.feature.settings.OnResetSettingsClicked
 import com.ekezet.othello.feature.settings.OnResetSettingsDialogClicked
 import com.ekezet.othello.feature.settings.OnShowBoardPositionsClicked
 import com.ekezet.othello.feature.settings.OnShowPossibleMovesClicked
+import com.ekezet.othello.feature.settings.OnStrategySelected
 import com.ekezet.othello.feature.settings.OnStrategySelectorClicked
 import com.ekezet.othello.feature.settings.SettingsAction
 import com.ekezet.othello.feature.settings.SettingsArgs
 import com.ekezet.othello.feature.settings.SettingsDependency
 import com.ekezet.othello.feature.settings.SettingsLoop
 import com.ekezet.othello.feature.settings.SettingsState
+import com.ekezet.othello.feature.settings.feature.strategyPicker.StrategyPickerDependency
+import com.ekezet.othello.feature.settings.feature.strategyPicker.ui.StrategyPickerView
 import com.ekezet.othello.feature.settings.ui.components.ButtonRow
 import com.ekezet.othello.feature.settings.ui.components.SelectedStrategy
 import com.ekezet.othello.feature.settings.ui.components.SettingsHeader
-import com.ekezet.othello.feature.settings.ui.components.StrategySelectorBottomSheet
 import com.ekezet.othello.feature.settings.ui.components.SwitchRow
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -44,7 +46,7 @@ import com.ekezet.othello.feature.settings.ui.components.SwitchRow
 fun SettingsView(
     args: SettingsArgs,
     dependency: SettingsDependency,
-    afterStrategySelected: (() -> Unit)?,
+    strategyPickerDependency: StrategyPickerDependency,
     modifier: Modifier = Modifier,
     listState: LazyListState = rememberLazyListState(),
 ) {
@@ -54,10 +56,16 @@ fun SettingsView(
     ) { emit ->
         SettingsViewImpl(
             emit = emit,
-            selectStrategyFor = selectingStrategyFor,
-            afterStrategySelected = afterStrategySelected,
             modifier = modifier,
             listState = listState,
+        )
+
+        StrategyPickerView(
+            parentEmitter = checkNotNull(LocalActionEmitter.current) {
+                "parentEmitter needs to be set to emit GameBoard actions from the parent"
+            },
+            onSelect = { player, strategy -> emit(OnStrategySelected(player, strategy)) },
+            dependency = strategyPickerDependency,
         )
     }
 }
@@ -66,8 +74,6 @@ fun SettingsView(
 @Composable
 internal fun SettingsState.SettingsViewImpl(
     emit: (action: SettingsAction) -> Unit,
-    selectStrategyFor: Disk?,
-    afterStrategySelected: (() -> Unit)?,
     modifier: Modifier = Modifier,
     listState: LazyListState = rememberLazyListState(),
 ) {
@@ -172,16 +178,6 @@ internal fun SettingsState.SettingsViewImpl(
         }
     }
 
-    if (selectStrategyFor != null) {
-        StrategySelectorBottomSheet(emit = emit, disk = selectStrategyFor)
-    }
-
-    LaunchedEffect(isStrategySelectorDismissed) {
-        if (isStrategySelectorDismissed && afterStrategySelected != null) {
-            afterStrategySelected()
-        }
-    }
-
     if (showConfirmResetSettingsDialog) {
         AlertDialog(
             title = { Text(text = stringResource(id = string.settings__title__reset_settings)) },
@@ -199,9 +195,4 @@ internal fun SettingsState.SettingsViewImpl(
             },
         )
     }
-}
-
-@Composable
-private fun SettingsState.StrategySelector() {
-
 }

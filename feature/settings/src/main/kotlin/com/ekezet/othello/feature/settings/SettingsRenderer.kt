@@ -11,11 +11,9 @@ internal class SettingsRenderer : Renderer<SettingsState, SettingsModel> {
             isDarkPreferSides = darkStrategy.isPreferSides,
             isLightPreferSides = lightStrategy.isPreferSides,
             boardDisplayOptions = boardDisplayOptions,
-            selectingStrategyFor = selectingStrategyFor,
             historyDisplayOptions = historyDisplayOptions,
             confirmExit = confirmExit,
             showConfirmResetSettingsDialog = showConfirmResetSettingsDialog,
-            isStrategySelectorDismissed = isStrategySelectorDismissed,
         )
     }
 }
