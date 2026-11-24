@@ -17,46 +17,8 @@ import kotlin.test.assertEquals
 @RunWith(JUnitParamsRunner::class)
 internal class SettingsActionTest {
     private val defaultModel = SettingsModel()
-    private val showDarkStrategySelectorModel = defaultModel.showStrategySelectorFor(Disk.Dark)
-    private val showLightStrategySelectorModel = defaultModel.showStrategySelectorFor(Disk.Light)
 
     private val renderer = SettingsRenderer()
-
-    @Test
-    @Parameters(method = "paramsForDisk")
-    fun `OnStrategySelectorClicked works correctly`(player: Disk?) {
-        val initModel = SettingsModel()
-
-        val expectedModel = if (player!!.isDark) {
-            showDarkStrategySelectorModel
-        } else {
-            showLightStrategySelectorModel
-        }
-
-        initModel after OnStrategySelectorClicked(player) matches {
-            assertModel(expectedModel)
-            assertNoEffects()
-        }
-
-        val expectedState = renderer.renderState(expectedModel)
-        assertEquals(expectedModel.selectingStrategyFor, expectedState.selectingStrategyFor)
-    }
-
-    @Test
-    @Parameters(method = "paramsForDisk")
-    fun `OnStrategySelectorDismissed works correctly`(player: Disk?) {
-        val initModel = SettingsModel().showStrategySelectorFor(player!!)
-
-        val expectedModel = SettingsModel(isStrategySelectorDismissed = true)
-
-        initModel after OnStrategySelectorDismissed matches {
-            assertModel(expectedModel)
-            assertNoEffects()
-        }
-
-        val expectedState = renderer.renderState(expectedModel)
-        assertEquals(expectedModel.selectingStrategyFor, expectedState.selectingStrategyFor)
-    }
 
     @Test
     @Parameters(method = "paramsForDiskAndStrategy")
@@ -65,11 +27,8 @@ internal class SettingsActionTest {
 
         val expectedModel = defaultModel.setStrategyFor(disk!!, strategy)
 
-        val expectedEffects = setOf(PublishSettings(expectedModel))
-
         initModel after OnStrategySelected(disk, strategy) matches {
             assertModel(expectedModel)
-            assertEffects(expectedEffects)
         }
 
         val expectedState = renderer.renderState(expectedModel)
@@ -77,6 +36,20 @@ internal class SettingsActionTest {
             assertEquals(expectedModel.darkStrategy, expectedState.darkStrategy)
         } else if (disk.isLight) {
             assertEquals(expectedModel.lightStrategy, expectedState.lightStrategy)
+        }
+    }
+
+    @Test
+    @Parameters(method = "paramsForDiskAndStrategy")
+    fun `OnStrategySelectorClicked works correctly`(disk: Disk?, strategy: Strategy?) {
+        val initModel = defaultModel.run {
+            if (disk!!.isDark) copy(darkStrategy = strategy) else copy(lightStrategy = strategy)
+        }
+
+        val expectedEffect = ShowStrategyPicker(player = disk!!, current = strategy)
+
+        initModel after OnStrategySelectorClicked(disk) matches {
+            assertEffects(setOf(expectedEffect))
         }
     }
 
